@@ -1,7 +1,5 @@
 import axios from 'axios'
-import {storefrontHeaders} from '../../../../utils/header'
-
-const url = process.env.NEXT_PUBLIC_STOREFRONT_URL
+import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
 
 const requests = async (req, res) => {
     try {
@@ -44,7 +42,7 @@ const requests = async (req, res) => {
             }
         }
         `
-        const data = await axios.post(url, query, {
+        const data = await axios.post(storefrontURL, query, {
             headers: storefrontHeaders
         })
         res.json(data.data)

@@ -1,12 +1,22 @@
 import "../public/styles/tailwind.css"
 import "../public/styles/index.css"
-
 import Helmet from "react-helmet";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
-const queryClient = new QueryClient()
+import {useState} from 'react'
+import loadingContext from "../utils/loadingContext";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+})
 
 function MyApp({ Component, pageProps }) {
+  const [loading, setLoading] = useState(true)
+
   return (
     <>
       <Helmet>
@@ -36,10 +46,11 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
+      <loadingContext.Provider value={{loading, setLoading}}>
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </loadingContext.Provider>
     </>
   )
 }
