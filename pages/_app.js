@@ -1,10 +1,13 @@
+import {useState} from 'react'
+// Style
 import "../public/styles/tailwind.css"
 import "../public/styles/index.css"
+// Library
 import Helmet from "react-helmet";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
-import {useState} from 'react'
 import loadingContext from "../utils/loadingContext";
+import cartContext from '../utils/cartContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +19,12 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
+  const [cart, setCart] = useState()
+
+  const setCartStorage = (e) => {
+    sessionStorage.setItem('cart-items', JSON.stringify(e))
+    setCart(e)
+  }
 
   return (
     <>
@@ -46,11 +55,13 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <loadingContext.Provider value={{loading, setLoading}}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </loadingContext.Provider>
+      <cartContext.Provider value={{cart, setCartStorage, setCart}}>
+        <loadingContext.Provider value={{loading, setLoading}}>
+          <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+          </QueryClientProvider>
+        </loadingContext.Provider>
+      </cartContext.Provider>
     </>
   )
 }

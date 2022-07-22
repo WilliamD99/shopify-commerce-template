@@ -21,6 +21,13 @@ const requests = async (req, res) => {
                     tags
                     totalVariants
                     productType
+                    variants(first: 5) {
+                        edges {
+                          node {
+                            id
+                          }
+                        }
+                    }
                 }
               }
             }
