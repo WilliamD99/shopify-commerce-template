@@ -77,6 +77,15 @@ let cartRemoveItem = async (params) => {
     return data.data
 }
 
+// Customer create
+let customerCreate = async (params) => {
+    let url = "/api/storefront/mutation/customer-create"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 export {
     productInCollection,
     productAll,
@@ -86,5 +95,6 @@ export {
     cartRetrieve,
     cartAdd,
     cartUpdate,
-    cartRemoveItem
+    cartRemoveItem,
+    customerCreate
 }
