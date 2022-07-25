@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 
-import {useMutation} from '@tanstack/react-query'
-import {customerCreate} from '../utils/api/requests'
+import {useMutation, useQuery} from '@tanstack/react-query'
+import {customerCreate, customerAll, customerGet, customerUpdate} from '../utils/api/requests'
 
 export default function Index() {
   const [field, setField] = useState({
@@ -24,6 +24,31 @@ export default function Index() {
     ]
   }
 
+  // Default fetching data
+  let {isLoading, error, data} = useQuery(
+    ['all'],
+    async () => {
+      let data = await customerAll()
+      console.log(data)
+      return data
+    }
+  )
+
+  const customerGetMutation = useMutation(async(params) => {
+    let data = await customerGet(params)
+    console.log(data.data)
+    return data.data
+  })
+
+  const customerUpdateMutation = useMutation(async(params) => {
+    let data = await customerUpdate(params)
+    console.log(data)
+    return data.data
+  })
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>
@@ -32,6 +57,16 @@ export default function Index() {
       <button onClick={() => {
         customerCreateMutation.mutate({email: field.email, password: field.password})
       }}>Submit</button>
+
+      <p onClick={() => {
+        customerGetMutation.mutate({id: "gid://shopify/Customer/5791110168756"})
+      }}>Click me</p>
+      <p onClick={() => {
+        customerUpdateMutation.mutate({
+          id: "gid://shopify/Customer/5791110168756", 
+          fields: [{key: "firstName", value: "John"}, {key: "lastName", value: "Doe"}]
+        })
+      }} >me</p>
     </>
   )
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Get search products by title
 let productSearch = async (params) => {
-    let url = "/api/admin/get/products-search"
+    let url = "/api/admin/query/products-search"
     let data = await axios.post(url, {
         data: params
     })
@@ -11,7 +11,7 @@ let productSearch = async (params) => {
 
 // Get products in collections
 let productInCollection = async (params) => {
-    let url = "/api/admin/get/products-in-collection"
+    let url = "/api/admin/query/products-in-collection"
     let data = await axios.post(url, {
         data: params
     })
@@ -20,7 +20,7 @@ let productInCollection = async (params) => {
 
 // Get all products
 let productAll = async () => {
-    let url = "api/admin/get/all-products"
+    let url = "api/admin/query/all-products"
     let data = await axios.post(url)
 
     return data.data
@@ -28,7 +28,7 @@ let productAll = async () => {
 
 // Get all collections
 let collectionAll = async () => {
-    let url = "api/admin/get/all-collections"
+    let url = "api/admin/query/all-collections"
     let data = await axios.post(url)
 
     return data.data
@@ -86,6 +86,32 @@ let customerCreate = async (params) => {
     return data.data
 }
 
+// All customers (admin-only)
+let customerAll = async () => {
+    let url = "/api/admin/query/all-customers"
+    let data = await axios.post(url)
+
+    return data.data
+}
+
+// Get customer by id
+let customerGet = async (params) => {
+    let url = "/api/admin/query/customer"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Update customer info
+let customerUpdate = async (params) => {
+    let url = "/api/admin/mutation/customer-update"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 export {
     productInCollection,
     productAll,
@@ -96,5 +122,8 @@ export {
     cartAdd,
     cartUpdate,
     cartRemoveItem,
-    customerCreate
+    customerCreate,
+    customerAll,
+    customerGet,
+    customerUpdate
 }
