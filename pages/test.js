@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 
 import {useMutation, useQuery} from '@tanstack/react-query'
-import {customerCreate, customerAll, customerGet, customerUpdate} from '../utils/api/requests'
+import {customerCreate, customerAll, customerGet, customerUpdate, checkoutCreate, checkoutUpdate, checkoutShippingUpdate} from '../utils/api/requests'
 
 export default function Index() {
   const [field, setField] = useState({
@@ -29,7 +29,7 @@ export default function Index() {
     ['all'],
     async () => {
       let data = await customerAll()
-      console.log(data)
+      // console.log(data)
       return data
     }
   )
@@ -42,6 +42,28 @@ export default function Index() {
 
   const customerUpdateMutation = useMutation(async(params) => {
     let data = await customerUpdate(params)
+    console.log(data)
+    return data.data
+  })
+
+  const checkoutCreateMutation = useMutation(async(params) => {
+    let data = await checkoutCreate(params)
+    sessionStorage.setItem('checkoutId', data.data.checkoutCreate.checkout.id)
+    return data.data
+  })
+
+  const checkoutUpdateMutation = useMutation(async() => {
+    let checkoutId = sessionStorage.getItem('checkoutId')
+    let lineArr = JSON.parse(sessionStorage.getItem('cart-items')).lines.edges
+    let data = await checkoutUpdate({checkoutId: checkoutId, edges: lineArr})
+    return data.data
+  })
+
+  const checkoutShippingMutation = useMutation(async(params) => {
+    let checkoutId = sessionStorage.getItem('checkoutId')
+    params.checkoutId = checkoutId
+    console.log(params)
+    let data = await checkoutShippingUpdate(params)
     console.log(data)
     return data.data
   })
@@ -67,6 +89,30 @@ export default function Index() {
           fields: [{key: "firstName", value: "John"}, {key: "lastName", value: "Doe"}]
         })
       }} >me</p>
+
+      <p onClick={() => {
+        let params = JSON.parse(sessionStorage.getItem('cart-items'))
+        console.log(params)
+        checkoutCreateMutation.mutate({edges: params.lines.edges})
+      }}>Checkout</p>
+
+      <p onClick={() => {
+        checkoutUpdateMutation.mutate()
+      }}>Update</p>
+      
+      <p onClick={() => {
+        checkoutShippingMutation.mutate({
+          shippingAddress: {
+            "lastName": "Doe",
+            "firstName": "John",
+            "address1": "123 Test Street",
+            "province": "QC",
+            "country": "Canada",
+            "zip": "H3K0X2",
+            "city": "Montreal"
+          }
+        })
+      }}>Shipping</p>
     </>
   )
 }

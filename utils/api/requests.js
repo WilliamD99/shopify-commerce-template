@@ -112,6 +112,33 @@ let customerUpdate = async (params) => {
     return data.data
 }
 
+// Create checkout
+let checkoutCreate = async (params) => {
+    let url = "/api/storefront/mutation/checkout-create"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Update checkout
+let checkoutUpdate = async (params) => {
+    let url = "/api/storefront/mutation/checkout-update"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Update checkout shipping address
+let checkoutShippingUpdate = async (params) => {
+    let url = "/api/storefront/mutation/checkout-shipping"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 export {
     productInCollection,
     productAll,
@@ -125,5 +152,8 @@ export {
     customerCreate,
     customerAll,
     customerGet,
-    customerUpdate
+    customerUpdate,
+    checkoutCreate,
+    checkoutUpdate,
+    checkoutShippingUpdate
 }
