@@ -112,6 +112,15 @@ let customerUpdate = async (params) => {
     return data.data
 }
 
+// Create customer access token
+let customerAccessToken = async (params) => {
+    let url = "/api/storefront/mutation/customer-access-token"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 // Create checkout
 let checkoutCreate = async (params) => {
     let url = "/api/storefront/mutation/checkout-create"
@@ -139,6 +148,34 @@ let checkoutShippingUpdate = async (params) => {
     return data.data
 }
 
+// Remove Item(s) from checkout
+let checkoutItemsRemove = async (params) => {
+    let url = "/api/storefront/mutation/checkout-remove"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Get vault
+let checkoutVaultId = async (params) => {
+    let url = "/api/admin/mutation/checkout-vault"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Associate customer with checkout
+let checkoutToCustomer = async (params) => {
+    let url = "/api/storefront/mutation/checkoutToCustomer"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+
 export {
     productInCollection,
     productAll,
@@ -155,5 +192,9 @@ export {
     customerUpdate,
     checkoutCreate,
     checkoutUpdate,
-    checkoutShippingUpdate
+    checkoutShippingUpdate,
+    checkoutItemsRemove,
+    checkoutVaultId,
+    customerAccessToken,
+    checkoutToCustomer
 }

@@ -16,6 +16,11 @@ const requests = async (req, res) => {
               customerUserErrors {
                 message
               }
+              customer {
+                email
+                id
+                
+              }
             }
         }
         `

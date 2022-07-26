@@ -5,24 +5,34 @@ const requests = async (req, res) => {
     try {
         let params = req.body.data
         let checkoutId = params.checkoutId
-        let shippingAddress = JSON.stringify(params.shippingAddress)
+        let lineItems = `${
+            params.lines.map(e => `"${e}"`)
+        }`
 
         const query = `
         mutation {
-            checkoutShippingAddressUpdateV2(
-                shippingAddress: ${shippingAddress},
+            checkoutLineItemsRemove(
+                lineItemIds: [
+                    ${lineItems}
+                ], 
                 checkoutId: "${checkoutId}",
             ) {
               checkout {
-                id
-              }
-              checkoutUserErrors {
-                message
-                code
+                 id
+                 lineItems(first:2) {
+                   edges {
+                     node {
+                       id
+                       title
+                       quantity
+                     }
+                   }
+                 }
               }
             }
-        }
+          }
         `
+        console.log(query)
         const data = await axios.post(storefrontURL, query, {
             headers: storefrontHeaders
         })
@@ -34,4 +44,3 @@ const requests = async (req, res) => {
 }
 
 export default requests
-

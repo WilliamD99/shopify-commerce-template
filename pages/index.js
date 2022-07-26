@@ -101,7 +101,6 @@ export default function Home() {
     if (!id) return
     let data = await cartRemoveItem({ id: id, merchandiseId: params.merchandiseId })
     cartRetrieveMutation.mutate()
-    console.log(data)
     return data.data
   })
 

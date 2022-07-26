@@ -1,7 +1,19 @@
 import React, {useEffect, useState} from 'react'
 
 import {useMutation, useQuery} from '@tanstack/react-query'
-import {customerCreate, customerAll, customerGet, customerUpdate, checkoutCreate, checkoutUpdate, checkoutShippingUpdate} from '../utils/api/requests'
+import {
+  customerCreate, 
+  customerAll, 
+  customerGet, 
+  customerUpdate, 
+  checkoutCreate, 
+  checkoutUpdate, 
+  checkoutShippingUpdate, 
+  checkoutItemsRemove, 
+  checkoutVaultId,
+  customerAccessToken,
+  checkoutToCustomer
+} from '../utils/api/requests'
 
 export default function Index() {
   const [field, setField] = useState({
@@ -29,14 +41,13 @@ export default function Index() {
     ['all'],
     async () => {
       let data = await customerAll()
-      // console.log(data)
       return data
     }
   )
 
   const customerGetMutation = useMutation(async(params) => {
     let data = await customerGet(params)
-    console.log(data.data)
+    console.log(data)
     return data.data
   })
 
@@ -47,9 +58,11 @@ export default function Index() {
   })
 
   const checkoutCreateMutation = useMutation(async(params) => {
-    let data = await checkoutCreate(params)
-    sessionStorage.setItem('checkoutId', data.data.checkoutCreate.checkout.id)
-    return data.data
+    // if (sessionStorage.getItem('checkoutId') !== null) {
+      let data = await checkoutCreate(params)
+      sessionStorage.setItem('checkoutId', data.data.checkoutCreate.checkout.id)
+      return data.data
+    // }
   })
 
   const checkoutUpdateMutation = useMutation(async() => {
@@ -58,18 +71,45 @@ export default function Index() {
     let data = await checkoutUpdate({checkoutId: checkoutId, edges: lineArr})
     return data.data
   })
+  
 
   const checkoutShippingMutation = useMutation(async(params) => {
     let checkoutId = sessionStorage.getItem('checkoutId')
     params.checkoutId = checkoutId
-    console.log(params)
     let data = await checkoutShippingUpdate(params)
-    console.log(data)
     return data.data
   })
 
-  useEffect(() => {
+  const checkoutItemsRemoveMutation = useMutation(async(params) => {
+    let checkoutId = sessionStorage.getItem('checkoutId')
+    params.checkoutId = checkoutId
 
+    let data = await checkoutItemsRemove(params)
+    return data.data
+  })
+
+  const checkoutVaultIdMutation = useMutation(async(params) => {
+    let checkoutId = sessionStorage.getItem('checkoutId')
+    params.checkoutId = checkoutId  
+    
+    let data = await checkoutVaultId(params)
+    return data.data
+  })
+
+  const customerAccessTokenMutation = useMutation(async(params) => {
+    let data = await customerAccessToken(params)
+    sessionStorage.setItem('accessToken', data.data.customerAccessTokenCreate.customerAccessToken.accessToken)
+    return data.data
+  })
+
+  const checkoutToCustomerMutation = useMutation(async(params) => {
+    let data = await checkoutToCustomer(params)
+    console.log(data)
+    return data
+  })
+
+  useEffect(() => {
+    checkoutToCustomerMutation.mutate({checkoutId: sessionStorage.getItem('checkoutId'), accessToken: sessionStorage.getItem('accessToken')})
   }, [])
 
   return (
@@ -81,18 +121,17 @@ export default function Index() {
       }}>Submit</button>
 
       <p onClick={() => {
-        customerGetMutation.mutate({id: "gid://shopify/Customer/5791110168756"})
-      }}>Click me</p>
+        customerGetMutation.mutate({id: "gid://shopify/Customer/6141938892980"})
+      }}>Cus me</p>
       <p onClick={() => {
         customerUpdateMutation.mutate({
           id: "gid://shopify/Customer/5791110168756", 
           fields: [{key: "firstName", value: "John"}, {key: "lastName", value: "Doe"}]
         })
-      }} >me</p>
+      }}>me</p>
 
       <p onClick={() => {
         let params = JSON.parse(sessionStorage.getItem('cart-items'))
-        console.log(params)
         checkoutCreateMutation.mutate({edges: params.lines.edges})
       }}>Checkout</p>
 
@@ -103,16 +142,25 @@ export default function Index() {
       <p onClick={() => {
         checkoutShippingMutation.mutate({
           shippingAddress: {
-            "lastName": "Doe",
-            "firstName": "John",
-            "address1": "123 Test Street",
-            "province": "QC",
-            "country": "Canada",
-            "zip": "H3K0X2",
-            "city": "Montreal"
+            lastName: "Doe",
+            firstName: "John",
+            address1: "123 Test Street",
+            province: "QC",
+            country: "Canada",
+            zip: "H3K0X2",
+            city: "Montreal"
           }
         })
       }}>Shipping</p>
+
+      {/* Check ID again */}
+      <p onClick={() => {
+        checkoutItemsRemoveMutation.mutate({lines: ["gid://shopify/CartLine/4f56d102c79020431d157401ef58c3a8?cart=c5fd20228723ad8f15ac46bf6458b98d"]})
+      }}>Remove</p>
+
+      <p onClick={() => {
+        checkoutVaultIdMutation.mutate({test: "test"})
+      }}>Vault</p>
     </>
   )
 }

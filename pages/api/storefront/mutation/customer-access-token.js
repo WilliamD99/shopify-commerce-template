@@ -2,23 +2,25 @@ import axios from 'axios'
 import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
 
 const requests = async (req, res) => {
-    try {
-        let params = req.body.data
-        let checkoutId = params.checkoutId
-        let shippingAddress = JSON.stringify(params.shippingAddress)
+    try {        
+        const params = req.body.data
+        const email = params.email
+        const password = params.password
 
         const query = `
         mutation {
-            checkoutShippingAddressUpdateV2(
-                shippingAddress: ${shippingAddress},
-                checkoutId: "${checkoutId}",
-            ) {
-              checkout {
-                id
+            customerAccessTokenCreate(input: {
+                email: "${email}",
+                password: "${password}"
+            }) {
+              customerAccessToken {
+                accessToken
+                expiresAt
               }
-              checkoutUserErrors {
-                message
+              customerUserErrors {
+                field
                 code
+                message
               }
             }
         }
@@ -34,4 +36,3 @@ const requests = async (req, res) => {
 }
 
 export default requests
-
