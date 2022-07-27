@@ -58,14 +58,17 @@ export default function Index() {
     return data.data
   })
 
+  // Create a checkout
   const checkoutCreateMutation = useMutation(async(params) => {
     // if (sessionStorage.getItem('checkoutId') !== null) {
       let data = await checkoutCreate(params)
       sessionStorage.setItem('checkoutId', encryptText(data.data.checkoutCreate.checkout.id))
+      console.log(data)
       return data.data
     // }
   })
 
+  // Update lines item in checkout
   const checkoutUpdateMutation = useMutation(async() => {
     let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     let lineArr = JSON.parse(sessionStorage.getItem('cart-items')).lines.edges
@@ -73,7 +76,7 @@ export default function Index() {
     return data.data
   })
   
-
+  // Update shipping in checkout
   const checkoutShippingMutation = useMutation(async(params) => {
     let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId
@@ -81,6 +84,7 @@ export default function Index() {
     return data.data
   })
 
+  // Remove an entire item from the cart
   const checkoutItemsRemoveMutation = useMutation(async(params) => {
     let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId
@@ -89,6 +93,7 @@ export default function Index() {
     return data.data
   })
 
+  // WIP: for payment
   const checkoutVaultIdMutation = useMutation(async(params) => {
     let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId  
@@ -97,12 +102,14 @@ export default function Index() {
     return data.data
   })
 
+  // Create accessToken --> work like login
   const customerAccessTokenMutation = useMutation(async(params) => {
     let data = await customerAccessToken(params)
     sessionStorage.setItem('accessToken', encryptText(data.data.customerAccessTokenCreate.customerAccessToken.accessToken))
     return data.data
   })
 
+  // Need to have checkoutId and accessToken in storage to work
   const checkoutToCustomerMutation = useMutation(async(params) => {
     let data = await checkoutToCustomer(params)
     return data
