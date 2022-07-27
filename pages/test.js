@@ -14,6 +14,7 @@ import {
   customerAccessToken,
   checkoutToCustomer
 } from '../utils/api/requests'
+import { decryptObject, decryptText, encryptText } from '../utils/utils'
 
 export default function Index() {
   const [field, setField] = useState({
@@ -60,13 +61,13 @@ export default function Index() {
   const checkoutCreateMutation = useMutation(async(params) => {
     // if (sessionStorage.getItem('checkoutId') !== null) {
       let data = await checkoutCreate(params)
-      sessionStorage.setItem('checkoutId', data.data.checkoutCreate.checkout.id)
+      sessionStorage.setItem('checkoutId', encryptText(data.data.checkoutCreate.checkout.id))
       return data.data
     // }
   })
 
   const checkoutUpdateMutation = useMutation(async() => {
-    let checkoutId = sessionStorage.getItem('checkoutId')
+    let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     let lineArr = JSON.parse(sessionStorage.getItem('cart-items')).lines.edges
     let data = await checkoutUpdate({checkoutId: checkoutId, edges: lineArr})
     return data.data
@@ -74,14 +75,14 @@ export default function Index() {
   
 
   const checkoutShippingMutation = useMutation(async(params) => {
-    let checkoutId = sessionStorage.getItem('checkoutId')
+    let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId
     let data = await checkoutShippingUpdate(params)
     return data.data
   })
 
   const checkoutItemsRemoveMutation = useMutation(async(params) => {
-    let checkoutId = sessionStorage.getItem('checkoutId')
+    let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId
 
     let data = await checkoutItemsRemove(params)
@@ -89,7 +90,7 @@ export default function Index() {
   })
 
   const checkoutVaultIdMutation = useMutation(async(params) => {
-    let checkoutId = sessionStorage.getItem('checkoutId')
+    let checkoutId = decryptText(sessionStorage.getItem('checkoutId'))
     params.checkoutId = checkoutId  
     
     let data = await checkoutVaultId(params)
@@ -98,18 +99,18 @@ export default function Index() {
 
   const customerAccessTokenMutation = useMutation(async(params) => {
     let data = await customerAccessToken(params)
-    sessionStorage.setItem('accessToken', data.data.customerAccessTokenCreate.customerAccessToken.accessToken)
+    sessionStorage.setItem('accessToken', encryptText(data.data.customerAccessTokenCreate.customerAccessToken.accessToken))
     return data.data
   })
 
   const checkoutToCustomerMutation = useMutation(async(params) => {
     let data = await checkoutToCustomer(params)
-    console.log(data)
     return data
   })
 
   useEffect(() => {
-    checkoutToCustomerMutation.mutate({checkoutId: sessionStorage.getItem('checkoutId'), accessToken: sessionStorage.getItem('accessToken')})
+    customerAccessTokenMutation.mutate({email: 'will.doan@advesa.com', password: "Antimate99."})
+    checkoutToCustomerMutation.mutate({checkoutId: decryptText(sessionStorage.getItem('checkoutId')), accessToken: decryptText(sessionStorage.getItem('accessToken'))})
   }, [])
 
   return (
@@ -131,7 +132,7 @@ export default function Index() {
       }}>me</p>
 
       <p onClick={() => {
-        let params = JSON.parse(sessionStorage.getItem('cart-items'))
+        let params = decryptObject(sessionStorage.getItem('cart-items'))
         checkoutCreateMutation.mutate({edges: params.lines.edges})
       }}>Checkout</p>
 

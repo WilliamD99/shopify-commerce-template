@@ -8,6 +8,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 import loadingContext from "../utils/loadingContext";
 import cartContext from '../utils/cartContext'
+import { encryptObject } from '../utils/utils';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,7 @@ function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState()
 
   const setCartStorage = (e) => {
-    sessionStorage.setItem('cart-items', JSON.stringify(e))
+    sessionStorage.setItem('cart-items', encryptObject(e))
     setCart(e)
   }
 

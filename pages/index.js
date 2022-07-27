@@ -16,6 +16,7 @@ import {
   cartUpdate,
   cartRemoveItem
 } from '../utils/api/requests'
+import {decryptObject, decryptText, encryptObject, encryptText} from '../utils/utils'
 // Loading Context
 import loadingContext from '../utils/loadingContext';
 import cartContext from '../utils/cartContext'
@@ -58,27 +59,25 @@ export default function Home() {
   // Create cart
   let cartCreateMutation = useMutation(async() => {
     let data = await cartCreate()
-    sessionStorage.setItem('cart', data.data.cartCreate.cart.id)
+    sessionStorage.setItem('cart', encryptText(data.data.cartCreate.cart.id))
+
     setCartStorage(data.data.cartCreate.cart)
-    // sessionStorage.setItem('cart-items', JSON.stringify(data.data.cartCreate.cart))
     return data.data.cartCreate.cart
   })
 
   // Retrieve cart
   let cartRetrieveMutation = useMutation(async() => {
-    let id = sessionStorage.getItem('cart')
+    let id = decryptText(sessionStorage.getItem('cart'))
     if (!id) return
     let data = await cartRetrieve({id: id})
 
     setCartStorage(data.data.cart)
-    // sessionStorage.setItem('cart-items', JSON.stringify(data.data.cart))
-    // console.log(data.data.cart)
     return data
   })
 
   // Add to cart
   let cartAddMutation = useMutation(async(params) => {
-    let id = sessionStorage.getItem('cart')
+    let id = decryptText(sessionStorage.getItem('cart'))
     if (!id) return
     let data = await cartAdd({ id: id, merchandiseId: params.merchandiseId, quantity: params.quantity })
     cartRetrieveMutation.mutate()
@@ -88,7 +87,7 @@ export default function Home() {
 
   // Update Cart
   let cartUpdateMutation = useMutation(async(params) => {
-    let id = sessionStorage.getItem('cart')
+    let id = decryptText(sessionStorage.getItem('cart'))
     if (!id) return
     let data = await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
     cartRetrieveMutation.mutate()
@@ -97,7 +96,7 @@ export default function Home() {
 
   // Remove item in cart
   let cartRemoveItemMutation = useMutation(async(params) => {
-    let id = sessionStorage.getItem('cart')
+    let id = decryptText(sessionStorage.getItem('cart'))
     if (!id) return
     let data = await cartRemoveItem({ id: id, merchandiseId: params.merchandiseId })
     cartRetrieveMutation.mutate()
@@ -120,7 +119,7 @@ export default function Home() {
   // Get the cart from sessionStorage to add it to app's state (page refresh problem)
   useEffect(() => {
     if (cart === undefined) {
-      let cartNew = JSON.parse(sessionStorage.getItem('cart-items'))
+      let cartNew = decryptObject(sessionStorage.getItem('cart-items'))
       setCart(cartNew)
     }
   }, [cart])
@@ -149,7 +148,7 @@ export default function Home() {
                       {item.node.id}
                     </p>
                     <button className='border-2 border-black px-2' onClick={() => {
-                      let cart = JSON.parse(sessionStorage.getItem('cart-items'))
+                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
                       let lines = cart.lines.edges
 
                       // Findout if the product is in the cart or not
@@ -174,7 +173,7 @@ export default function Home() {
                       Click me
                     </button>
                     <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                      let cart = JSON.parse(sessionStorage.getItem('cart-items'))
+                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
                       let lines = cart.lines.edges
 
                       let product, isInCart, quantityCurrent
@@ -194,7 +193,7 @@ export default function Home() {
                       Remove 1
                     </button>
                     <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                      let cart = JSON.parse(sessionStorage.getItem('cart-items'))
+                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
                       let lines = cart.lines.edges
 
                       // Findout if the product is in the cart or not
