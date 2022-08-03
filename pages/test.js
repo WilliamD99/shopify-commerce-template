@@ -15,8 +15,10 @@ import {
   checkoutToCustomer
 } from '../utils/api/requests'
 import { decryptObject, decryptText, encryptText } from '../utils/utils'
+import axios from 'axios'
 
-export default function Index() {
+export default function Index({props}) {
+  console.log(props)
   const [field, setField] = useState({
     email: "",
     password: ""
@@ -115,10 +117,10 @@ export default function Index() {
     return data
   })
 
-  useEffect(() => {
-    customerAccessTokenMutation.mutate({email: 'will.doan@advesa.com', password: "Antimate99."})
-    checkoutToCustomerMutation.mutate({checkoutId: decryptText(sessionStorage.getItem('checkoutId')), accessToken: decryptText(sessionStorage.getItem('accessToken'))})
-  }, [])
+  // useEffect(() => {
+  //   customerAccessTokenMutation.mutate({email: 'will.doan@advesa.com', password: "Antimate99."})
+  //   checkoutToCustomerMutation.mutate({checkoutId: decryptText(sessionStorage.getItem('checkoutId')), accessToken: decryptText(sessionStorage.getItem('accessToken'))})
+  // }, [])
 
   return (
     <>

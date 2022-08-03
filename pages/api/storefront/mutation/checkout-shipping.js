@@ -5,7 +5,8 @@ const requests = async (req, res) => {
     try {
         let params = req.body.data
         let checkoutId = params.checkoutId
-        let shippingAddress = JSON.stringify(params.shippingAddress)
+        let shippingAddress = JSON.stringify(params.address)
+        shippingAddress = shippingAddress.replace(/"([^"]+)":/g, '$1:');
 
         const query = `
         mutation {

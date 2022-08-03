@@ -1,0 +1,16 @@
+- create cart
+    + Update cart
+    + Get cart
+- create checkout
+    + Update checkout (items)
+    + Update checkout shipping address
+    + Update email checkout
+    + Associate checkout to a customer 
+    + Shipping Line Update
+    + Get checkout
+- Create Payment Intent
+    + Update Payment Intent
+- Create Payment Method
+    + Create token for Payment Method
+- Complete Checkout using PM token 
+

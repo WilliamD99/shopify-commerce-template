@@ -9,7 +9,9 @@ export default function Cart() {
 
     useEffect(() => {
         let totalItem = 0
-        cart.lines.edges.forEach(e => totalItem += e.node.quantity)
+        if (cart !== undefined) {
+            cart.lines.edges.forEach(e => totalItem += e.node.quantity)
+        }
         setTotal(totalItem)
     }, [cart])
 

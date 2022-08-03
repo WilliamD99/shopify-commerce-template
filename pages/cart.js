@@ -1,40 +1,41 @@
-import React, {useState, useEffect} from 'react'
-import { decryptText } from '../utils/utils'
-import {Elements, PaymentElement} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
-import axios from 'axios';
+import React, {useEffect, useContext} from 'react'
+import cartContext from '../utils/cartContext'
 
-const stripePromise = loadStripe('pk_test_51LQIuMJF5iU7SUPZMkeKONKxr2VfCqcX9MS47jq5ozvEmg8BEJpaecDNiGW26bZHHAm0HxEF3VpCRvtTe9YscqUk00tL1zYHtS');
+import {cartCreate} from '../utils/api/requests'
+import {encryptText, decryptObject} from '../utils/utils'
+import {useMutation} from '@tanstack/react-query'
 
 export default function Cart() {
-    const options = {
-        clientSecret: "pi_3LQJZhJF5iU7SUPZ07JPxJw6_secret_yw2t0PMdheMNFM0gbilOvOkQ9"
+  const {cart, setCartStorage, setCart} = useContext(cartContext)
+
+  // Create cart
+  let cartCreateMutation = useMutation(async() => {
+    let data = await cartCreate()
+    sessionStorage.setItem('cart', encryptText(data.data.cartCreate.cart.id))
+
+    setCartStorage(data.data.cartCreate.cart)
+    return data.data.cartCreate.cart
+  })
+  
+  // First loaded, create a cart
+  useEffect(() => {
+    if (sessionStorage.getItem('cart') === null) {
+      cartCreateMutation.mutate()
     }
+  }, [])
 
-    useEffect(() => {
-        axios.get('/api/stripe/test', {
-            data: {
-                amount: 2000,
-                currency: "cad",
-                method: ['card']
-            }
-        }).then(res => console.log(res))
-    }, [])
+  // Get the cart from sessionStorage to add it to app's state (page refresh problem)
+  useEffect(() => {
+    if (cart === undefined) {
+      // Prevent first loaded
+      if (sessionStorage.getItem('cart-items') !== null) {
+        let cartNew = decryptObject(sessionStorage.getItem('cart-items'))
+        setCart(cartNew)
+      }
+    }
+  }, [cart])
 
-    return (
-        <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm />
-        </Elements>
-    )
-}
-
-let CheckoutForm = () => {
-    return (
-        <>
-            <form>
-                <PaymentElement />
-                <button>Submit</button>
-            </form>
-        </>
-    )
+  return (
+    <div>Cart</div>
+  )
 }

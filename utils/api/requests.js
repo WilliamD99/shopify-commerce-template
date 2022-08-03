@@ -157,6 +157,15 @@ let checkoutItemsRemove = async (params) => {
     return data.data
 }
 
+// Update email checkout
+let checkoutEmailUpdate = async (params) => {
+    let url = "/api/storefront/mutation/checkout-email-update"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 // Get vault
 let checkoutVaultId = async (params) => {
     let url = "/api/admin/mutation/checkout-vault"
@@ -172,6 +181,40 @@ let checkoutToCustomer = async (params) => {
     let data = await axios.post(url, {
         data: params
     })
+    return data.data
+}
+
+// Update checkout shipping address
+let checkoutUpdateShipping = async (params) => {
+    let url = "/api/storefront/mutation/checkout-shipping-address-update"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Shipping Line update
+let checkoutShippingLineUpdate = async (params) => {
+    let url = "/api/storefront/mutation/checkout-shipping-line"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Complete checkout with Stripe
+let checkoutCompleteStripe = async (params) => {
+    let url = "/api/storefront/mutation/checkout-complete-stripe"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Get all the delivery
+let deliveryAll = async () => {
+    let url = "/api/admin/query/delivery-all"
+    let data = await axios.get(url)
     return data.data
 }
 
@@ -196,5 +239,10 @@ export {
     checkoutItemsRemove,
     checkoutVaultId,
     customerAccessToken,
-    checkoutToCustomer
+    checkoutToCustomer,
+    checkoutCompleteStripe,
+    checkoutUpdateShipping,
+    checkoutShippingLineUpdate,
+    checkoutEmailUpdate,
+    deliveryAll
 }

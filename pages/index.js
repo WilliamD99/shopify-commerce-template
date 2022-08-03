@@ -1,6 +1,6 @@
 // 3rd party library
 import { useState, useEffect, useContext } from 'react';
-import {useQuery, useMutation, QueryClient} from '@tanstack/react-query'
+import {useQuery, useMutation, QueryClient, useQueries} from '@tanstack/react-query'
 
 // Components
 import DataLoading from '../components/Loading/dataLoading';
@@ -14,7 +14,8 @@ import {
   cartRetrieve,
   cartAdd,
   cartUpdate,
-  cartRemoveItem
+  cartRemoveItem,
+  checkoutCreate
 } from '../utils/api/requests'
 import {decryptObject, decryptText, encryptObject, encryptText} from '../utils/utils'
 // Loading Context
@@ -22,6 +23,7 @@ import loadingContext from '../utils/loadingContext';
 import cartContext from '../utils/cartContext'
 
 import Cart from '../components/cart';
+import SingeProduct from '../components/Shop/single-product';
 
 const queryClient = new QueryClient()
 
@@ -77,26 +79,47 @@ export default function Home() {
 
   // Add to cart
   let cartAddMutation = useMutation(async(params) => {
-    let id = decryptText(sessionStorage.getItem('cart'))
-    if (!id) return
-    let data = await cartAdd({ id: id, merchandiseId: params.merchandiseId, quantity: params.quantity })
-    cartRetrieveMutation.mutate()
-
-    return data.data
+    let cartSession = sessionStorage.getItem('cart')
+    if (cartSession !== null) {
+      let id = decryptText(cartSession)
+      if (!id) return
+      await cartAdd({ id: id, merchandiseId: params.merchandiseId, quantity: params.quantity })
+      cartRetrieveMutation.mutate()
+    }
+    else {
+      let items = sessionStorage.getItem('items')
+      if (items === null) {
+        sessionStorage.setItem('items', JSON.stringify([{ merchandiseId: params.merchandiseId, quantity: params.quantity }]))
+      }
+      else {
+        items = JSON.parse(items)
+        items.push({ merchandiseId: params.merchandiseId, quantity: params.quantity })
+      }
+    }
   })
 
   // Update Cart
   let cartUpdateMutation = useMutation(async(params) => {
-    let id = decryptText(sessionStorage.getItem('cart'))
-    if (!id) return
-    let data = await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
-    cartRetrieveMutation.mutate()
-    return data.data
+    let cartSession = sessionStorage.getItem('cart')
+    if (cartSession !== null) {
+      let id = decryptText(cartSession)
+      if (!id) return
+      await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
+      cartRetrieveMutation.mutate()
+    }
+    else {
+      let items = JSON.parse(sessionStorage.getItem('items'))
+      let targetItemIndex = items.findIndex(item => item.merchandiseId === params.merchandiseId)
+      items[targetItemIndex] = params.quantity
+      sessionStorage.setItem('items', JSON.stringify(items))
+    }
   })
 
   // Remove item in cart
   let cartRemoveItemMutation = useMutation(async(params) => {
-    let id = decryptText(sessionStorage.getItem('cart'))
+    let cartSession = sessionStorage.getItem('cart')
+    // if ()
+    let id = decryptText(cartSession)
     if (!id) return
     let data = await cartRemoveItem({ id: id, merchandiseId: params.merchandiseId })
     cartRetrieveMutation.mutate()
@@ -119,8 +142,11 @@ export default function Home() {
   // Get the cart from sessionStorage to add it to app's state (page refresh problem)
   useEffect(() => {
     if (cart === undefined) {
-      let cartNew = decryptObject(sessionStorage.getItem('cart-items'))
-      setCart(cartNew)
+      // First loaded the storage doesnt have anything
+      if (sessionStorage.getItem('cart-items') !== null) {
+        let cartNew = decryptObject(sessionStorage.getItem('cart-items'))
+        setCart(cartNew)
+      }
     }
   }, [cart])
 
@@ -135,90 +161,13 @@ export default function Home() {
         cartRetrieveMutation.mutate()
       }}>Click me</p>
       <p className='text-5xl' onClick={() => productInCollectionMutation.mutate()}>Hello</p>
-      {
-        dataArr.map((e, i) => (
-          <div className='flex flex-row mb-5' key={i}>
-            <p>{e.node.id}</p>
-            <div>
-              {
-                // e.node.varians
-                e.node.variants.edges.map((item, index) => (
-                  <div key={index}>
-                    <p>
-                      {item.node.id}
-                    </p>
-                    <button className='border-2 border-black px-2' onClick={() => {
-                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                      let lines = cart.lines.edges
-
-                      // Findout if the product is in the cart or not
-                      // --> decide whether to add or update
-                      let product, isInCart, quantityCurrent
-                      for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                          product = lines[i].node.id
-                          isInCart = true
-                          quantityCurrent = lines[i].node.quantity + 1
-                        }
-                        else {
-                          isInCart = false
-                        }
-                      }
-                      !isInCart ? 
-                        cartAddMutation.mutate({merchandiseId: item.node.id, quantity: 1})
-                        :
-                        cartUpdateMutation.mutate({merchandiseId: product, quantity: quantityCurrent})
-                      
-                    }}>
-                      Click me
-                    </button>
-                    <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                      let lines = cart.lines.edges
-
-                      let product, isInCart, quantityCurrent
-                      for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                          product = lines[i].node.id
-                          isInCart = true
-                          quantityCurrent = lines[i].node.quantity - 1
-                        }
-                        else {
-                          isInCart = false
-                        }
-                      }
-                      
-                      if (isInCart) cartUpdateMutation.mutate({merchandiseId: product, quantity: quantityCurrent})
-                    }}>
-                      Remove 1
-                    </button>
-                    <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                      let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                      let lines = cart.lines.edges
-
-                      // Findout if the product is in the cart or not
-                      // --> decide whether to add or update
-                      let product, isInCart
-                      for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                          product = lines[i].node.id
-                          isInCart = true
-                        }
-                        else {
-                          isInCart = false
-                        }
-                      }
-                      if (isInCart) cartRemoveItemMutation.mutate({merchandiseId: product})
-                    }}>
-                      Remove
-                    </button>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        ))
-      }
+      <div className='grid grid-cols-4 gap-2'>
+        {
+          dataArr.map((e, i) => (
+            <SingeProduct key={i} e={e} add={cartAddMutation.mutate} update={cartUpdateMutation.mutate} remove={cartRemoveItemMutation.mutate}/>
+          ))
+        }
+      </div>
     </>
   )
 }
