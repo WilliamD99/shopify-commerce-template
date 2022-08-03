@@ -7,7 +7,6 @@ const requests = async (req, res) => {
         const id = params.id
         const merchandiseId = params.merchandiseId
         const quantity = params.quantity
-        console.log(id, merchandiseId, quantity)
         const query = `
         mutation {
             cartLinesAdd(cartId: "${id}", lines: {

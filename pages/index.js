@@ -104,7 +104,8 @@ export default function Home() {
     if (cartSession !== null) {
       let id = decryptText(cartSession)
       if (!id) return
-      await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
+      let data = await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
+      console.log(data)
       cartRetrieveMutation.mutate()
     }
     else {
@@ -118,7 +119,7 @@ export default function Home() {
   // Remove item in cart
   let cartRemoveItemMutation = useMutation(async(params) => {
     let cartSession = sessionStorage.getItem('cart')
-    // if ()
+    // if ()~
     let id = decryptText(cartSession)
     if (!id) return
     let data = await cartRemoveItem({ id: id, merchandiseId: params.merchandiseId })
@@ -156,10 +157,6 @@ export default function Home() {
   
   return (
     <>
-      <Cart />
-      <p onClick={() => {
-        cartRetrieveMutation.mutate()
-      }}>Click me</p>
       <p className='text-5xl' onClick={() => productInCollectionMutation.mutate()}>Hello</p>
       <div className='grid grid-cols-4 gap-2'>
         {

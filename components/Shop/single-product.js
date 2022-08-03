@@ -8,7 +8,7 @@ export default function SingeProduct({e, add, update, remove}) {
             <div className='relative w-10 h-10'>
                 {/* <Image alt={e.node.title} src={e.node.featureImage.url} layout="fill"/> */}
             </div>
-            <p>{e.node.title}</p>
+            <a href={`/product/${e.node.handle}`}>{e.node.title}</a>
             <div>
             {
                 // e.node.varians
@@ -35,6 +35,7 @@ export default function SingeProduct({e, add, update, remove}) {
                             isInCart = false
                         }
                     }
+                    console.log(product, item.node.id)
                     !isInCart ? 
                         add({merchandiseId: item.node.id, quantity: 1})
                         :
@@ -55,7 +56,7 @@ export default function SingeProduct({e, add, update, remove}) {
                             quantityCurrent = lines[i].node.quantity - 1
                         }
                         else {
-                        isInCart = false
+                            isInCart = false
                         }
                     }
                     

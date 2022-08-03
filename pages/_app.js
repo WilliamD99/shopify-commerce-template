@@ -10,6 +10,8 @@ import loadingContext from "../utils/loadingContext";
 import cartContext from '../utils/cartContext'
 import { encryptObject } from '../utils/utils';
 
+import Layout from '../components/layout'
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -59,7 +61,9 @@ function MyApp({ Component, pageProps }) {
       <cartContext.Provider value={{cart, setCartStorage, setCart}}>
         <loadingContext.Provider value={{loading, setLoading}}>
           <QueryClientProvider client={queryClient}>
+            <Layout>
               <Component {...pageProps} />
+            </Layout>
           </QueryClientProvider>
         </loadingContext.Provider>
       </cartContext.Provider>

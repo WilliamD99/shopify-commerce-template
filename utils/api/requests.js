@@ -18,6 +18,15 @@ let productInCollection = async (params) => {
     return data.data
 }
 
+// Get product by handle
+let productByHandle = async (params) => {
+    let url = "/api/storefront/query/product-by-handle"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 // Get all products
 let productAll = async () => {
     let url = "api/admin/query/all-products"
@@ -224,6 +233,7 @@ export {
     productAll,
     collectionAll,
     productSearch,
+    productByHandle,
     cartCreate,
     cartRetrieve,
     cartAdd,
