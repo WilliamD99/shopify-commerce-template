@@ -18,7 +18,6 @@ import { decryptObject, decryptText, encryptText } from '../utils/utils'
 import axios from 'axios'
 
 export default function Index({props}) {
-  console.log(props)
   const [field, setField] = useState({
     email: "",
     password: ""

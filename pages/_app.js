@@ -2,6 +2,7 @@ import {useState} from 'react'
 // Style
 import "../public/styles/tailwind.css"
 import "../public/styles/index.css"
+import "react-toastify/dist/ReactToastify.css"
 // Library
 import Helmet from "react-helmet";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'

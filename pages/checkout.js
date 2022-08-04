@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react'
 import cartContext from '../utils/cartContext'
 
-import {useMutation, useQuery} from '@tanstack/react-query'
+import {useMutation} from '@tanstack/react-query'
 import { checkoutCreate, cartCreate } from '../utils/api/requests'
 import {decryptObject, encryptText} from '../utils/utils'
 
@@ -44,16 +44,32 @@ export default function Checkout() {
             }
         }
         // Create checkoutId after create cart
-        if (cart !== undefined) {
+        if (cart !== undefined && sessionStorage.getItem('checkoutId') !== null) {
             checkoutCreateMutation.mutate({edges: cart.lines.edges})
         }
     }, [cart])
 
     return (
-        <div onClick={() => {
-            console.log(sessionStorage.getItem('items'))
-            sessionStorage.setItem('items', JSON.stringify([{test: "test", val: "test"}]))
-        }}>Checkout</div>
+        <>
+            <div 
+                onClick={() => {
+                    console.log(cart)
+                }}
+            >
+                Checkout
+            </div>
+            {
+                cart !== undefined ?
+                cart.lines.edges.map((e, i) => (
+                    <div key={i}>
+                        <p>{e.node.id}</p>
+                        <p>{e.node.quantity}</p>
+                    </div>
+                ))
+                :
+                <></>
+            }
+        </>
     )
 }
 

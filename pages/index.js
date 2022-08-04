@@ -1,10 +1,11 @@
 // 3rd party library
-import { useState, useEffect, useContext } from 'react';
-import {useQuery, useMutation, QueryClient, useQueries} from '@tanstack/react-query'
+import { useState, useEffect, useContext, useRef } from 'react';
+import {useQuery, useMutation, QueryClient} from '@tanstack/react-query'
 
 // Components
 import DataLoading from '../components/Loading/dataLoading';
 import Error from '../components/Error';
+import SingeProduct from '../components/Shop/single-product';
 
 // Request
 import {
@@ -14,16 +15,13 @@ import {
   cartRetrieve,
   cartAdd,
   cartUpdate,
-  cartRemoveItem,
-  checkoutCreate
+  cartRemoveItem
 } from '../utils/api/requests'
-import {decryptObject, decryptText, encryptObject, encryptText} from '../utils/utils'
+import {decryptObject, decryptText, encryptText} from '../utils/utils'
 // Loading Context
 import loadingContext from '../utils/loadingContext';
 import cartContext from '../utils/cartContext'
 
-import Cart from '../components/cart';
-import SingeProduct from '../components/Shop/single-product';
 
 const queryClient = new QueryClient()
 
@@ -138,6 +136,7 @@ export default function Home() {
         setLoading(false)
       }, 1200)
     }
+
   }, [isLoading, productInCollectionMutation.isLoading])
 
   // Get the cart from sessionStorage to add it to app's state (page refresh problem)

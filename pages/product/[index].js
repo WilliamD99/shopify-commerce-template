@@ -4,7 +4,6 @@ import {useRouter} from 'next/router'
 import { productByHandle, cartRetrieve, cartAdd, cartUpdate } from '../../utils/api/requests'
 import {decryptObject, decryptText} from '../../utils/utils'
 import {useMutation} from '@tanstack/react-query'
-
 import cartContext from '../../utils/cartContext'
 
 export default function Products() {
@@ -115,6 +114,7 @@ export default function Products() {
     setQuantity(parseInt(inputRef.current.value))
   }, [inputRef.current.value])
 
+  // Loading state
   if (product === undefined) return <p>Loading</p>
 
   return (
@@ -122,7 +122,6 @@ export default function Products() {
       <div onClick={() => console.log(product)}>Products {index}</div>
       <div onClick={() => console.log(decryptObject(sessionStorage.getItem('cart-items')))}>Items</div>
       <div onClick={() => console.log(quantity)}>Quantity</div>
-
       {
         product.variants.edges.map((e, i) => (
           <p key={i} onClick={() => setVariantId(e.node.id)}>{e.node.id}</p>
