@@ -43,6 +43,7 @@ export default function Home() {
       let data
       data = await productAll()
       setDataArr(data.data.products.edges)
+      console.log(data)
       return data
     }
   )
