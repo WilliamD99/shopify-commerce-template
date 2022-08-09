@@ -1,33 +1,20 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {useMutation} from '@tanstack/react-query'
 import cartContext from '../utils/cartContext'
-import {cartRetrieve} from '../utils/api/requests'
-import {decryptText} from '../utils/utils'
 
-export default function Cart() {
-    const {cart, setCartStorage}  = useContext(cartContext)
+export default function CartComponent() {
+    // const [cart, setCart] = useState([])
     const [total, setTotal] = useState(0)
+    const {cart, setCart} = useContext(cartContext)
 
-    // Retrieve cart
-    let cartRetrieveMutation = useMutation(async() => {
-        let id = decryptText(sessionStorage.getItem('cart'))
-        if (!id) return
-        let data = await cartRetrieve({id: id})
-        setCartStorage(data.data.cart)
-        return data
-    })
-
-    // Keeping track of the cart 
     useEffect(() => {
-        let totalItem = 0
-        cartRetrieveMutation.mutate()
-        if (cart !== undefined) {
-            cart.lines.edges.forEach(e => totalItem += e.node.quantity)
+        let count = 0
+        if (typeof cart === "object") {
+            cart.forEach(item => count += item.quantity)
+            setTotal(count)
         }
-        setTotal(totalItem)
     }, [cart])
 
     return (
-        <div>Cart: { total }</div>
+        <div>CartComponent {total}</div>
     )
 }

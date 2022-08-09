@@ -43,12 +43,13 @@ export default function Home() {
     ['all'],
     async () => {
       let data
+      console.log('run')
       data = await productAll()
+      console.log(data)
       setDataArr(data.data.products.edges)
       return data
     }
   )
-
   // Fetch new Data action
   let productInCollectionMutation = useMutation(async() => {
     let data = await productInCollection({id: "gid://shopify/Collection/284230615220"})
@@ -149,7 +150,8 @@ export default function Home() {
         setCart(cartNew)
       }
     }
-  }, [cart])
+    console.log('test')
+  }, [])
 
   if (loading) return <DataLoading />
 

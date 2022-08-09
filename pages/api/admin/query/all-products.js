@@ -5,7 +5,7 @@ const requests = async (req, res) => {
     try {
         const query = `
         {
-            products(first: 100) {
+            products(first: 10) {
               edges {
                 node {
                     id

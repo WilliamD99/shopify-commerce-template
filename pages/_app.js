@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 // Style
 import "../public/styles/tailwind.css"
 import "../public/styles/index.css"
@@ -22,12 +22,14 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
-  const [cart, setCart] = useState()
+  const [cart, setCart] = useState([])
 
-  const setCartStorage = (e) => {
-    sessionStorage.setItem('cart-items', encryptObject(e))
-    setCart(e)
-  }
+  useEffect(() => {
+    let items = JSON.parse(localStorage.getItem('items'))
+    if (items !== null) {
+      setCart(JSON.parse(localStorage.getItem('items')))
+    }
+  }, [])
 
   return (
     <>
@@ -58,7 +60,7 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <cartContext.Provider value={{cart, setCartStorage, setCart}}>
+      <cartContext.Provider value={{cart, setCart}}>
         <loadingContext.Provider value={{loading, setLoading}}>
           <QueryClientProvider client={queryClient}>
             <Layout>

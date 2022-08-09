@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import {useRouter} from 'next/router'
 
-import { productByHandle, cartRetrieve, cartAdd, cartUpdate } from '../../utils/api/requests'
-import {decryptObject, decryptText} from '../../utils/utils'
+import { productByHandle } from '../../utils/api/requests'
+import {decryptObject, decryptText, cartAdd} from '../../utils/utils'
 import {useMutation} from '@tanstack/react-query'
 
 import cartContext from '../../utils/cartContext'
@@ -13,7 +13,7 @@ export default function Products() {
   const [product, setProduct] = useState()
   const [quantity, setQuantity] = useState(0)
   const [variantId, setVariantId] = useState()
-  const {setCartStorage} = useContext(cartContext)
+  const {setCart} = useContext(cartContext)
   const inputRef = useRef(0)
 
   let productByHandleMutation = useMutation(async(params) => {
@@ -21,88 +21,10 @@ export default function Products() {
     setProduct(data.data.productByHandle)
   })
 
-  // Retrieve cart
-  let cartRetrieveMutation = useMutation(async() => {
-    let id = decryptText(sessionStorage.getItem('cart'))
-    if (!id) return
-    let data = await cartRetrieve({id: id})
-    setCartStorage(data.data.cart)
-    return data
-  })
-
-  // Add to cart
-  let cartAddMutation = useMutation(async(params) => {
-    let cartSession = sessionStorage.getItem('cart')
-    if (cartSession !== null) {
-      let id = decryptText(cartSession)
-      if (!id) return
-      await cartAdd({ id: id, merchandiseId: params.merchandiseId, quantity: params.quantity })
-      cartRetrieveMutation.mutate()
-    }
-    else {
-      let items = sessionStorage.getItem('items')
-      if (items === null) {
-        sessionStorage.setItem('items', JSON.stringify([{ merchandiseId: params.merchandiseId, quantity: params.quantity }]))
-      }
-      else {
-        items = JSON.parse(items)
-        items.push({ merchandiseId: params.merchandiseId, quantity: params.quantity })
-      }
-    }
-  })
-
-  // Update Cart
-  let cartUpdateMutation = useMutation(async(params) => {
-    let cartSession = sessionStorage.getItem('cart')
-    if (cartSession !== null) {
-      let id = decryptText(cartSession)
-      if (!id) return
-      console.log(params)
-      await cartUpdate({id: id, merchandiseId: params.merchandiseId, quantity: params.quantity})
-      cartRetrieveMutation.mutate()
-    }
-    else {
-      let items = JSON.parse(sessionStorage.getItem('items'))
-      let targetItemIndex = items.findIndex(item => item.merchandiseId === params.merchandiseId)
-      items[targetItemIndex] = params.quantity
-      sessionStorage.setItem('items', JSON.stringify(items))
-    }
-  })
-
   // On change input quantity
   let onChangeInput = (e) => {
     e.preventDefault();
     setQuantity(parseInt(inputRef.current.value))
-  }
-
-  // Add/Update cart
-  let onClickAdd = (e) => {
-    // Force user to choose a variant
-    if (variantId === undefined) {
-      alert('Please choose a variant')
-      return
-    }
-    let cart = decryptObject(sessionStorage.getItem('cart-items'))
-    let lines = cart.lines.edges
-
-    // Findout if the product is in the cart or not
-    // --> decide whether to add or update
-    let product, isInCart, quantityCurrent
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i].node.merchandise.id === variantId) {
-            product = lines[i].node.id
-            isInCart = true
-            quantityCurrent = lines[i].node.quantity + quantity
-        }
-        else {
-            isInCart = false
-        }
-    }
-    !isInCart ? 
-        cartAddMutation.mutate({merchandiseId: variantId, quantity: quantity})
-        :
-        cartUpdateMutation.mutate({merchandiseId: product, quantity: quantityCurrent})
-    
   }
   
   // Get the product
@@ -138,7 +60,7 @@ export default function Products() {
             -
         </div>
       </div>
-      <div onClick={onClickAdd}>Add to cart</div>
+      <div onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity}, setCart)}>Add to cart</div>
     </>
   )
 }

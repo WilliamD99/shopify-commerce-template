@@ -1,8 +1,10 @@
-import React from 'react'
-import { decryptObject } from '../../utils/utils'
+import React, { useContext } from 'react'
+import { decryptObject, cartAdd, cartRemoveItem } from '../../utils/utils'
 import Image from 'next/image'
+import cartContext from '../../utils/cartContext'
 
-export default function SingeProduct({e, add, update, remove}) {
+export default function SingeProduct({e}) {
+    const {setCart} = useContext(cartContext)
     return (
         <div className='flex flex-col mb-5 bg-slate-50 px-2 py-2 product'>
             <div className='relative w-10 h-10'>
@@ -18,70 +20,15 @@ export default function SingeProduct({e, add, update, remove}) {
                     {item.node.title}
                     {/* {item.node.id */}
                     </p>
-                    <button className='border-2 border-black px-2' onClick={() => {
-                    let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                    let lines = cart.lines.edges
-
-                    // Findout if the product is in the cart or not
-                    // --> decide whether to add or update
-                    let product, isInCart, quantityCurrent
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                            product = lines[i].node.id
-                            isInCart = true
-                            quantityCurrent = lines[i].node.quantity + 1
-                        }
-                        else {
-                            isInCart = false
-                        }
-                    }
-                    console.log(product, item.node.id)
-                    !isInCart ? 
-                        add({merchandiseId: item.node.id, quantity: 1})
-                        :
-                        update({merchandiseId: product, quantity: quantityCurrent})
-                    
-                    }}>
+                    <button className='border-2 border-black px-2' onClick={() => cartAdd({merchandiseId: item.node.id, quantity: 1}, setCart)}
+                    >
                         Click me
                     </button>
-                    <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                    let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                    let lines = cart.lines.edges
-
-                    let product, isInCart, quantityCurrent
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                            product = lines[i].node.id
-                            isInCart = true
-                            quantityCurrent = lines[i].node.quantity - 1
-                        }
-                        else {
-                            isInCart = false
-                        }
-                    }
-                    
-                    if (isInCart) update({merchandiseId: product, quantity: quantityCurrent})
-                    }}>
+                    <button className='border-2 border-black px-2 ml-2' onClick={() => cartAdd({merchandiseId: e.node.variants.edges[0].node.id, quantity: -1}, setCart)}
+                    >
                         Remove 1
                     </button>
-                    <button className='border-2 border-black px-2 ml-2' onClick={() => {
-                    let cart = decryptObject(sessionStorage.getItem('cart-items'))
-                    let lines = cart.lines.edges
-
-                    // Findout if the product is in the cart or not
-                    // --> decide whether to add or update
-                    let product, isInCart
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].node.merchandise.id === item.node.id) {
-                            product = lines[i].node.id
-                            isInCart = true
-                        }
-                        else {
-                            isInCart = false
-                        }
-                    }
-                    if (isInCart) remove({merchandiseId: product})
-                    }}>
+                    <button className='border-2 border-black px-2 ml-2' onClick={() => cartRemoveItem({merchandiseId: e.node.variants.edges[0].node.id}, setCart)}>
                         Remove
                     </button>
                 </div>
