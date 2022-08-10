@@ -20,7 +20,7 @@ export default function SingeProduct({e}) {
                     {item.node.title}
                     {/* {item.node.id */}
                     </p>
-                    <button className='border-2 border-black px-2' onClick={() => cartAdd({merchandiseId: item.node.id, quantity: 1}, setCart)}
+                    <button className='border-2 border-black px-2' onClick={() => cartAdd({merchandiseId: item.node.id, quantity: 1, price: item.node.price}, setCart)}
                     >
                         Click me
                     </button>

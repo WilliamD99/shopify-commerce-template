@@ -57,7 +57,7 @@ export default function Products() {
         <div onClick={() => {
           if (quantity > 0) inputRef.current.value = parseInt(inputRef.current.value) - 1
         }}>
-            -
+          -
         </div>
       </div>
       <div onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity}, setCart)}>Add to cart</div>

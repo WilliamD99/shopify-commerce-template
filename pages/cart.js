@@ -1,41 +1,35 @@
-import React, {useEffect, useContext} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
+import useCartCreate from '../utils/hooks/useCartCreate'
 import cartContext from '../utils/cartContext'
 
-import {cartCreate} from '../utils/api/requests'
-import {encryptText, decryptObject} from '../utils/utils'
-import {useMutation} from '@tanstack/react-query'
+import Single from '../components/Cart/single-product'
 
 export default function Cart() {
-  const {cart, setCartStorage, setCart} = useContext(cartContext)
+  const [cartData, setCartData] = useState()
+  const {cart} = useContext(cartContext)
 
-  // Create cart
-  let cartCreateMutation = useMutation(async() => {
-    let data = await cartCreate()
-    sessionStorage.setItem('cart', encryptText(data.data.cartCreate.cart.id))
+  // Generate cart id in the local storage
+  let cartCreate = useCartCreate()
 
-    setCartStorage(data.data.cartCreate.cart)
-    return data.data.cartCreate.cart
-  })
-  
-  // First loaded, create a cart
+  // For live data update
   useEffect(() => {
-    if (sessionStorage.getItem('cart') === null) {
-      cartCreateMutation.mutate()
-    }
-  }, [])
-
-  // Get the cart from sessionStorage to add it to app's state (page refresh problem)
-  useEffect(() => {
-    if (cart === undefined) {
-      // Prevent first loaded
-      if (sessionStorage.getItem('cart-items') !== null) {
-        let cartNew = decryptObject(sessionStorage.getItem('cart-items'))
-        setCart(cartNew)
-      }
-    }
+    setCartData(JSON.parse(localStorage.getItem('items')))
   }, [cart])
 
+  if (!cartData) return <p>Loading...</p>
+
   return (
-    <div>Cart</div>
+    <>
+      <div onClick={() => {
+        console.log(cartCreate)
+      }}>Cart</div>
+      {
+        cartData.map((e,i) => (
+          <div className='flex flex-row space-x-10' key={i}>
+            <Single item={e}/>
+          </div>
+        ))
+      }
+    </>
   )
 }

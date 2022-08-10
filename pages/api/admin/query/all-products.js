@@ -25,6 +25,7 @@ const requests = async (req, res) => {
                         edges {
                           node {
                             id
+                            price
                           }
                         }
                     }

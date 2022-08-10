@@ -3,11 +3,22 @@ import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
 
 const requests = async (req, res) => {
     try {
+        const params = req.body.data
+        const lines = params.lines
+
+        let linesQuery
+        if (lines.length > 0) {
+          linesQuery = lines.map(e => `{ merchandiseId: "${e.merchandiseId}", quantity: ${e.quantity}}`)
+        } else {
+          linesQuery = ``
+        }
+
         const query = `
         mutation {
             cartCreate(
               input: {
-                attributes: { key: "cart_attribute", value: "This is a cart attribute" }
+                attributes: { key: "cart_attribute", value: "This is a cart attribute" },
+                lines: [${linesQuery}]
               }
             ) {
               cart {
@@ -18,6 +29,7 @@ const requests = async (req, res) => {
                   edges {
                     node {
                       id
+
                       merchandise {
                         ... on ProductVariant {
                           id

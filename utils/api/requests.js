@@ -44,9 +44,11 @@ let collectionAll = async () => {
 }
 
 // Create cart
-let cartCreate = async () => {
+let cartCreate = async (params) => {
     let url = "/api/storefront/mutation/cart"
-    let data = await axios.post(url)
+    let data = await axios.post(url, {
+        data: params
+    })
     return data.data
 }
 

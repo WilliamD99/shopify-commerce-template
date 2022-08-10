@@ -6,7 +6,7 @@ let useCartRetrieve = () => {
     let {data, isLoading, isError} = useQuery(
         ['all'],
         async () => {
-            let id = decryptText(sessionStorage.getItem('cart'))
+            let id = decryptText(localStorage.getItem('cart'))
             if (!id) return
             let data = await cartRetrieve({id: id})
             return data.data.cart
