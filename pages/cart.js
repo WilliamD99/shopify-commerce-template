@@ -3,6 +3,7 @@ import useCartCreate from '../utils/hooks/useCartCreate'
 import cartContext from '../utils/cartContext'
 
 import Single from '../components/Cart/single-product'
+import Link from '../components/common/Link'
 
 export default function Cart() {
   const [cartData, setCartData] = useState()
@@ -30,6 +31,7 @@ export default function Cart() {
           </div>
         ))
       }
+      <Link disabled href="/checkout">Checkout</Link>
     </>
   )
 }

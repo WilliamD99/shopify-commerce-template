@@ -5,7 +5,7 @@ const request = async (req, res) => {
     try {
         const params = req.body.data
         let checkoutId = params.checkoutId
-        let email = "danm@gmail.com"
+        let email = params.email
 
         const query = `
         mutation {

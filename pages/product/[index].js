@@ -47,7 +47,9 @@ export default function Products() {
 
       {
         product.variants.edges.map((e, i) => (
-          <p key={i} onClick={() => setVariantId(e.node.id)}>{e.node.id}</p>
+          <p key={i} onClick={() => setVariantId(e.node.id)}>
+            {e.node.id}
+          </p>
         ))
       }
 
@@ -60,7 +62,7 @@ export default function Products() {
           -
         </div>
       </div>
-      <div onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity}, setCart)}>Add to cart</div>
+      <button disabled={variantId ? false : true} onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity}, setCart)}>Add to cart</button>
     </>
   )
 }

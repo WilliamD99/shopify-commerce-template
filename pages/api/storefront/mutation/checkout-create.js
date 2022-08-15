@@ -6,7 +6,7 @@ const requests = async (req, res) => {
         let params = req.body.data
         let lineItems = `${
             params.edges.map(e => {
-              let field = `{variantId: "${e.node.merchandise.id}", quantity: ${e.node.quantity}}`
+              let field = `{variantId: "${e.merchandiseId}", quantity: ${e.quantity}}`
               return field
             })
           }
@@ -39,7 +39,7 @@ const requests = async (req, res) => {
         res.json(data.data)
     }
     catch(e) {
-        res.json({error: e})
+      res.json({error: e})
     }
 }
 

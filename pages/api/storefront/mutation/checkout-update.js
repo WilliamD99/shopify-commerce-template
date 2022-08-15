@@ -6,11 +6,11 @@ const requests = async (req, res) => {
         let params = req.body.data
         let checkoutId = params.checkoutId
         let lineItems = `${
-            params.edges.map(e => {
-              let field = `{variantId: "${e.node.merchandise.id}", quantity: ${e.node.quantity}}`
-              return field
-            })
-          }
+          params.edges.map(e => {
+            let field = `{variantId: "${e.merchandiseId}", quantity: ${e.quantity}}`
+            return field
+          })
+        }
         `
         const query = `
         mutation {
