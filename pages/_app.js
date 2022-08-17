@@ -8,7 +8,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 import loadingContext from "../utils/loadingContext";
 import cartContext from '../utils/cartContext'
-import { encryptObject } from '../utils/utils';
+import userContext from '../utils/userContext'
 
 import Layout from '../components/layout'
 
@@ -23,6 +23,7 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
   const [cart, setCart] = useState([])
+  const [accessToken, setAccessToken] = useState()
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem('items'))
@@ -60,15 +61,17 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <cartContext.Provider value={{cart, setCart}}>
-        <loadingContext.Provider value={{loading, setLoading}}>
-          <QueryClientProvider client={queryClient}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </QueryClientProvider>
-        </loadingContext.Provider>
-      </cartContext.Provider>
+      <userContext.Provider value={{accessToken, setAccessToken}}>
+        <cartContext.Provider value={{cart, setCart}}>
+          <loadingContext.Provider value={{loading, setLoading}}>
+            <QueryClientProvider client={queryClient}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </QueryClientProvider>
+          </loadingContext.Provider>
+        </cartContext.Provider>
+      </userContext.Provider>
     </>
   )
 }

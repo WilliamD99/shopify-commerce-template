@@ -22,7 +22,6 @@ import {decryptObject, decryptText, encryptObject, encryptText} from '../utils/u
 import loadingContext from '../utils/loadingContext';
 import cartContext from '../utils/cartContext'
 
-import Cart from '../components/cart';
 import SingeProduct from '../components/Shop/single-product';
 
 const queryClient = new QueryClient()

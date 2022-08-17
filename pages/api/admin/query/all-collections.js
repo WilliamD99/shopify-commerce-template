@@ -8,6 +8,7 @@ const requests = async (req, res) => {
             collections(first: 100) {
               edges {
                 node {
+                  id
                   title
                   handle
                   productsCount

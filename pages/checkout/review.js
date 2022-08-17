@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 
 // Hooks
-import useCheckoutCreate from '../utils/hooks/useCheckoutCreate'
-import useCheckoutUpdateLines from '../utils/hooks/useCheckoutUpdateLines'
-import useCreatePaymentIntent from '../utils/hooks/useCreatePaymentIntent'
+import useCheckoutCreate from '../../utils/hooks/useCheckoutCreate'
+import useCheckoutUpdateLines from '../../utils/hooks/useCheckoutUpdateLines'
+import useCreatePaymentIntent from '../../utils/hooks/useCreatePaymentIntent'
 // import useRetrievePaymentIntent from '../utils/hooks/useRetrievePaymentIntent'
 
-import { encryptText } from '../utils/utils'
+import { encryptText } from '../../utils/utils'
 
 // Component
-import EmailUpdate from '../components/Checkout/EmailUpdate'
-import ShippingUpdate from '../components/Checkout/ShippingUpdate'
+import EmailUpdate from '../../components/Checkout/EmailUpdate'
+import ShippingUpdate from '../../components/Checkout/ShippingUpdate'
 
 export default function Checkout() {
     let [cartData, setCartData] = useState()

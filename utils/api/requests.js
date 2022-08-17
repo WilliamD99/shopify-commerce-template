@@ -28,9 +28,11 @@ let productByHandle = async (params) => {
 }
 
 // Get all products
-let productAll = async () => {
+let productAll = async (params) => {
     let url = "api/admin/query/all-products"
-    let data = await axios.post(url)
+    let data = await axios.post(url, {
+        data: params
+    })
 
     return data.data
 }

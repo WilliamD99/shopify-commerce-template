@@ -1,12 +1,12 @@
 import {useQuery} from '@tanstack/react-query'
 import {productAll} from '../api/requests'
 
-export default function useGetAllProduct() {
+export default function useGetAllProduct(params) {
     let {data, isLoading, isError, error} = useQuery(
-        ['all'],
+        ['product_all'],
         async () => {
-            let data = await productAll()
-            return data.data.products.edges
+            let data = await productAll(params)
+            return data.data
         }
     )
 

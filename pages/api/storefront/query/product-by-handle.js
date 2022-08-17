@@ -5,7 +5,6 @@ const requests = async (req, res) => {
     try {
         const params = req.body.data
         let handle = params.handle
-        console.log(handle)
 
         const query = `
         {
@@ -31,6 +30,8 @@ const requests = async (req, res) => {
                             edges {
                                 node {
                                     id
+                                    title
+                                    price
                                 }
                             }
                         }
