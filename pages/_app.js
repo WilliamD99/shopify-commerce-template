@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
   const [cart, setCart] = useState([])
-  const [accessToken, setAccessToken] = useState()
+  const [user, setUser] = useState()
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem('items'))
@@ -61,17 +61,17 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <userContext.Provider value={{accessToken, setAccessToken}}>
-        <cartContext.Provider value={{cart, setCart}}>
-          <loadingContext.Provider value={{loading, setLoading}}>
-            <QueryClientProvider client={queryClient}>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </QueryClientProvider>
-          </loadingContext.Provider>
-        </cartContext.Provider>
-      </userContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <userContext.Provider value={{user, setUser}}>
+          <cartContext.Provider value={{cart, setCart}}>
+            <loadingContext.Provider value={{loading, setLoading}}>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+            </loadingContext.Provider>
+          </cartContext.Provider>
+        </userContext.Provider>
+      </QueryClientProvider>
     </>
   )
 }

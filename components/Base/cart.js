@@ -2,12 +2,15 @@ import React, {useState, useEffect, useContext, useRef} from 'react'
 import cartContext from '../../utils/cartContext'
 import { BsCart2 } from 'react-icons/bs'
 import { gsap } from 'gsap'
-import Link from '../common/Link'
+import CartDrawer from './drawer'
+import Badge from '@mui/material/Badge'
 
 export default function CartComponent() {
     const [total, setTotal] = useState(0)
-    const {cart, setCart} = useContext(cartContext)
+    const [drawerOpen, setDrawer] = useState(false)
+    const {cart} = useContext(cartContext)
     const anim = useRef(null)
+
 
     useEffect(() => {
         let count = 0
@@ -19,24 +22,26 @@ export default function CartComponent() {
 
     useEffect(() => {
         anim.current = gsap.fromTo(
-            '#total', {
+            '#cart-badge .MuiBadge-badge', {
                 autoAlpha: 0,
                 top: "-0.1rem"
             }, {
                 autoAlpha: 1,
-                top: "-0.5rem"
+                top: "0rem"
             }
         )
     }, [total])
 
     return (
-        <div className='max-w-max relative'>
-            <Link href="/cart">
-                <BsCart2 className='text-3xl z-5'/> 
-                <p id="total" className='absolute -right-2 -top-2 z-10 font-bold rounded-full'>
-                    {total}
-                </p>
-            </Link>
-        </div>
+        <>
+            <div className='max-w-max relative'>
+                <button className='flex items-center' onClick={() => setDrawer(!drawerOpen)}>
+                    <Badge id="cart-badge" badgeContent={total}>
+                        <BsCart2 className='text-xl z-5'/> 
+                    </Badge>
+                </button>
+            </div>
+            <CartDrawer open={drawerOpen} setDrawer={setDrawer}/>
+        </>
     )
 }

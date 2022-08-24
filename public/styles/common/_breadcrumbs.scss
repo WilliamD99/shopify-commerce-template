@@ -1,0 +1,8 @@
+.breadcrumbs {
+    &-crumb {
+        transition: .5s;
+    }
+    &-crumb:hover {
+        text-decoration: underline;
+    }
+}

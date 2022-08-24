@@ -9,8 +9,9 @@ import useCreatePaymentIntent from '../../utils/hooks/useCreatePaymentIntent'
 import { encryptText } from '../../utils/utils'
 
 // Component
-import EmailUpdate from '../../components/Checkout/EmailUpdate'
-import ShippingUpdate from '../../components/Checkout/ShippingUpdate'
+import OrderSummary from '../../components/Checkout/OrderSummary'
+import CheckoutInfo from '../../components/Checkout/CheckoutInfo'
+import Breadcrumbs from '../../components/Checkout/Breadcrumbs'
 
 export default function Checkout() {
     let [cartData, setCartData] = useState()
@@ -47,23 +48,23 @@ export default function Checkout() {
     
     return (
         <>
-            <div>Checkout</div>
-                
-            {
+            <Breadcrumbs step={2}/>
+            {/* {
                 !cartData ?
                 <p>Loading</p>
                 :
                 cartData.map((e,i) => (
                     <div className='flex flex-row space-x-10' key={i}>
-                        {/* <Single item={e}/> */}
                         <p>{e.merchandiseId}</p>
                         <p>{e.quantity}</p>
                         <p>{e.price}</p>
                     </div>
                 ))
-            }
-            <EmailUpdate />
-            <ShippingUpdate />
+            } */}
+            <div className='flex flex-row justify-between'>
+                <CheckoutInfo />
+                <OrderSummary />
+            </div>
         </>
     )
 }

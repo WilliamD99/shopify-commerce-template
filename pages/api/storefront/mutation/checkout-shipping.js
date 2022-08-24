@@ -16,6 +16,7 @@ const requests = async (req, res) => {
             ) {
               checkout {
                 id
+                webUrl
               }
               checkoutUserErrors {
                 message

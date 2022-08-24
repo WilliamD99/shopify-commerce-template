@@ -5,6 +5,8 @@ import { useMutation } from '@tanstack/react-query'
 import { productInCollection } from '../../utils/api/requests'
 import useProductByCollection from '../../utils/hooks/useProductByCollection'
 
+import Breadcrumbs from '../../components/common/Breadcrumbs'
+
 export default function ShopCollection() {
   const [dataArr, setDataArr] = useState([])
   const router = useRouter()
@@ -28,11 +30,20 @@ export default function ShopCollection() {
     if (!product.isLoading && product.data) setDataArr(product.data.collection.products.edges)
   }, [product.isLoading])
 
-  if (product.isLoading) return <p>Loading ...</p>
+  // if (product.isLoading) return <p>Loading ...</p>
 
   return (
     <>
       <div onClick={() => console.log(product)}>Shop</div>
+
+
+      <Breadcrumbs path={[
+        { name: "Home", path: "/" },
+        { name: "Shop", path: "/shop" },
+        { name: `${product.data ? product.data.collection.title : ""}`, path: "#" }
+      ]}/>
+
+
       <div className='flex flex-row justify-center items-center space-x-2'>
         {
           product.data !== undefined ?

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { cartAdd } from '../../utils/utils'
-import Image from 'next/image'
+import Image from '../common/Image'
 import cartContext from '../../utils/cartContext'
 
 export default function SingeProduct({e}) {
@@ -18,7 +18,7 @@ export default function SingeProduct({e}) {
                 e.node.variants.edges.map((item, index) => (
                 <div className='space-y-2' key={index}>
                     <p className='text-center'>${item.node.price}</p>
-                    <button className='border-2 border-black px-2' onClick={() => cartAdd({merchandiseId: item.node.id, quantity: 1, price: item.node.price}, setCart)}
+                    <button className='border-2 border-black px-2' onClick={() => cartAdd({ title: e.node.title, merchandiseId: item.node.id, quantity: 1, price: item.node.price, image: e.node.featuredImage.url}, setCart)}
                     >
                         Click me
                     </button>

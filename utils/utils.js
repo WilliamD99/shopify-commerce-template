@@ -35,8 +35,8 @@ let cartAdd = (params, setCart) => {
     // If there's no item with this id
     if (items === null) {
         if (params.quantity > 0) {
-        localStorage.setItem('items', JSON.stringify([{ merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price }]))
-        setCart([{merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price}])
+        localStorage.setItem('items', JSON.stringify([{ title: params.title, merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price, image: params.image }]))
+        setCart([{title: params.title, merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price, image: params.image}])
         }
         else return
     }
@@ -58,7 +58,7 @@ let cartAdd = (params, setCart) => {
         else {
         // Make sure quantity not negative
         if (params.quantity > 0) {
-            items.push({ merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price })
+            items.push({ title: params.title, merchandiseId: params.merchandiseId, quantity: params.quantity, price: params.price, image: params.image })
         }
         }
         // Update the storage
@@ -77,13 +77,52 @@ let cartRemoveItem = (params, setCart) => {
         let index = items.findIndex(e => e.merchandiseId === params.merchandiseId)
 
         if (index !== -1) {
-        items = items.filter(e => e.merchandiseId !== params.merchandiseId)
-        localStorage.setItem('items', JSON.stringify(items))
-        setCart(items)
+            items = items.filter(e => e.merchandiseId !== params.merchandiseId)
+            localStorage.setItem('items', JSON.stringify(items))
+            setCart(items)
         }
     }
 }
+// Get access token
+let accessTokenExist = () => {
+    let cookie = document.cookie
+    cookie = cookie.split(";")
+    let index = cookie.findIndex(e => e.search('token') !== -1)
 
+    let token
+    if (index !== -1) {
+        token = decryptText(cookie[index].split('=')[1])
+    }
+    else {
+        token = false
+    }
+    return token
+}
+// Delete access token
+let accessTokenDelete = () => {
+    let cookie = document.cookie
+    cookie = cookie.split(';')
+    let index = cookie.findIndex(e => e.search('token') !== -1)
+
+    let newCookie = cookie.splice(index, 1)
+    document.cookie = (newCookie.join())
+}
+
+const provinces = [
+    { value: "BC", label: "British Columbia" },
+    { value: "AB", label: "Alberta" },
+    { value: "MB", label: "Manitoba" },
+    { value: "NB", label: "New Brunswick" },
+    { value: "NL", label: "Newfoundland and Labrador" },
+    { value: "NT", label: "Northwest Territories" },
+    { value: "NS", label: "Nova Scotia" },
+    { value: "NU", label: "Nunavut" },
+    { value: "ON", label: "Ontario" },
+    { value: "PE", label: "Prince Edward Island" },
+    { value: "QC", label: "Quebec" },
+    { value: "YT", label: "Yukon" },
+    { value: "SK", label: "Saskatchewan" },
+]
 export {
     updateSessionStorage, 
     encryptObject, 
@@ -91,5 +130,8 @@ export {
     encryptText,
     decryptText,
     cartAdd,
-    cartRemoveItem
+    cartRemoveItem,
+    accessTokenExist,
+    accessTokenDelete,
+    provinces
 }

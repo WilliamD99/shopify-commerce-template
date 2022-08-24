@@ -3,30 +3,28 @@ import { useState, useEffect } from 'react';
 import DataLoading from '../components/Loading/dataLoading';
 import Error from '../components/Error';
 import SingeProduct from '../components/Shop/single-product';
-import Link from '../components/common/Link'
+import Filter from '../components/Shop/filter'
+import Sorting from '../components/Shop/sorting';
+import Breadcrumbs from '../components/common/Breadcrumbs'
 // Hooks
 import useGetAllProduct from '../utils/hooks/useGetAllProduct';
+import useGetTotal from '../utils/hooks/useGetTotal'
 
 import { productAll } from '../utils/api/requests';
 import { useMutation } from '@tanstack/react-query';
-import {CREATED_AT, TITLE, UPDATED_AT, PRODUCT_TYPE} from '../utils/sort_key'
-import useAllCollection from '../utils/hooks/useAllCollection'
 
 export default function Shop() {
     const [dataArr, setDataArr] = useState([])
-    const [sortKey, setSortKey] = useState()
-
-    let handleSort = (e) => {
-        setSortKey(e.target.value)
-        mutateProductNext.mutate({direction: true, sortKey: e.target.value})
-    }
+    const [count, setCount] = useState(0)
 
     // Init page with products
     let products = useGetAllProduct({})
+    let total = useGetTotal()
     useEffect(() => {
         if (products.data) {
             let edges = products.data.products.edges
             setDataArr(edges)
+            setCount(edges.length)
         }
     }, [products.data])
 
@@ -42,36 +40,41 @@ export default function Shop() {
         )
         let edges = data.data.products.edges
         setDataArr(edges)
+        if (params.direction) setCount(edges.length + count)
+        else setCount(count - edges.length)
         return data.data
     })
-
-    let collections = useAllCollection()
-
-    if (products.isLoading || mutateProductNext.isLoading) return <DataLoading />
 
     return (
         <>
             <div>Shop</div>
+            <Breadcrumbs path={[{name: "Home", path: "/"}, {name: "Shop", path: "/shop"}]}/>
+            {/* <Filter /> */}
+            {/* <Sorting mutateProductNext={mutateProductNext}/> */}
 
-            <div className='grid grid-cols-4 gap-5'>
-                {
-                    collections.data !== undefined ?
-                    collections.data.collections.edges.map((e, i) => (
-                        <div key={i} className="bg-slate-200 flex justify-center items-center">
-                            <Link href={`/shop/products-in-collection?col=${e.node.id}`}>{e.node.title}</Link>
-                        </div>
-                    ))
-                    :
-                    <></>
-                }
+            {/* Show product count */}
+            <div>
+                <p>
+                    Showing
+                    <span className='mx-1'>
+                        {
+                            count === 12 ?
+                            "1-12"
+                            :
+                            `${count - dataArr.length + 1}-${count}`
+                        }
+                    </span>
+                    of
+                    <span className='mx-1'>
+                        {
+                            total.data ?
+                            total.data.count
+                            :
+                            <></>
+                        }
+                    </span>
+                </p>
             </div>
-
-            <select value={sortKey} onChange={handleSort}>
-                <option value={CREATED_AT}>Date Created Acensding</option>
-                <option value={UPDATED_AT}>Date Updated</option>
-                <option value={TITLE}>Title</option>
-                <option value={PRODUCT_TYPE}>Product Type</option>
-            </select>
 
             <div className='flex justify-center items-center space-x-5'>
                 <button onClick={() => {
@@ -86,9 +89,12 @@ export default function Shop() {
 
             <div className='grid grid-cols-4 gap-2'>
                 {
+                    !products.isLoading || !mutateProductNext.isLoading ?
                     dataArr.map((e, i) => (
                         <SingeProduct key={i} e={e}/>
                     ))
+                    :
+                    <p>Loading...</p>
                 }
             </div>
         </>

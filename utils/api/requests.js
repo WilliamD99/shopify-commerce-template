@@ -109,7 +109,7 @@ let customerAll = async () => {
 
 // Get customer by id
 let customerGet = async (params) => {
-    let url = "/api/admin/query/customer"
+    let url = "/api/storefront/query/customer"
     let data = await axios.post(url, {
         data: params
     })
@@ -118,7 +118,25 @@ let customerGet = async (params) => {
 
 // Update customer info
 let customerUpdate = async (params) => {
-    let url = "/api/admin/mutation/customer-update"
+    let url = "/api/storefront/mutation/customer-update"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Create shipping for customer
+let customerCreateShipping = async (params) => {
+    let url = "/api/storefront/mutation/customer-create-shipping"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Update shipping
+let customerUpdateShipping = async (params) => {
+    let url = "/api/storefront/mutation/customer-update-shipping"
     let data = await axios.post(url, {
         data: params
     })
@@ -128,6 +146,15 @@ let customerUpdate = async (params) => {
 // Create customer access token
 let customerAccessToken = async (params) => {
     let url = "/api/storefront/mutation/customer-access-token"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
+// Delete customer access token
+let customerAccessTokenDelete = async (params) => {
+    let url = "/api/storefront/mutation/customer-access-token-delete"
     let data = await axios.post(url, {
         data: params
     })
@@ -231,6 +258,14 @@ let deliveryAll = async () => {
     return data.data
 }
 
+// Get an order by Id
+let orderGet = async (params) => {
+    let url = "/api/admin/query/order-get"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
 
 export {
     productInCollection,
@@ -252,11 +287,15 @@ export {
     checkoutShippingUpdate,
     checkoutItemsRemove,
     checkoutVaultId,
+    customerCreateShipping,
+    customerUpdateShipping,
     customerAccessToken,
+    customerAccessTokenDelete,
     checkoutToCustomer,
     checkoutCompleteStripe,
     checkoutUpdateShipping,
     checkoutShippingLineUpdate,
     checkoutEmailUpdate,
-    deliveryAll
+    deliveryAll,
+    orderGet
 }

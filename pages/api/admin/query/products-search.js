@@ -24,20 +24,8 @@ const requests = async (req, res) => {
                   }
                 }
                 tags
-                images(first: 5) {
-                  edges {
-                    node {
-                      src 
-                    }
-                  }
-                }
-                variant(first: 5) {
-                  edges {
-                    node {
-                      id
-                      price
-                    }
-                  }
+                featuredImage {
+                  src
                 }
               }
             }

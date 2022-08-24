@@ -5,15 +5,20 @@ const requests = async (req, res) => {
     try {
         const params = req.body.data
         const id = params.id
-        const merchandiseId = params.merchandiseId
-        const quantity = params.quantity
+
+        let lineItems = `${
+          params.edges.map(e => {
+            let field = `{variantId: "${e.merchandiseId}", quantity: ${e.quantity}}`
+            return field
+          })
+        }
+        `
 
         const query = `
         mutation {
-          cartLinesUpdate(cartId: "${id}", lines: {
-            id:"${merchandiseId}",
-            quantity:${quantity}
-          }) {
+          cartLinesUpdate(cartId: "${id}", lines: [
+            ${lineItems}
+          ]) {
             cart {
               totalQuantity
             }

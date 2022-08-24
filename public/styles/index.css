@@ -6,6 +6,7 @@ body {
   height: 100%;
   width: 100%;
   scroll-behavior: smooth;
+  position: relative;
 }
 
 *,
@@ -24,4 +25,11 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.breadcrumbs-crumb {
+  transition: 0.5s;
+}
+.breadcrumbs-crumb:hover {
+  text-decoration: underline;
 }/*# sourceMappingURL=index.css.map */

@@ -6,6 +6,7 @@ import { cartAdd } from '../../utils/utils'
 import {useMutation} from '@tanstack/react-query'
 import Image from 'next/image'
 import cartContext from '../../utils/cartContext'
+import Breadcrumbs from '../../components/common/Breadcrumbs'
 
 export default function Products() {
   const router = useRouter()
@@ -45,45 +46,54 @@ export default function Products() {
   if (product === undefined) return <p>Loading</p>
 
   return (
-    <div className='flex flex-row'> 
-      <div>
-        {
-          product.images.edges.map((e, i)=> (
-            <div className='relative w-56 h-56' key={i}>
-              <Image layout="fill" src={e.node.src}/>
-            </div>
-          ))
-        }
-      </div>
-      <div className='flex flex-col space-y-5'>
-        <p className='text-2xl font-semibold'>Products {product.title}</p>
-        <p className='text-xl'>{product.description}</p>
+    <>
+      <Breadcrumbs path={[
+        { name: "Home", path: "/" },
+        { name: `${product.title}`, path: "#" }
+      ]}/>
 
-        <div className='flex flex-row'>
+      <p onClick={() => console.log(product)}>Test</p>
+
+      <div className='flex flex-row'> 
+        <div>
           {
-            product.variants.edges.map((e, i) => (
-              <button className='bg-slate-200 rounded-full py-2 px-1' key={i} onClick={() => handleVariantClick(e)}>
-                <p className='text-sm'>{e.node.title}</p>
-              </button>
+            product.images.edges.map((e, i)=> (
+              <div className='relative w-56 h-56' key={i}>
+                <Image layout="fill" src={e.node.src}/>
+              </div>
             ))
           }
         </div>
+        <div className='flex flex-col space-y-5'>
+          <p className='text-2xl font-semibold'>Products {product.title}</p>
+          <p className='text-xl'>{product.description}</p>
 
-        <div className='flex flex-row space-x-2'>
-          <button onClick={() => {
-            if (quantity > 0) inputRef.current.value = parseInt(inputRef.current.value) - 1
-          }}>
-            -
-          </button>
-          <input className='text-center' type="number" ref={inputRef} defaultValue={0} onChange={onChangeInput}/>
-          <button onClick={() => inputRef.current.value = parseInt(inputRef.current.value) + 1}>+</button>
-        </div>
-        <div>
-          <button className='bg-zinc-300 px-5 py-2 rounded-full' disabled={variantId ? false : true} onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity}, setCart)}>
-            Add to cart | ${displayPrice}
-          </button>
+          <div className='flex flex-row'>
+            {
+              product.variants.edges.map((e, i) => (
+                <button className='bg-slate-200 rounded-full py-2 px-1' key={i} onClick={() => handleVariantClick(e)}>
+                  <p className='text-sm'>{e.node.title}</p>
+                </button>
+              ))
+            }
+          </div>
+
+          <div className='flex flex-row space-x-2'>
+            <button onClick={() => {
+              if (quantity > 0) inputRef.current.value = parseInt(inputRef.current.value) - 1
+            }}>
+              -
+            </button>
+            <input className='text-center' type="number" ref={inputRef} defaultValue={0} onChange={onChangeInput}/>
+            <button onClick={() => inputRef.current.value = parseInt(inputRef.current.value) + 1}>+</button>
+          </div>
+          <div>
+            <button className='bg-zinc-300 px-5 py-2 rounded-full' disabled={variantId ? false : true} onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity, image: product.featuredImage.url, title: product.title}, setCart)}>
+              Add to cart | ${displayPrice}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

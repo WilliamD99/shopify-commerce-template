@@ -14,6 +14,9 @@ const requests = async (req, res) => {
                         handle
                         description
                         productType
+                        featuredImage {
+                            src
+                        }
                         priceRange {
                             maxVariantPrice {
                                 amount

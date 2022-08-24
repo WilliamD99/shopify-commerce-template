@@ -15,6 +15,7 @@ const requests = async (req, res) => {
             }) {
               customerUserErrors {
                 message
+                field
               }
               customer {
                 email

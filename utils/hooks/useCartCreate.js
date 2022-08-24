@@ -6,12 +6,12 @@ let useCartCreate = () => {
     let {data, isLoading, isError, error} = useQuery(
         ['all'],
         async () => {
-            if (localStorage.getItem('cart') === null) {
-                let items = localStorage.getItem('items')
+            if (sessionStorage.getItem('cart') === null) {
+                let items = sessionStorage.getItem('items')
                 let lines = items !== null ? JSON.parse(items) : []
     
                 let data = await cartCreate({lines: lines})
-                localStorage.setItem('cart', encryptText(data.data.cartCreate.cart.id))
+                sessionStorage.setItem('cart', encryptText(data.data.cartCreate.cart.id))
                 return data.data.cartCreate.cart
             }
             else {

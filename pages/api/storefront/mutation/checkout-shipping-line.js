@@ -11,7 +11,8 @@ const request = async (req, res) => {
         mutation {
             checkoutShippingLineUpdate(
                 checkoutId: "${checkoutId}", 
-                shippingRateHandle: "Standard") {
+                shippingRateHandle: "Standard"
+            ) {
             checkout {
                 id
                 email
