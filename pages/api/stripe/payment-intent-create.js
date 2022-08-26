@@ -12,7 +12,7 @@ const request = async (req, res) => {
             currency: currency,
             payment_method_types: payment_method,
         });
-        res.json(data)
+        res.json(data.client_secret)
     }
     catch(e) {
         res.json(e)

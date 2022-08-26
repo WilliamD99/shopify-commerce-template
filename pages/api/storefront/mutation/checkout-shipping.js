@@ -17,6 +17,15 @@ const requests = async (req, res) => {
               checkout {
                 id
                 webUrl
+                availableShippingRates {
+                  shippingRates {
+                      handle
+                      priceV2 {
+                          amount
+                      }
+                      title
+                  }
+                }
               }
               checkoutUserErrors {
                 message

@@ -9,7 +9,7 @@ const request = async (req, res) => {
         // const unquoted = payment.replace(/"([^"]+)":/g, '$1:');
         let payment = `
         paymentAmount: {
-            amount: "808.71",
+            amount: "375.80",
             currencyCode: CAD
         },
         idempotencyKey: "123",
@@ -23,18 +23,20 @@ const request = async (req, res) => {
             zip: "H3K0X2",
         },
         type: STRIPE_VAULT_TOKEN,
-        paymentData: "tok_1LR01uJF5iU7SUPZJmxLoLYX"
-
+        paymentData: "tok_1LaU6rJF5iU7SUPZ0uiRvGrk"
         `
 
         const query = `
         mutation {
             checkoutCompleteWithTokenizedPaymentV3(
                 checkoutId: "${checkoutId}", 
-                payment: {${payment}}
+                payment: {
+                  ${payment}
+                }
             ) {
               checkout {
                 id
+                webUrl
               }
               checkoutUserErrors {
                 code
@@ -43,6 +45,9 @@ const request = async (req, res) => {
               }
               payment {
                 id
+                creditCard {
+                  expiryYear
+                }
               }
             }
           }

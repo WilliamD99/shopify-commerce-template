@@ -5,7 +5,7 @@ import Link from '../common/Link'
 export default function CheckoutBreadcrumbs({step}) {
 
     return (
-        <Breadcrumbs>
+        <Breadcrumbs className="ml-10 mb-10">
             <Link className="text-black" href="/cart">
                 Cart
             </Link>

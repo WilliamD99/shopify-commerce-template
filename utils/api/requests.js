@@ -242,6 +242,14 @@ let checkoutShippingLineUpdate = async (params) => {
     return data.data
 }
 
+let checkoutGet = async (params) => {
+    let url = "/api/storefront/query/checkout-get"
+    let data = await axios.post(url, {
+        data: params
+    })
+    return data.data
+}
+
 // Complete checkout with Stripe
 let checkoutCompleteStripe = async (params) => {
     let url = "/api/storefront/mutation/checkout-complete-stripe"
@@ -292,6 +300,7 @@ export {
     customerAccessToken,
     customerAccessTokenDelete,
     checkoutToCustomer,
+    checkoutGet,
     checkoutCompleteStripe,
     checkoutUpdateShipping,
     checkoutShippingLineUpdate,

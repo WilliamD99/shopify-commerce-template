@@ -14,7 +14,6 @@ export default function Payment() {
     let router = useRouter()
 
     useEffect(() => {
-        console.log(pi)
         if (pi.isError) router.push("/checkout/review")
     }, [pi.isLoading])
 

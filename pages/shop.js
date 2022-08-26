@@ -89,12 +89,12 @@ export default function Shop() {
 
             <div className='grid grid-cols-4 gap-2'>
                 {
-                    !products.isLoading || !mutateProductNext.isLoading ?
+                    // !products.isLoading || !mutateProductNext.isLoading ?
                     dataArr.map((e, i) => (
                         <SingeProduct key={i} e={e}/>
                     ))
-                    :
-                    <p>Loading...</p>
+                    // :
+                    // <p>Loading...</p>
                 }
             </div>
         </>

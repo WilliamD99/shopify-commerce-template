@@ -6,11 +6,13 @@ let useRetrievePaymentIntent = () => {
     let { data, isLoading, isError, error } = useQuery(
         ['retrieve_payment_intent'],
         async () => {
-            let pi = sessionStorage.getItem('pi')
+            let pi = sessionStorage.getItem('client')
             if (!pi) return 
 
+            pi = decryptText(pi).split("_secret_")[0]
+
             let data = await axios.post('/api/stripe/payment-intent-retrieve', {
-                data: { id: decryptText(pi) }
+                data: { id: pi }
             })
             return data.data
         }

@@ -25,7 +25,20 @@ const requests = async (req, res) => {
                 }
                 tags
                 featuredImage {
-                  src
+                  url
+                }
+                options {
+                  name
+                  values
+                }
+                variants(first: 10) {
+                  edges {
+                    node {
+                      id
+                      compareAtPrice
+                      price
+                    }
+                  }
                 }
               }
             }

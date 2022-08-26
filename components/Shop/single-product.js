@@ -1,38 +1,39 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { cartAdd } from '../../utils/utils'
+
+import Link from '../common/Link'
 import Image from '../common/Image'
+import Button from '@mui/material/Button'
+
 import cartContext from '../../utils/cartContext'
 
 export default function SingeProduct({e}) {
     const {setCart} = useContext(cartContext)
 
     return (
-        <div className='flex flex-col justify-center items-center space-y-2 mb-5 bg-slate-50 px-2 py-2 product'>
-            <div className='relative w-20 h-20'>
+        <div className='flex flex-col justify-center items-center space-y-5 mb-5 bg-slate-50 px-2 py-5 product'>
+            <div className='relative w-full h-44'>
                 <Image alt={e.node.title} src={e.node.featuredImage.url} layout="fill"/>
             </div>
-            <a className='text-center' href={`/product/${e.node.handle}`}>{e.node.title}</a>
-            <div className='flex flex-col justify-center items-center'>
+            <a className='text-center text-xl font-semibold' href={`/product/${e.node.handle}`}>{e.node.title}</a>
+            <p className='text-base'>
+                {
+                    parseFloat(e.node.priceRangeV2.minVariantPrice.amount) === parseFloat(e.node.priceRangeV2.maxVariantPrice.amount) ?
+                    `$${parseFloat(e.node.priceRangeV2.minVariantPrice.amount).toFixed(2)}`
+                    :
+                    `$${parseFloat(e.node.priceRangeV2.minVariantPrice.amount)} - $${parseFloat(e.node.priceRangeV2.maxVariantPrice.amount)}` 
+                }
+            </p>
             {
-                // e.node.varians
-                e.node.variants.edges.map((item, index) => (
-                <div className='space-y-2' key={index}>
-                    <p className='text-center'>${item.node.price}</p>
-                    <button className='border-2 border-black px-2' onClick={() => cartAdd({ title: e.node.title, merchandiseId: item.node.id, quantity: 1, price: item.node.price, image: e.node.featuredImage.url}, setCart)}
-                    >
-                        Click me
-                    </button>
-                    {/* <button className='border-2 border-black px-2 ml-2' onClick={() => cartAdd({merchandiseId: e.node.variants.edges[0].node.id, quantity: -1}, setCart)}
-                    >
-                        Remove 1
-                    </button>
-                    <button className='border-2 border-black px-2 ml-2' onClick={() => cartRemoveItem({merchandiseId: e.node.variants.edges[0].node.id}, setCart)}>
-                        Remove
-                    </button> */}
-                </div>
-                ))
+                e.node.variants.edges.length > 1 ?
+                <Button variant="outlined" className="rounded-lg">
+                    <Link href={`/product/${e.node.handle}`}>Select Options</Link>
+                </Button>
+                :
+                <Button variant="outlined" className="rounded-lg">
+                    Add to cart
+                </Button>
             }
-            </div>
         </div>
     )
 }
