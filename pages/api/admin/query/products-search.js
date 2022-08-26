@@ -1,12 +1,15 @@
-import axios from 'axios'
-import {adminHeadersGraphql, adminURLGraphql} from '../../../../utils/api/header'
+import axios from "axios";
+import {
+  adminHeadersGraphql,
+  adminURLGraphql,
+} from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        let params = req.body.data
-        let search = params.search
+  try {
+    let params = req.body.data;
+    let search = params.search;
 
-        const query = `
+    const query = `
         {
             products(first:10, query:"title:${search}*") {
             edges {
@@ -15,6 +18,13 @@ const requests = async (req, res) => {
                 handle
                 id
                 description
+                collections(first:5) {
+                  edges {
+                    node {
+                      title
+                    }
+                  }
+                }
                 priceRangeV2 {
                   minVariantPrice {
                     amount
@@ -44,15 +54,14 @@ const requests = async (req, res) => {
             }
           }
         }
-        `
-        const data = await axios.post(adminURLGraphql, query, {
-            headers: adminHeadersGraphql
-        })
-        res.json(data.data)
-    }
-    catch(e) {
-        res.json({error: e})
-    }
-}
+        `;
+    const data = await axios.post(adminURLGraphql, query, {
+      headers: adminHeadersGraphql,
+    });
+    res.json(data.data);
+  } catch (e) {
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;
