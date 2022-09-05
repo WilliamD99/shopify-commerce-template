@@ -1,52 +1,53 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import Autocomplete from '@mui/material/Autocomplete'
-import TextField from '@mui/material/TextField'
-import { GoSearch } from 'react-icons/go'
-import useProductSearch from '../../utils/hooks/useProductSearch'
-import Image from '../common/Image'
-import Link from '../common/Link'
-import { useRouter } from 'next/router'
-import throttle from 'lodash.throttle'
+import React, { useEffect, useState, useMemo } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { GoSearch } from "react-icons/go";
+import useProductSearch from "../../utils/hooks/useProductSearch";
+import Image from "../common/Image";
+import Link from "../common/Link";
+import { useRouter } from "next/router";
+import throttle from "lodash.throttle";
 
 export default function Search() {
-    // const [input, setInput] = useState("")
-    const [options, setOptions] = useState([])
-    const searchProduct = useProductSearch()
-    const router = useRouter()
+  // const [input, setInput] = useState("")
+  const [options, setOptions] = useState([]);
+  const searchProduct = useProductSearch();
+  const router = useRouter();
 
-    // useEffect(() => {
-    //     if (input.length > 2) {
-    //         searchProduct.mutate({search: input})
-    //         if (searchProduct.data) setOptions(searchProduct.data.data.products.edges)
-    //     }
-    // }, [input])
+  // useEffect(() => {
+  //     if (input.length > 2) {
+  //         searchProduct.mutate({search: input})
+  //         if (searchProduct.data) setOptions(searchProduct.data.data.products.edges)
+  //     }
+  // }, [input])
 
-    useEffect(() => {
-        setOptions([])
-    }, [router.asPath])
+  useEffect(() => {
+    setOptions([]);
+  }, [router.asPath]);
 
-    const handleInputChange = (e) => {
-        let input = e.target.value
-        searchProduct.mutate({search: input})
-        if (searchProduct.data) {
-            setOptions(searchProduct.data.data.products.edges)
-        } else {
-            setOptions([])
-        } 
-
-        
-        if (input.length === 0) setOptions([])
+  const handleInputChange = (e) => {
+    let input = e.target.value;
+    searchProduct.mutate({ search: input });
+    if (searchProduct.data) {
+      setOptions(searchProduct.data.data.products.edges);
+    } else {
+      setOptions([]);
     }
 
-    const throttleEventHandler = useMemo(
-        () => throttle(handleInputChange, 300)
-    , [])
+    if (input.length === 0) setOptions([]);
+  };
 
-    return (
-        <>  
-            {/* <p onClick={() => console.log(options)}>Test</p> */}
-            <div className=''>
-                <Autocomplete 
+  const throttleEventHandler = useMemo(
+    () => throttle(handleInputChange, 300),
+    []
+  );
+
+  return (
+    <>
+      {/* <p onClick={() => console.log(options)}>Test</p> */}
+      <div className="">
+        <TextField className="" label="Search" variant="standard" />
+        {/* <Autocomplete 
                     freeSolo
                     filterOptions={x => x}
                     id="search-bar"
@@ -85,8 +86,8 @@ export default function Search() {
                             onChange={e => handleInputChange(e)}
                         />
                     )}
-                />
-            </div>
-        </>
-    )
+                /> */}
+      </div>
+    </>
+  );
 }

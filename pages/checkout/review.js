@@ -1,44 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 // Hooks
-import useCheckoutCreate from '../../utils/hooks/useCheckoutCreate'
-import useCheckoutUpdateLines from '../../utils/hooks/useCheckoutUpdateLines'
-import { decryptText, encryptText } from '../../utils/utils'
+import useCheckoutCreate from "../../utils/hooks/useCheckoutCreate";
+import useCheckoutUpdateLines from "../../utils/hooks/useCheckoutUpdateLines";
+import { decryptText, encryptText } from "../../utils/utils";
 
 // Component
-import OrderSummary from '../../components/Checkout/OrderSummary'
-import CheckoutInfo from '../../components/Checkout/CheckoutInfo'
-import Breadcrumbs from '../../components/Checkout/Breadcrumbs'
+import OrderSummary from "../../components/Checkout/OrderSummary";
+import CheckoutInfo from "../../components/Checkout/CheckoutInfo";
+import Breadcrumbs from "../../components/Checkout/Breadcrumbs";
+
+import { useRouter } from "next/router";
 
 export default function Checkout() {
-    let [cartData, setCartData] = useState()
-    let [shippingOptions, setShippingOptions] = useState([])
-    let [checkoutId, setCheckoutId] = useState()
+  let [cartData, setCartData] = useState();
+  let [shippingOptions, setShippingOptions] = useState([]);
+  let [checkoutId, setCheckoutId] = useState();
 
-    let checkout = useCheckoutCreate()
-    // Update the line incase user comeback and add more to cart
-    // let checkoutUpdate = useCheckoutUpdateLines()
+  // Check if checkout's id exist
+  let router = useRouter();
+  useEffect(() => {
+    let checkoutId = sessionStorage.getItem("checkoutId");
+    if (!checkoutId) router.push("/cart");
+  }, []);
 
-    // Create checkout when first enter only
-    useEffect(() => {
-        if (!checkout.isLoading && checkout.data !== undefined) {
-            sessionStorage.setItem('checkoutId', encryptText(checkout.data.checkoutCreate.checkout.id))
-            setCheckoutId(checkout.data.checkoutCreate.checkout.id)
-        }
-        if (checkout.isError) {
-            setCheckoutId(decryptText(sessionStorage.getItem('checkoutId')))
-        }
-    }, [checkout.isLoading])  
+  let checkout = useCheckoutCreate();
+  // Update the line incase user comeback and add more to cart
+  // let checkoutUpdate = useCheckoutUpdateLines()
 
-    // To display products in cart
-    useEffect(() => {
-        setCartData(JSON.parse(localStorage.getItem('items')))
-    }, [])
-    
-    return (
-        <>
-            <Breadcrumbs step={2}/>
-            {/* {
+  // Create checkout when first enter only
+  useEffect(() => {
+    if (!checkout.isLoading && checkout.data !== undefined) {
+      sessionStorage.setItem(
+        "checkoutId",
+        encryptText(checkout.data.checkoutCreate.checkout.id)
+      );
+      setCheckoutId(checkout.data.checkoutCreate.checkout.id);
+    }
+    if (checkout.isError) {
+      setCheckoutId(decryptText(sessionStorage.getItem("checkoutId")));
+    }
+  }, [checkout.isLoading]);
+
+  // To display products in cart
+  useEffect(() => {
+    setCartData(JSON.parse(localStorage.getItem("items")));
+  }, []);
+
+  return (
+    <>
+      <Breadcrumbs step={2} />
+      {/* {
                 !cartData ?
                 <p>Loading</p>
                 :
@@ -50,15 +62,19 @@ export default function Checkout() {
                     </div>
                 ))
             } */}
-            <div className='flex flex-row justify-between'>
-                <CheckoutInfo setShippingOptions={setShippingOptions}/>
-                {
-                    checkoutId ?
-                    <OrderSummary checkoutId={checkoutId} shippingOptions={shippingOptions}/>
-                    :
-                    <></>
-                }
-            </div>
-        </>
-    )
+      <div className="px-32">
+        <div className="flex flex-row justify-between">
+          <CheckoutInfo setShippingOptions={setShippingOptions} />
+          {checkoutId ? (
+            <OrderSummary
+              checkoutId={checkoutId}
+              shippingOptions={shippingOptions}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
+      </div>
+    </>
+  );
 }
