@@ -14,7 +14,7 @@ const requests = async (req, res) => {
         `
         const query = `
         mutation {
-            checkoutLineItemsReplace(
+            checkoutLineItemsUpdate(
                 lineItems: [
                     ${lineItems}
                 ], 

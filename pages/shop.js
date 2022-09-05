@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 // Components
-import DataLoading from "../components/Loading/dataLoading";
+import Loading from "../components/Loading/dataLoading";
 import Error from "../components/Error";
 import SingeProduct from "../components/Shop/single-product";
 import Filter from "../components/Shop/filter";
@@ -16,17 +16,22 @@ import { useMutation } from "@tanstack/react-query";
 export default function Shop() {
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
+  const [isNext, setNext] = useState(false)
+  const [isPrevious, setPrevious] = useState(false)
 
   // Init page with products
   let products = useGetAllProduct({});
   let total = useGetTotal();
   useEffect(() => {
+    setDataArr([])
     if (products.data) {
       let edges = products.data.products.edges;
       setDataArr(edges);
       setCount(edges.length);
+      setNext(products.data.products.pageInfo.hasNextPage)
+      setPrevious(products.data.products.pageInfo.hasPreviousPage)
     }
-  }, [products.data]);
+  }, [products.isLoading]);
 
   // Handle next/previous page
   let mutateProductNext = useMutation(async (params) => {
@@ -38,6 +43,8 @@ export default function Shop() {
     });
     let edges = data.data.products.edges;
     setDataArr(edges);
+    setNext(data.data.products.pageInfo.hasNextPage)
+    setPrevious(data.data.products.pageInfo.hasPreviousPage)
     if (params.direction) setCount(edges.length + count);
     else setCount(count - edges.length);
     return data.data;
@@ -68,6 +75,7 @@ export default function Shop() {
 
       <div className="flex justify-center items-center space-x-5">
         <button
+          disabled={!isPrevious}
           onClick={() => {
             let cursor = dataArr[0].cursor;
             mutateProductNext.mutate({ cursor: cursor, direction: false });
@@ -76,6 +84,7 @@ export default function Shop() {
           Previous
         </button>
         <button
+          disabled={!isNext}
           onClick={() => {
             let cursor = dataArr[dataArr.length - 1].cursor;
             mutateProductNext.mutate({ cursor: cursor, direction: true });
@@ -85,16 +94,16 @@ export default function Shop() {
         </button>
       </div>
 
-      <div className="flex justify-center mt-5">
-        <div className="w-3/4">
+      <div id="shop" className="flex justify-center mt-5">
+        <div className="w-11/12 xl:w-3/4">
           <div className="grid grid-cols-4 gap-5">
             {
-              // !products.isLoading || !mutateProductNext.isLoading ?
+              products.isLoading || mutateProductNext.isLoading ?
+              <Loading />
+              :
               dataArr.map((e, i) => (
-                <SingeProduct key={i} e={e} />
+                <SingeProduct key={i} index={i} e={e} />
               ))
-              // :
-              // <p>Loading...</p>
             }
           </div>
         </div>

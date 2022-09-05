@@ -1,16 +1,35 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef, useLayoutEffect } from "react";
 import { cartAdd } from "../../utils/utils";
 
 import Link from "../common/Link";
 import Image from "../common/Image";
 import Button from "@mui/material/Button";
-
+import Chip from '@mui/material/Chip'
 import cartContext from "../../utils/cartContext";
+import {gsap} from '../../utils/utils'
 
-export default function SingeProduct({ e }) {
+export default function SingeProduct({ e, index }) {
   const { setCart } = useContext(cartContext);
   const [onSale, setOnSale] = useState(false);
-  console.log(e);
+  const anim = useRef(null)
+
+  useLayoutEffect(() => {
+    let from = gsap.fromTo(anim.current, {
+      autoAlpha: 0.1,
+      y: 30
+    }, {
+      autoAlpha: 1,
+      y: 0,
+      delay: index * 0.2,
+      duration: 0.3,
+      immediateRender: false,
+      ease: "Sine.easeInOut",
+      onStart: () => (anim.current.classList.remove('invisible'))
+    })
+    return () => {
+      from.kill()
+    }
+  }, [])
 
   useEffect(() => {
     setOnSale(
@@ -19,7 +38,7 @@ export default function SingeProduct({ e }) {
   }, []);
 
   return (
-    <div className="relative flex flex-col bg-slate-50 product rounded-md">
+    <div ref={anim} className="single-product invisible relative flex flex-col bg-slate-100 product rounded-md">
       {onSale ? (
         <div className="absolute -top-0 -right-2 bg-red-400 rounded-full px-3 py-3 z-40">
           <p className="text-lg text-white">Sales</p>
@@ -32,15 +51,29 @@ export default function SingeProduct({ e }) {
           alt={e.node.title}
           src={e.node.featuredImage.url}
           layout="fill"
+          placeholder="blur"
+          blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
         />
+        <div className=""></div>
       </div>
-      <div className="flex flex-col justify-center items-center space-y-5 px-5 py-5">
-        <a
-          className="text-center text-xl font-semibold"
-          href={`/product/${e.node.handle}`}
-        >
-          {e.node.title}
-        </a>
+      <div className="flex flex-col justify-between space-y-3 px-5 py-5">
+        <div>
+          <div className="flex flex-row my-1">
+            {
+              e.node.collections.edges.map((col) => (
+                <Link href={`/shop/products-in-collection?col=${col.node.id}`} key={col.node.title}>
+                  <Chip label={col.node.title} variant="outlined" className="text-sm cursor-pointer" />
+                </Link>
+              ))
+            }
+          </div>
+          <Link
+            className="text-center text-xl font-semibold"
+            href={`/product/${e.node.handle}`}
+          >
+            {e.node.title}
+          </Link>
+        </div>
         <p className="text-base">
           {parseFloat(e.node.priceRangeV2.minVariantPrice.amount) ===
           parseFloat(e.node.priceRangeV2.maxVariantPrice.amount)
@@ -51,15 +84,25 @@ export default function SingeProduct({ e }) {
                 e.node.priceRangeV2.minVariantPrice.amount
               )} - $${parseFloat(e.node.priceRangeV2.maxVariantPrice.amount)}`}
         </p>
-        {e.node.variants.edges.length > 1 ? (
-          <Button variant="outlined" className="rounded-lg">
-            <Link href={`/product/${e.node.handle}`}>Select Options</Link>
-          </Button>
-        ) : (
-          <Button variant="outlined" className="rounded-lg">
-            Add to cart
-          </Button>
-        )}
+        <p className="text-sm text-slate-400 italic">By {e.node.vendor}</p>
+
+        <div className="h-16">
+          {e.node.variants.edges.length > 1 ? (
+            <Button variant="outlined" className="rounded-lg absolute bottom-5">
+              <Link href={`/product/${e.node.handle}`}>Select Options</Link>
+            </Button>
+          ) : (
+            <Button onClick={() => cartAdd({ 
+              title: e.node.title,
+              merchandiseId: e.node.variants.edges[0].node.id,
+              quantity: 1,
+              price: e.node.variants.edges[0].node.price,
+              image: e.node.featuredImage.url
+             }, setCart)} variant="outlined" className="rounded-lg absolute bottom-5">
+              Add to cart
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

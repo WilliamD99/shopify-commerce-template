@@ -1,11 +1,13 @@
-import React, { useEffect, useContext, useCallback } from 'react'
+import React, { useEffect, useContext, useCallback, useRef } from 'react'
 import useCustomerGetAccessToken from '../../utils/hooks/useCustomerGetAccessToken'
 import { encryptText } from '../../utils/utils'
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 import useCustomerGet from '../../utils/hooks/useCustomerGet'
 import userContext from '../../utils/userContext'
+import { gsap } from '../../utils/utils'
 
 export default function Login({open, setOpen}) {
     const {user, setUser} = useContext(userContext)
@@ -49,14 +51,22 @@ export default function Login({open, setOpen}) {
     return (
         <>
             <Modal aria-labelledby='Login Modal' open={open} onClose={() => setOpen(false)}>
-                <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-center space-y-5 bg-slate-200 rounded-lg'>
-                    <p className='text-black font-bold text-xl absolute left-1/2 -translate-x-1/2 -top-4'>Login</p>
-                    <TextField label="Email" type="email" id="email" />
-                    <TextField label="Password" type="password" id="password"/>
-                    <p className='text-black' onClick={handleLogin}>
-                        {getAccessToken.isLoading ? "Loading" : "Login"}
-                    </p>
+                <>
+                <div id="loginForm" className='absolute w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-8 flex flex-col justify-between space-y-5 bg-slate-200 rounded-xl z-50'>
+                    <p className='text-black text-3xl font-bold text-center'>Login</p>
+                    <div className='flex flex-col space-y-5'>
+                        <TextField className="rounded-md" label="Email" type="email" id="email" />
+                        <TextField className="rounded-md" label="Password" type="password" id="password"/>
+                        <Button variant="outlined" className='text-black rounded-md' onClick={handleLogin}>
+                            {getAccessToken.isLoading ? "Loading" : "Login"}
+                        </Button>
+                    </div>
+                    <div className='flex flex-row space-x-2 items-center'>
+                        <p className='text-sm'>Don&apos;t have an account yet?</p>
+                        <button className='font-semibold text-sm hover:underline'>Sign up</button>
+                    </div>
                 </div>
+                </>
             </Modal>
         </>
     )

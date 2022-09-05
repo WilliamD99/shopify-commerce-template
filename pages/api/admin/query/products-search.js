@@ -8,52 +8,77 @@ const requests = async (req, res) => {
   try {
     let params = req.body.data;
     let search = params.search;
+    let cursor = params.cursor
+    let direction = params.direction
+    let sortKey = params.sortKey
+    let reversed = params.reversed
+
+    let reverseQuery 
+    if (reversed) reverseQuery = "true"
+    else reverseQuery = ""
+
+    let sortQuery 
+    if (sortKey) sortQuery = `sortKey: ${sortKey}`
+    else sortQuery = ""
+
+
+    let position
+
+    if (!cursor) position = "first: 12"
+    else if (cursor && direction) position = `first: 12, after: "${cursor}"`
+    else if (cursor && !direction) position = `last: 12, before: "${cursor}"`
+
 
     const query = `
-        {
-            products(first:10, query:"title:${search}*") {
-            edges {
-              node {
-                title
-                handle
-                id
-                description
-                collections(first:5) {
-                  edges {
-                    node {
-                      title
+          {
+            products(
+              ${position}, 
+              query:"title:${search}*"
+            ) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+              }
+              edges {
+                cursor
+                node {
+                  title
+                  handle
+                  id
+                  vendor
+                  collections(first:5) {
+                    edges {
+                      node {
+                        title
+                        id
+                      }
                     }
                   }
-                }
-                priceRangeV2 {
-                  minVariantPrice {
-                    amount
+                  priceRangeV2 {
+                    minVariantPrice {
+                      amount
+                    }
+                    maxVariantPrice {
+                      amount
+                    }
                   }
-                  maxVariantPrice {
-                    amount
+                  tags
+                  featuredImage {
+                    url
                   }
-                }
-                tags
-                featuredImage {
-                  url
-                }
-                options {
-                  name
-                  values
-                }
-                variants(first: 10) {
-                  edges {
-                    node {
-                      id
-                      compareAtPrice
-                      price
+                  variants(first: 10) {
+                    edges {
+                      node {
+                        id
+                        compareAtPrice
+                        price
+                      }
                     }
                   }
                 }
               }
             }
           }
-        }
         `;
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,

@@ -7,6 +7,7 @@ body {
   width: 100%;
   scroll-behavior: smooth;
   position: relative;
+  min-height: 100vh;
 }
 
 *,
@@ -27,6 +28,28 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.loading {
+  width: 2rem;
+  height: 2rem;
+  margin: 2rem;
+  border-radius: 50%;
+  border: 0.3rem solid rgba(0, 0, 0, 0.3);
+  border-top-color: black;
+  -webkit-animation: 1.5s spin infinite linear;
+          animation: 1.5s spin infinite linear;
+}
+
+@-webkit-keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .breadcrumbs-crumb {
   transition: 0.5s;
 }

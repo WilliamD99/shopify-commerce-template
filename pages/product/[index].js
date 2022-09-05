@@ -7,6 +7,7 @@ import {useMutation} from '@tanstack/react-query'
 import Image from 'next/image'
 import cartContext from '../../utils/cartContext'
 import Breadcrumbs from '../../components/common/Breadcrumbs'
+import Chip from '@mui/material/Chip'
 
 export default function Products() {
   const router = useRouter()
@@ -44,53 +45,101 @@ export default function Products() {
   }, [inputRef.current.value])
 
   if (product === undefined) return <p>Loading</p>
-
+  console.log(product)
   return (
     <>
-      <Breadcrumbs path={[
-        { name: "Home", path: "/" },
-        { name: `${product.title}`, path: "#" }
-      ]}/>
+      <div className='flex justify-center'>
+        <div className='w-11/12'>
+          <Breadcrumbs path={[
+            { name: "Home", path: "/" },
+            { name: "Product", path: "#" },
+            { name: `${product.title}`, path: "#" }
+          ]}/>
 
-      <p onClick={() => console.log(product)}>Test</p>
-
-      <div className='flex flex-row'> 
-        <div>
-          {
-            product.images.edges.map((e, i)=> (
-              <div className='relative w-56 h-56' key={i}>
-                <Image layout="fill" src={e.node.src}/>
+          <div className='flex flex-row space-x-10'> 
+            <div className='w-1/2 flex flex-col space-x-10'>
+              <div className='relative w-full h-80'>
+                  <Image layout="fill" src={product.featuredImage.src} alt={product.title}/>
               </div>
-            ))
-          }
-        </div>
-        <div className='flex flex-col space-y-5'>
-          <p className='text-2xl font-semibold'>Products {product.title}</p>
-          <p className='text-xl'>{product.description}</p>
+              {/* {
+                product.images.edges.map((e, i)=> (
+                  <div className='relative w-full h-56' key={i}>
+                    <Image layout="fill" src={e.node.src}/>
+                  </div>
+                ))
+              } */}
+              <div className=''>
+                {
+                  product.tags.length > 0 ?
+                  <div className='flex flex-row space-x-2'>
+                    <p>Tags: </p>
+                    {
+                      product.tags.map(tag => (
+                        <p className='' key={`tag-${product.title}`}>
+                          {tag.displayName}
+                        </p>
+                      ))
+                    }
+                  </div>
+                  :
+                  <></>
+                }
+              </div>
+            </div>
+            <div className='flex flex-col space-y-5 w-1/2'>
+              <p className='text-2xl font-semibold'>Products {product.title}</p>
+              <div className='flex flex-row space-x-10'>
+                <div className='flex flex-row space-x-3'>
+                  <p className='font-semibold text-base'>By:</p>
+                  <p className='text-base italic'>{product.vendor}</p>
+                </div>
+                <span>|</span>
+                <div className='flex flex-row space-x-3'>
+                  <p className='font-semibold text-base'>Product Type:</p>
+                  <p className='text-base italic'>{product.productType}</p>
+                </div>
+              </div>
+              <div className='flex flex-row space-x-5'>
+                <p className='text-base font-semibold'>Price</p>
+                <p className='text-base'>
+                  {
+                    parseFloat(product.priceRange.maxVariantPrice.amount) === parseFloat(product.priceRange.minVariantPrice.amount) ?
+                    `$${parseFloat(product.priceRange.maxVariantPrice.amount).toFixed(2)}`
+                    :
+                    `$${parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2)} - $${parseFloat(product.priceRange.maxVariantPrice.amount).toFixed(2)}`
+                  }
+                </p>
+              </div>
+              <p className='text-xl'>{product.description}</p>
 
-          <div className='flex flex-row'>
-            {
-              product.variants.edges.map((e, i) => (
-                <button className='bg-slate-200 rounded-full py-2 px-1' key={i} onClick={() => handleVariantClick(e)}>
-                  <p className='text-sm'>{e.node.title}</p>
+              <div className='flex flex-col space-y-3'>
+                <p className='font-semibold text-base'>Select Options</p>
+                <div className='flex flex-row space-x-3'>
+                  {
+                    product.variants.edges.map(e => (
+                      <div className="py-2 px-1" key={e.node.title}>
+                        <Chip label={e.node.title} onClick={() => handleVariantClick(e)}/>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+
+              <div className='flex flex-row space-x-2'>
+                <button onClick={() => {
+                  if (quantity > 0) inputRef.current.value = parseInt(inputRef.current.value) - 1
+                }}>
+                  -
                 </button>
-              ))
-            }
-          </div>
-
-          <div className='flex flex-row space-x-2'>
-            <button onClick={() => {
-              if (quantity > 0) inputRef.current.value = parseInt(inputRef.current.value) - 1
-            }}>
-              -
-            </button>
-            <input className='text-center' type="number" ref={inputRef} defaultValue={0} onChange={onChangeInput}/>
-            <button onClick={() => inputRef.current.value = parseInt(inputRef.current.value) + 1}>+</button>
-          </div>
-          <div>
-            <button className='bg-zinc-300 px-5 py-2 rounded-full' disabled={variantId ? false : true} onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity, image: product.featuredImage.url, title: product.title}, setCart)}>
-              Add to cart | ${displayPrice}
-            </button>
+                <input className='text-center text-lg' type="number" ref={inputRef} defaultValue={0} onChange={onChangeInput}/>
+                <button onClick={() => inputRef.current.value = parseInt(inputRef.current.value) + 1}>+</button>
+              </div>
+              <div>
+                <button className='bg-slate-300 px-5 py-2 rounded-full' disabled={variantId ? false : true} onClick={() => cartAdd({merchandiseId: variantId, quantity: quantity, image: product.featuredImage.url, title: product.title}, setCart)}>
+                  Add to cart | ${displayPrice}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

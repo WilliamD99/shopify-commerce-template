@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useRef } from 'react'
 import Cart from './cart'
 import useCustomerGet from '../../utils/hooks/useCustomerGet'
 import { accessTokenExist } from '../../utils/utils'
@@ -13,6 +13,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 import Search from './search'
+import { gsap } from '../../utils/utils'
 
 export default function Header(props) {
   let customer = useCustomerGet()

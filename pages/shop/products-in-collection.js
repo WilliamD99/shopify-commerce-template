@@ -1,72 +1,78 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Single from '../../components/Shop/single-product'
-import { useMutation } from '@tanstack/react-query'
-import { productInCollection } from '../../utils/api/requests'
 import useProductByCollection from '../../utils/hooks/useProductByCollection'
-
+import SingleProduct from '../../components/Shop/single-product'
 import Breadcrumbs from '../../components/common/Breadcrumbs'
+import Loading from '../../components/Loading/dataLoading'
 
-export default function ShopCollection() {
-  const [dataArr, setDataArr] = useState([])
+export default function Collection() {
   const router = useRouter()
   const query = router.query
-  const product = useProductByCollection()
-
-  const productMutation = useMutation(async(params) => {
-    let data = await productInCollection({ cursor: params.cursor, direction: params.direction, id: query.col })
-    let edges = data.data.collection.products.edges
-    setDataArr(edges)
-    return data.data  
-  })
+  const products = useProductByCollection()
+  const [dataArr, setDataArr] = useState([])
+  const [isNext, setNext] = useState(false)
+  const [isPrevious, setPrevious] = useState(false)
 
   useEffect(() => {
-    if (query.col) {
-      product.mutate({id: query.col})
+    if (router.isReady) {
+      if (query.col) {
+        products.mutate({id: query.col})
+      }
     }
-  }, [query])
+  }, [router.isReady])
 
   useEffect(() => {
-    if (!product.isLoading && product.data) setDataArr(product.data.collection.products.edges)
-  }, [product.isLoading])
-
-  // if (product.isLoading) return <p>Loading ...</p>
+    setDataArr([])
+    if (products.data) {
+      setDataArr(products.data.collection.products.edges)
+      setNext(products.data.collection.products.pageInfo.hasNextPage)
+      setPrevious(products.data.collection.products.pageInfo.hasPreviousPage)
+    }
+  }, [products.isLoading])
+  
 
   return (
     <>
-      <div onClick={() => console.log(product)}>Shop</div>
-
-
       <Breadcrumbs path={[
         { name: "Home", path: "/" },
         { name: "Shop", path: "/shop" },
-        { name: `${product.data ? product.data.collection.title : ""}`, path: "#" }
+        { name: `Collection - ${products.data ? products.data.collection.title : ""}`, path: "#" }
       ]}/>
 
-
-      <div className='flex flex-row justify-center items-center space-x-2'>
-        {
-          product.data !== undefined ?
-          <>
-            <button disabled={!product.data.collection.products.pageInfo.hasPreviousPage} onClick={() => {
-              let cursor = dataArr[0].cursor
-              productMutation.mutate({cursor: cursor, direction: false})
-            }}>Previous</button>
-            <button disabled={!product.data.collection.products.pageInfo.hasNextPage} onClick={() => {
-              let cursor = dataArr[dataArr.length - 1].cursor
-              productMutation.mutate({cursor: cursor, direction: true})
-            }}>Next</button>
-          </>
-          :
-          <></>
-        }
+      <div className="flex justify-center items-center space-x-5">
+        <button
+          disabled={!isPrevious}
+          onClick={() => {
+            let cursor = dataArr[0].cursor;
+            products.mutate({ id: query.col, cursor: cursor, direction: false });
+          }}
+        >
+          Previous
+        </button>
+        <button
+          disabled={!isNext}
+          onClick={() => {
+            let cursor = dataArr[dataArr.length - 1].cursor;
+            products.mutate({ id: query.col, cursor: cursor, direction: true });
+          }}
+        >
+          Next
+        </button>
       </div>
-      <div className='grid grid-cols-4 gap-2'>
-        {
-            dataArr.map((e, i) => (
-                <Single key={i} e={e}/>
-            ))
-        }
+
+      <div className='flex justify-center'>
+        <div className='w-11/12'>
+          <div className="grid grid-cols-4 gap-5">
+            {
+              products.isLoading ?
+              <Loading />
+              :
+              dataArr.map((e, i) => (
+                <SingleProduct index={i} e={e} key={e.node.title}/>
+              ))
+            }
+          </div>
+        </div>
       </div>
     </>
   )

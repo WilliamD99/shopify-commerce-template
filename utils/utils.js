@@ -1,4 +1,11 @@
 import CryptoJS from 'crypto-js'
+import {gsap} from 'gsap'
+import {ScrollTrigger} from 'gsap/dist/ScrollTrigger'
+
+gsap.registerPlugin(
+    ScrollTrigger
+)
+
 
 const updateSessionStorage = (key, value) => {
     sessionStorage.setItem(key, JSON.stringify(value))
@@ -133,5 +140,6 @@ export {
     cartRemoveItem,
     accessTokenExist,
     accessTokenDelete,
-    provinces
+    provinces,
+    gsap
 }

@@ -42,9 +42,9 @@ const requests = async (req, res) => {
                     id
                     title
                     handle
-                    description
                     tags
-                    priceRange {
+                    vendor
+                    priceRangeV2 {
                       maxVariantPrice {
                         amount
                       }
@@ -55,10 +55,11 @@ const requests = async (req, res) => {
                     featuredImage {
                       url
                     }
-                    images(first: 5) {
+                    collections(first: 5) {
                       edges {
                         node {
-                          src
+                          title
+                          id
                         }
                       }
                     }
@@ -67,6 +68,7 @@ const requests = async (req, res) => {
                         node {
                           id
                           price
+                          compareAtPrice
                         }
                       }
                     }

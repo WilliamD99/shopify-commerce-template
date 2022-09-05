@@ -14,11 +14,17 @@ const requests = async (req, res) => {
                         handle
                         description
                         productType
+                        vendor
+                        tags
+                        productType
                         featuredImage {
                             src
                         }
                         priceRange {
                             maxVariantPrice {
+                                amount
+                            }
+                            minVariantPrice {
                                 amount
                             }
                         }
@@ -35,6 +41,7 @@ const requests = async (req, res) => {
                                     id
                                     title
                                     price
+                                    compareAtPrice
                                 }
                             }
                         }

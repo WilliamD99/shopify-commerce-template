@@ -10,7 +10,6 @@ let useCheckoutUpdateLines = () => {
         if (checkoutId !== null && items !== null) {
             items = JSON.parse(items)
             checkoutId = decryptText(checkoutId)
-            
             data = await checkoutUpdate({checkoutId: checkoutId, edges: items})
             data = data.data
         }

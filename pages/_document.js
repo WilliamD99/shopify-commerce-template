@@ -7,7 +7,7 @@ export default class MyDocument extends Document {
         <Head>
           <base href={process.env.PUBLIC_URL} />
         </Head>
-        <body>
+        <body className="relative">
           <Main />
           <NextScript />
         </body>

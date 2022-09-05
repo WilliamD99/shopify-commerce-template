@@ -37,8 +37,14 @@ const requests = async (req, res) => {
                 id
                 title
                 handle
-                collection {
-                  handle
+                vendor
+                collections(first: 5) {
+                  edges {
+                    node {
+                      title
+                      id
+                    }
+                  }
                 }
                 description
                 featuredImage{
@@ -56,7 +62,6 @@ const requests = async (req, res) => {
                 totalInventory
                 status
                 tags
-                totalVariants
                 productType
                 variants(first: 5) {
                     edges {

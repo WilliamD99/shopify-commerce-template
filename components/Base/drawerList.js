@@ -1,12 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import cartContext from '../../utils/cartContext'
 import Image from '../common/Image'
 import Divider from '@mui/material/Divider'
 
 import { cartRemoveItem, cartAdd } from '../../utils/utils'
+import useCheckoutUpdateLinesMutation from '../../utils/hooks/useCheckoutUpdateLinesMutation'
 
 export default function DrawerList({e}) {
-    const { setCart } = useContext(cartContext)
+    const { setCart, cart } = useContext(cartContext)
+
+    // let checkoutUpdate = useCheckoutUpdateLinesMutation()
     
     return (
         <>
