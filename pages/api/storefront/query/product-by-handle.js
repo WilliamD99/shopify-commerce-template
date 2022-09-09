@@ -52,7 +52,6 @@ const requests = async (req, res) => {
         const data = await axios.post(storefrontURL, query, {
             headers: storefrontHeaders
         })
-        console.log(data.data)
         res.json(data.data)
     }
     catch(e) {

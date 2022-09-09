@@ -31,6 +31,7 @@ const requests = async (req, res) => {
               title
               description
               handle
+              productsCount
               products(${position}, ${sortQuery}, ${reverseQuery}) {
                 pageInfo {
                   hasNextPage
@@ -75,7 +76,6 @@ const requests = async (req, res) => {
                   }
                 }
               }
-              productsCount
             }
           }
         `

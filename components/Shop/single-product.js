@@ -21,6 +21,9 @@ export default function SingeProduct({ e, index }) {
   const [isLoading, setLoading] = useState(false);
   const anim = useRef(null);
 
+  let minPrice = e.node.priceRangeV2 ? e.node.priceRangeV2.minVariantPrice.amount : e.node.priceRange.minVariantPrice.amount
+  let maxPrice = e.node.priceRangeV2 ? e.node.priceRangeV2.maxVariantPrice.amount : e.node.priceRange.maxVariantPrice.amount
+
   useLayoutEffect(() => {
     let from = gsap.fromTo(
       anim.current,
@@ -105,14 +108,14 @@ export default function SingeProduct({ e, index }) {
           </Link>
         </div>
         <p className="text-base">
-          {parseFloat(e.node.priceRangeV2.minVariantPrice.amount) ===
-          parseFloat(e.node.priceRangeV2.maxVariantPrice.amount)
-            ? `$${parseFloat(
-                e.node.priceRangeV2.minVariantPrice.amount
-              ).toFixed(2)}`
-            : `$${parseFloat(
-                e.node.priceRangeV2.minVariantPrice.amount
-              )} - $${parseFloat(e.node.priceRangeV2.maxVariantPrice.amount)}`}
+          {
+          parseFloat(minPrice) === parseFloat(maxPrice)
+          ? `$${parseFloat(
+              minPrice
+            ).toFixed(2)}`
+          : `$${parseFloat(
+              minPrice
+            )} - $${parseFloat(maxPrice)}`}
         </p>
         <p className="text-sm text-slate-400 italic">By {e.node.vendor}</p>
 

@@ -174,6 +174,16 @@ let accessTokenDelete = () => {
   document.cookie = newCookie.join();
 };
 
+// Check if object is empty
+let isEmptyObj = (obj) => {
+  for (let prop in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+      return false
+    }
+  }
+  return JSON.stringify(obj) === JSON.stringify({})
+}
+
 const provinces = [
   { value: "BC", label: "British Columbia" },
   { value: "AB", label: "Alberta" },
@@ -201,4 +211,5 @@ export {
   accessTokenDelete,
   provinces,
   gsap,
+  isEmptyObj
 };

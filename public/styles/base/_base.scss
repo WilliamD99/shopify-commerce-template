@@ -25,3 +25,22 @@ input[type=number] {
     transform: rotate(360deg);
   }
 }
+
+// Custom scrollbar
+.sb-custom::-webkit-scrollbar, .sb-custom::-webkit-scrollbar-thumb {
+  width: 26px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 10px solid transparent;
+}
+.sb-custom::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 0 10px;
+}
+.sb-custom {
+  -webkit-text-fill-color: black;
+  color: rgba(0, 0, 0, 0);
+  transition: color .3s ease;
+  &:hover {
+    color: rgba(0, 0, 0, 0.5)
+  }
+}

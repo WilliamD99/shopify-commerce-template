@@ -7,16 +7,20 @@ import {
 const requests = async (req, res) => {
   try {
     const params = req.body.data;
+
+    // Reversed underlying list
     const reversed = params.reversed;
     let reverseQuery;
-    if (reversed) reverseQuery = "true";
+    if (reversed) reverseQuery = `reverse:${reversed}`;
     else reverseQuery = "";
 
+    // Sort key
     const sortKey = params.sortKey;
     let sortQuery;
     if (sortKey) sortQuery = `sortKey: ${sortKey}`;
     else sortQuery = "";
 
+    // Use for pagination
     const cursor = params.cursor;
     // True is forward, false is backward
     const direction = params.direction;
@@ -24,9 +28,18 @@ const requests = async (req, res) => {
     if (!cursor) position = "first: 12";
     else if (cursor && direction) position = `first: 12, after: "${cursor}"`;
     else if (cursor && !direction) position = `last: 12, before: "${cursor}"`;
+
+    // Query the list
+    const searchQuery = params.query
+    let searchSyntax = ``
+    if (searchQuery) {
+      let arr = searchQuery.map(e => `${e.key}:${e.value}`)
+      searchSyntax = `query: "${arr.toString()}"`
+    }
+
     const query = `
     {
-        products(${position}, ${sortQuery}, ${reverseQuery}) {
+        products(${position}, ${sortQuery}, ${reverseQuery}, ${searchSyntax}) {
           pageInfo {
             hasNextPage
             hasPreviousPage
@@ -77,6 +90,7 @@ const requests = async (req, res) => {
         }
     }
     `;
+
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,
     });

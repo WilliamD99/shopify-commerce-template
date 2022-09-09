@@ -13,6 +13,7 @@ const requests = async (req, res) => {
                   handle
                   productsCount
                   description
+                  productsCount
                 }
               }
             }
@@ -21,9 +22,11 @@ const requests = async (req, res) => {
         const data = await axios.post(adminURLGraphql, query, {
             headers: adminHeadersGraphql
         })
+        console.log('test')
         res.json(data.data)
     }
     catch(e) {
+      console.log(e)
         res.json({error: e})
     }
 }

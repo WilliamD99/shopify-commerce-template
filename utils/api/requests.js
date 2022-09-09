@@ -29,11 +29,20 @@ let productByHandle = async (params) => {
 
 // Get all products
 let productAll = async (params) => {
-    let url = "api/admin/query/all-products"
+    let url = "/api/admin/query/all-products"
     let data = await axios.post(url, {
         data: params
     })
 
+    return data.data
+}
+
+// Get all products storefront
+let productAllStorefront = async (params) => {
+    let url = "/api/storefront/query/product-all"
+    let data = await axios.post(url, {
+        data: params
+    })
     return data.data
 }
 
@@ -278,6 +287,7 @@ let orderGet = async (params) => {
 export {
     productInCollection,
     productAll,
+    productAllStorefront,
     collectionAll,
     productSearch,
     productByHandle,
