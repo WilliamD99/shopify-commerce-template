@@ -8,4 +8,14 @@
 #filter {
     height: 100vh !important;
     max-height: 100vh !important;
+    #price-filter {
+        .MuiSlider-root {
+            color: black !important;
+            height: 1px !important;
+            .MuiSlider-thumb {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    }
 }

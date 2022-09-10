@@ -87,4 +87,12 @@ input[type=number] {
 #filter {
   height: 100vh !important;
   max-height: 100vh !important;
+}
+#filter #price-filter .MuiSlider-root {
+  color: black !important;
+  height: 1px !important;
+}
+#filter #price-filter .MuiSlider-root .MuiSlider-thumb {
+  width: 15px;
+  height: 15px;
 }/*# sourceMappingURL=index.css.map */

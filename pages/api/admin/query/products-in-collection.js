@@ -8,19 +8,17 @@ const requests = async (req, res) => {
         let cursor = params.cursor
         let direction = params.direction
         let sortKey = params.sortKey
-        let reversed = params.reversed
+        let reverse = params.reverse
 
         let reverseQuery 
-        if (reversed) reverseQuery = "true"
+        if (reverse) reverseQuery = `reverse:${reverse}`
         else reverseQuery = ""
     
         let sortQuery 
-        if (sortKey) sortQuery = `sortKey: ${sortKey}`
+        if (sortKey) sortQuery = `sortKey:${sortKey}`
         else sortQuery = ""
 
-
         let position
-
         if (!cursor) position = "first: 12"
         else if (cursor && direction) position = `first: 12, after: "${cursor}"`
         else if (cursor && !direction) position = `last: 12, before: "${cursor}"`
@@ -79,12 +77,15 @@ const requests = async (req, res) => {
             }
           }
         `
+        console.log(query)
         const data = await axios.post(adminURLGraphql, query, {
             headers: adminHeadersGraphql
         })
+        console.log(data.data)
         res.json(data.data)
     }
     catch(e) {
+      console.log(e)
         res.json({error: e})
     }
 }

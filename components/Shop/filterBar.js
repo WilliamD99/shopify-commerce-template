@@ -66,10 +66,13 @@ export default function Filter({
   // Handle sorting router
   const handleSortingClick = async (key, reverse, path) => {
     setPath(path)
-    router.query.sort_key = key
-    router.query.reverse = reverse.toString()
-    router.query.path = path
-    router.push(router)
+    routerQuery.sort_key = key
+    routerQuery.reverse = reverse.toString()
+    routerQuery.path = path
+    router.push({
+      pathname: window.location.pathname,
+      query: routerQuery
+    }, undefined)
 
     await setSortKey(key)
     await setReverse(reverse)
@@ -94,7 +97,15 @@ export default function Filter({
           </p>
         </div>
         <div className="flex flex-row">
-          <FilterCheckbox />
+          <Button>
+            <Link>Clear Filter</Link>
+          </Button>
+          {
+            routerQuery.col ? 
+            <></>
+            :
+            <FilterCheckbox />
+          }
 
           <div id="sort" className="relative">
             <Button
@@ -114,13 +125,13 @@ export default function Filter({
               id="sort_dropdown"
               className="w-52 h-48 px-4 invisible absolute -right-8 flex flex-col justify-center items-center bg-white z-40"
             >
-              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', false, 'admin')}>Title (A-Z)</Button>
-              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', true, 'admin')}>Title (Z-A)</Button>
+              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', false, routerQuery.col ? '' : 'admin')}>Title (A-Z)</Button>
+              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', true, routerQuery.col ? '' : 'admin')}>Title (Z-A)</Button>
               {
-                !routerQuery.path || routerQuery.path === 'admin' ?
+                !routerQuery.path || routerQuery.path === 'sf' ?
                 <>
-                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', true, 'sf')}>Price (High-Low)</Button>
-                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', false, 'sf')}>Price (Low-High)</Button>
+                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', true, routerQuery.col ? '' : 'sf')}>Price (High-Low)</Button>
+                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', false, routerQuery.col ? '' : 'sf')}>Price (Low-High)</Button>
                 </>
                 :
                 <></>

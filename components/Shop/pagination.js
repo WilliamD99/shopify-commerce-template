@@ -12,7 +12,10 @@ export default function Pagination({
     scroll(0, 0)
     await setDirection(direction)
     routerQuery.cursor = cursor
-    router.push(router)
+    router.push({
+      pathname: window.location.pathname,
+      query: routerQuery
+    }, undefined)
   }
 
   return (

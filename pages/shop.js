@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { isEmptyObj } from "../utils/utils";
 
 // Hooks
-import useGetAllProduct from "../utils/hooks/useGetAllProduct";
 import useGetTotal from "../utils/hooks/useGetTotal";
 import { productAll, productAllStorefront } from "../utils/api/requests";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +23,6 @@ export default function Shop() {
   const routerQuery = router.query
 
   // State for query
-  const [query, setQuery] = useState([])
   const [sortKey, setSortKey] = useState()
   const [isReverse, setReverse] = useState(false)
   const [cursorNext, setCursorNext] = useState()
@@ -35,28 +32,30 @@ export default function Shop() {
 
   let total = useGetTotal();
 
-  // Init page with products
-  let products = useGetAllProduct({});
 
   useEffect(() => {
     setDataArr([]);
-    if (products.data && isEmptyObj(routerQuery)) {
-      let edges = products.data.products.edges;
-      setDataArr(edges);
-      setCount(edges.length);
-      setNext(products.data.products.pageInfo.hasNextPage);
-      setPrevious(products.data.products.pageInfo.hasPreviousPage);
-
-      setCursorNext(edges[0].cursor)
-      setCursorLast(edges[edges.length - 1].cursor)
+    if (router.isReady) {
+      if (routerQuery.path === 'admin' || !routerQuery.path) {
+        mutateProductAdmin.mutate({ 
+          sortKey: routerQuery.sort_key, 
+          isReverse: routerQuery.reverse ? routerQuery.reverse.toString() : '', 
+          cursor: routerQuery.cursor,
+          price: routerQuery.price,
+          sales: routerQuery.sales
+        })
+      }
+      if (routerQuery.path === 'sf') {
+        mutateProductNextSf.mutate({ 
+          sortKey: routerQuery.sort_key, 
+          isReverse: routerQuery.reverse.toString(), 
+          cursor: routerQuery.cursor,
+          price: routerQuery.price,
+          sales: routerQuery.sales
+        })
+      }
     }
-    if (routerQuery.path === 'admin') {
-      mutateProductAdmin.mutate({ query: decodeURIComponent(routerQuery.query), sortKey: routerQuery.sort_key, isReverse: routerQuery.reverse.toString(), cursor: routerQuery.cursor })
-    }
-    if (routerQuery.path === 'sf') {
-      mutateProductNextSf.mutate({ query: decodeURIComponent(routerQuery.query), sortKey: routerQuery.sort_key, isReverse: routerQuery.reverse.toString(), cursor: routerQuery.cursor })
-    }
-  }, [router.isReady, products.isLoading, routerQuery])
+  }, [routerQuery])
 
   // Handle next/previous page + filter admin
   let mutateProductAdmin = useMutation(async (params) => {
@@ -65,7 +64,8 @@ export default function Shop() {
       direction: direction,
       sortKey: params.sortKey ? params.sortKey : sortKey,
       reversed: params.isReverse ? params.isReverse : isReverse,
-      query: params.query ? JSON.parse(params.query) : query
+      price: params.price,
+      sales: params.sales
     });
     let edges = data.data.products.edges;
     setDataArr(edges);
@@ -86,7 +86,8 @@ export default function Shop() {
       direction: direction,
       sortKey: params.sortKey ? params.sortKey : sortKey,
       reversed: params.isReverse ? params.isReverse : isReverse,
-      query: params.query ? params.query : query
+      price: params.price,
+      sales: params.sales
     })
     let edges = data.data.products.edges;
     setDataArr(edges);
@@ -114,7 +115,7 @@ export default function Shop() {
         <FilterBar
           count={count}
           length={dataArr.length}
-          isLoading={products.isLoading}
+          isLoading={mutateProductAdmin.isLoading || mutateProductNextSf.isLoading}
           total={total.data ? total.data.count : 0}
           setSortKey={setSortKey}
           setReverse={setReverse}
@@ -122,18 +123,18 @@ export default function Shop() {
         />
 
         <div id="shop" className="flex flex-row justify-between mt-5 space-x-8 z-50">
-          <FilterMenu isLoading={products.isLoading}/>
+          <FilterMenu isLoading={mutateProductAdmin.isLoading || mutateProductNextSf.isLoading}/>
 
           <div className="relative w-9/12 xl:w-10/12">
             <div id="shop-grid" className="grid grid-cols-3 xl:grid-cols-4 gap-5 gap-y-10">
-              {products.isLoading || mutateProductAdmin.isLoading || mutateProductNextSf.isLoading ? (
+              {mutateProductAdmin.isLoading || mutateProductNextSf.isLoading ? (
                 <Loading />
               ) : (
                 dataArr.map((e, i) => <SingeProduct key={i} index={i} e={e} />)
               )}
             </div>
             {
-              products.isLoading || mutateProductAdmin.isLoading || mutateProductNextSf.isLoading ?
+              mutateProductAdmin.isLoading || mutateProductNextSf.isLoading ?
               <></>
               :
               <Pagination 

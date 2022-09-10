@@ -7,6 +7,7 @@ import Loading from '../../components/Loading/dataLoading'
 
 import FilterMenu from '../../components/Shop/filterMenu'
 import FilterBar from '../../components/Shop/filterBar'
+import Pagination from '../../components/Shop/pagination'
 
 export default function Collection() {
   const router = useRouter()
@@ -28,11 +29,19 @@ export default function Collection() {
   useEffect(() => {
     if (router.isReady) {
       console.log(routerQuery)
-      if (routerQuery.col && Object.keys(routerQuery).length === 2) {
-        products.mutate({id: decodeURIComponent(routerQuery.col)})
+      if (routerQuery.col) {
+        products.mutate({
+          id: decodeURIComponent(routerQuery.col),
+          sortKey: routerQuery.sort_key,
+          reverse: routerQuery.reverse,
+          price: routerQuery.price,
+          sales: routerQuery.sales,
+          direction: direction,
+          cursor: routerQuery.cursor
+        })
       }
     }
-  }, [router.isReady, routerQuery])
+  }, [routerQuery])
 
   useEffect(() => {
     setDataArr([])
@@ -40,6 +49,10 @@ export default function Collection() {
       setDataArr(products.data.collection.products.edges)
       setNext(products.data.collection.products.pageInfo.hasNextPage)
       setPrevious(products.data.collection.products.pageInfo.hasPreviousPage)
+
+      console.log(products.data)
+      setCursorLast(products.data.collection.products.edges[products.data.collection.products.edges.length - 1].cursor)
+      setCursorNext(products.data.collection.products.edges[0].cursor)
     }
   }, [products.isLoading])
   
@@ -76,28 +89,18 @@ export default function Collection() {
                 ))
               }
             </div>
-            <div className="flex justify-center items-center space-x-5 mt-3">
-              <button
-                disabled={!isPrevious}
-                onClick={() => {
-                  scroll(0, 0)
-                  let cursor = dataArr[0].cursor;
-                  products.mutate({ id: query.col, cursor: cursor, direction: false });
-                }}
-              >
-                Previous
-              </button>
-              <button
-                disabled={!isNext}
-                onClick={() => {
-                  scroll(0, 0)
-                  let cursor = dataArr[dataArr.length - 1].cursor;
-                  products.mutate({ id: query.col, cursor: cursor, direction: true });
-                }}
-              >
-                Next
-              </button>
-            </div>
+            {
+              products.isLoading ?
+              <></>
+              :
+              <Pagination 
+                isPrevious={isPrevious}
+                isNext={isNext}
+                setDirection={setDirection}
+                cursorFirst={cursorNext}
+                cursorLast={cursorLast}
+              />
+            }
           </div>
         </div>
       </div>

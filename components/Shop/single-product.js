@@ -15,6 +15,11 @@ import cartContext from "../../utils/cartContext";
 import { gsap } from "../../utils/utils";
 import Loading from "../Loading/dataLoading";
 
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 export default function SingeProduct({ e, index }) {
   const { setCart } = useContext(cartContext);
   const [onSale, setOnSale] = useState(false);
@@ -86,7 +91,7 @@ export default function SingeProduct({ e, index }) {
       </div>
       <div className="flex flex-col justify-between space-y-3 px-5 py-5">
         <div>
-          <div className="flex flex-row my-1">
+          <div className="flex flex-row my-1 flex-wrap space-y-2">
             {e.node.collections.edges.map((col) => (
               <Link
                 href={`/shop/products-in-collection?col=${col.node.id}`}
@@ -110,12 +115,8 @@ export default function SingeProduct({ e, index }) {
         <p className="text-base">
           {
           parseFloat(minPrice) === parseFloat(maxPrice)
-          ? `$${parseFloat(
-              minPrice
-            ).toFixed(2)}`
-          : `$${parseFloat(
-              minPrice
-            )} - $${parseFloat(maxPrice)}`}
+          ? `${formatter.format(minPrice)}`
+          : `${formatter.format(minPrice)} - ${formatter.format(maxPrice)}`}
         </p>
         <p className="text-sm text-slate-400 italic">By {e.node.vendor}</p>
 

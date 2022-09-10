@@ -1,43 +1,47 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useRouter } from 'next/router';
 
 export default function FilterCheckbox() {
     const [isOn, setOn] = useState(false)
+    const [checked, setChecked] = useState(false)
     const router = useRouter()
     const routerQuery = router.query
 
-    const handleClick = (e) => {   
-        console.log(isOn)    
-        if (!isOn) {
-            if (!routerQuery.query) {
-                routerQuery.query = encodeURIComponent(JSON.stringify([{key: 'is_price_reduced', value: true}]))
-                routerQuery.path = "admin"
-                routerQuery.reverse = false
-                router.push(router, undefined)
-            }
-            else if (routerQuery.query) {
-                let newQuery = JSON.parse(decodeURIComponent(routerQuery.query))
-                newQuery.push({key: 'is_price_reduced', value: true})
-                routerQuery.query = encodeURIComponent(JSON.stringify(newQuery))
-                routerQuery.path = "admin"
-                routerQuery.reverse = false
-                router.push(router, undefined)
-            }
+    useEffect(() => {
+        if (router.isReady && routerQuery.sales) {
+            setChecked(routerQuery.sales === 'true')
         }
-        else {
-            let querySales = JSON.parse(decodeURIComponent(routerQuery.query))
-            querySales = querySales.filter(e => e.key !== 'is_price_reduced')
-            routerQuery.query = encodeURIComponent(JSON.stringify(querySales))
+    }, [routerQuery])
 
-            router.push(router)
+    const handleClick = (e) => {   
+        if (!checked) {
+            routerQuery.sales = true
+            if (!routerQuery.path) routerQuery.path = 'admin'
+            if (!routerQuery.reverse) routerQuery.reverse = false
+            if (routerQuery.cursor) delete routerQuery.cursor
+            router.push({
+                pathname: window.location.pathname,
+                query: routerQuery
+            }, undefined)
+
+            setChecked(true)
+        }
+
+        else {
+            delete routerQuery.sales
+            router.push({
+                pathname: window.location.pathname,
+                query: routerQuery
+            }, undefined)
+            setChecked(false)
         }
     }
 
     return (
         <>
-            <FormControlLabel control={<Checkbox onChange={() => setOn(!isOn)} onClick={handleClick}/>} label={<p className="text-lg">Sales</p>}/>
+            <FormControlLabel control={<Checkbox checked={checked} onChange={() => setOn(!isOn)} onClick={handleClick}/>} label={<p className="text-lg">Sales</p>}/>
         </>
     )
 }
