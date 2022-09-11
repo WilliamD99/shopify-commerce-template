@@ -12,13 +12,8 @@ import Image from "../common/Image";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import cartContext from "../../utils/cartContext";
-import { gsap } from "../../utils/utils";
+import { gsap, formatter } from "../../utils/utils";
 import Loading from "../Loading/dataLoading";
-
-var formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
 
 export default function SingeProduct({ e, index }) {
   const { setCart } = useContext(cartContext);
@@ -136,6 +131,7 @@ export default function SingeProduct({ e, index }) {
                     quantity: 1,
                     price: e.node.variants.edges[0].node.price,
                     image: e.node.featuredImage.url,
+                    variantTitle: ""
                   },
                   setCart
                 );

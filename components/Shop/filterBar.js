@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { IoIosArrowDown } from "react-icons/io";
 import Button from "@mui/material/Button";
 import FilterCheckbox from "./filterCheckbox";
+import Link from '../common/Link'
 
 export default function Filter({ 
   length, isLoading, count, total, setSortKey, setReverse, setPath
@@ -15,17 +16,17 @@ export default function Filter({
   const sortRefFocus = useRef(null)
 
   // Pin the bar while scrolling
-  useLayoutEffect(() => {
-    filterBarAnim.current = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#shop-container",
-        start: "top top",
-        end: "bottom bottom",
-        pin: "#filter-bar",
-      },
-    });
-    return () => filterBarAnim.current.kill();
-  }, [isLoading]);
+  // useLayoutEffect(() => {
+  //   filterBarAnim.current = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: "#shop-container",
+  //       start: "top top",
+  //       end: "bottom bottom",
+  //       pin: "#filter-bar",
+  //     },
+  //   });
+  //   return () => filterBarAnim.current.kill();
+  // }, [isLoading]);
 
   // Create animation for sort dropdown
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function Filter({
     <>
       <div
         id="filter-bar"
-        className="filter-menu flex flex-row justify-between bg-white py-6 z-40 -mb-16"
+        className="filter-menu flex flex-row justify-between bg-white py-6 z-40 -mb-8"
       >
         <div id="filter-bar__product-number">
           <p className="text-lg">
@@ -98,7 +99,7 @@ export default function Filter({
         </div>
         <div className="flex flex-row">
           <Button>
-            <Link>Clear Filter</Link>
+            <Link href="/shop">Clear Filter</Link>
           </Button>
           {
             routerQuery.col ? 

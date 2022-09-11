@@ -1,3 +1,19 @@
 .single-product {
     transition: 0.2s;
 }
+
+.product-details {
+    #image-gallery {
+        .image-gallery-main {
+            &:hover {
+                .arrow-next {
+                    display: block;
+                }
+            }
+            .arrow-next {
+                transition: .2s;
+                display: none;
+            }
+        }
+    }
+}

@@ -69,6 +69,7 @@ let cartAdd = async (params, setCart) => {
             quantity: params.quantity,
             price: params.price,
             image: params.image,
+            variantTitle: params.variantTitle
           },
         ])
       );
@@ -79,6 +80,7 @@ let cartAdd = async (params, setCart) => {
           quantity: params.quantity,
           price: params.price,
           image: params.image,
+          variantTitle: params.variantTitle
         },
       ]);
     } else return;
@@ -106,6 +108,7 @@ let cartAdd = async (params, setCart) => {
           quantity: params.quantity,
           price: params.price,
           image: params.image,
+          variantTitle: params.variantTitle
         });
       }
     }
@@ -199,6 +202,12 @@ const provinces = [
   { value: "YT", label: "Yukon" },
   { value: "SK", label: "Saskatchewan" },
 ];
+
+let formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 export {
   updateSessionStorage,
   encryptObject,
@@ -211,5 +220,6 @@ export {
   accessTokenDelete,
   provinces,
   gsap,
-  isEmptyObj
+  isEmptyObj,
+  formatter
 };

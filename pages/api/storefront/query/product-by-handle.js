@@ -32,6 +32,7 @@ const requests = async (req, res) => {
                             edges {
                                 node {
                                     src
+                                    altText
                                 }
                             }
                         }
@@ -42,6 +43,9 @@ const requests = async (req, res) => {
                                     title
                                     price
                                     compareAtPrice
+                                    image {
+                                        url
+                                    }
                                 }
                             }
                         }

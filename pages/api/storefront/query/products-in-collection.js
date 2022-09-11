@@ -8,10 +8,13 @@ const requests = async (req, res) => {
         let cursor = params.cursor
         let direction = params.direction
         let sortKey = params.sortKey
-        let reversed = params.reversed
+        let reverse = params.reverse
+        let queryArr = []
+        let price = params.price
+        let sales = params.sales
 
         let reverseQuery 
-        if (reversed) reverseQuery = "true"
+        if (reverse) reverseQuery = "true"
         else reverseQuery = ""
     
         let sortQuery 
@@ -23,6 +26,15 @@ const requests = async (req, res) => {
         if (!cursor) position = "first: 12"
         else if (cursor && direction) position = `first: 12, after: "${cursor}"`
         else if (cursor && !direction) position = `last: 12, before: "${cursor}"`
+
+        if (price) {
+          let arr = price.split(',')
+          price = `price:>${arr[0]} price:<${arr[1]}`
+          queryArr.push(price)
+        }
+
+        let querySearch = queryArr.join(' ')
+ 
 
         const query = `
         {

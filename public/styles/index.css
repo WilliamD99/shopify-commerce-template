@@ -80,6 +80,14 @@ input[type=number] {
   transition: 0.2s;
 }
 
+.product-details #image-gallery .image-gallery-main:hover .arrow-next {
+  display: block;
+}
+.product-details #image-gallery .image-gallery-main .arrow-next {
+  transition: 0.2s;
+  display: none;
+}
+
 #filter-bar #sort #sort_icon {
   transition: 0.3s;
 }
