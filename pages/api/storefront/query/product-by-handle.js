@@ -1,12 +1,12 @@
-import axios from 'axios'
-import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        const params = req.body.data
-        let handle = params.handle
+  try {
+    const params = req.body.data;
+    let handle = params.handle;
 
-        const query = `
+    const query = `
         {
             productByHandle(handle: "${handle}") {
                         id
@@ -17,6 +17,13 @@ const requests = async (req, res) => {
                         vendor
                         tags
                         productType
+                        metafields(identifiers: [
+                            { namespace: "custom", key: "related_products" },
+                            { namespace: "custom", key: "vendor" }
+                          ]) {
+                            key
+                            value
+                        }
                         featuredImage {
                             src
                         }
@@ -52,15 +59,15 @@ const requests = async (req, res) => {
                     }
 
         }
-        `
-        const data = await axios.post(storefrontURL, query, {
-            headers: storefrontHeaders
-        })
-        res.json(data.data)
-    }
-    catch(e) {
-        res.json({error: e})
-    }
-}
+        `;
+    console.log(query);
+    const data = await axios.post(storefrontURL, query, {
+      headers: storefrontHeaders,
+    });
+    res.json(data.data);
+  } catch (e) {
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;
