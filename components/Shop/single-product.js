@@ -11,6 +11,7 @@ import Link from "../common/Link";
 import Image from "../common/Image";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+
 import cartContext from "../../utils/cartContext";
 import { gsap, formatter } from "../../utils/utils";
 import Loading from "../Loading/dataLoading";
@@ -20,8 +21,6 @@ export default function SingeProduct({ e, index }) {
   const [onSale, setOnSale] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const anim = useRef(null);
-
-  console.log(e);
 
   let minPrice = e.node.priceRangeV2
     ? e.node.priceRangeV2.minVariantPrice.amount
@@ -75,8 +74,8 @@ export default function SingeProduct({ e, index }) {
 
       {/* If product is on sales */}
       {onSale ? (
-        <div className="absolute -top-0 -right-2 bg-red-400 rounded-full px-3 py-3 z-40">
-          <p className="text-lg text-white">Sales</p>
+        <div className="absolute -top-5 -right-2 bg-red-400 rounded-full px-2 py-3 z-40">
+          <p className="text-sm text-white">Sales</p>
         </div>
       ) : (
         <></>

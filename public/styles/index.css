@@ -88,6 +88,10 @@ input[type=number] {
   display: none;
 }
 
+.slick-slider .slick-prev::before, .slick-slider .slick-next::before {
+  color: black !important;
+}
+
 #filter-bar #sort #sort_icon {
   transition: 0.3s;
 }
