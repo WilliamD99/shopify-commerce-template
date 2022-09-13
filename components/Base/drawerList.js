@@ -4,13 +4,12 @@ import Image from "../common/Image";
 import Divider from "@mui/material/Divider";
 
 import { cartRemoveItem, cartAdd } from "../../utils/utils";
-import useCheckoutUpdateLinesMutation from "../../utils/hooks/useCheckoutUpdateLinesMutation";
+// import useCheckoutUpdateLinesMutation from "../../utils/hooks/useCheckoutUpdateLinesMutation";
 
 export default function DrawerList({ e }) {
-  const { setCart, cart } = useContext(cartContext);
+  const { setCart } = useContext(cartContext);
 
   // let checkoutUpdate = useCheckoutUpdateLinesMutation()
-  console.log(e)
   return (
     <>
       <div className="mt-4 mb-2 flex flex-row space-x-5 justify-between items-center">

@@ -24,8 +24,8 @@ export default function Product({ data }) {
 
   return (
     <>
-      <div className="xl:h-96 xl:w-96 flex flex-col space-y-5 bg-slate-100">
-        <div className="image-container relative w-full h-56 xl:h-64">
+      <div className="mr-5 flex flex-col space-y-5 bg-slate-100">
+        <div className="image-container relative w-full h-64">
           <Image
             alt={productData.title}
             src={productData.featuredImage.url}

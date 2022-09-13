@@ -2,6 +2,8 @@ import {useEffect, useState} from 'react'
 // Style
 import "../public/styles/tailwind.css"
 import "../public/styles/index.css"
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 // Library
 import Helmet from "react-helmet";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'

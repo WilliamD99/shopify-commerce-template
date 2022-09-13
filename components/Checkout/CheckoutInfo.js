@@ -112,7 +112,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
           {checkoutShippingUpdate.isLoading ? <p>Loading...</p> : <></>}
         </form>{" "}
       </>
-    );
+  );
 
   return (
     <>

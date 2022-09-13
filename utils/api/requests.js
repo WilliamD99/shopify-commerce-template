@@ -225,6 +225,24 @@ let checkoutEmailUpdate = async (params) => {
   return data.data;
 };
 
+// Apply discount code to checkout
+let checkoutAddDiscount = async (params) => {
+  let url = "/api/storefront/mutation/checkout-discount"
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
+
+// Remove discount code
+let checkoutRemoveDiscount = async (params) => {
+  let url = "/api/storefront/mutation/checkout-discount-remove"
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
+
 // Get vault
 let checkoutVaultId = async (params) => {
   let url = "/api/admin/mutation/checkout-vault";
@@ -322,6 +340,8 @@ export {
   customerAccessTokenDelete,
   checkoutToCustomer,
   checkoutGet,
+  checkoutAddDiscount,
+  checkoutRemoveDiscount,
   checkoutCompleteStripe,
   checkoutUpdateShipping,
   checkoutShippingLineUpdate,
