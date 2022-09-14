@@ -13,6 +13,9 @@ const requests = async (req, res) => {
                     firstName
                     lastName
                     phone
+                    defaultAddress {
+                        id
+                    }
                     addresses(first: 10) {
                         edges {
                             node {
@@ -33,6 +36,7 @@ const requests = async (req, res) => {
                                 totalPriceV2 {
                                     amount
                                 }
+                                processedAt
                             }
                         }
                     }

@@ -162,6 +162,15 @@ let customerUpdateShipping = async (params) => {
   return data.data;
 };
 
+// Update default address
+let customerDefaultAddressUpdate = async (params) => {
+  let url = '/api/storefront/mutation/customer-update-default-address'
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
+
 // Create customer access token
 let customerAccessToken = async (params) => {
   let url = "/api/storefront/mutation/customer-access-token";
@@ -336,6 +345,7 @@ export {
   checkoutVaultId,
   customerCreateShipping,
   customerUpdateShipping,
+  customerDefaultAddressUpdate,
   customerAccessToken,
   customerAccessTokenDelete,
   checkoutToCustomer,

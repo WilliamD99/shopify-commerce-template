@@ -29,18 +29,20 @@ export default function Header(props) {
           </Button>
         </>
       );
-    if (!user.firstName) return <p>Hello {user.email}</p>;
     return (
-      <Link href="/myaccount" className="hover:underline">
-        <span className="font-semibold ml-1">
-          {user.firstName} {user.lastName}
-        </span>
-      </Link>
+      <div className="relative">
+        <Link href="/my-account" className="hover:underline">
+          <span className="font-semibold ml-1">
+            {user.firstName ? user.firstName : user.email} {user.lastName}
+          </span>
+        </Link>
+      </div>
     );
   };
 
+  // Get customer if there's a token
   useEffect(() => {
-    if (user) {
+    if (!user) {
       let token = accessTokenExist();
       if (token) {
         customer.mutate({ accessToken: token });

@@ -6,6 +6,8 @@ const requests = async (req, res) => {
         const params = req.body.data
         const accessToken = params.accessToken
         let updateFields = params.updateFields // return { firstName: "", lastName: "" }
+        updateFields.phone = '+1' + updateFields.phone
+
         updateFields = JSON.stringify(updateFields)
         updateFields = updateFields.replace(/"([^"]+)":/g, '$1:');
 
@@ -30,7 +32,7 @@ const requests = async (req, res) => {
         const data = await axios.post(storefrontURL, query, {
             headers: storefrontHeaders
         })
-        console.log(data.data)
+        console.log(query)
         res.json(data.data)
     }
     catch(e) {

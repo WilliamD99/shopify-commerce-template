@@ -5,13 +5,18 @@ import userContext from '../utils/userContext'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Button from '@mui/material/Button'
+import Loading from '../components/Loading/dataLoading'
 
 import useCustomerDeleteAccessToken from '../utils/hooks/useCustomerDeleteAccessToken'
+import useCustomerGet from '../utils/hooks/useCustomerGet'
 import { accessTokenExist, accessTokenDelete } from '../utils/utils'
+import Dashboard from '../components/User/dashboard'
 
 export default function Account() {
   const { user, setUser } = useContext(userContext)
   const [tab, setTab] = useState(0)
+
+  const customer = useCustomerGet()
   const deleteAccessToken = useCustomerDeleteAccessToken()
 
   const handleChangeTab = (e, newValue) => {
@@ -24,6 +29,19 @@ export default function Account() {
   }
 
   useEffect(() => {
+    if (accessTokenExist()) {
+      customer.mutate({accessToken: accessTokenExist()})
+    }
+  }, [])
+
+  useEffect(() => {
+    if (customer.data) {
+      setUser(customer.data.customer)
+    }
+  }, [customer.data])
+
+  // Remove access token
+  useEffect(() => {
     if (deleteAccessToken.data && !deleteAccessToken.isLoading) {
       setUser()
       localStorage.removeItem("items")
@@ -31,6 +49,10 @@ export default function Account() {
     }
   }, [deleteAccessToken.isLoading])
 
+  
+  if (customer.isLoading) return (
+    <Loading />
+  )
   if (!user) return (
     <>
       <p className='text-center text-xl mt-44'>You&apos;re not login yet!</p>
@@ -39,27 +61,31 @@ export default function Account() {
 
   return (
     <>
-      <p onClick={() => console.log(user)}>Test</p>
-      <div className="flex flex-col justify-center items-center">
-        <Tabs className='mb-20' value={tab} onChange={handleChangeTab}>
+      <div className="flex flex-col ml-20">
+        <Tabs className='mb-12' value={tab} onChange={handleChangeTab}>
+          <Tab label="Dashboard" />
           <Tab label="Personal Info"/>
           <Tab label="Shipping"/>
           <Tab label="Payment"/>
         </Tabs>
 
         <TabPanel value={tab} index={0}>
-          <UpdateForm />
+          <Dashboard />
         </TabPanel>
 
         <TabPanel value={tab} index={1}>
-          <ShippingForm />
+          <UpdateForm />
         </TabPanel>
 
         <TabPanel value={tab} index={2}>
-          <p>Test2</p>
+          <ShippingForm />
+        </TabPanel>
+
+        <TabPanel value={tab} index={3}>
+          <p className='ml-3 mb-5 text-lg'>Payment methods</p>
         </TabPanel>
       </div>
-      <Button onClick={handleLogout}>Logout</Button>
+      {/* <Button onClick={handleLogout}>Logout</Button> */}
     </>
   )
 }
