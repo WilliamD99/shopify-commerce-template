@@ -1,7 +1,7 @@
 import React from "react";
 import Product from "./relatedProduct";
 
-import Slider from 'react-slick'
+import Slider from "react-slick";
 
 export default function Related({ data }) {
   data = JSON.parse(data.value);
@@ -9,10 +9,10 @@ export default function Related({ data }) {
   const settings = {
     // infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    arrows: true
-  }
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    arrows: true,
+  };
 
   return (
     <>

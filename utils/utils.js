@@ -2,8 +2,9 @@ import axios from "axios";
 import CryptoJS from "crypto-js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { Flip } from "gsap/dist/Flip";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Flip);
 
 const updateSessionStorage = (key, value) => {
   sessionStorage.setItem(key, JSON.stringify(value));
@@ -69,7 +70,7 @@ let cartAdd = async (params, setCart) => {
             quantity: params.quantity,
             price: params.price,
             image: params.image,
-            variantTitle: params.variantTitle
+            variantTitle: params.variantTitle,
           },
         ])
       );
@@ -80,7 +81,7 @@ let cartAdd = async (params, setCart) => {
           quantity: params.quantity,
           price: params.price,
           image: params.image,
-          variantTitle: params.variantTitle
+          variantTitle: params.variantTitle,
         },
       ]);
     } else return;
@@ -108,7 +109,7 @@ let cartAdd = async (params, setCart) => {
           quantity: params.quantity,
           price: params.price,
           image: params.image,
-          variantTitle: params.variantTitle
+          variantTitle: params.variantTitle,
         });
       }
     }
@@ -181,11 +182,11 @@ let accessTokenDelete = () => {
 let isEmptyObj = (obj) => {
   for (let prop in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-      return false
+      return false;
     }
   }
-  return JSON.stringify(obj) === JSON.stringify({})
-}
+  return JSON.stringify(obj) === JSON.stringify({});
+};
 
 const provinces = [
   { value: "BC", label: "British Columbia" },
@@ -203,9 +204,9 @@ const provinces = [
   { value: "SK", label: "Saskatchewan" },
 ];
 
-let formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+let formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
 });
 
 export {
@@ -221,5 +222,5 @@ export {
   provinces,
   gsap,
   isEmptyObj,
-  formatter
+  formatter,
 };

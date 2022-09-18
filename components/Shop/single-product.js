@@ -39,7 +39,7 @@ export default function SingeProduct({ e, index }) {
       {
         autoAlpha: 1,
         y: 0,
-        delay: index * 0.2,
+        delay: index * 0.15,
         duration: 0.3,
         immediateRender: false,
         ease: "Sine.easeInOut",
@@ -60,7 +60,7 @@ export default function SingeProduct({ e, index }) {
   return (
     <div
       ref={anim}
-      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-md border-2 shadow-sm"
+      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-lg shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -74,8 +74,8 @@ export default function SingeProduct({ e, index }) {
 
       {/* If product is on sales */}
       {onSale ? (
-        <div className="absolute -top-5 -right-2 bg-red-400 rounded-full px-2 py-3 z-40">
-          <p className="text-sm text-white">Sales</p>
+        <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-5 py-3 z-40">
+          <p className="text-base text-white uppercase">Sales</p>
         </div>
       ) : (
         <></>

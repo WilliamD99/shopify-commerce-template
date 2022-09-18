@@ -5,15 +5,21 @@ import { useRouter } from "next/router";
 import { IoIosArrowDown } from "react-icons/io";
 import Button from "@mui/material/Button";
 import FilterCheckbox from "./filterCheckbox";
-import Link from '../common/Link'
+import Link from "../common/Link";
 
-export default function Filter({ 
-  length, isLoading, count, total, setSortKey, setReverse, setPath
+export default function Filter({
+  length,
+  isLoading,
+  count,
+  total,
+  setSortKey,
+  setReverse,
+  setPath,
 }) {
   const filterBarAnim = useRef(null);
-  const router = useRouter()
-  const routerQuery = router.query
-  const sortRefFocus = useRef(null)
+  const router = useRouter();
+  const routerQuery = router.query;
+  const sortRefFocus = useRef(null);
 
   // Pin the bar while scrolling
   // useLayoutEffect(() => {
@@ -30,7 +36,7 @@ export default function Filter({
 
   // Create animation for sort dropdown
   useEffect(() => {
-    sortRefFocus.current = gsap.timeline({paused: true}).fromTo(
+    sortRefFocus.current = gsap.timeline({ paused: true }).fromTo(
       "#sort_dropdown",
       {
         top: -10,
@@ -42,14 +48,18 @@ export default function Filter({
         duration: 0.1,
         ease: "Sine.easeInOut",
         onStart: () => {
-          document.querySelector("#sort_dropdown").classList.toggle("invisible");
+          document
+            .querySelector("#sort_dropdown")
+            .classList.toggle("invisible");
         },
         onReverseComplete: () => {
-          document.querySelector("#sort_dropdown").classList.toggle("invisible");
-        }
+          document
+            .querySelector("#sort_dropdown")
+            .classList.toggle("invisible");
+        },
       }
-    )
-  }, [])
+    );
+  }, []);
 
   // Handle Dropdown animation
   let sortByFunction = () => {
@@ -58,26 +68,29 @@ export default function Filter({
     sortIcon.classList.toggle("rotate-180");
 
     if (sortDropdown.classList.contains("invisible")) {
-      sortRefFocus.current.play()
+      sortRefFocus.current.play();
     } else {
-      sortRefFocus.current.reverse()
+      sortRefFocus.current.reverse();
     }
   };
 
   // Handle sorting router
   const handleSortingClick = async (key, reverse, path) => {
-    setPath(path)
-    routerQuery.sort_key = key
-    routerQuery.reverse = reverse.toString()
-    routerQuery.path = path
-    router.push({
-      pathname: window.location.pathname,
-      query: routerQuery
-    }, undefined)
+    setPath(path);
+    routerQuery.sort_key = key;
+    routerQuery.reverse = reverse.toString();
+    routerQuery.path = path;
+    router.push(
+      {
+        pathname: window.location.pathname,
+        query: routerQuery,
+      },
+      undefined
+    );
 
-    await setSortKey(key)
-    await setReverse(reverse)
-  }
+    await setSortKey(key);
+    await setReverse(reverse);
+  };
 
   return (
     <>
@@ -92,21 +105,16 @@ export default function Filter({
               {count === 12 ? "1-12" : `${count - length + 1}-${count}`}
             </span>
             of
-            <span className="mx-1">
-              {total}
-            </span>
+            <span className="mx-1">{total}</span>
           </p>
         </div>
         <div className="flex flex-row">
           <Button>
-            <Link href="/shop">Clear Filter</Link>
+            <Link className="text-black" href="/shop">
+              Clear Filter
+            </Link>
           </Button>
-          {
-            routerQuery.col ? 
-            <></>
-            :
-            <FilterCheckbox />
-          }
+          {routerQuery.col ? <></> : <FilterCheckbox />}
 
           <div id="sort" className="relative">
             <Button
@@ -126,18 +134,66 @@ export default function Filter({
               id="sort_dropdown"
               className="w-52 h-48 px-4 invisible absolute -right-8 flex flex-col justify-center items-center bg-white z-40"
             >
-              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', false, routerQuery.col ? '' : 'admin')}>Title (A-Z)</Button>
-              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('TITLE', true, routerQuery.col ? '' : 'admin')}>Title (Z-A)</Button>
-              {
-                !routerQuery.path || routerQuery.path === 'sf' ?
+              <Button
+                className="text-sm w-full text-black"
+                onClick={() =>
+                  handleSortingClick(
+                    "TITLE",
+                    false,
+                    routerQuery.col ? "" : "admin"
+                  )
+                }
+              >
+                Title (A-Z)
+              </Button>
+              <Button
+                className="text-sm w-full text-black"
+                onClick={() =>
+                  handleSortingClick(
+                    "TITLE",
+                    true,
+                    routerQuery.col ? "" : "admin"
+                  )
+                }
+              >
+                Title (Z-A)
+              </Button>
+              {!routerQuery.path || routerQuery.path === "sf" ? (
                 <>
-                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', true, routerQuery.col ? '' : 'sf')}>Price (High-Low)</Button>
-                  <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('PRICE', false, routerQuery.col ? '' : 'sf')}>Price (Low-High)</Button>
+                  <Button
+                    className="text-sm w-full text-black"
+                    onClick={() =>
+                      handleSortingClick(
+                        "PRICE",
+                        true,
+                        routerQuery.col ? "" : "sf"
+                      )
+                    }
+                  >
+                    Price (High-Low)
+                  </Button>
+                  <Button
+                    className="text-sm w-full text-black"
+                    onClick={() =>
+                      handleSortingClick(
+                        "PRICE",
+                        false,
+                        routerQuery.col ? "" : "sf"
+                      )
+                    }
+                  >
+                    Price (Low-High)
+                  </Button>
                 </>
-                :
+              ) : (
                 <></>
-              }
-              <Button className="text-sm w-full text-black" onClick={() => handleSortingClick('CREATED_AT', true, 'admin')}>Latest Arrival</Button>
+              )}
+              <Button
+                className="text-sm w-full text-black"
+                onClick={() => handleSortingClick("CREATED_AT", true, "admin")}
+              >
+                Latest Arrival
+              </Button>
             </div>
           </div>
         </div>
