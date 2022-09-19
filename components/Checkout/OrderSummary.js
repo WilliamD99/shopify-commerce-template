@@ -48,7 +48,6 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
     checkoutDiscount.data,
     checkoutDiscountRemove.data,
   ]);
-
   useEffect(() => {
     if (checkout.data) {
       let discount = 0;
@@ -136,7 +135,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
           <div className="absolute w-full h-full top-0 left-0 backdrop-blur-sm z-40"></div>
         </>
       )}
-      <p className="text-2xl text-center font-semibold mb-8">Order Summary</p>
+      <p className="text-2xl text-center font-semibold mb-4">Order Summary</p>
 
       <Divider />
 
@@ -146,7 +145,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
             checkout.data.node.lineItems.edges.map((e, i) => (
               <div className="flex flex-row justify-between" key={i}>
                 <div className="flex flex-row items-center space-x-5">
-                  <div className="relative h-10 w-10">
+                  <div className="relative h-10 w-10 xl:h-16 xl:w-16">
                     <Image
                       src={e.node.variant.image.url}
                       layout="fill"
@@ -155,7 +154,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
                   </div>
 
                   <div className="flex flex-col">
-                    <p className="text-xs font-medium overflow-hidden whitespace-nowrap text-ellipsis">
+                    <p className="text-xs xl:text-base font-medium overflow-hidden whitespace-nowrap text-ellipsis">
                       {e.node.title}{" "}
                       <span>
                         {e.node.variant.title !== "Default Title"
@@ -163,13 +162,13 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
                           : ""}
                       </span>
                     </p>
-                    <p className="text-xs">
+                    <p className="text-xs xl:text-base">
                       Quantity: <span>{e.node.quantity}</span>
                     </p>
                   </div>
                 </div>
                 <div className="ml-5">
-                  <p className="text-sm">
+                  <p className="text-sm xl:text-base">
                     {formatter.format(e.node.variant.price)}
                   </p>
                 </div>
@@ -183,8 +182,8 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
         <Divider />
 
         <div className="flex flex-row justify-between">
-          <p className="text-base font-medium">Subtotal</p>
-          <p className="text-base font-semibold">
+          <p className="text-base xl:text-lg font-medium">Subtotal</p>
+          <p className="text-base xl:text-lg font-semibold">
             {formatter.format(totalLine)}
           </p>
         </div>
@@ -215,7 +214,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
         <Divider />
 
         <div className="flex flex-col">
-          <p className="text-base font-medium">Delivery</p>
+          <p className="text-base xl:text-lg font-medium">Delivery</p>
           <FormControl className="mt-2 pl-5">
             <RadioGroup value={selectedRate}>
               {shippingRateHandle.length > 0 ? (
@@ -254,15 +253,17 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
         <Divider />
 
         <div className="flex flex-row justify-between">
-          <p className="text-base font-medium">Tax (GST)</p>
-          <p className="text-sm">{formatter.format(tax)}</p>
+          <p className="text-base xl:text-lg font-medium">Tax (GST)</p>
+          <p className="text-sm xl:text-base">{formatter.format(tax)}</p>
         </div>
 
         <Divider />
 
         <div className="flex flex-row justify-between">
-          <p className="text-base font-medium">Total</p>
-          <p className="text-base font-semibold">{formatter.format(total)}</p>
+          <p className="text-base xl:text-lg font-medium">Total</p>
+          <p className="text-base xl:text-lg font-semibold">
+            {formatter.format(total)}
+          </p>
         </div>
 
         <div className="flex flex-col space-y-2">
