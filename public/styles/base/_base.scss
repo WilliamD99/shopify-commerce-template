@@ -44,3 +44,20 @@ input[type=number] {
     color: rgba(0, 0, 0, 0.5)
   }
 }
+
+// Search bar
+#search-bar {
+  .MuiFormControl-root {
+    .MuiFormLabel-root {
+      color: white
+    }
+    .MuiInputBase-root {
+      &::before {
+        border-color: white
+      }
+      &::after {
+        border-color: papayawhip
+      }
+    }
+  }
+}
