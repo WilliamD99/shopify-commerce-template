@@ -2,9 +2,17 @@ import React, { useState } from "react";
 import Image from "../common/Image";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import Button from "@mui/material/Button";
+import Slider from 'react-slick'
 
 export default function Gallery({ images }) {
   const [index, setIndex] = useState(0);
+  let settings = {
+    infinite: true,
+    dots: true,
+    arrows: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  }
 
   const handleImageClick = (target, i) => {
     setIndex(i);
@@ -28,23 +36,22 @@ export default function Gallery({ images }) {
 
   return (
     <div id="image-gallery" className="flex flex-col space-y-2">
-      <div className="relative w-full h-80 xl:h-80 image-gallery-main">
-        <Image
-          layout="fill"
-          src={images[index].node.src}
-          alt={images[index].node.altText}
-        />
-        <div className="absolute arrow-next left-2 top-1/2">
-          <Button className="text-black" onClick={() => handleNextClick(false)}>
-            <GoArrowLeft className="text-lg" />
-          </Button>
-        </div>
-        <div className="absolute arrow-next right-2 top-1/2">
-          <Button className="text-black" onClick={() => handleNextClick(true)}>
-            <GoArrowRight className="text-lg" />
-          </Button>
-        </div>
+      <div className="relative">
+        <Slider {...settings}>
+          {
+            images.map((e, i) => (
+              <div className="relative w-full h-80 xl:h-80 image-gallery-main" key={`image-${i}`}>
+                <Image
+                  layout="fill"
+                  src={e.node.src}
+                  alt={e.node.altText}
+                />
+              </div>
+            ))
+          }
+        </Slider>
       </div>
+
       <div
         className={`grid grid-cols-${
           images.length > 3 ? images.length : 3

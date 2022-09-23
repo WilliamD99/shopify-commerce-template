@@ -11,6 +11,7 @@ const requests = async (req, res) => {
             node(id: "${id}") {
               ... on Checkout {
                 id
+                webUrl
                 totalTaxV2 {
                   amount
                 }
@@ -39,10 +40,20 @@ const requests = async (req, res) => {
                   edges {
                     node {
                       id
+                      title
                       quantity
+                      discountAllocations {
+                        allocatedAmount {
+                          amount
+                        }
+                      }
                       variant {
                         id
                         price
+                        title
+                        image {
+                          url
+                        }
                       }
                     }
                   }

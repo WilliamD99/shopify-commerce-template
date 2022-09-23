@@ -24,23 +24,28 @@ export default function Header(props) {
     if (!user)
       return (
         <>
-          <Button className="text-white" onClick={() => setModalOpen(true)}>
+          <p
+            className="text-white cursor-pointer"
+            onClick={() => setModalOpen(true)}
+          >
             Login
-          </Button>
+          </p>
         </>
       );
-    if (!user.firstName) return <p>Hello {user.email}</p>;
     return (
-      <Link href="/myaccount" className="hover:underline">
-        <span className="font-semibold ml-1">
-          {user.firstName} {user.lastName}
-        </span>
-      </Link>
+      <div className="relative">
+        <Link href="/my-account" className="hover:underline">
+          <span className="font-semibold ml-1">
+            {user.firstName ? user.firstName : user.email} {user.lastName}
+          </span>
+        </Link>
+      </div>
     );
   };
 
+  // Get customer if there's a token
   useEffect(() => {
-    if (user) {
+    if (!user) {
       let token = accessTokenExist();
       if (token) {
         customer.mutate({ accessToken: token });
@@ -60,7 +65,7 @@ export default function Header(props) {
         <AppBar>
           <Toolbar className="flex justify-between bg-black">
             <Link href="/">Ecommerce Theme</Link>
-            <div className="flex flex-row space-x-5 items-center">
+            <div className="flex flex-row space-x-10 items-center">
               <Search />
               {headerConditionalDisplay()}
               <Cart />

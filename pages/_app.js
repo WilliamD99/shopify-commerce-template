@@ -1,38 +1,42 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from "react";
 // Style
-import "../public/styles/tailwind.css"
-import "../public/styles/index.css"
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "../public/styles/tailwind.css";
+import "../public/styles/index.css";
 // Library
 import Helmet from "react-helmet";
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import loadingContext from "../utils/loadingContext";
-import cartContext from '../utils/cartContext'
-import userContext from '../utils/userContext'
+import cartContext from "../utils/cartContext";
+import userContext from "../utils/userContext";
 
-import Layout from '../components/layout'
+import Layout from "../components/layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
-    }
-  }
-})
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true)
-  const [cart, setCart] = useState([])
-  const [user, setUser] = useState()
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    let items = JSON.parse(localStorage.getItem('items'))
+    let items = JSON.parse(localStorage.getItem("items"));
     if (items !== null) {
-      setCart(JSON.parse(localStorage.getItem('items')))
+      setCart(JSON.parse(localStorage.getItem("items")));
     }
-  }, [])
+  }, []);
 
-  return (
+  const getLayout = Component.getLayout || ((page) => page);
+
+  return getLayout(
     <>
       <Helmet>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -62,18 +66,18 @@ function MyApp({ Component, pageProps }) {
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
       <QueryClientProvider client={queryClient}>
-        <userContext.Provider value={{user, setUser}}>
-          <cartContext.Provider value={{cart, setCart}}>
-            <loadingContext.Provider value={{loading, setLoading}}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+        <userContext.Provider value={{ user, setUser }}>
+          <cartContext.Provider value={{ cart, setCart }}>
+            <loadingContext.Provider value={{ loading, setLoading }}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
             </loadingContext.Provider>
           </cartContext.Provider>
         </userContext.Provider>
       </QueryClientProvider>
     </>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

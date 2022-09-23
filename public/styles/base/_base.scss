@@ -47,11 +47,20 @@ input[type=number] {
 
 // Search bar
 #search-bar {
+  .search-icon {
+    svg {
+      color: white
+    }
+  }
   .MuiFormControl-root {
+    width: 100%;
     .MuiFormLabel-root {
       color: white
     }
     .MuiInputBase-root {
+      #search {
+        color: white
+      }
       &::before {
         border-color: white
       }

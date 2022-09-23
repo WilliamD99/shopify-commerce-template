@@ -162,6 +162,15 @@ let customerUpdateShipping = async (params) => {
   return data.data;
 };
 
+// Update default address
+let customerDefaultAddressUpdate = async (params) => {
+  let url = '/api/storefront/mutation/customer-update-default-address'
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
+
 // Create customer access token
 let customerAccessToken = async (params) => {
   let url = "/api/storefront/mutation/customer-access-token";
@@ -224,6 +233,24 @@ let checkoutEmailUpdate = async (params) => {
   });
   return data.data;
 };
+
+// Apply discount code to checkout
+let checkoutAddDiscount = async (params) => {
+  let url = "/api/storefront/mutation/checkout-discount"
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
+
+// Remove discount code
+let checkoutRemoveDiscount = async (params) => {
+  let url = "/api/storefront/mutation/checkout-discount-remove"
+  let data = await axios.post(url, {
+    data: params
+  })
+  return data.data
+}
 
 // Get vault
 let checkoutVaultId = async (params) => {
@@ -318,10 +345,13 @@ export {
   checkoutVaultId,
   customerCreateShipping,
   customerUpdateShipping,
+  customerDefaultAddressUpdate,
   customerAccessToken,
   customerAccessTokenDelete,
   checkoutToCustomer,
   checkoutGet,
+  checkoutAddDiscount,
+  checkoutRemoveDiscount,
   checkoutCompleteStripe,
   checkoutUpdateShipping,
   checkoutShippingLineUpdate,
