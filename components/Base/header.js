@@ -1,4 +1,10 @@
-import React, { useEffect, useContext, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useContext,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import Cart from "./cart";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import { accessTokenExist } from "../../utils/utils";
@@ -14,13 +20,14 @@ import Button from "@mui/material/Button";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "./search";
 import { gsap } from "../../utils/utils";
+import DrawerMobile from "./drawerMobile";
 
 export default function Header(props) {
   let customer = useCustomerGet();
   let { user, setUser } = useContext(userContext);
   let [modalOpen, setModalOpen] = useState(false);
 
-  let headerConditionalDisplay = () => {
+  let headerConditionalDisplay = useCallback(() => {
     if (!user)
       return (
         <>
@@ -41,7 +48,7 @@ export default function Header(props) {
         </Link>
       </div>
     );
-  };
+  }, []);
 
   // Get customer if there's a token
   useEffect(() => {
@@ -63,9 +70,12 @@ export default function Header(props) {
     <>
       <HideOnScroll {...props}>
         <AppBar>
-          <Toolbar className="flex justify-between bg-black">
-            <Link href="/">Ecommerce Theme</Link>
-            <div className="flex flex-row space-x-10 items-center">
+          <Toolbar className="relative w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
+            <Link className="text-xl" href="/">
+              Ecommerce Theme
+            </Link>
+            <DrawerMobile />
+            <div className="hidden md:flex md:flex-row space-x-10 items-center">
               <Search />
               {headerConditionalDisplay()}
               <Cart />
