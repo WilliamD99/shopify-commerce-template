@@ -108,7 +108,7 @@ export default function Filter({
             <span className="mx-1">{total}</span>
           </p>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row space-x-5 items-center">
           <Button>
             <Link className="text-black" href="/shop">
               Clear Filter
