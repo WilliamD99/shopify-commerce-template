@@ -114,7 +114,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
       <>
         <form
           onSubmit={handleFormInfo}
-          className="flex flex-col space-y-5 px-10 w-2/3"
+          className="flex flex-col space-y-5 md:px-10 md:w-2/3"
         >
           <div className="flex flex-col space-y-5">
             <p className="text-xl font-medium">Contact Information</p>

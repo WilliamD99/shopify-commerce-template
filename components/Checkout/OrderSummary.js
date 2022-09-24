@@ -124,7 +124,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
   if (!cart) return <div className="w-1/3 bg-slate-100"></div>;
 
   return (
-    <div className="mr-10 px-8 py-5 flex flex-col w-1/3 relative bg-slate-100">
+    <div className="md:mr-10 px-4 md:px-8 py-5 flex flex-col md:w-1/3 relative bg-slate-100">
       {!checkoutShippingLineUpdate.isLoading &&
       !checkout.isLoading &&
       !pi.isLoading ? (

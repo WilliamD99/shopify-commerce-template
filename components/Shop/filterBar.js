@@ -96,7 +96,7 @@ export default function Filter({
     <>
       <div
         id="filter-bar"
-        className="filter-menu flex flex-row justify-between bg-white py-6 z-40 -mb-8"
+        className="filter-menu hidden md:flex flex-row justify-between bg-white py-6 z-40 -mb-8"
       >
         <div id="filter-bar__product-number">
           <p className="text-lg">

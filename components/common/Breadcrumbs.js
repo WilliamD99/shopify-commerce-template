@@ -7,11 +7,11 @@ export default function CustomBreadcrumbs({ path }) {
 
   return (
     <>
-      <div className="my-5 px-10">
+      <div className="my-5 md:px-10">
         <Breadcrumbs className="breadcrumbs">
           {path.map((e, i) => (
             <Link
-              className="breadcrumbs-crumb text-lg text-black"
+              className="breadcrumbs-crumb text-sm md:text-lg text-black"
               key={`breadcrumb-${i}`}
               href={e.path}
             >

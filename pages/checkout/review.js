@@ -36,8 +36,8 @@ export default function Checkout() {
     <>
       <Breadcrumbs step={2} />
 
-      <div className="px-16">
-        <div className="flex flex-row justify-between">
+      <div className="px-5 md:px-16">
+        <div className="flex flex-col md:flex-row space-y-5 justify-between">
           <CheckoutInfo setShippingOptions={setShippingOptions} />
           {checkoutId ? (
             <OrderSummary

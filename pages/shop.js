@@ -110,7 +110,7 @@ export default function Shop() {
         ]}
       />
 
-      <div id="shop-container" className="px-10">
+      <div id="shop-container" className="px-3 md:px-10">
         <FilterBar
           count={count}
           length={dataArr.length}
@@ -125,7 +125,7 @@ export default function Shop() {
 
         <div
           id="shop"
-          className="flex flex-row justify-between mt-5 space-x-8 z-50"
+          className="flex flex-row justify-center md:justify-between mt-5 md:space-x-8 z-50"
         >
           <FilterMenu
             isLoading={
@@ -133,10 +133,10 @@ export default function Shop() {
             }
           />
 
-          <div className="relative w-9/12 xl:w-10/12">
+          <div className="relative xl:w-10/12">
             <div
               id="shop-grid"
-              className="grid grid-cols-3 xl:grid-cols-4 gap-5 gap-y-10"
+              className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-10"
             >
               {mutateProductAdmin.isLoading || mutateProductNextSf.isLoading ? (
                 <Loading />
