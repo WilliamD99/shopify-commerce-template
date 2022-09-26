@@ -164,12 +164,12 @@ let customerUpdateShipping = async (params) => {
 
 // Update default address
 let customerDefaultAddressUpdate = async (params) => {
-  let url = '/api/storefront/mutation/customer-update-default-address'
+  let url = "/api/storefront/mutation/customer-update-default-address";
   let data = await axios.post(url, {
-    data: params
-  })
-  return data.data
-}
+    data: params,
+  });
+  return data.data;
+};
 
 // Create customer access token
 let customerAccessToken = async (params) => {
@@ -236,21 +236,21 @@ let checkoutEmailUpdate = async (params) => {
 
 // Apply discount code to checkout
 let checkoutAddDiscount = async (params) => {
-  let url = "/api/storefront/mutation/checkout-discount"
+  let url = "/api/storefront/mutation/checkout-discount";
   let data = await axios.post(url, {
-    data: params
-  })
-  return data.data
-}
+    data: params,
+  });
+  return data.data;
+};
 
 // Remove discount code
 let checkoutRemoveDiscount = async (params) => {
-  let url = "/api/storefront/mutation/checkout-discount-remove"
+  let url = "/api/storefront/mutation/checkout-discount-remove";
   let data = await axios.post(url, {
-    data: params
-  })
-  return data.data
-}
+    data: params,
+  });
+  return data.data;
+};
 
 // Get vault
 let checkoutVaultId = async (params) => {
@@ -321,6 +321,19 @@ let orderGet = async (params) => {
   return data.data;
 };
 
+let vendorGet = async () => {
+  let url = "/api/admin/query/vendors-get";
+  let data = await axios.get(url);
+
+  return data.data;
+};
+
+let productTypeGet = async () => {
+  let url = "/api/storefront/query/product-type-get";
+  let data = await axios.get(url);
+  return data.data;
+};
+
 export {
   productInCollection,
   productAll,
@@ -358,4 +371,6 @@ export {
   checkoutEmailUpdate,
   deliveryAll,
   orderGet,
+  vendorGet,
+  productTypeGet,
 };

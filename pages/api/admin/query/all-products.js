@@ -22,7 +22,6 @@ const requests = async (req, res) => {
 
     // Use for pagination
     const cursor = params.cursor;
-    console.log(cursor);
     // True is forward, false is backward
     const direction = params.direction;
     let position;
@@ -46,6 +45,19 @@ const requests = async (req, res) => {
       queryArr.push(sales);
     }
 
+    let vendors = params.vendors;
+    if (vendors) {
+      vendors = vendors.split(",");
+      let vendorQuery = vendors.map((e) => `vendor:'${e}'`).join(" OR ");
+      queryArr.push(vendorQuery);
+    }
+
+    let type = params.type;
+    if (type) {
+      type = type.split(",");
+      let vendorQuery = type.map((e) => `product_type:'${e}'`).join(" OR ");
+      queryArr.push(vendorQuery);
+    }
     const querySearch = queryArr.join(" ");
 
     const query = `
@@ -109,13 +121,12 @@ const requests = async (req, res) => {
         }
     }
     `;
-    console.log(query);
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,
     });
-    console.log(data.data);
     res.json(data.data);
   } catch (e) {
+    console.log(e);
     res.json({ error: e });
   }
 };

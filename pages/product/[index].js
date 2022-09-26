@@ -85,10 +85,21 @@ export default function Products() {
     if (index !== undefined) productByHandleMutation.mutate({ handle: index });
   }, [index]);
 
+  useEffect(() => {
+    if (product) {
+      if (product.variants.edges.length === 1) {
+        setVariantId(product.variants.edges[0].node.id);
+        setDisplayPrice(product.variants.edges[0].node.price);
+        console.log("test");
+      }
+    }
+  }, [product]);
+
   // Keeping track of ref value using state
   useEffect(() => {
+    console.log("hi");
     setQuantity(parseInt(inputRef.current.value));
-  }, [inputRef.current.value]);
+  }, [inputRef.current]);
 
   if (product === undefined) return <Loading />;
   return (
@@ -170,33 +181,39 @@ export default function Products() {
               </div>
               <p className="text-xl">{product.description}</p>
 
-              <div className="flex flex-col space-y-3">
-                <p className="font-semibold text-base">Select Options:</p>
-                <div className="flex flex-row space-x-3">
-                  {product.variants.edges.map((e) => (
-                    <div
-                      id={`variant-${e.node.title}`}
-                      className="py-2 px-1 chip-variant"
-                      onClick={() => handleVariantClick(e.node.title, e.node)}
-                      key={e.node.title}
-                    >
-                      <Chip
-                        label={e.node.title}
-                        className="cursor-pointer text-lg px-2 py-2"
-                        variant="outlined"
-                      />
-                    </div>
-                  ))}
+              {product.variants.edges.length > 1 ? (
+                <div className="flex flex-col space-y-3">
+                  <p className="font-semibold text-base">Select Options:</p>
+                  <div className="flex flex-row space-x-3">
+                    {product.variants.edges.map((e) => (
+                      <div
+                        id={`variant-${e.node.title}`}
+                        className="py-2 px-1 chip-variant"
+                        onClick={() => handleVariantClick(e.node.title, e.node)}
+                        key={e.node.title}
+                      >
+                        <Chip
+                          label={e.node.title}
+                          className="cursor-pointer text-lg px-2 py-2"
+                          variant="outlined"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
 
               <div className="flex flex-row">
                 <button
                   className="text-2xl border-2 px-4 py-2 rounded-full"
                   onClick={() => {
-                    if (parseInt(inputRef.current.value) > 0)
+                    if (parseInt(inputRef.current.value) > 0) {
                       inputRef.current.value =
                         parseInt(inputRef.current.value) - 1;
+                      setQuantity(parseInt(inputRef.current.value));
+                    }
                   }}
                 >
                   -
@@ -210,17 +227,18 @@ export default function Products() {
                 />
                 <button
                   className="text-2xl border-2 px-4 py-2 rounded-full"
-                  onClick={() =>
-                    (inputRef.current.value =
-                      parseInt(inputRef.current.value) + 1)
-                  }
+                  onClick={() => {
+                    inputRef.current.value =
+                      parseInt(inputRef.current.value) + 1;
+                    setQuantity(parseInt(inputRef.current.value));
+                  }}
                 >
                   +
                 </button>
               </div>
               <div className="mt-4 flex flex-row justify-between items-center">
                 <Button
-                  className="bg-slate-300 mr-5 text-white px-5 py-2 rounded-lg hover:bg-slate-400"
+                  className="bg-black mr-5 text-white px-5 py-2 rounded-lg hover:bg-slate-400"
                   onClick={() => {
                     if (variantId && quantity > 0) {
                       let variantTitle =
@@ -267,7 +285,12 @@ export default function Products() {
 
       <div className="flex justify-center mt-10 md:mt-20">
         <div className="w-11/12 xl:w-3/4">
-          <p className="text-xl font-semibold">Related Products</p>
+          <p
+            className="text-xl font-semibold"
+            onClick={() => console.log(variantId, quantity)}
+          >
+            Related Products
+          </p>
 
           {product.metafields.some((e) => {
             if (e) return e.key === "related_products";

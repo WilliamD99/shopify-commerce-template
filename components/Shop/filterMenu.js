@@ -9,6 +9,8 @@ import Link from "../common/Link";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PriceFilter from "./filter/price";
+import VendorFilter from "./filter/vendor";
+import ProductType from "./filter/product-type";
 
 export default function FilterMenu({ isLoading }) {
   // const filterMenuAnim = useRef(null)
@@ -87,11 +89,26 @@ export default function FilterMenu({ isLoading }) {
 
         <Divider />
 
+        <div id="price-filter" className="py-5 h-40 flex flex-col space-y-3">
+          <PriceFilter />
+        </div>
+
+        <Divider />
+
         <div
-          id="price-filter"
+          id="vendor-filter"
+          className="py-5 mb-5 min-h-24 flex flex-col space-y-3"
+        >
+          <VendorFilter />
+        </div>
+
+        <Divider />
+
+        <div
+          id="product-type-filter"
           className="py-5 mb-10 h-56 flex flex-col space-y-3"
         >
-          <PriceFilter />
+          <ProductType />
         </div>
       </div>
     </>

@@ -42,6 +42,10 @@ export default function Shop() {
           cursor: routerQuery.cursor,
           price: routerQuery.price,
           sales: routerQuery.sales,
+          vendors: routerQuery.vendors
+            ? decodeURIComponent(routerQuery.vendors)
+            : "",
+          type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
         });
       }
       if (routerQuery.path === "sf") {
@@ -51,6 +55,10 @@ export default function Shop() {
           cursor: routerQuery.cursor,
           price: routerQuery.price,
           sales: routerQuery.sales,
+          vendors: routerQuery.vendors
+            ? decodeURIComponent(routerQuery.vendors)
+            : "",
+          type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
         });
       }
     }
@@ -65,6 +73,8 @@ export default function Shop() {
       reversed: params.isReverse ? params.isReverse : isReverse,
       price: params.price,
       sales: params.sales,
+      vendors: params.vendors,
+      type: params.type,
     });
     let edges = data.data.products.edges;
     setDataArr(edges);
@@ -87,6 +97,8 @@ export default function Shop() {
       reversed: params.isReverse ? params.isReverse : isReverse,
       price: params.price,
       sales: params.sales,
+      vendors: params.vendors,
+      type: params.type,
     });
     let edges = data.data.products.edges;
     setDataArr(edges);

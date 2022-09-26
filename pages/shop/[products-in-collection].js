@@ -37,6 +37,9 @@ export default function Collection() {
           sales: routerQuery.sales,
           direction: direction,
           cursor: routerQuery.cursor,
+          vendors: routerQuery.vendors
+            ? decodeURIComponent(routerQuery.vendors)
+            : "",
         });
       }
     }

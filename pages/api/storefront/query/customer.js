@@ -48,6 +48,7 @@ const requests = async (req, res) => {
                 }
             }
         `;
+    console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });

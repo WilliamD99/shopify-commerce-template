@@ -43,7 +43,7 @@ export default function Filter({
         autoAlpha: 0,
       },
       {
-        top: 30,
+        top: 50,
         autoAlpha: 1,
         duration: 0.1,
         ease: "Sine.easeInOut",
@@ -108,31 +108,28 @@ export default function Filter({
             <span className="mx-1">{total}</span>
           </p>
         </div>
-        <div className="flex flex-row space-x-5 items-center">
-          <Button>
-            <Link className="text-black" href="/shop">
-              Clear Filter
-            </Link>
-          </Button>
+        <div
+          className="flex flex-row space-x-5 items-center"
+          // onBlur={() => {
+          //   if (!sortRefFocus.current.reversed()) {
+          //     let sortIcon = document.querySelector("#sort_icon");
+          //     sortIcon.classList.toggle("rotate-180");
+          //     sortRefFocus.current.reverse();
+          //   }
+          // }}
+        >
           {routerQuery.col ? <></> : <FilterCheckbox />}
 
           <div id="sort" className="relative">
             <Button
               className="normal-case text-lg text-black z-50"
               onClick={() => sortByFunction()}
-              // onBlur={() => {
-              //   if (!sortRefFocus.current.reversed()) {
-              //     let sortIcon = document.querySelector("#sort_icon");
-              //     sortIcon.classList.toggle("rotate-180");
-              //     sortRefFocus.current.reverse()
-              //   }
-              // }}
             >
               Sort By <IoIosArrowDown id="sort_icon" className="ml-2 ease-in" />
             </Button>
             <div
               id="sort_dropdown"
-              className="w-52 h-48 px-4 invisible absolute -right-8 flex flex-col justify-center items-center bg-white z-40"
+              className="w-44 py-5 invisible absolute -right-0 flex flex-col justify-center items-end bg-slate-200 z-40"
             >
               <Button
                 className="text-sm w-full text-black"
@@ -158,7 +155,7 @@ export default function Filter({
               >
                 Title (Z-A)
               </Button>
-              {!routerQuery.path || routerQuery.path === "sf" ? (
+              {/* {!routerQuery.path || routerQuery.path === "sf" ? (
                 <>
                   <Button
                     className="text-sm w-full text-black"
@@ -187,7 +184,7 @@ export default function Filter({
                 </>
               ) : (
                 <></>
-              )}
+              )} */}
               <Button
                 className="text-sm w-full text-black"
                 onClick={() => handleSortingClick("CREATED_AT", true, "admin")}
