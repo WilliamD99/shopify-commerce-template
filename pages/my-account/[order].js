@@ -21,7 +21,6 @@ export default function Order() {
     if (router.isReady) {
       if (routerQuery.id) {
         order.mutate({ id: routerQuery.id });
-        console.log(decodeURIComponent(routerQuery.id));
       }
     }
   }, [router.isReady]);
@@ -29,7 +28,6 @@ export default function Order() {
   useEffect(() => {
     if (order.data) {
       setData(order.data.order);
-      console.log(order.data.order);
     }
   }, [order.data]);
 
@@ -74,11 +72,15 @@ export default function Order() {
                     <div className="flex flex-row justify-between items-center">
                       <div className="flex flex-row items-center space-x-2">
                         <div className="relative h-10 w-10">
-                          <Image
-                            layout="fill"
-                            src={e.node.image.url}
-                            alt={`image-${i}`}
-                          />
+                          {e.node.image ? (
+                            <Image
+                              layout="fill"
+                              src={e.node.image.url}
+                              alt={`image-${i}`}
+                            />
+                          ) : (
+                            <></>
+                          )}
                         </div>
                         <Link
                           href={`/product/${e.node.product.handle}`}

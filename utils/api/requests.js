@@ -144,6 +144,14 @@ let customerUpdate = async (params) => {
   return data.data;
 };
 
+let customerUpdateWishlist = async (params) => {
+  let url = "/api/admin/mutation/customer-update-meta";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data.data;
+};
+
 // Create shipping for customer
 let customerCreateShipping = async (params) => {
   let url = "/api/storefront/mutation/customer-create-shipping";
@@ -358,6 +366,7 @@ export {
   checkoutVaultId,
   customerCreateShipping,
   customerUpdateShipping,
+  customerUpdateWishlist,
   customerDefaultAddressUpdate,
   customerAccessToken,
   customerAccessTokenDelete,

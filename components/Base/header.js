@@ -27,7 +27,7 @@ export default function Header(props) {
   let { user, setUser } = useContext(userContext);
   let [modalOpen, setModalOpen] = useState(false);
 
-  let headerConditionalDisplay = useCallback(() => {
+  let headerConditionalDisplay = () => {
     if (!user)
       return (
         <>
@@ -48,7 +48,7 @@ export default function Header(props) {
         </Link>
       </div>
     );
-  }, []);
+  };
 
   // Get customer if there's a token
   useEffect(() => {
@@ -61,7 +61,8 @@ export default function Header(props) {
   }, []);
 
   useEffect(() => {
-    if (customer.data !== undefined) {
+    if (customer.data) {
+      console.log(customer.data);
       setUser(customer.data.customer);
     }
   }, [customer.isLoading]);
@@ -70,7 +71,7 @@ export default function Header(props) {
     <>
       <HideOnScroll {...props}>
         <AppBar>
-          <Toolbar className="relative w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
+          <Toolbar className="relative invisible w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
             <Link className="text-xl" href="/">
               Ecommerce Theme
             </Link>
@@ -93,7 +94,7 @@ const HideOnScroll = (props) => {
   const trigger = useScrollTrigger();
 
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
+    <Slide className="invisible" appear={false} direction="down" in={!trigger}>
       {children}
     </Slide>
   );

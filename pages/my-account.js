@@ -67,6 +67,7 @@ export default function Account() {
           <Tab label="Shipping" />
           <Tab label="Payment" />
           <Tab label="History" />
+          <Tab label="Wishlist" />
         </Tabs>
 
         <TabPanel value={tab} index={0}>
@@ -87,6 +88,10 @@ export default function Account() {
 
         <TabPanel value={tab} index={4}>
           <p>History</p>
+        </TabPanel>
+
+        <TabPanel value={tab} index={5}>
+          <p>Wishlist</p>
         </TabPanel>
       </div>
       {/* <Button onClick={handleLogout}>Logout</Button> */}

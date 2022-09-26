@@ -21,6 +21,12 @@ const requests = async (req, res) => {
                         province
                         zip
                     }
+                    metafields(identifiers: [
+                        { namespace: "custom", key: "wishlist" },
+                      ]) {
+                        key
+                        value
+                    }
                     addresses(first: 10) {
                         edges {
                             node {
@@ -48,7 +54,7 @@ const requests = async (req, res) => {
                 }
             }
         `;
-    console.log(query);
+    // console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
