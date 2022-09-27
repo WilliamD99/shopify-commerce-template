@@ -72,9 +72,9 @@ export default function ShippingForm() {
   let updateDefault = useDefaultAddressUpdate();
   const handleCheckDefault = (id) => {
     setDefaultId(id);
-    !alertRef.current.reversed()
-      ? alertRef.current.play()
-      : alertRef.current.reverse();
+    // !alertRef.current.reversed()
+    //   ? alertRef.current.play()
+    //   : alertRef.current.reverse();
     let accessToken = accessTokenExist();
     updateDefault.mutate({ accessToken: accessToken, addressId: id });
   };

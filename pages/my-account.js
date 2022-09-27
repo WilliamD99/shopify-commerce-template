@@ -1,16 +1,29 @@
 import React, { useState, useContext, useEffect } from "react";
-import UpdateForm from "../components/User/user-update";
-import ShippingForm from "../components/User/shipping-update";
+import dynamic from "next/dynamic";
 import userContext from "../utils/userContext";
+
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
 import Loading from "../components/Loading/dataLoading";
+import Dashboard from "../components/User/dashboard";
 
+// Dynamic component
+const Wishlist = dynamic(() => import("../components/User/wishlist"), {
+  loading: () => <p>Loading ...</p>,
+});
+const ShippingForm = dynamic(
+  () => import("../components/User/shipping-update"),
+  { loading: () => <p>Loading...</p> }
+);
+const UpdateForm = dynamic(() => import("../components/User/user-update"), {
+  loading: () => <p>Loading...</p>,
+});
+
+// Hooks
 import useCustomerDeleteAccessToken from "../utils/hooks/useCustomerDeleteAccessToken";
 import useCustomerGet from "../utils/hooks/useCustomerGet";
 import { accessTokenExist, accessTokenDelete } from "../utils/utils";
-import Dashboard from "../components/User/dashboard";
 
 export default function Account() {
   const { user, setUser } = useContext(userContext);
@@ -23,10 +36,10 @@ export default function Account() {
     setTab(newValue);
   };
 
-  const handleLogout = () => {
-    let token = accessTokenExist();
-    deleteAccessToken.mutate({ accessToken: token });
-  };
+  // const handleLogout = () => {
+  //   let token = accessTokenExist();
+  //   deleteAccessToken.mutate({ accessToken: token });
+  // };
 
   useEffect(() => {
     if (accessTokenExist()) {
@@ -37,7 +50,6 @@ export default function Account() {
   useEffect(() => {
     if (customer.data) {
       setUser(customer.data.customer);
-      console.log(customer.data.customer);
     }
   }, [customer.data]);
 
@@ -91,7 +103,7 @@ export default function Account() {
         </TabPanel>
 
         <TabPanel value={tab} index={5}>
-          <p>Wishlist</p>
+          <Wishlist />
         </TabPanel>
       </div>
       {/* <Button onClick={handleLogout}>Logout</Button> */}
