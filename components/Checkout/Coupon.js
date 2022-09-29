@@ -21,6 +21,7 @@ export default function Coupon({ checkoutMutation }) {
   };
 
   useEffect(() => {
+    console.log(checkoutMutation.data);
     if (checkoutMutation.data) {
       if (
         checkoutMutation.data.data.checkoutDiscountCodeApplyV2

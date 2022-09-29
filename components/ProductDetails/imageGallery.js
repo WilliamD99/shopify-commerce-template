@@ -2,13 +2,7 @@ import React, { useState, useRef } from "react";
 import Image from "../common/Image";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import Slider from "react-slick";
-import {
-  GlassMagnifier,
-  SideBySideMagnifier,
-  MOUSE_ACTIVATION,
-  TOUCH_ACTIVATION,
-  Magnifier,
-} from "react-image-magnifiers";
+import { SideBySideMagnifier, GlassMagnifier } from "react-image-magnifiers";
 
 export default function Gallery({ images }) {
   const sliderRef = useRef(null);
@@ -28,24 +22,26 @@ export default function Gallery({ images }) {
   return (
     <div id="image-gallery" className="flex flex-col space-y-2">
       <div className="relative">
-        <Slider ref={sliderRef} {...settings}>
-          {images.map((e, i) => (
-            <div
-              className="relative h-80 xl:h-80 image-gallery-main"
-              key={`image-${i}`}
-            >
-              <Image layout="fill" src={e.node.src} alt={e.node.altText} />
-              {/* <Magnifier
-                mouseActivation={MOUSE_ACTIVATION}
-                touchActivation={TOUCH_ACTIVATION}
-                dragToMove={true}
-                imageSrc={e.node.src}
-                imageAlt="Example"
-                largeImageSrc={e.node.src} // Optional
-              /> */}
-            </div>
-          ))}
-        </Slider>
+        {/* <Slider ref={sliderRef} {...settings}> */}
+        {images.map((e, i) => (
+          <div
+            id="magnifier"
+            className="relative h-80 xl:h-80 image-gallery-main"
+            key={`image-${i}`}
+          >
+            {/* <Image layout="fill" src={e.node.src} alt={e.node.altText} /> */}
+            <GlassMagnifier
+              // mouseActivation={MOUSE_ACTIVATION}
+              // touchActivation={TOUCH_ACTIVATION}
+              // dragToMove={true}
+              imageSrc={e.node.src}
+              imageAlt="Example"
+              largeImageSrc={e.node.src} // Optional
+              // allowOverflow={true}
+            />
+          </div>
+        ))}
+        {/* </Slider> */}
       </div>
 
       <div

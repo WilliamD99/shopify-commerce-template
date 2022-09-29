@@ -130,6 +130,10 @@ input[type=number] {
   color: black !important;
 }
 
+#magnifier img {
+  max-width: none !important;
+}
+
 #filter-bar #sort #sort_icon {
   -webkit-transition: .3s;
   transition: .3s;

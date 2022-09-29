@@ -19,6 +19,9 @@ const ShippingForm = dynamic(
 const UpdateForm = dynamic(() => import("../components/User/user-update"), {
   loading: () => <p>Loading...</p>,
 });
+const Loyalty = dynamic(() => import("../components/User/loyalty"), {
+  loading: () => <p>Loading ...</p>,
+});
 
 // Hooks
 import useCustomerDeleteAccessToken from "../utils/hooks/useCustomerDeleteAccessToken";
@@ -80,6 +83,7 @@ export default function Account() {
           <Tab label="Payment" />
           <Tab label="History" />
           <Tab label="Wishlist" />
+          <Tab label="Loyalty Program" />
         </Tabs>
 
         <TabPanel value={tab} index={0}>
@@ -104,6 +108,10 @@ export default function Account() {
 
         <TabPanel value={tab} index={5}>
           <Wishlist />
+        </TabPanel>
+
+        <TabPanel value={tab} index={6}>
+          <Loyalty />
         </TabPanel>
       </div>
       {/* <Button onClick={handleLogout}>Logout</Button> */}

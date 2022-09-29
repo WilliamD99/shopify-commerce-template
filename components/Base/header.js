@@ -71,7 +71,7 @@ export default function Header(props) {
     <>
       <HideOnScroll {...props}>
         <AppBar>
-          <Toolbar className="relative invisible w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
+          <Toolbar className="relative  w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
             <Link className="text-xl" href="/">
               Ecommerce Theme
             </Link>

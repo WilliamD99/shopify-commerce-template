@@ -342,7 +342,49 @@ let productTypeGet = async () => {
   return data.data;
 };
 
+// Loyalty
+
+// Get customer profile
+let customer_get_loyalty = async (params) => {
+  let url = "/api/loyalty/get_customer";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data.data;
+};
+
+// Get all the available redemption options for that customer
+let redemption_get_loyalty = async (params) => {
+  let url = "/api/loyalty/get_redemption_option";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data.data;
+};
+
+// Set/Edit customer birthday
+let bd_post_loyalty = async (params) => {
+  let url = "/api/loyalty/post_customer_bd";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data.data;
+};
+
+// Retrieve a redemption option for that customer (reward)
+let redemption_post_loyalty = async (params) => {
+  let url = "/api/loyalty/post_redemptions";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data.data;
+};
+
 export {
+  customer_get_loyalty,
+  redemption_post_loyalty,
+  bd_post_loyalty,
+  redemption_get_loyalty,
   productInCollection,
   productAll,
   productAllStorefront,
