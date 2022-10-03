@@ -116,6 +116,11 @@ input[type=number] {
   transition: 0.2s;
 }
 
+.product-details .options.selected {
+  background-color: black !important;
+  color: white !important;
+}
+
 .product-details #image-gallery .image-gallery-main:hover .arrow-next {
   display: block;
 }
@@ -126,8 +131,26 @@ input[type=number] {
   display: none;
 }
 
+.product-details #image-gallery .slick-arrow {
+  display: none !important;
+}
+
+.product-details #product-accordion .MuiPaper-root {
+  border-radius: 0 !important;
+  background-color: unset !important;
+  color: unset !important;
+}
+
+.product-details #product-accordion .MuiPaper-root .MuiAccordionSummary-root {
+  border-bottom: black solid 1px;
+}
+
 .slick-slider .slick-prev::before, .slick-slider .slick-next::before {
   color: black !important;
+}
+
+.slick-slider .single-product__image-main {
+  height: 50rem;
 }
 
 #magnifier img {

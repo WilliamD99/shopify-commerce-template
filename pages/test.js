@@ -10,34 +10,34 @@ import useCustomerGet from "../utils/hooks/useCustomerGet";
 import useLoyaltyGetCustomer from "../utils/hooks/useLoyaltyCustomerGet";
 import userContext from "../utils/userContext";
 import { SideBySideMagnifier } from "react-image-magnifiers";
+import useProductGetReviews from "../utils/hooks/useProductGetReviews";
 
 export default function Test() {
-  let customerLoyalty = useLoyaltyGetCustomer();
-  let { user } = useContext(userContext);
+  let test = useProductGetReviews();
 
   useEffect(() => {
-    if (user) {
-      customerLoyalty.mutate({ email: user.email });
-    }
-  }, [user]);
+    axios
+      .post("/api/reviews/post_product_reviews", {
+        data: {
+          id: "7278769995956",
+          productTitle: "7 Shakra Bracelet",
+          name: "Will Dzoan",
+          email: "will.doan@advesa.com",
+          content: "This is the best",
+          title: "Product Reviews",
+          score: 4,
+        },
+      })
+      .then((res) => console.log(res));
+  }, []);
 
-  useEffect(() => {
-    if (customerLoyalty.data) console.log(customerLoyalty.data);
-  }, [customerLoyalty.data]);
+  // useEffect(() => {
+  //   test.mutate({ id: "7278769995956" });
+  // }, []);
 
-  return (
-    <>
-      {/* <div className="cursor-crosshair">Test</div>
-      <div id="magnifier" className="h-96 w-96 relative">
-        <SideBySideMagnifier
-          imageSrc="/image.png"
-          largeImageSrc="/image.png"
-          // alwaysInPlace={true}
-          // mouseActivation={MOUSE_ACTIVATION.CLICK}
-          // touchActivation={TOUCH_ACTIVATION.TAP}
-          // dragToMove={true}
-        />
-      </div> */}
-    </>
-  );
+  // useEffect(() => {
+  //   if (test.data) console.log(test.data);
+  // }, [test.data]);
+
+  return <></>;
 }

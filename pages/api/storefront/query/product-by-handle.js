@@ -17,6 +17,10 @@ const requests = async (req, res) => {
                         vendor
                         tags
                         productType
+                        options {
+                            name
+                            values
+                        }
                         metafields(identifiers: [
                             { namespace: "custom", key: "related_products" },
                             { namespace: "custom", key: "vendor" }
@@ -43,7 +47,7 @@ const requests = async (req, res) => {
                                 }
                             }
                         }
-                        variants(first: 5) {
+                        variants(first: 10) {
                             edges {
                                 node {
                                     id

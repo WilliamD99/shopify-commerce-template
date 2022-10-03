@@ -28,7 +28,7 @@ export default function Product({ data }) {
 
   return (
     <>
-      <div className="relative mr-3 pb-5 flex flex-col space-y-5 bg-slate-100">
+      <div className="relative pb-5 flex flex-col mr-3 bg-slate-100">
         {/* If product is loading */}
         {isLoading ? (
           <>

@@ -15,7 +15,10 @@ export default function Wishlist() {
 
   return (
     <>
-      <div onClick={() => console.log(list)}>Wishlist</div>;
+      <p className="text-2xl font-bold mb-10" onClick={() => console.log(list)}>
+        Wishlist
+      </p>
+
       {list.map((e, i) => (
         <WishlistItem key={i} id={e} />
       ))}

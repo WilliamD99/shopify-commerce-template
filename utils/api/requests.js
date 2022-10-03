@@ -56,6 +56,15 @@ let productAllStorefront = async (params) => {
   return data.data;
 };
 
+// Reviews
+let productReviews = async (params) => {
+  let url = "/api/reviews/get_product_reviews";
+  let data = await axios.post(url, {
+    data: params,
+  });
+  return data;
+};
+
 // Get all collections
 let collectionAll = async () => {
   let url = "api/admin/query/all-collections";
@@ -389,6 +398,7 @@ export {
   productAll,
   productAllStorefront,
   productById,
+  productReviews,
   collectionAll,
   productSearch,
   productByHandle,

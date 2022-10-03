@@ -19,6 +19,8 @@ import Link from "../../components/common/Link";
 import Loading from "../../components/Loading/dataLoading";
 import Related from "../../components/ProductDetails/related/relatedProducts";
 import Button from "@mui/material/Button";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import Accordion from "../../components/ProductDetails/accordion";
 
 export default function Products() {
   const router = useRouter();
@@ -28,7 +30,9 @@ export default function Products() {
   const [variantId, setVariantId] = useState();
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
+  const [originalPrice, setOriginalPrice] = useState(0);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [options, setOptions] = useState("[]");
   const inputRef = useRef(0);
 
   let productByHandleMutation = useMutation(async (params) => {
@@ -57,27 +61,23 @@ export default function Products() {
         )} - ${formatter.format(product.priceRange.maxVariantPrice.amount)}`;
       }
     } else {
-      display = displayPrice;
+      display = formatter.format(displayPrice);
     }
 
     return display;
   };
 
-  let handleVariantClick = (target, e) => {
-    let chips = document.querySelectorAll(".chip-variant .MuiChip-root");
-    for (let chip of chips) {
-      chip.classList.remove("bg-black");
-      chip.classList.remove("text-white");
+  let handleVariantClick = (index, value) => {
+    let state = JSON.parse(options);
+    state[index] = value;
+    setOptions(JSON.stringify(state));
+
+    let element = document.querySelector(`#${value}-${index}`);
+    let others = document.querySelectorAll(`.options.options-${index}`);
+    for (let other of others) {
+      other.classList.remove("selected");
     }
-
-    let selectedChip = document.querySelector(
-      `#variant-${target} .MuiChip-root`
-    );
-    selectedChip.classList.toggle("bg-black");
-    selectedChip.classList.toggle("text-white");
-
-    setVariantId(e.id);
-    setDisplayPrice(e.price);
+    element.classList.add("selected");
   };
 
   // Get the product
@@ -97,117 +97,112 @@ export default function Products() {
 
   // Keeping track of ref value using state
   useEffect(() => {
-    console.log("hi");
     setQuantity(parseInt(inputRef.current.value));
   }, [inputRef.current]);
+
+  // Handle variants
+  useEffect(() => {
+    if (product) {
+      if (product.options) {
+        if (
+          JSON.parse(options).length === product.options.length &&
+          !JSON.parse(options).some((e) => e === null)
+        ) {
+          let combined = JSON.parse(options).join(" / ");
+          let selectedIndex = product.variants.edges.findIndex(
+            (e) => e.node.title === combined
+          );
+          setVariantId(product.variants.edges[selectedIndex].node.id);
+          setDisplayPrice(product.variants.edges[selectedIndex].node.price);
+        }
+      }
+    }
+  }, [options]);
+
+  useEffect(() => {
+    if (variantId) {
+      let index = product.variants.edges.findIndex(
+        (e) => e.node.id === variantId
+      );
+      setOriginalPrice(product.variants.edges[index].node.compareAtPrice);
+    }
+  }, [variantId]);
 
   if (product === undefined) return <Loading />;
   return (
     <>
-      <div className="product-details flex justify-center">
+      <Breadcrumbs
+        path={[
+          { name: "Home", path: "/" },
+          { name: "Product", path: "#" },
+          { name: `${product.title}`, path: "#" },
+        ]}
+      />
+      <div className="product-details pb-10 bg-amber-50 flex justify-center">
         <div className="w-11/12 xl:w-3/4">
-          <Breadcrumbs
-            path={[
-              { name: "Home", path: "/" },
-              { name: "Product", path: "#" },
-              { name: `${product.title}`, path: "#" },
-            ]}
-          />
-
-          <div className="flex flex-col md:flex-row md:space-x-20 space-y-10 xl:mt-16">
-            <div className="w-full md:w-1/3 flex flex-col justify-center space-y-5">
+          <div className="flex flex-col md:flex-row space-y-10 xl:mt-16">
+            <div className="w-full md:w-2/3 flex flex-col justify-center space-y-5">
               {productByHandleMutation.isLoading ? (
                 <></>
               ) : (
-                <ImageGallery images={product.images.edges} />
+                <ImageGallery
+                  tag={product.tags}
+                  images={product.images.edges}
+                />
               )}
-
-              <div className="">
-                {product.tags.length > 0 ? (
-                  <div className="flex flex-row items-center space-x-2">
-                    <p>Tags: </p>
-                    {product.tags.map((tag, index) => (
-                      <Chip
-                        key={`tag-${product.title}-${index}`}
-                        label={
-                          <Link href="#" className="hover:underline">
-                            {tag}
-                          </Link>
-                        }
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
             </div>
-            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2">
-              <p className="text-2xl font-semibold w-10/12 md:w-full">
-                Products {product.title}
-              </p>
-              <div className="flex flex-col w-3/4 md:flex-row md:space-x-10">
-                <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
-                  <p className="font-semibold text-base">By:</p>
-                  <Link
-                    href="#"
-                    className="col-span-2 text-lg md:italic hover:underline"
-                  >
-                    {product.vendor}
-                  </Link>
-                </div>
-                {product.productType ? (
-                  <>
-                    <span className="hidden md:block">|</span>
-                    <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
-                      <p className="font-semibold text-base">Type:</p>
-                      <Link
-                        href="#"
-                        className="col-span-2 text-lg md:italic hover:underline"
-                      >
-                        {product.productType}
-                      </Link>
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div className="w-3/4 grid grid-cols-4 md:flex md:flex-row items-center md:space-x-5">
-                <p className="text-base font-semibold">Price:</p>
-                <p className="text-lg md:text-xl col-span-3">
+            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/3">
+              {/* Title */}
+              <div className="flex flex-row items-center space-x-5">
+                <p className="text-3xl font-semibold">
+                  Products {product.title}
+                </p>
+                <p
+                  className={`text-xl font-semibold ${
+                    originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
+                  }`}
+                  onClick={() =>
+                    console.log(JSON.parse(product.metafields[0].value))
+                  }
+                >
                   {handlePriceDisplay()}
+                  {originalPrice > parseInt(displayPrice) ? (
+                    <span className="text-lg ml-2 text-black font-semibold line-through">
+                      {formatter.format(originalPrice)}
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </p>
               </div>
+              {/* Description */}
               <p className="text-xl">{product.description}</p>
 
-              {product.variants.edges.length > 1 ? (
-                <div className="flex flex-col space-y-3">
-                  <p className="font-semibold text-base">Select Options:</p>
-                  <div className="flex flex-row space-x-3">
-                    {product.variants.edges.map((e) => (
-                      <div
-                        id={`variant-${e.node.title}`}
-                        className="py-2 px-1 chip-variant"
-                        onClick={() => handleVariantClick(e.node.title, e.node)}
-                        key={e.node.title}
-                      >
+              {/* Options */}
+              <div className="flex flex-col space-y-5">
+                {product.options.map((e, i) => (
+                  <div key={`variant-${i}`} className="flex flex-col space-y-2">
+                    <p className="font-semibold text-xl">{e.name}</p>
+                    <div className="flex flex-row space-x-2">
+                      {e.values.map((value, index) => (
                         <Chip
-                          label={e.node.title}
-                          className="cursor-pointer text-lg px-2 py-2"
-                          variant="outlined"
+                          id={value + "-" + i}
+                          size="medium"
+                          key={`value-${index}`}
+                          className={`py-2 px-2 options options-${i}`}
+                          label={<p className="text-lg">{value}</p>}
+                          onClick={() => handleVariantClick(i, value)}
                         />
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <></>
-              )}
+                ))}
+              </div>
 
-              <div className="flex flex-row">
+              {/* Quantity Input */}
+              <div className="flex flex-row justify-center w-full">
                 <button
-                  className="text-2xl border-2 px-4 py-2 rounded-full"
+                  className="text-base"
                   onClick={() => {
                     if (parseInt(inputRef.current.value) > 0) {
                       inputRef.current.value =
@@ -216,29 +211,31 @@ export default function Products() {
                     }
                   }}
                 >
-                  -
+                  <AiOutlineMinus />
                 </button>
                 <input
-                  className="text-center w-24 text-lg"
+                  className="text-center bg-transparent w-24 text-2xl"
                   type="number"
                   ref={inputRef}
                   defaultValue={0}
                   onChange={onChangeInput}
                 />
                 <button
-                  className="text-2xl border-2 px-4 py-2 rounded-full"
+                  className="text-base"
                   onClick={() => {
                     inputRef.current.value =
                       parseInt(inputRef.current.value) + 1;
                     setQuantity(parseInt(inputRef.current.value));
                   }}
                 >
-                  +
+                  <AiOutlinePlus />
                 </button>
               </div>
+
+              {/* Add to cart */}
               <div className="mt-4 flex flex-row justify-between items-center">
                 <Button
-                  className="bg-black mr-5 text-white px-5 py-2 rounded-lg hover:bg-slate-400"
+                  className="bg-black mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-400"
                   onClick={() => {
                     if (variantId && quantity > 0) {
                       let variantTitle =
@@ -268,16 +265,9 @@ export default function Products() {
                 >
                   Add to cart | ${displayPrice}
                 </Button>
-                <div className="h-full">
-                  {alertOpen ? (
-                    <Alert severity="warning">
-                      Please select variant and/or quantity
-                    </Alert>
-                  ) : (
-                    <></>
-                  )}
-                </div>
               </div>
+
+              <Accordion />
             </div>
           </div>
         </div>
@@ -285,12 +275,7 @@ export default function Products() {
 
       <div className="flex justify-center mt-10 md:mt-20">
         <div className="w-11/12 xl:w-3/4">
-          <p
-            className="text-xl font-semibold"
-            onClick={() => console.log(variantId, quantity)}
-          >
-            Related Products
-          </p>
+          <p className="text-2xl font-semibold mb-8">Related Products</p>
 
           {product.metafields.some((e) => {
             if (e) return e.key === "related_products";
@@ -313,4 +298,44 @@ export default function Products() {
       </div>
     </>
   );
+}
+{
+  /* <div className="h-full">
+                  {alertOpen ? (
+                    <Alert severity="warning">
+                      Please select variant and/or quantity
+                    </Alert>
+                  ) : (
+                    <></>
+                  )}
+                </div> */
+}
+{
+  /* <div className="flex flex-col w-3/4 md:flex-row md:space-x-10">
+                <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
+                  <p className="font-semibold text-base">By:</p>
+                  <Link
+                    href="#"
+                    className="col-span-2 text-lg md:italic hover:underline"
+                  >
+                    {product.vendor}
+                  </Link>
+                </div>
+                {product.productType ? (
+                  <>
+                    <span className="hidden md:block">|</span>
+                    <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
+                      <p className="font-semibold text-base">Type:</p>
+                      <Link
+                        href="#"
+                        className="col-span-2 text-lg md:italic hover:underline"
+                      >
+                        {product.productType}
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div> */
 }

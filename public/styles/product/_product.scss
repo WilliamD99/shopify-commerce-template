@@ -3,6 +3,10 @@
 }
 
 .product-details {
+    .options.selected {
+        background-color: black !important;
+        color: white !important
+    }
     #image-gallery {
         .image-gallery-main {
             &:hover {
@@ -15,6 +19,19 @@
                 display: none;
             }
         }
+        .slick-arrow {
+            display: none !important;
+        }
+    }
+    #product-accordion {
+        .MuiPaper-root {
+            border-radius: 0 !important;
+            background-color: unset !important;
+            color: unset !important;
+            .MuiAccordionSummary-root {
+                border-bottom: black solid 1px;
+            }
+        }
     }
 }
 
@@ -22,6 +39,9 @@
 .slick-slider {
     .slick-prev::before, .slick-next::before {
         color: black !important
+    }
+    .single-product__image-main {
+        height: 50rem
     }
 }
 
