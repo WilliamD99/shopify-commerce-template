@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
-import Divider from "@mui/material/Divider";
+import Rating from "@mui/material/Rating";
 
-export default function ProductAccordion() {
+import useProductReviewBottom from "../../../utils/hooks/useProductReviewBottom";
+
+export default function ProductAccordion({ id }) {
+  const reviewBottom = useProductReviewBottom();
+
+  useEffect(() => {
+    reviewBottom.mutate({ id: id });
+  }, []);
+
   return (
     <>
       <div id="product-accordion" className="flex flex-col space-y-0">
@@ -44,21 +52,28 @@ export default function ProductAccordion() {
           </AccordionDetails>
         </Accordion>
         <Accordion disableGutters={true} className="shadow-none">
-          <AccordionSummary
-            expandIcon={<MdExpandMore className="text-2xl" />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            className="bg-amber-50 shadow-none pl-0"
-          >
-            <p className="text-xl font-semibold">Reviews</p>
+          <AccordionSummary className="bg-amber-50 shadow-none pl-0">
+            <div className="flex flex-row justify-between items-center w-full">
+              <p className="text-xl font-semibold">
+                Reviews
+                {reviewBottom.data ? (
+                  <span className="ml-1">
+                    ({reviewBottom.data.response.bottomline.total_reviews})
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </p>
+              {reviewBottom.data ? (
+                <Rating
+                  readOnly
+                  value={reviewBottom.data.response.bottomline.average_score}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </AccordionSummary>
-          <AccordionDetails>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
-            </p>
-          </AccordionDetails>
         </Accordion>
       </div>
     </>

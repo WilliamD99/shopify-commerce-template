@@ -8,7 +8,7 @@ import React, {
 import { useRouter } from "next/router";
 
 import { productByHandle } from "../../utils/api/requests";
-import { cartAdd, formatter } from "../../utils/utils";
+import { cartAdd, extractId, formatter } from "../../utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import cartContext from "../../utils/cartContext";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
@@ -21,6 +21,7 @@ import Related from "../../components/ProductDetails/related/relatedProducts";
 import Button from "@mui/material/Button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
+import Reviews from "../../components/ProductDetails/reviews";
 
 export default function Products() {
   const router = useRouter();
@@ -90,7 +91,6 @@ export default function Products() {
       if (product.variants.edges.length === 1) {
         setVariantId(product.variants.edges[0].node.id);
         setDisplayPrice(product.variants.edges[0].node.price);
-        console.log("test");
       }
     }
   }, [product]);
@@ -127,6 +127,7 @@ export default function Products() {
       setOriginalPrice(product.variants.edges[index].node.compareAtPrice);
     }
   }, [variantId]);
+  console.log(product);
 
   if (product === undefined) return <Loading />;
   return (
@@ -161,9 +162,6 @@ export default function Products() {
                   className={`text-xl font-semibold ${
                     originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
                   }`}
-                  onClick={() =>
-                    console.log(JSON.parse(product.metafields[0].value))
-                  }
                 >
                   {handlePriceDisplay()}
                   {originalPrice > parseInt(displayPrice) ? (
@@ -267,7 +265,7 @@ export default function Products() {
                 </Button>
               </div>
 
-              <Accordion />
+              <Accordion id={extractId(product.id)} />
             </div>
           </div>
         </div>
@@ -275,8 +273,12 @@ export default function Products() {
 
       <div className="flex justify-center mt-10 md:mt-20">
         <div className="w-11/12 xl:w-3/4">
-          <p className="text-2xl font-semibold mb-8">Related Products</p>
+          <Reviews id={extractId(product.id)} />
+        </div>
+      </div>
 
+      <div className="flex justify-center mt-10 md:mt-20">
+        <div className="w-11/12 xl:w-3/4">
           {product.metafields.some((e) => {
             if (e) return e.key === "related_products";
           }) ? (

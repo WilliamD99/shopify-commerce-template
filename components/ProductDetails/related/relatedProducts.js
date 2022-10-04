@@ -3,20 +3,21 @@ import Product from "./relatedProduct";
 
 import Slider from "react-slick";
 
+const settings = {
+  infinite: true,
+  speed: 500,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  arrows: true,
+  swipeToSlide: true,
+};
 export default function Related({ data }) {
   data = JSON.parse(data.value);
 
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    arrows: true,
-    swipeToSlide: true,
-  };
-  console.log(data);
   return (
     <>
+      <p className="text-3xl font-semibold mb-8">Related Products</p>
+
       {data.length > 3 ? (
         <Slider {...settings} className="mt-5 relative">
           {data.map((e) => (

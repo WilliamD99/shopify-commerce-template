@@ -188,6 +188,12 @@ let isEmptyObj = (obj) => {
   return JSON.stringify(obj) === JSON.stringify({});
 };
 
+// Extract ID
+let extractId = (id) => {
+  let arr = id.split("/");
+  return arr[arr.length - 1];
+};
+
 const provinces = [
   { value: "BC", label: "British Columbia" },
   { value: "AB", label: "Alberta" },
@@ -223,4 +229,5 @@ export {
   gsap,
   isEmptyObj,
   formatter,
+  extractId,
 };

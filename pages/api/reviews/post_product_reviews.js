@@ -12,19 +12,6 @@ const request = async (req, res) => {
     const title = params.title;
     const score = params.score;
 
-    const requestData = {
-      appkey: process.env.NEXT_PUBLIC_YOTPO_APP_KEY,
-      domain: process.env.NEXT_PUBLIC_DOMAIN_URL,
-      sku: id,
-      product_title: productTitle,
-      product_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}admin/products/${id}`,
-      display_name: name,
-      email: email,
-      is_incentivized: false,
-      review_content: content,
-      review_title: title,
-      review_score: score,
-    };
     var data = JSON.stringify({
       appkey: process.env.NEXT_PUBLIC_YOTPO_APP_KEY,
       domain: process.env.NEXT_PUBLIC_DOMAIN_URL,
@@ -37,7 +24,7 @@ const request = async (req, res) => {
       is_incentivized: false,
       review_content: content,
       review_title: title,
-      review_score: 5,
+      review_score: score,
     });
 
     var config = {
