@@ -25,20 +25,34 @@ const request = async (req, res) => {
       review_title: title,
       review_score: score,
     };
-    console.log(requestData);
-    const data = await axios.post(
-      url,
-      {
-        data: requestData,
+    var data = JSON.stringify({
+      appkey: process.env.NEXT_PUBLIC_YOTPO_APP_KEY,
+      domain: process.env.NEXT_PUBLIC_DOMAIN_URL,
+      product_title: productTitle,
+      sku: id,
+      product_description: "This is a test test",
+      product_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}admin/products/${id}`,
+      display_name: name,
+      email: email,
+      is_incentivized: false,
+      review_content: content,
+      review_title: title,
+      review_score: 5,
+    });
+
+    var config = {
+      method: "post",
+      url: "https://api.yotpo.com/reviews/dynamic_create",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
-      {
-        headers: {
-          Accept: "application/json",
-          "content-type": "application/json",
-        },
-      }
-    );
-    res.json(data.data);
+      data: data,
+    };
+
+    let returnedData = await axios(config);
+
+    res.json(returnedData.data);
   } catch (e) {
     console.log(e);
     res.json(e);
