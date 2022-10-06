@@ -127,7 +127,6 @@ export default function Products() {
       setOriginalPrice(product.variants.edges[index].node.compareAtPrice);
     }
   }, [variantId]);
-  console.log(product);
 
   if (product === undefined) return <Loading />;
   return (

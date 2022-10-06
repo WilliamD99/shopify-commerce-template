@@ -12,24 +12,26 @@ import userContext from "../utils/userContext";
 import { SideBySideMagnifier } from "react-image-magnifiers";
 import useProductGetReviews from "../utils/hooks/useProductGetReviews";
 
+import Reviews from "../components/ProductDetails/reviews";
+
 export default function Test() {
   let test = useProductGetReviews();
 
-  useEffect(() => {
-    axios
-      .post("/api/reviews/post_product_reviews", {
-        data: {
-          id: "7278769995956",
-          productTitle: "Test Product",
-          name: "Bruce Denzel",
-          email: "bruceisgay@gmail.com",
-          content: "I'm in love with this product",
-          title: "So Good",
-          score: 4.5,
-        },
-      })
-      .then((res) => console.log(res));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post("/api/reviews/post_product_reviews", {
+  //       data: {
+  //         id: "7278769995956",
+  //         productTitle: "Test Product",
+  //         name: "Bruce Denzel",
+  //         email: "bruceisgay@gmail.com",
+  //         content: "I'm in love with this product",
+  //         title: "So Good",
+  //         score: 4.5,
+  //       },
+  //     })
+  //     .then((res) => console.log(res));
+  // }, []);
 
   // useEffect(() => {
   //   axios
@@ -41,13 +43,17 @@ export default function Test() {
   //     .then((res) => console.log(res));
   // }, []);
 
-  // useEffect(() => {
-  //   test.mutate({ id: "7255529717940" });
-  // }, []);
+  useEffect(() => {
+    test.mutate({ id: "7278769995956" });
+  }, []);
 
-  // useEffect(() => {
-  //   if (test.data) console.log(test.data);
-  // }, [test.data]);
+  useEffect(() => {
+    if (test.data) console.log(test.data);
+  }, [test.data]);
 
-  return <></>;
+  return (
+    <>
+      <Reviews id={7278769995956} />
+    </>
+  );
 }
