@@ -3,25 +3,29 @@ import React, {
   useEffect,
   useContext,
   useRef,
-  useCallback,
 } from "react";
 import { useRouter } from "next/router";
+import dynamic from 'next/dynamic'
 
 import { productByHandle } from "../../utils/api/requests";
 import { cartAdd, extractId, formatter } from "../../utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import cartContext from "../../utils/cartContext";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
-import Chip from "@mui/material/Chip";
 import ImageGallery from "../../components/ProductDetails/imageGallery";
-import Alert from "@mui/material/Alert";
-import Link from "../../components/common/Link";
 import Loading from "../../components/Loading/dataLoading";
-import Related from "../../components/ProductDetails/related/relatedProducts";
 import Button from "@mui/material/Button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
-import Reviews from "../../components/ProductDetails/reviews";
+import {ToastContainer, toast} from 'react-toastify'
+import Options from "../../components/ProductDetails/options"
+
+const Reviews = dynamic(() => import("../../components/ProductDetails/reviews"), {
+  loading: () => <p>Loading...</p>
+})
+const Related = dynamic(() => import("../../components/ProductDetails/related/relatedProducts"), {
+  loading: () => <p>Loading...</p>
+})
 
 export default function Products() {
   const router = useRouter();
@@ -32,7 +36,6 @@ export default function Products() {
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [options, setOptions] = useState("[]");
   const inputRef = useRef(0);
 
@@ -47,7 +50,7 @@ export default function Products() {
     setQuantity(parseInt(inputRef.current.value));
   };
 
-  const handlePriceDisplay = () => {
+  let handlePriceDisplay = () => {
     let display;
 
     if (displayPrice === 0) {
@@ -72,14 +75,28 @@ export default function Products() {
     let state = JSON.parse(options);
     state[index] = value;
     setOptions(JSON.stringify(state));
-
-    let element = document.querySelector(`#${value}-${index}`);
-    let others = document.querySelectorAll(`.options.options-${index}`);
-    for (let other of others) {
-      other.classList.remove("selected");
-    }
-    element.classList.add("selected");
   };
+
+  let handleAddToCart = () => {
+    let variantTitle =
+      product.variants.edges[
+        product.variants.edges.findIndex(
+          (e) => e.node.id === variantId
+        )
+      ].node.title;
+    cartAdd(
+      {
+        merchandiseId: variantId,
+        quantity: quantity,
+        image: product.featuredImage.src,
+        title: product.title,
+        price: product.variants.edges[0].node.price,
+        variantTitle: variantTitle,
+      },
+      setCart
+    );
+    toast.success("Added to cart")
+  }
 
   // Get the product
   useEffect(() => {
@@ -134,27 +151,28 @@ export default function Products() {
       <Breadcrumbs
         path={[
           { name: "Home", path: "/" },
-          { name: "Product", path: "#" },
-          { name: `${product.title}`, path: "#" },
+          { name: "Shop", path: "/shop" },
+          { name: `Product: ${product.title}`, path: "#" },
         ]}
       />
       <div className="product-details pb-10 bg-amber-50 flex justify-center">
         <div className="w-11/12 xl:w-3/4">
-          <div className="flex flex-col md:flex-row space-y-10 xl:mt-16">
-            <div className="w-full md:w-2/3 flex flex-col justify-center space-y-5">
+          <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
+            <div className="w-full md:w-1/2 xl:w-2/3 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
               {productByHandleMutation.isLoading ? (
                 <></>
               ) : (
                 <ImageGallery
+                  id={product.id}
                   tag={product.tags}
                   images={product.images.edges}
                 />
               )}
             </div>
-            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/3">
+            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-1/3">
               {/* Title */}
               <div className="flex flex-row items-center space-x-5">
-                <p className="text-3xl font-semibold">
+                <p className="md:text-2xl xl:text-3xl font-semibold">
                   Products {product.title}
                 </p>
                 <p
@@ -176,25 +194,7 @@ export default function Products() {
               <p className="text-xl">{product.description}</p>
 
               {/* Options */}
-              <div className="flex flex-col space-y-5">
-                {product.options.map((e, i) => (
-                  <div key={`variant-${i}`} className="flex flex-col space-y-2">
-                    <p className="font-semibold text-xl">{e.name}</p>
-                    <div className="flex flex-row space-x-2">
-                      {e.values.map((value, index) => (
-                        <Chip
-                          id={value + "-" + i}
-                          size="medium"
-                          key={`value-${index}`}
-                          className={`py-2 px-2 options options-${i}`}
-                          label={<p className="text-lg">{value}</p>}
-                          onClick={() => handleVariantClick(i, value)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Options handleFunc={handleVariantClick} options={product.options} type={product.metafields[product.metafields.findIndex(e => e.key === "selection_type")].value} />
 
               {/* Quantity Input */}
               <div className="flex flex-row justify-center w-full">
@@ -232,33 +232,9 @@ export default function Products() {
               {/* Add to cart */}
               <div className="mt-4 flex flex-row justify-between items-center">
                 <Button
-                  className="bg-black mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-400"
-                  onClick={() => {
-                    if (variantId && quantity > 0) {
-                      let variantTitle =
-                        product.variants.edges[
-                          product.variants.edges.findIndex(
-                            (e) => e.node.id === variantId
-                          )
-                        ].node.title;
-                      cartAdd(
-                        {
-                          merchandiseId: variantId,
-                          quantity: quantity,
-                          image: product.featuredImage.src,
-                          title: product.title,
-                          price: product.variants.edges[0].node.price,
-                          variantTitle: variantTitle,
-                        },
-                        setCart
-                      );
-                    } else {
-                      setAlertOpen(true);
-                      setTimeout(() => {
-                        setAlertOpen(false);
-                      }, 2000);
-                    }
-                  }}
+                  className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+                  onClick={handleAddToCart}
+                  disabled={displayPrice && quantity ? false : true}
                 >
                   Add to cart | ${displayPrice}
                 </Button>
@@ -292,11 +268,19 @@ export default function Products() {
             />
           ) : (
             <>
-              <p>No related products found</p>
+              {/* <p>No related products found</p> */}
             </>
           )}
         </div>
       </div>
+
+      <ToastContainer 
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={true}
+        closeOnClick
+        theme="dark"
+      />
     </>
   );
 }

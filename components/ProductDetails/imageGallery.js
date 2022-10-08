@@ -1,20 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useContext, useRef } from "react";
+import dynamic from 'next/dynamic'
+import userContext from '../../utils/userContext'
+
 import Image from "../common/Image";
-import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import Slider from "react-slick";
 import Chip from "@mui/material/Chip";
 import Link from "../common/Link";
-import { SideBySideMagnifier, GlassMagnifier } from "react-image-magnifiers";
+// import { SideBySideMagnifier, GlassMagnifier } from "react-image-magnifiers";
 
-export default function Gallery({ images, tag }) {
+const WishlistButton = dynamic(() => import("./wishlistButton"))
+
+let settings = {
+  infinite: true,
+  arrows: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  swipeToSlide: true,
+};
+
+export default function Gallery({ images, tag, id }) {
+  const { user } = useContext(userContext)
   const sliderRef = useRef(null);
-  let settings = {
-    infinite: true,
-    arrows: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    swipeToSlide: true,
-  };
 
   const handleImageClick = (e, i) => {
     sliderRef.current.slickGoTo(i);
@@ -22,8 +28,8 @@ export default function Gallery({ images, tag }) {
 
   return (
     <>
-      <div id="image-gallery" className="flex flex-row space-x-2">
-        <div className="flex flex-col w-32 space-y-2">
+      <div id="image-gallery" className="flex flex-col-reverse lg:flex-row lg:space-x-2">
+        <div className="flex flex-row image-collections space-x-1 md:space-x-0 lg:flex-col w-full lg:w-32 lg:space-y-2">
           {images.map((e, i) => (
             <div
               onClick={(e) => handleImageClick(e, i)}
@@ -34,7 +40,7 @@ export default function Gallery({ images, tag }) {
             </div>
           ))}
         </div>
-        <div className="relative w-5/6">
+        <div className="relative image-container w-full lg:w-5/6">
           <Slider className="w-full relative" ref={sliderRef} {...settings}>
             {images.map((e, i) => (
               <div
@@ -55,10 +61,18 @@ export default function Gallery({ images, tag }) {
               </div>
             ))}
           </Slider>
-          <div className="absolute top-5 right-5">
+          {
+            user ? 
+            <div className="absolute wishlist-button top-5 left-5">
+                <WishlistButton id={id} userId={user.id} list={user.metafields[user.metafields.findIndex(e => e.key === "wishlist")].value}/>
+            </div>
+            :
+            <></>
+          }
+          <div className="absolute tag-container top-5 right-5">
             <div className="flex flex-col space-y-2">
               {tag.map((e, i) => (
-                <Link href="#" key={`tag-${i}`}>
+                <Link className="product-tag" href="#" key={`tag-${i}`}>
                   <Chip color="success" label={e} />
                 </Link>
               ))}

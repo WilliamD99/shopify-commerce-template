@@ -3,24 +3,65 @@
 }
 
 .product-details {
+    .add-to-cart {
+        transition: 0.2s;
+    }
+    .add-to-cart.Mui-disabled { 
+        color: white !important;
+        background-color: gray;
+    }
     .options.selected {
         background-color: black !important;
         color: white !important
     }
     #image-gallery {
-        .image-gallery-main {
-            &:hover {
-                .arrow-next {
-                    display: block;
-                }
-            }
-            .arrow-next {
-                transition: .2s;
-                display: none;
+        .image-collections {
+            height: 25rem;
+        }
+        @media (min-width: 768px) {
+            .image-collections {
+                height: 30rem
             }
         }
-        .slick-arrow {
-            display: none !important;
+        @media (min-width: 1280px) {
+            .image-collections {
+                height: 50rem
+            }
+        }
+        .image-container {
+            .wishlist-button {
+                opacity: 0;
+                transition: 0.2s
+            }
+            &:hover {
+                .wishlist-button {
+                    opacity: 1;
+                }
+                .product-tag {
+                    opacity: 0;
+                }
+            }
+            .image-gallery-main {
+                &:hover {
+                    .arrow-next {
+                        display: block;
+                    }
+                }
+                .arrow-next {
+                    transition: .2s;
+                    display: none;
+                }
+            }
+            .slick-arrow {
+                display: none !important;
+            }
+        }
+        
+        .tag-container {
+            .product-tag {
+                opacity: 1;
+                transition: 0.2s;
+            }
         }
     }
     #product-accordion {
@@ -41,7 +82,17 @@
         color: black !important
     }
     .single-product__image-main {
-        height: 50rem
+        height: 25rem
+    }
+    @media (min-width: 768px) {
+        .single-product__image-main {
+            height: 30rem
+        }
+    }
+    @media (min-width: 1280px) {
+        .single-product__image-main {
+            height: 50rem
+        }
     }
 }
 

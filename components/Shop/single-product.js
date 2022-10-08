@@ -60,7 +60,7 @@ export default function SingeProduct({ e, index }) {
   return (
     <div
       ref={anim}
-      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-lg shadow-sm"
+      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-tr-md  shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -74,18 +74,19 @@ export default function SingeProduct({ e, index }) {
 
       {/* If product is on sales */}
       {onSale ? (
-        <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-5 py-3 z-40">
+        <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-2 py-2 xl:px-5 xl:py-3 z-40">
           <p className="text-base text-white uppercase">Sales</p>
         </div>
       ) : (
         <></>
       )}
-      <div className="image-container relative w-full h-56 xl:h-64">
+      <div className="image-container relative w-full h-56 xl:h-64 rounded-tr-md">
         <Image
           alt={e.node.title}
           src={e.node.featuredImage.url}
           layout="fill"
           placeholder="blur"
+          classNam="rounded-tr-md"
           blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
         />
       </div>

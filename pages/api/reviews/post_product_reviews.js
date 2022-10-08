@@ -7,7 +7,7 @@ const request = async (req, res) => {
     const id = params.id;
     const productTitle = params.productTitle;
     const name = params.name ? params.name : "Anonymous";
-    const email = params.email ? params.email : "dnam310199@gmail.com";
+    const email = params.email ? params.email : "johndoe@gmail.com";
     const content = params.content;
     const title = params.title;
     const score = params.score;
@@ -41,7 +41,6 @@ const request = async (req, res) => {
 
     res.json(returnedData.data);
   } catch (e) {
-    console.log(e);
     res.json(e);
   }
 };

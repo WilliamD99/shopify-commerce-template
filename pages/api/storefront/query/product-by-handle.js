@@ -23,7 +23,7 @@ const requests = async (req, res) => {
                         }
                         metafields(identifiers: [
                             { namespace: "custom", key: "related_products" },
-                            { namespace: "custom", key: "vendor" }
+                            { namespace: "custom", key: "selection_type" }
                           ]) {
                             key
                             value

@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../public/styles/tailwind.css";
 import "../public/styles/index.css";
+import 'react-toastify/dist/ReactToastify.css';
 // Library
 import Helmet from "react-helmet";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -56,7 +57,7 @@ function MyApp({ Component, pageProps }) {
         />
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Will</title>
+        <title>Template</title>
         <link rel="manifest" href="images/icons/site.webmanifest" />
         <link
           rel="mask-icon"

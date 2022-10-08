@@ -7,7 +7,7 @@ export default function Layout({ children }) {
     <div className="flex flex-col justify-between min-h-screen">
       <Header />
       <div className="mt-24">{children}</div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }

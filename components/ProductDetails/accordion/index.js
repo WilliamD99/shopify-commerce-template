@@ -64,12 +64,12 @@ export default function ProductAccordion({ id }) {
                   <></>
                 )}
               </p>
-              {reviewBottom.data ? (
+              {reviewBottom.data ? reviewBottom.data.response.bottomline.average_score > 0 ? (
                 <Rating
                   readOnly
                   value={reviewBottom.data.response.bottomline.average_score}
                 />
-              ) : (
+              ) : <></> : (
                 <></>
               )}
             </div>
