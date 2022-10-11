@@ -40,6 +40,7 @@ export default function Collection() {
           vendors: routerQuery.vendors
             ? decodeURIComponent(routerQuery.vendors)
             : "",
+          type: routerQuery.type ? routerQuery.type : "",
         });
       }
     }
@@ -47,7 +48,7 @@ export default function Collection() {
 
   useEffect(() => {
     setDataArr([]);
-    if (products.data) {
+    if (products.data && products.data.collection.products.edges.length > 0) {
       setDataArr(products.data.collection.products.edges);
       setNext(products.data.collection.products.pageInfo.hasNextPage);
       setPrevious(products.data.collection.products.pageInfo.hasPreviousPage);
@@ -90,7 +91,7 @@ export default function Collection() {
           <FilterMenu isLoading={products.isLoading} />
 
           <div className="relative w-9/12 xl:w-10/12">
-            <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-5 gap-y-10">
+            <div className="grid lg:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
               {products.isLoading ? (
                 <Loading />
               ) : (

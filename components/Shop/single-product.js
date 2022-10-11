@@ -11,13 +11,16 @@ import Link from "../common/Link";
 import Image from "../common/Image";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import WishlistButton from "../ProductDetails/wishlistButton";
 
 import cartContext from "../../utils/cartContext";
 import { gsap, formatter } from "../../utils/utils";
 import Loading from "../Loading/dataLoading";
+import userContext from "../../utils/userContext";
 
 export default function SingeProduct({ e, index }) {
   const { setCart } = useContext(cartContext);
+  const { user } = useContext(userContext);
   const [onSale, setOnSale] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const anim = useRef(null);
@@ -60,7 +63,7 @@ export default function SingeProduct({ e, index }) {
   return (
     <div
       ref={anim}
-      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-tr-md  shadow-sm"
+      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-tr-md shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -72,10 +75,26 @@ export default function SingeProduct({ e, index }) {
         <></>
       )}
 
+      {user ? (
+        <div className="absolute wishlist-button top-5 left-5 z-50">
+          <WishlistButton
+            id={e.node.id}
+            userId={user.id}
+            list={
+              user.metafields[
+                user.metafields.findIndex((e) => e.key === "wishlist")
+              ].value
+            }
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+
       {/* If product is on sales */}
       {onSale ? (
-        <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-2 py-2 xl:px-5 xl:py-3 z-40">
-          <p className="text-base text-white uppercase">Sales</p>
+        <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-2 py-2 z-40">
+          <p className="text-sm text-white">Sales</p>
         </div>
       ) : (
         <></>
@@ -86,44 +105,33 @@ export default function SingeProduct({ e, index }) {
           src={e.node.featuredImage.url}
           layout="fill"
           placeholder="blur"
-          classNam="rounded-tr-md"
+          className="rounded-tr-md"
           blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
         />
       </div>
       <div className="flex flex-col justify-between space-y-3 px-5 py-5">
-        <div>
-          <div className="flex flex-row my-1 flex-wrap space-y-2">
-            {e.node.collections.edges.map((col) => (
-              <Link
-                href={`/shop/products-in-collection?col=${col.node.id}`}
-                key={col.node.title}
-              >
-                <Chip
-                  label={col.node.title}
-                  variant="outlined"
-                  className="text-sm cursor-pointer"
-                />
-              </Link>
-            ))}
-          </div>
-          <Link
-            className="text-center text-xl font-semibold"
-            href={`/product/${e.node.handle}`}
-          >
-            {e.node.title}
-          </Link>
-        </div>
-        <p className="text-base">
+        <Link
+          className="text-center text-xl font-semibold"
+          href={`/product/${e.node.handle}`}
+        >
+          {e.node.title}
+        </Link>
+        <p className="text-base text-center">
           {parseFloat(minPrice) === parseFloat(maxPrice)
             ? `${formatter.format(minPrice)}`
             : `${formatter.format(minPrice)} - ${formatter.format(maxPrice)}`}
         </p>
-        <p className="text-sm text-slate-400 italic">By {e.node.vendor}</p>
+        <p className="text-sm text-slate-400 italic text-center">
+          By {e.node.vendor}
+        </p>
 
-        <div className="h-16">
+        <div className="h-12 w-full">
           {e.node.variants.edges.length > 1 ? (
-            <Button variant="outlined" className="rounded-lg absolute bottom-5">
-              <Link href={`/product/${e.node.handle}`}>Select Options</Link>
+            <Button
+              variant="outlined"
+              className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+            >
+              <Link href={`/product/${e.node.handle}`}>Select</Link>
             </Button>
           ) : (
             <Button
@@ -143,7 +151,7 @@ export default function SingeProduct({ e, index }) {
                 setLoading(false);
               }}
               variant="outlined"
-              className="rounded-lg absolute bottom-5"
+              className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
             >
               Add to cart
             </Button>

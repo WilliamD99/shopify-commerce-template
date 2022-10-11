@@ -6,7 +6,8 @@
     }
 }
 #filter {
-    height: 100vh !important;
+    // height: 100vh !important;
+    min-height: 50vh;
     max-height: 100vh !important;
     #price-filter {
         .MuiSlider-root {

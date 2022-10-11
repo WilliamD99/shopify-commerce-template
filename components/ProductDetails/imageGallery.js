@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
-import dynamic from 'next/dynamic'
-import userContext from '../../utils/userContext'
+import dynamic from "next/dynamic";
+import userContext from "../../utils/userContext";
 
 import Image from "../common/Image";
 import Slider from "react-slick";
@@ -8,7 +8,7 @@ import Chip from "@mui/material/Chip";
 import Link from "../common/Link";
 // import { SideBySideMagnifier, GlassMagnifier } from "react-image-magnifiers";
 
-const WishlistButton = dynamic(() => import("./wishlistButton"))
+const WishlistButton = dynamic(() => import("./wishlistButton"));
 
 let settings = {
   infinite: true,
@@ -19,7 +19,7 @@ let settings = {
 };
 
 export default function Gallery({ images, tag, id }) {
-  const { user } = useContext(userContext)
+  const { user } = useContext(userContext);
   const sliderRef = useRef(null);
 
   const handleImageClick = (e, i) => {
@@ -28,7 +28,10 @@ export default function Gallery({ images, tag, id }) {
 
   return (
     <>
-      <div id="image-gallery" className="flex flex-col-reverse lg:flex-row lg:space-x-2">
+      <div
+        id="image-gallery"
+        className="flex flex-col-reverse lg:flex-row lg:space-x-2"
+      >
         <div className="flex flex-row image-collections space-x-1 md:space-x-0 lg:flex-col w-full lg:w-32 lg:space-y-2">
           {images.map((e, i) => (
             <div
@@ -61,14 +64,21 @@ export default function Gallery({ images, tag, id }) {
               </div>
             ))}
           </Slider>
-          {
-            user ? 
+          {user ? (
             <div className="absolute wishlist-button top-5 left-5">
-                <WishlistButton id={id} userId={user.id} list={user.metafields[user.metafields.findIndex(e => e.key === "wishlist")].value}/>
+              <WishlistButton
+                id={id}
+                userId={user.id}
+                list={
+                  user.metafields[
+                    user.metafields.findIndex((e) => e.key === "wishlist")
+                  ].value
+                }
+              />
             </div>
-            :
+          ) : (
             <></>
-          }
+          )}
           <div className="absolute tag-container top-5 right-5">
             <div className="flex flex-col space-y-2">
               {tag.map((e, i) => (

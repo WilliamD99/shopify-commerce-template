@@ -2,12 +2,21 @@ import React from "react";
 import Footer from "./Base/footer";
 import Header from "./Base/header";
 
+import { ToastContainer } from "react-toastify";
+
 export default function Layout({ children }) {
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <Header />
-      <div className="mt-24">{children}</div>
+      <div className="mt-24 min-h-screen">{children}</div>
       <Footer />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={true}
+        closeOnClick
+        theme="dark"
+      />
     </div>
   );
 }

@@ -22,64 +22,64 @@ const requests = async (req, res) => {
     //   console.log('running')
     // }
     // else {
-      const params = req.body.data;
-  
-      // Reversed underlying list
-      const reversed = params.reversed;
-      let reverseQuery;
-      if (reversed) reverseQuery = `reverse:${reversed}`;
-      else reverseQuery = "";
-  
-      // Sort key
-      const sortKey = params.sortKey;
-      let sortQuery;
-      if (sortKey) sortQuery = `sortKey: ${sortKey}`;
-      else sortQuery = "";
-  
-      // Use for pagination
-      const cursor = params.cursor;
-      // True is forward, false is backward
-      const direction = params.direction;
-      let position;
-      if (!cursor) position = "first: 12";
-      else if (cursor && direction) position = `first: 12, after: "${cursor}"`;
-      else if (cursor && !direction) position = `last: 12, before: "${cursor}"`;
-  
-      // Query the list
-      let queryArr = [];
-  
-      let priceRange = params.price; // ?price=11,20
-      if (priceRange) {
-        let arr = priceRange.split(",");
-        priceRange = `price:>${arr[0]} price:<${arr[1]}`;
-        queryArr.push(priceRange);
-      }
-  
-      // Is on sales?
-      let sales = params.sales;
-      if (sales) {
-        sales = `is_price_reduced:${sales}`;
-        queryArr.push(sales);
-      }
-  
-      // Vendor
-      let vendors = params.vendors;
-      if (vendors) {
-        vendors = vendors.split(",");
-        let vendorQuery = vendors.map((e) => `vendor:'${e}'`).join(" OR ");
-        queryArr.push(vendorQuery);
-      }
-  
-      // Product Type
-      let type = params.type;
-      if (type) {
-        type = type.split(",");
-        let vendorQuery = type.map((e) => `product_type:'${e}'`).join(" OR ");
-        queryArr.push(vendorQuery);
-      }
-      const querySearch = queryArr.join(" ");
-  
-      const query = `
+    const params = req.body.data;
+
+    // Reversed underlying list
+    const reversed = params.reversed;
+    let reverseQuery;
+    if (reversed) reverseQuery = `reverse:${reversed}`;
+    else reverseQuery = "";
+
+    // Sort key
+    const sortKey = params.sortKey;
+    let sortQuery;
+    if (sortKey) sortQuery = `sortKey: ${sortKey}`;
+    else sortQuery = "";
+
+    // Use for pagination
+    const cursor = params.cursor;
+    // True is forward, false is backward
+    const direction = params.direction;
+    let position;
+    if (!cursor) position = "first: 12";
+    else if (cursor && direction) position = `first: 12, after: "${cursor}"`;
+    else if (cursor && !direction) position = `last: 12, before: "${cursor}"`;
+
+    // Query the list
+    let queryArr = [];
+
+    let priceRange = params.price; // ?price=11,20
+    if (priceRange) {
+      let arr = priceRange.split(",");
+      priceRange = `price:>${arr[0]} price:<${arr[1]}`;
+      queryArr.push(priceRange);
+    }
+
+    // Is on sales?
+    let sales = params.sales;
+    if (sales) {
+      sales = `is_price_reduced:${sales}`;
+      queryArr.push(sales);
+    }
+
+    // Vendor
+    let vendors = params.vendors;
+    if (vendors) {
+      vendors = vendors.split(",");
+      let vendorQuery = vendors.map((e) => `vendor:'${e}'`).join(" OR ");
+      queryArr.push(vendorQuery);
+    }
+
+    // Product Type
+    let type = params.type;
+    if (type) {
+      type = type.split(",");
+      let vendorQuery = type.map((e) => `product_type:'${e}'`).join(" OR ");
+      queryArr.push(vendorQuery);
+    }
+    const querySearch = queryArr.join(" ");
+
+    const query = `
       {
           products(${position}, ${sortQuery}, ${reverseQuery}, query:"${querySearch}") {
             pageInfo {
@@ -140,12 +140,13 @@ const requests = async (req, res) => {
           }
       }
       `;
-      const data = await axios.post(adminURLGraphql, query, {
-        headers: adminHeadersGraphql,
-      });
-      // console.log('not')
-      // redis.set("all-p-cache", JSON.stringify(data.data), "EX", 60)
-      res.json(data.data);
+    console.log(query);
+    const data = await axios.post(adminURLGraphql, query, {
+      headers: adminHeadersGraphql,
+    });
+    // console.log('not')
+    // redis.set("all-p-cache", JSON.stringify(data.data), "EX", 60)
+    res.json(data.data);
 
     // }
   } catch (e) {

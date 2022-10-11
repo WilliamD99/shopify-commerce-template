@@ -27,10 +27,10 @@
     "react-dom": "18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.4.0",
-    "react-image-magnifiers": "^1.4.0",
     "react-slick": "^0.29.0",
     "react-toastify": "^9.0.8",
     "slick-carousel": "^1.8.1",
+    "string-to-color": "^2.2.2",
     "stripe": "^9.16.0"
   },
   "devDependencies": {

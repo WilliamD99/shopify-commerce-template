@@ -16,6 +16,7 @@ const requests = async (req, res) => {
                         productType
                         vendor
                         tags
+                        availableForSale
                         productType
                         options {
                             name
@@ -57,6 +58,7 @@ const requests = async (req, res) => {
                                     image {
                                         url
                                     }
+                                    quantityAvailable
                                 }
                             }
                         }

@@ -11,7 +11,7 @@ let productSearch = async (params) => {
 
 // Get products in collections
 let productInCollection = async (params) => {
-  let url = "/api/admin/query/products-in-collection";
+  let url = "/api/storefront/query/products-in-collection";
   let data = await axios.post(url, {
     data: params,
   });

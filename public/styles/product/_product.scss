@@ -10,14 +10,18 @@
         color: white !important;
         background-color: gray;
     }
+    .options {
+        transition: 0.2s;
+    }
     .options.selected {
         background-color: black !important;
         color: white !important
     }
+    .options.color-selected {
+        transform: scale(1.15);
+    }
     #image-gallery {
-        .image-collections {
-            height: 25rem;
-        }
+
         @media (min-width: 768px) {
             .image-collections {
                 height: 30rem

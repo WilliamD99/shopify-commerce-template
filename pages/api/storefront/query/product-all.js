@@ -32,7 +32,7 @@ const requests = async (req, res) => {
     let priceRange = params.price; // ?price=11,20
     if (priceRange) {
       let arr = priceRange.split(",");
-      priceRange = `price:>${arr[0]} price:<${arr[1]}`;
+      priceRange = `variants.price:>=${arr[0]} variants.price:<=${arr[1]}`;
       queryArr.push(priceRange);
     }
 
@@ -49,15 +49,14 @@ const requests = async (req, res) => {
       queryArr.push(vendorQuery);
     }
 
-    let type = params.vendors;
+    let type = params.type;
     if (type) {
       type = type.split(",");
-      let vendorQuery = type.map((e) => `type:'${e}'`).join(" OR ");
+      let vendorQuery = type.map((e) => `product_type:'${e}'`).join(" OR ");
       queryArr.push(vendorQuery);
     }
 
     const querySearch = queryArr.join(" ");
-
     const query = `
         {
             products(${position}, ${sortQuery}, ${reverseQuery}, query: "${querySearch}") {
@@ -72,6 +71,12 @@ const requests = async (req, res) => {
                         title
                         handle
                         vendor
+                        metafields(identifiers: [
+                          { namespace:"custom", key:"selection_type"},
+                          { namespace:"custom", key:"related_products" }
+                        ]) {
+                          value
+                        }
                         collections(first: 5) {
                           edges {
                             node {
@@ -110,6 +115,7 @@ const requests = async (req, res) => {
             }
         }
         `;
+    console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });

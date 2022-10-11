@@ -12,9 +12,15 @@ import PriceFilter from "./filter/price";
 import VendorFilter from "./filter/vendor";
 import ProductType from "./filter/product-type";
 
-export default function FilterMenu({ isLoading }) {
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import { MdExpandMore } from "react-icons/md";
+
+export default function FilterMenu() {
   // const filterMenuAnim = useRef(null)
   let [collections, setCollections] = useState([]);
+  let [price, setPrice] = useState([0, 1000]);
   let router = useRouter();
   let routerQuery = router.query;
 
@@ -43,73 +49,104 @@ export default function FilterMenu({ isLoading }) {
     <>
       <div
         id="filter"
-        className="filter-menu hidden md:block overflow-scroll overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-slate-50 px-3 py-5"
+        className="filter-menu hidden md:block overflow-scroll pl-2 overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-slate-50 py-5"
       >
-        <div className="py-2 mb-10 h-56">
-          <p className="text-lg font-semibold">Category</p>
-          <div className="relative sb-custom h-full flex flex-col space-y-2 overflow-scroll overflow-x-hidden py-4 pl-2">
-            {!collectionQuery.isLoading ? (
-              collectionQuery.data ? (
-                collections.map((e) => (
-                  <div
-                    key={e.node.handle}
-                    className="flex flex-row justify-between items-center"
-                  >
-                    <Link
-                      className={`${
-                        decodeURIComponent(routerQuery.col) === e.node.id
-                          ? "font-semibold"
-                          : ""
-                      }`}
-                      href={{
-                        pathname: "/shop/products-in-collection/",
-                        query: { col: encodeURIComponent(e.node.id) },
-                      }}
+        <Accordion
+          defaultExpanded={true}
+          disableGutters={true}
+          className="shadow-none bg-slate-50"
+        >
+          <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
+            <p className="text-lg font-semibold">Category</p>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className="relative sb-custom h-full flex flex-col space-y-2 overflow-scroll overflow-x-hidden pl-2">
+              {!collectionQuery.isLoading ? (
+                collectionQuery.data ? (
+                  collections.map((e) => (
+                    <div
+                      key={e.node.handle}
+                      className="flex flex-row justify-between items-center"
                     >
-                      {e.node.title}
-                    </Link>
-                    <p className="text-xs opacity-70">{e.node.productsCount}</p>
-                  </div>
-                ))
+                      <Link
+                        className={`${
+                          decodeURIComponent(routerQuery.col) === e.node.id
+                            ? "font-semibold"
+                            : ""
+                        }`}
+                        href={{
+                          pathname: "/shop/products-in-collection/",
+                          query: { col: encodeURIComponent(e.node.id) },
+                        }}
+                      >
+                        {e.node.title}
+                      </Link>
+                      <p className="text-xs opacity-70 font-semibold">
+                        {e.node.productsCount}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No collections found</p>
+                )
               ) : (
-                <p>No collections found</p>
-              )
-            ) : (
-              <Loading />
-            )}
-          </div>
-        </div>
+                <Loading />
+              )}
+            </div>
+          </AccordionDetails>
+        </Accordion>
 
-        <Divider />
+        <Accordion
+          id="price-filter"
+          disableGutters={true}
+          defaultExpanded={true}
+          className="shadow-none bg-slate-50"
+        >
+          <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
+            <p className="text-lg font-semibold">
+              Price
+              {price[0] === 0 && price[1] === 1000 ? (
+                <></>
+              ) : (
+                <span className="ml-2">
+                  <span className="font-normal text-base">${price[0]}</span> -{" "}
+                  <span className="font-normal text-base">${price[1]}</span>
+                </span>
+              )}
+            </p>
+          </AccordionSummary>
+          <AccordionDetails>
+            <PriceFilter price={price} setPrice={setPrice} />
+          </AccordionDetails>
+        </Accordion>
 
-        {/* <div className='py-5 mb-10 h-56'>
-                    <p className='text-lg font-semibold'>Brand</p>
-                    <p>AgroLED</p>
-                </div> */}
-
-        <Divider />
-
-        <div id="price-filter" className="py-5 h-40 flex flex-col space-y-3">
-          <PriceFilter />
-        </div>
-
-        <Divider />
-
-        <div
+        <Accordion
+          defaultExpanded={true}
+          disableGutters={true}
           id="vendor-filter"
-          className="py-5 mb-5 min-h-24 flex flex-col space-y-3"
+          className="shadow-none bg-slate-50"
         >
-          <VendorFilter />
-        </div>
+          <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
+            <p className="text-lg font-semibold">Vendor</p>
+          </AccordionSummary>
+          <AccordionDetails>
+            <VendorFilter />
+          </AccordionDetails>
+        </Accordion>
 
-        <Divider />
-
-        <div
+        <Accordion
+          disableGutters={true}
+          defaultExpanded={true}
           id="product-type-filter"
-          className="py-5 mb-10 h-56 flex flex-col space-y-3"
+          className="shadow-none bg-slate-50"
         >
-          <ProductType />
-        </div>
+          <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
+            <p className="text-lg font-semibold">Type</p>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ProductType />
+          </AccordionDetails>
+        </Accordion>
       </div>
     </>
   );

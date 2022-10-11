@@ -30,7 +30,7 @@ export default function ProductType() {
       routerQuery.type = encodeURIComponent(newList.join(","));
       router.push(
         {
-          pathname: window.location.pathname,
+          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -39,7 +39,7 @@ export default function ProductType() {
       routerQuery.type = "";
       router.push(
         {
-          pathname: window.location.pathname,
+          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -66,7 +66,6 @@ export default function ProductType() {
 
   return (
     <>
-      <p className="text-lg font-semibold">Type</p>
       <FormGroup>
         {productType.isLoading || productType.isIdle ? (
           <Loading />

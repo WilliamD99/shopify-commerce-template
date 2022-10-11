@@ -1,107 +1,122 @@
-import axios from 'axios'
-import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        let params = req.body.data
-        let handle = params.handle
-        let cursor = params.cursor
-        let direction = params.direction
-        let sortKey = params.sortKey
-        let reverse = params.reverse
-        let queryArr = []
-        let price = params.price
-        let sales = params.sales
+  try {
+    let params = req.body.data;
+    let id = params.id;
+    let cursor = params.cursor;
+    let direction = params.direction;
+    let sortKey = params.sortKey;
+    let reverse = params.reverse;
 
-        let reverseQuery 
-        if (reverse) reverseQuery = "true"
-        else reverseQuery = ""
-    
-        let sortQuery 
-        if (sortKey) sortQuery = `sortKey: ${sortKey}`
-        else sortQuery = ""
+    let reverseQuery;
+    if (reverse) reverseQuery = `reverse:${reverse}`;
+    else reverseQuery = "";
 
-        let position
+    let sortQuery;
+    if (sortKey) {
+      if (sortKey === "CREATED_AT") sortKey = "CREATED";
+      sortQuery = `sortKey:${sortKey}`;
+    } else sortQuery = "";
 
-        if (!cursor) position = "first: 12"
-        else if (cursor && direction) position = `first: 12, after: "${cursor}"`
-        else if (cursor && !direction) position = `last: 12, before: "${cursor}"`
+    let position;
+    if (!cursor) position = "first: 12";
+    else if (cursor && direction) position = `first: 12, after: "${cursor}"`;
+    else if (cursor && !direction) position = `last: 12, before: "${cursor}"`;
 
-        if (price) {
-          let arr = price.split(',')
-          price = `price:>${arr[0]} price:<${arr[1]}`
-          queryArr.push(price)
-        }
+    // Query the list
+    let queryArr = [];
 
-        let querySearch = queryArr.join(' ')
- 
+    let priceRange = params.price; // ?price=11,20
+    if (priceRange) {
+      let arr = priceRange.split(",");
+      priceRange = `{ price: { min: ${arr[0]}, max: ${arr[1]} } }`;
+      queryArr.push(priceRange);
+    }
 
-        const query = `
+    let sales = params.sales;
+    if (sales) {
+      sales = `is_price_reduced:${sales}`;
+      queryArr.push(sales);
+    }
+
+    let vendors = params.vendors;
+    if (vendors) {
+      vendors = vendors.split(",");
+      vendors.map((e) => queryArr.push(`{ productVendor: "${e}" }`));
+    }
+
+    // Product Type
+    let type = params.type;
+    if (type) {
+      type = type.split(",");
+      type.map((e) => queryArr.push(`{ productType: "${e}" }`));
+    }
+
+    const query = `
         {
-            collectionByHandle(handle: "${handle}") {
-                collection {
-                    title
-                    description
-                    handle
-                    products(${position}, ${sortQuery}, ${reverseQuery}) {
-                      pageInfo {
-                        hasNextPage
-                        hasPreviousPage
-                      }
-                      edges {
-                        cursor
-                        node {
-                          id
-                          title
-                          handle
-                          tags
-                          vendor
-                          priceRangeV2 {
-                            maxVariantPrice {
-                              amount
-                            }
-                            minVariantPrice {
-                              amount
-                            }
-                          }
-                          featuredImage {
-                            url
-                          }
-                          collections(first: 5) {
-                            edges {
-                              node {
-                                title
-                                id
-                              }
-                            }
-                          }
-                          variants(first: 5) {
-                            edges {
-                              node {
-                                id
-                                price
-                                compareAtPrice
-                              }
-                            }
-                          }
-                        }
+          collection(id:"${id}") {
+            title
+            description
+            handle
+            products(${position}, ${sortQuery}, ${reverseQuery}, ${
+      queryArr.length > 0 ? `filters: [${queryArr}]` : ""
+    }) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+              }
+              edges {
+                cursor
+                node {
+                  id
+                  title
+                  handle
+                  tags
+                  vendor
+                  priceRange {
+                    maxVariantPrice {
+                      amount
+                    }
+                    minVariantPrice {
+                      amount
+                    }
+                  }
+                  featuredImage {
+                    url
+                  }
+                  collections(first: 5) {
+                    edges {
+                      node {
+                        title
+                        id
                       }
                     }
-                    productsCount
                   }
+                  variants(first: 5) {
+                    edges {
+                      node {
+                        id
+                        price
+                        compareAtPrice
+                      }
+                    }
+                  }
+                }
+              }
             }
+          }
         }
-        `
-        console.log(query)
-        const data = await axios.post(storefrontURL, query, {
-            headers: storefrontHeaders
-        })
-        res.json(data.data)
-    }
-    catch(e) {
-        console.log(e)
-        res.json({error: e})
-    }
-}
+        `;
+    console.log(query);
+    const data = await axios.post(storefrontURL, query, {
+      headers: storefrontHeaders,
+    });
+    res.json(data.data);
+  } catch (e) {
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;

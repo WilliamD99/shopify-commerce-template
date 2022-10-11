@@ -60,7 +60,10 @@ export default function Dashboard() {
                   <TableCell className="xl:text-lg">
                     {new Date(e.node.processedAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="xl:text-lg">
+                  <TableCell
+                    onClick={() => console.log(e)}
+                    className="xl:text-lg"
+                  >
                     {formatter.format(e.node.totalPriceV2.amount)}
                   </TableCell>
                   <TableCell className="xl:text-lg">

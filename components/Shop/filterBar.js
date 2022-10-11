@@ -14,7 +14,7 @@ export default function Filter({
   total,
   setSortKey,
   setReverse,
-  setPath,
+  // setPath,
 }) {
   const filterBarAnim = useRef(null);
   const router = useRouter();
@@ -75,11 +75,11 @@ export default function Filter({
   };
 
   // Handle sorting router
-  const handleSortingClick = async (key, reverse, path) => {
-    setPath(path);
+  const handleSortingClick = async (key, reverse) => {
+    // setPath(path);
     routerQuery.sort_key = key;
     routerQuery.reverse = reverse.toString();
-    routerQuery.path = path;
+    // routerQuery.path = path;
     router.push(
       {
         pathname: window.location.pathname,
@@ -127,6 +127,7 @@ export default function Filter({
             >
               Sort By <IoIosArrowDown id="sort_icon" className="ml-2 ease-in" />
             </Button>
+
             <div
               id="sort_dropdown"
               className="w-44 py-5 invisible absolute -right-0 flex flex-col justify-center items-end bg-slate-200 z-40"
@@ -136,8 +137,8 @@ export default function Filter({
                 onClick={() =>
                   handleSortingClick(
                     "TITLE",
-                    false,
-                    routerQuery.col ? "" : "admin"
+                    false
+                    // routerQuery.col ? "" : "admin"
                   )
                 }
               >
@@ -148,46 +149,42 @@ export default function Filter({
                 onClick={() =>
                   handleSortingClick(
                     "TITLE",
-                    true,
-                    routerQuery.col ? "" : "admin"
+                    true
+                    // routerQuery.col ? "" : "admin"
                   )
                 }
               >
                 Title (Z-A)
               </Button>
+              <Button
+                className="text-sm w-full text-black"
+                onClick={() =>
+                  handleSortingClick("PRICE", true, routerQuery.col ? "" : "sf")
+                }
+              >
+                Price (High-Low)
+              </Button>
+              <Button
+                className="text-sm w-full text-black"
+                onClick={() =>
+                  handleSortingClick(
+                    "PRICE",
+                    false
+                    // routerQuery.col ? "" : "sf"
+                  )
+                }
+              >
+                Price (Low-High)
+              </Button>
               {/* {!routerQuery.path || routerQuery.path === "sf" ? (
                 <>
-                  <Button
-                    className="text-sm w-full text-black"
-                    onClick={() =>
-                      handleSortingClick(
-                        "PRICE",
-                        true,
-                        routerQuery.col ? "" : "sf"
-                      )
-                    }
-                  >
-                    Price (High-Low)
-                  </Button>
-                  <Button
-                    className="text-sm w-full text-black"
-                    onClick={() =>
-                      handleSortingClick(
-                        "PRICE",
-                        false,
-                        routerQuery.col ? "" : "sf"
-                      )
-                    }
-                  >
-                    Price (Low-High)
-                  </Button>
                 </>
               ) : (
                 <></>
               )} */}
               <Button
                 className="text-sm w-full text-black"
-                onClick={() => handleSortingClick("CREATED_AT", true, "admin")}
+                onClick={() => handleSortingClick("CREATED_AT", true)}
               >
                 Latest Arrival
               </Button>

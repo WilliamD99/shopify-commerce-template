@@ -57,7 +57,7 @@ const requests = async (req, res) => {
               description
               handle
               productsCount
-              products(${position}, ${sortQuery}, ${reverseQuery}, query: "${querySearch}") {
+              products(${position}, ${sortQuery}, ${reverseQuery}) {
                 pageInfo {
                   hasNextPage
                   hasPreviousPage

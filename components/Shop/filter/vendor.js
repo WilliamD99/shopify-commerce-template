@@ -7,6 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { useRouter } from "next/router";
 import useVendorGet from "../../../utils/hooks/useVendorGet";
+import { debounce } from "lodash";
 
 export default function VendorFilter() {
   let router = useRouter();
@@ -15,6 +16,10 @@ export default function VendorFilter() {
   let [selectedVendors, setSelectedVendors] = useState([]);
 
   let vendors = useVendorGet();
+
+  const handleCheckboxDebounce = debounce((e) => {
+    handleCheckbox(e);
+  }, 100);
 
   const handleCheckbox = (e) => {
     let newList;
@@ -29,9 +34,10 @@ export default function VendorFilter() {
     }
     if (newList.length > 0) {
       routerQuery.vendors = encodeURIComponent(newList.join(","));
+      console.log(window.location.pathname);
       router.push(
         {
-          pathname: window.location.pathname,
+          // pathname: "/shop",
           query: routerQuery,
         },
         undefined
@@ -40,7 +46,7 @@ export default function VendorFilter() {
       routerQuery.vendors = "";
       router.push(
         {
-          pathname: window.location.pathname,
+          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -49,6 +55,7 @@ export default function VendorFilter() {
   };
 
   useEffect(() => {
+    setSelectedVendors([]);
     if (routerQuery) {
       if (routerQuery.vendors) {
         setSelectedVendors(decodeURIComponent(routerQuery.vendors).split(","));
@@ -66,14 +73,15 @@ export default function VendorFilter() {
 
   return (
     <>
-      <p className="text-lg font-semibold">Vendor</p>
       <FormGroup>
         {vendors.isLoading || vendors.isIdle ? (
           <Loading />
         ) : (
           vendorList.map((e, i) => (
             <FormControlLabel
-              control={<Checkbox onClick={() => handleCheckbox(e.node)} />}
+              control={
+                <Checkbox onClick={() => handleCheckboxDebounce(e.node)} />
+              }
               label={<p className="text-lg">{e.node}</p>}
               key={i}
               checked={selectedVendors.includes(e.node)}

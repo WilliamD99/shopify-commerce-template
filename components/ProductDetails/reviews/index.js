@@ -37,7 +37,7 @@ export default function Index({ id }) {
           </p>
         </div>
       </div>
-      <div className="flex flex-row space-x-5 mt-8">
+      <div className="flex flex-row justify-center space-x-5 mt-8">
         {productReviews.data.response.reviews.map((e, i) => (
           <div
             className="relative bg-slate-50 px-4 py-4 w-72 h-64 flex flex-col justify-between rounded-md shadow-2xl"

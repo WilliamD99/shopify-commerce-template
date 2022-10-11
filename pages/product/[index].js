@@ -1,11 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useRouter } from "next/router";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
+import { debounce } from "lodash";
 
 import { productByHandle } from "../../utils/api/requests";
 import { cartAdd, extractId, formatter } from "../../utils/utils";
@@ -17,15 +13,21 @@ import Loading from "../../components/Loading/dataLoading";
 import Button from "@mui/material/Button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
-import {ToastContainer, toast} from 'react-toastify'
-import Options from "../../components/ProductDetails/options"
+import { ToastContainer, toast } from "react-toastify";
+import Options from "../../components/ProductDetails/options";
 
-const Reviews = dynamic(() => import("../../components/ProductDetails/reviews"), {
-  loading: () => <p>Loading...</p>
-})
-const Related = dynamic(() => import("../../components/ProductDetails/related/relatedProducts"), {
-  loading: () => <p>Loading...</p>
-})
+const Reviews = dynamic(
+  () => import("../../components/ProductDetails/reviews"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
+const Related = dynamic(
+  () => import("../../components/ProductDetails/related/relatedProducts"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
 
 export default function Products() {
   const router = useRouter();
@@ -37,17 +39,40 @@ export default function Products() {
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
+  const [isInStock, setIsInStock] = useState(true);
+  const [quantityInstock, setQuantityInstock] = useState(0);
   const inputRef = useRef(0);
 
   let productByHandleMutation = useMutation(async (params) => {
     let data = await productByHandle(params);
     setProduct(data.data.productByHandle);
+    setIsInStock(product.availableForSale);
   });
+
+  let debounceInput = debounce((criteria) => {
+    onChangeInput(criteria);
+  }, 500);
 
   // On change input quantity
   let onChangeInput = (e) => {
     e.preventDefault();
-    setQuantity(parseInt(inputRef.current.value));
+    if (
+      parseInt(inputRef.current.value) <=
+      product.variants.edges[
+        product.variants.edges.findIndex((e) => e.node.id === variantId)
+      ].node.quantityAvailable
+    ) {
+      setQuantity(parseInt(inputRef.current.value));
+    } else {
+      setQuantity(0);
+      toast.warning(
+        `There is only ${
+          product.variants.edges[
+            product.variants.edges.findIndex((e) => e.node.id === variantId)
+          ].node.quantityAvailable
+        } items of this product instock now`
+      );
+    }
   };
 
   let handlePriceDisplay = () => {
@@ -80,9 +105,7 @@ export default function Products() {
   let handleAddToCart = () => {
     let variantTitle =
       product.variants.edges[
-        product.variants.edges.findIndex(
-          (e) => e.node.id === variantId
-        )
+        product.variants.edges.findIndex((e) => e.node.id === variantId)
       ].node.title;
     cartAdd(
       {
@@ -95,8 +118,61 @@ export default function Products() {
       },
       setCart
     );
-    toast.success("Added to cart")
-  }
+    toast.success("Added to cart");
+  };
+
+  let handleDisplayButton = () => {
+    if (isInStock) {
+      if (!variantId) {
+        return (
+          <Button
+            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            disabled={true}
+          >
+            Please select a variant
+          </Button>
+        );
+      } else if (
+        variantId &&
+        product.variants.edges[
+          product.variants.edges.findIndex((e) => e.node.id === variantId)
+        ].node.quantityAvailable === 0
+      ) {
+        return (
+          <Button
+            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            disabled={true}
+          >
+            Sold Out
+          </Button>
+        );
+      } else if (
+        variantId &&
+        product.variants.edges[
+          product.variants.edges.findIndex((e) => e.node.id === variantId)
+        ].node.quantityAvailable !== 0
+      ) {
+        return (
+          <Button
+            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            onClick={handleAddToCart}
+            disabled={displayPrice && quantity ? false : true}
+          >
+            Add to cart | ${displayPrice}
+          </Button>
+        );
+      }
+    } else {
+      return (
+        <Button
+          className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+          disabled={true}
+        >
+          Sold Out
+        </Button>
+      );
+    }
+  };
 
   // Get the product
   useEffect(() => {
@@ -145,7 +221,7 @@ export default function Products() {
     }
   }, [variantId]);
 
-  if (product === undefined) return <Loading />;
+  if (!product) return <Loading />;
   return (
     <>
       <Breadcrumbs
@@ -194,7 +270,17 @@ export default function Products() {
               <p className="text-xl">{product.description}</p>
 
               {/* Options */}
-              <Options handleFunc={handleVariantClick} options={product.options} type={product.metafields[product.metafields.findIndex(e => e.key === "selection_type")].value} />
+              <Options
+                handleFunc={handleVariantClick}
+                options={product.options}
+                type={
+                  product.metafields[
+                    product.metafields.findIndex(
+                      (e) => e.key === "selection_type"
+                    )
+                  ].value
+                }
+              />
 
               {/* Quantity Input */}
               <div className="flex flex-row justify-center w-full">
@@ -207,23 +293,34 @@ export default function Products() {
                       setQuantity(parseInt(inputRef.current.value));
                     }
                   }}
+                  disabled={variantId ? false : true}
                 >
                   <AiOutlineMinus />
                 </button>
                 <input
-                  className="text-center bg-transparent w-24 text-2xl"
+                  className="text-center bg-transparent w-24 text-2xl focus:outline-none"
                   type="number"
                   ref={inputRef}
                   defaultValue={0}
-                  onChange={onChangeInput}
+                  onChange={debounceInput}
+                  disabled={variantId ? false : true}
                 />
                 <button
                   className="text-base"
                   onClick={() => {
-                    inputRef.current.value =
-                      parseInt(inputRef.current.value) + 1;
+                    if (
+                      parseInt(inputRef.current.value) <
+                      product.variants.edges[
+                        product.variants.edges.findIndex(
+                          (e) => e.node.id === variantId
+                        )
+                      ].node.quantityAvailable
+                    )
+                      inputRef.current.value =
+                        parseInt(inputRef.current.value) + 1;
                     setQuantity(parseInt(inputRef.current.value));
                   }}
+                  disabled={variantId ? false : true}
                 >
                   <AiOutlinePlus />
                 </button>
@@ -231,13 +328,23 @@ export default function Products() {
 
               {/* Add to cart */}
               <div className="mt-4 flex flex-row justify-between items-center">
-                <Button
-                  className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
-                  onClick={handleAddToCart}
-                  disabled={displayPrice && quantity ? false : true}
-                >
-                  Add to cart | ${displayPrice}
-                </Button>
+                {/* {isInStock ? (
+                  <Button
+                    className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+                    onClick={handleAddToCart}
+                    disabled={displayPrice && quantity ? false : true}
+                  >
+                    Add to cart | ${displayPrice}
+                  </Button>
+                ) : (
+                  <Button
+                    className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+                    disabled={true}
+                  >
+                    Sold Out
+                  </Button>
+                )} */}
+                {handleDisplayButton()}
               </div>
 
               <Accordion id={extractId(product.id)} />
@@ -267,20 +374,10 @@ export default function Products() {
               }
             />
           ) : (
-            <>
-              {/* <p>No related products found</p> */}
-            </>
+            <>{/* <p>No related products found</p> */}</>
           )}
         </div>
       </div>
-
-      <ToastContainer 
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={true}
-        closeOnClick
-        theme="dark"
-      />
     </>
   );
 }
