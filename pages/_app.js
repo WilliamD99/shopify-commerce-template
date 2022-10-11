@@ -4,16 +4,18 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../public/styles/tailwind.css";
 import "../public/styles/index.css";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 // Library
 import Helmet from "react-helmet";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import axios from "axios";
 
 import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 
 import Layout from "../components/layout";
+import { encryptText } from "../utils/utils";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +34,20 @@ function MyApp({ Component, pageProps }) {
     let items = JSON.parse(localStorage.getItem("items"));
     if (items !== null) {
       setCart(JSON.parse(localStorage.getItem("items")));
+    }
+  }, []);
+
+  useEffect(() => {
+    let cartId = localStorage.getItem("cartId");
+    if (!cartId) {
+      axios
+        .post("/api/storefront/mutation/cart", { data: { lines: [] } })
+        .then((res) =>
+          localStorage.setItem(
+            "cartId",
+            encryptText(res.data.data.cartCreate.cart.id)
+          )
+        );
     }
   }, []);
 

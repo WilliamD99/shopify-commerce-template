@@ -13,6 +13,8 @@ import useProductGetReviews from "../utils/hooks/useProductGetReviews";
 import useProduct from "../utils/hooks/useGetAllProduct";
 
 import Reviews from "../components/ProductDetails/reviews";
+import useCustomerCreate from "../utils/hooks/useCustomerCreate";
+import { decryptText } from "../utils/utils";
 
 export default function Test() {
   // useEffect(() => {
@@ -31,16 +33,21 @@ export default function Test() {
   // }, []);
 
   useEffect(() => {
+    console.log(decryptText(localStorage.getItem("cartId")));
     axios
       .post("/api/storefront/query/cart-get", {
         data: {
-          id: "gid://shopify/Cart/bbd87d24833c3fb50ee5eb5f11161624",
+          id: decryptText(localStorage.getItem("cartId")),
         },
       })
       .then((res) => console.log(res.data));
   }, []);
 
-  return <></>;
+  return (
+    <>
+      <p>test</p>
+    </>
+  );
 }
 // "gid://shopify/Cart/e5522a205ac18c36bc776b9d2c447dd6"
 // "gid://shopify/Cart/bf8969c8df0d88b1dd73f5b87cfee7bb"

@@ -56,9 +56,11 @@ const decryptText = (e) => {
 // Add to cart
 // Params: { merchantId: Product Variant ID, quantity: num }, setCart(context)
 let cartAdd = async (params, setCart) => {
+  console.log("running");
   let items = localStorage.getItem("items");
+  let cartId = localStorage.getItem("cartId");
   let checkoutId = sessionStorage.getItem("checkoutId");
-  // If there's no item with this id
+  // If there's no localStorage
   if (items === null) {
     if (params.quantity > 0) {
       localStorage.setItem(
@@ -84,6 +86,16 @@ let cartAdd = async (params, setCart) => {
           variantTitle: params.variantTitle,
         },
       ]);
+      if (cartId) {
+        let data = await axios.post("/api/storefront/mutation/cart-add", {
+          data: {
+            id: decryptText(cartId),
+            merchandiseId: params.merchandiseId,
+            quantity: params.quantity,
+          },
+        });
+        console.log(data.data);
+      }
     } else return;
   } else {
     items = JSON.parse(items);

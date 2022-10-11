@@ -23,6 +23,7 @@ const requests = async (req, res) => {
                     }
                     metafields(identifiers: [
                         { namespace: "custom", key: "wishlist" },
+                        { namespace: "custom", key: "approved" }
                       ]) {
                         key
                         value
@@ -54,6 +55,7 @@ const requests = async (req, res) => {
                 }
             }
         `;
+    console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
