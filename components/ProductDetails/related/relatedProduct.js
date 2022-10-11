@@ -47,21 +47,7 @@ export default function Product({ data }) {
             blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
           />
         </div>
-        <div className="px-5 flex flex-col space-y-2">
-          <div className="flex flex-row mb-2 flex-wrap space-y-2">
-            {productData.collections.edges.map((col) => (
-              <Link
-                href={`/shop/products-in-collection?col=${col.node.id}`}
-                key={col.node.title}
-              >
-                <Chip
-                  label={col.node.title}
-                  variant="outlined"
-                  className="text-sm cursor-pointer"
-                />
-              </Link>
-            ))}
-          </div>
+        <div className="px-5 flex flex-col mt-2">
           <Link
             href={`/product/${productData.handle}`}
             className="text-lg font-medium"

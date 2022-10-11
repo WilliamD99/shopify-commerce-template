@@ -13,7 +13,7 @@ import Loading from "../../components/Loading/dataLoading";
 import Button from "@mui/material/Button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
 
 const Reviews = dynamic(
@@ -40,7 +40,6 @@ export default function Products() {
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
   const [isInStock, setIsInStock] = useState(true);
-  const [quantityInstock, setQuantityInstock] = useState(0);
   const inputRef = useRef(0);
 
   let productByHandleMutation = useMutation(async (params) => {
@@ -113,7 +112,10 @@ export default function Products() {
         quantity: quantity,
         image: product.featuredImage.src,
         title: product.title,
-        price: product.variants.edges[0].node.price,
+        price:
+          product.variants.edges[
+            product.variants.edges.findIndex((e) => e.node.id === variantId)
+          ].node.price,
         variantTitle: variantTitle,
       },
       setCart
