@@ -56,9 +56,7 @@ const decryptText = (e) => {
 // Add to cart
 // Params: { merchantId: Product Variant ID, quantity: num }, setCart(context)
 let cartAdd = async (params, setCart) => {
-  console.log("running");
   let items = localStorage.getItem("items");
-  let cartId = localStorage.getItem("cartId");
   let checkoutId = sessionStorage.getItem("checkoutId");
   // If there's no localStorage
   if (items === null) {
@@ -86,16 +84,6 @@ let cartAdd = async (params, setCart) => {
           variantTitle: params.variantTitle,
         },
       ]);
-      if (cartId) {
-        let data = await axios.post("/api/storefront/mutation/cart-add", {
-          data: {
-            id: decryptText(cartId),
-            merchandiseId: params.merchandiseId,
-            quantity: params.quantity,
-          },
-        });
-        console.log(data.data);
-      }
     } else return;
   } else {
     items = JSON.parse(items);
@@ -168,26 +156,15 @@ let cartRemoveItem = async (params, setCart) => {
 };
 // Get access token
 let accessTokenExist = () => {
-  let cookie = document.cookie;
-  cookie = cookie.split(";");
-  let index = cookie.findIndex((e) => e.search("token") !== -1);
+  let token = localStorage.getItem("tn");
+  if (!token) token = false;
+  token = decryptText(JSON.parse(token).value);
 
-  let token;
-  if (index !== -1) {
-    token = decryptText(cookie[index].split("=")[1]);
-  } else {
-    token = false;
-  }
   return token;
 };
 // Delete access token
 let accessTokenDelete = () => {
-  let cookie = document.cookie;
-  cookie = cookie.split(";");
-  let index = cookie.findIndex((e) => e.search("token") !== -1);
-
-  let newCookie = cookie.splice(index, 1);
-  document.cookie = newCookie.join();
+  localStorage.removeItem("tn");
 };
 
 // Check if object is empty

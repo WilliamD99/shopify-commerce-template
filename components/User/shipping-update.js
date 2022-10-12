@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 
 import userContext from "../../utils/userContext";
 import { accessTokenExist, provinces, gsap } from "../../utils/utils";
@@ -16,26 +13,29 @@ import useCustomerUpdateShipping from "../../utils/hooks/useCustomerUpdateShippi
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import useDefaultAddressUpdate from "../../utils/hooks/useDefaultAddressUpdate";
 
+import { toast } from "react-toastify";
+
 export default function ShippingForm() {
   const { user } = useContext(userContext);
   const [defaultId, setDefaultId] = useState(
     user.defaultAddress ? user.defaultAddress.id : ""
   );
   const [addressArr, setAddressArr] = useState(user.addresses.edges);
+  const [state, setState] = useState("");
   const createShipping = useCustomerCreateShipping();
   const updateShipping = useCustomerUpdateShipping();
   const customer = useCustomerGet();
 
-  const handleUpdate = (e, id, i) => {
+  const handleUpdate = async (e, id, i) => {
     e.preventDefault();
     let address = document.getElementById(`address-${i}`).value,
       city = document.getElementById(`city-${i}`).value,
       country = document.getElementById(`country-${i}`).value,
-      province = document.getElementById(`province-${i}`).value,
+      province = document.getElementById(`province-${i}`).innerHTML,
       postal = document.getElementById(`postal-${i}`).value;
     let token = accessTokenExist();
 
-    updateShipping.mutate({
+    await updateShipping.mutate({
       accessToken: token,
       updateFields: {
         address1: address,
@@ -48,16 +48,17 @@ export default function ShippingForm() {
     });
   };
 
-  const handleCreate = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
 
     let address = document.getElementById(`address`).value,
       city = document.getElementById(`city`).value,
       country = document.getElementById(`country`).value,
-      province = document.getElementById(`province`).value,
+      province = document.getElementById(`province`).innerHTML,
       postal = document.getElementById(`postal`).value;
 
-    createShipping.mutate({
+    await createShipping.mutate({
+      accessToken: accessTokenExist(),
       updateFields: {
         address1: address,
         city: city,
@@ -72,9 +73,6 @@ export default function ShippingForm() {
   let updateDefault = useDefaultAddressUpdate();
   const handleCheckDefault = (id) => {
     setDefaultId(id);
-    // !alertRef.current.reversed()
-    //   ? alertRef.current.play()
-    //   : alertRef.current.reverse();
     let accessToken = accessTokenExist();
     updateDefault.mutate({ accessToken: accessToken, addressId: id });
   };
@@ -85,6 +83,7 @@ export default function ShippingForm() {
       let token = accessTokenExist();
       customer.mutate({ accessToken: token });
     }
+    if (updateShipping.isSuccess) toast.success("Update Successfully!");
   }, [updateShipping.isLoading]);
 
   if (user.addresses.edges.length === 0)
@@ -106,13 +105,23 @@ export default function ShippingForm() {
               type="text"
             />
             <TextField required id={`city`} label="City" type="text" />
-            <Select required label="Province" value="">
+            <TextField
+              id="province"
+              select
+              required
+              label="Province"
+              value={state}
+            >
               {provinces.map((e, i) => (
-                <MenuItem key={i} value={e.label}>
+                <MenuItem
+                  key={i}
+                  value={e.label}
+                  onClick={() => setState(e.label)}
+                >
                   {e.label}
                 </MenuItem>
               ))}
-            </Select>
+            </TextField>
             <TextField required id={`postal`} label="Postal Code" type="text" />
             <TextField label="Canada" disabled id={`country`} type="text" />
             <Button variant="outlined" type="submit">
@@ -157,7 +166,8 @@ export default function ShippingForm() {
                 defaultValue={e.node.city}
                 type="text"
               />
-              <Select
+              <TextField
+                select
                 required
                 id={`province-${i}`}
                 label="Province"
@@ -168,7 +178,7 @@ export default function ShippingForm() {
                     {e.label}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
               {/* </div> */}
               <TextField
                 required
@@ -208,13 +218,6 @@ export default function ShippingForm() {
           </div>
         ))}
       </div>
-      <Stack
-        id="alert-stack"
-        className="hidden fixed z-50 w-72 right-5 bottom-5"
-        spacing={2}
-      >
-        <Alert severity="success">Update sucessful!</Alert>
-      </Stack>
     </>
   );
 }

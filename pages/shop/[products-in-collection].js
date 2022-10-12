@@ -41,6 +41,7 @@ export default function Collection() {
             ? decodeURIComponent(routerQuery.vendors)
             : "",
           type: routerQuery.type ? routerQuery.type : "",
+          limit: routerQuery.limit,
         });
       }
     }

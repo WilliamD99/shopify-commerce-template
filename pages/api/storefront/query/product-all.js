@@ -5,6 +5,9 @@ const requests = async (req, res) => {
   try {
     const params = req.body.data;
 
+    // Limit
+    const limit = params.limit ? params.limit : 12;
+
     // Reversed underlying list
     const reversed = params.reversed;
     let reverseQuery;
@@ -22,9 +25,11 @@ const requests = async (req, res) => {
     // True is forward, false is backward
     const direction = params.direction;
     let position;
-    if (!cursor) position = "first: 12";
-    else if (cursor && direction) position = `first: 12, after: "${cursor}"`;
-    else if (cursor && !direction) position = `last: 12, before: "${cursor}"`;
+    if (!cursor) position = `first: ${limit}`;
+    else if (cursor && direction)
+      position = `first: ${limit}, after: "${cursor}"`;
+    else if (cursor && !direction)
+      position = `last: ${limit}, before: "${cursor}"`;
 
     // Query the list
     let queryArr = [];

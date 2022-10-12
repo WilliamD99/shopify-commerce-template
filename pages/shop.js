@@ -44,6 +44,7 @@ export default function Shop() {
           ? decodeURIComponent(routerQuery.vendors)
           : "",
         type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
+        limit: routerQuery.limit,
       });
       // }
     }
@@ -59,6 +60,7 @@ export default function Shop() {
       sales: params.sales,
       vendors: params.vendors,
       type: params.type,
+      limit: params.limit,
     });
     let edges = data.data.products.edges;
     setDataArr(edges);

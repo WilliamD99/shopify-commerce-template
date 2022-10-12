@@ -10,7 +10,6 @@ import { cartAdd } from "../../utils/utils";
 import Link from "../common/Link";
 import Image from "../common/Image";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import WishlistButton from "../ProductDetails/wishlistButton";
 
 import cartContext from "../../utils/cartContext";
@@ -32,27 +31,52 @@ export default function SingeProduct({ e, index }) {
     ? e.node.priceRangeV2.maxVariantPrice.amount
     : e.node.priceRange.maxVariantPrice.amount;
 
-  useLayoutEffect(() => {
-    let from = gsap.fromTo(
-      anim.current,
-      {
-        autoAlpha: 0.1,
-        y: 30,
-      },
-      {
-        autoAlpha: 1,
-        y: 0,
-        delay: index * 0.15,
-        duration: 0.3,
-        immediateRender: false,
-        ease: "Sine.easeInOut",
-        onStart: () => anim.current.classList.remove("invisible"),
-      }
-    );
-    return () => {
-      from.kill();
-    };
-  }, []);
+  let handleDisplayButton = () => {
+    if (e.node.variants.edges.length > 1) {
+      return (
+        <Button
+          variant="outlined"
+          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+        >
+          <Link href={`/product/${e.node.handle}`}>Select</Link>
+        </Button>
+      );
+    } else if (e.node.totalInventory === 0) {
+      return (
+        <Button
+          variant="outlined"
+          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+          disabled={true}
+        >
+          Sold out
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          onClick={async () => {
+            setLoading(true);
+            await cartAdd(
+              {
+                title: e.node.title,
+                merchandiseId: e.node.variants.edges[0].node.id,
+                quantity: 1,
+                price: e.node.variants.edges[0].node.price,
+                image: e.node.featuredImage.url,
+                variantTitle: "",
+              },
+              setCart
+            );
+            setLoading(false);
+          }}
+          variant="outlined"
+          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+        >
+          Add to cart
+        </Button>
+      );
+    }
+  };
 
   useEffect(() => {
     setOnSale(
@@ -63,7 +87,7 @@ export default function SingeProduct({ e, index }) {
   return (
     <div
       ref={anim}
-      className="single-product invisible relative flex flex-col bg-slate-100 product rounded-tr-md shadow-sm"
+      className="single-product relative flex flex-col bg-slate-100 product rounded-tr-md shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -125,39 +149,30 @@ export default function SingeProduct({ e, index }) {
           By {e.node.vendor}
         </p>
 
-        <div className="h-12 w-full">
-          {e.node.variants.edges.length > 1 ? (
-            <Button
-              variant="outlined"
-              className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
-            >
-              <Link href={`/product/${e.node.handle}`}>Select</Link>
-            </Button>
-          ) : (
-            <Button
-              onClick={async () => {
-                setLoading(true);
-                await cartAdd(
-                  {
-                    title: e.node.title,
-                    merchandiseId: e.node.variants.edges[0].node.id,
-                    quantity: 1,
-                    price: e.node.variants.edges[0].node.price,
-                    image: e.node.featuredImage.url,
-                    variantTitle: "",
-                  },
-                  setCart
-                );
-                setLoading(false);
-              }}
-              variant="outlined"
-              className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
-            >
-              Add to cart
-            </Button>
-          )}
-        </div>
+        <div className="h-12 w-full">{handleDisplayButton()}</div>
       </div>
     </div>
   );
 }
+
+// useLayoutEffect(() => {
+//   let from = gsap.fromTo(
+//     anim.current,
+//     {
+//       autoAlpha: 0.1,
+//       y: 30,
+//     },
+//     {
+//       autoAlpha: 1,
+//       y: 0,
+//       delay: index * 0.15,
+//       duration: 0.3,
+//       immediateRender: false,
+//       ease: "Sine.easeInOut",
+//       onStart: () => anim.current.classList.remove("invisible"),
+//     }
+//   );
+//   return () => {
+//     from.kill();
+//   };
+// }, []);

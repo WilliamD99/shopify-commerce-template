@@ -1,10 +1,8 @@
-import React, { useRef, useLayoutEffect, useEffect, useState } from "react";
-import { gsap } from "../../utils/utils";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import Divider from "@mui/material/Divider";
-import Loading from "../Loading/dataLoading";
 import Link from "../common/Link";
+import Loading from "../Loading/dataLoading";
 
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -18,23 +16,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
 
 export default function FilterMenu() {
-  // const filterMenuAnim = useRef(null)
   let [collections, setCollections] = useState([]);
   let [price, setPrice] = useState([0, 1000]);
   let router = useRouter();
   let routerQuery = router.query;
-
-  // useLayoutEffect(() => {
-  //   filterMenuAnim.current = gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: "#shop-container",
-  //       start: "top top",
-  //       end: "center+=800 bottom",
-  //       pin: "#filter",
-  //     },
-  //   });
-  //   return () => filterMenuAnim.current.kill();
-  // }, [isLoading]);
 
   let collectionQuery = useQuery(["get_collections"], async () => {
     let data = await axios.post("/api/admin/query/all-collections");
@@ -151,3 +136,15 @@ export default function FilterMenu() {
     </>
   );
 }
+
+// useLayoutEffect(() => {
+//   filterMenuAnim.current = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: "#shop-container",
+//       start: "top top",
+//       end: "center+=800 bottom",
+//       pin: "#filter",
+//     },
+//   });
+//   return () => filterMenuAnim.current.kill();
+// }, [isLoading]);

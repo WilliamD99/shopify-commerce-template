@@ -1,15 +1,15 @@
-import axios from 'axios'
-import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        const params = req.body.data
-        const accessToken = params.accessToken
-        let updateFields = params.updateFields // return { firstName: "", lastName: "" }
-        updateFields = JSON.stringify(updateFields)
-        updateFields = updateFields.replace(/"([^"]+)":/g, '$1:');
+  try {
+    const params = req.body.data;
+    const accessToken = params.accessToken;
+    let updateFields = params.updateFields; // return { firstName: "", lastName: "" }
+    updateFields = JSON.stringify(updateFields);
+    updateFields = updateFields.replace(/"([^"]+)":/g, "$1:");
 
-        const query = `
+    const query = `
         mutation {
             customerAddressCreate(
                 customerAccessToken: "${accessToken}",
@@ -20,17 +20,16 @@ const requests = async (req, res) => {
                 }
             }
         }
-        `
-        const data = await axios.post(storefrontURL, query, {
-            headers: storefrontHeaders
-        })
-        console.log(data.data)
-        res.json(data.data)
-    }
-    catch(e) {
-        console.log(e)
-        res.json({error: e})
-    }
-}
+        `;
+    const data = await axios.post(storefrontURL, query, {
+      headers: storefrontHeaders,
+    });
+    console.log(query);
+    res.json(data.data);
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;

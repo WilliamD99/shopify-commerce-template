@@ -1,25 +1,16 @@
-import React, {
-  useEffect,
-  useContext,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useEffect, useContext, useState } from "react";
 import Cart from "./cart";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import { accessTokenExist } from "../../utils/utils";
 import userContext from "../../utils/userContext";
-import Login from "../User/login";
-import Signup from "../User/signup";
+import Account from "../User/account";
 import Link from "../common/Link";
 
 import Slide from "@mui/material/Slide";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "./search";
-import { gsap } from "../../utils/utils";
 import DrawerMobile from "./drawerMobile";
 
 export default function Header(props) {
@@ -62,7 +53,6 @@ export default function Header(props) {
 
   useEffect(() => {
     if (customer.data) {
-      console.log(customer.data);
       setUser(customer.data.customer);
     }
   }, [customer.isLoading]);
@@ -84,7 +74,7 @@ export default function Header(props) {
           </Toolbar>
         </AppBar>
       </HideOnScroll>
-      <Login open={modalOpen} setOpen={setModalOpen} />
+      <Account open={modalOpen} setOpen={setModalOpen} />
     </>
   );
 }

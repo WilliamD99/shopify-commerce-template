@@ -1,29 +1,25 @@
 import React, { useEffect, useContext, useCallback, useState } from "react";
 import useCustomerGetAccessToken from "../../utils/hooks/useCustomerGetAccessToken";
 import { encryptText } from "../../utils/utils";
+import useCustomerGet from "../../utils/hooks/useCustomerGet";
+import userContext from "../../utils/userContext";
+import { toast } from "react-toastify";
+
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-import useCustomerGet from "../../utils/hooks/useCustomerGet";
-import userContext from "../../utils/userContext";
-import { gsap } from "../../utils/utils";
+import Loading from "../Loading/dataLoading";
+import Divider from "@mui/material/Divider";
+import Link from "../common/Link";
 
 export default function Login({ open, setOpen }) {
   const { user, setUser } = useContext(userContext);
-  const [error, setError] = useState("");
 
   let getAccessToken = useCustomerGetAccessToken();
   let customer = useCustomerGet();
 
-  const handleErrMsg = (e) => {
-    setError(e);
-    setTimeout(() => {
-      setError("");
-    }, [2000]);
-  };
-
-  const handleLogin = useCallback(() => {
+  const handleLogin = useCallback((e) => {
+    e.preventDefault();
     let email = document.getElementById("email");
     let password = document.getElementById("password");
     getAccessToken.mutate({ email: email.value, password: password.value });
@@ -36,15 +32,21 @@ export default function Login({ open, setOpen }) {
         getAccessToken.data.customerAccessTokenCreate.customerAccessToken;
       if (token) {
         customer.mutate({ accessToken: token.accessToken });
-        document.cookie = `token=${encryptText(token.accessToken)};expires=${
-          token.expiresAt
-        }`;
+        localStorage.setItem(
+          "tn",
+          JSON.stringify({
+            value: encryptText(token.accessToken),
+            expiresAt: "",
+          })
+        );
+        // document.cookie = `token=${encryptText(token.accessToken)};expires=${
+        //   token.expiresAt
+        // }`;
       } else {
         let error =
           getAccessToken.data.customerAccessTokenCreate.customerUserErrors[0]
             .message;
-        console.log(error);
-        handleErrMsg(error);
+        toast.error(error);
       }
     }
   }, [getAccessToken.isLoading]);
@@ -68,9 +70,10 @@ export default function Login({ open, setOpen }) {
         open={open}
         onClose={() => setOpen(false)}
       >
-        <div
+        <form
           id="loginForm"
-          className="absolute w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-8 flex flex-col justify-between space-y-5 bg-slate-200 rounded-xl z-50"
+          className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-between space-y-3 bg-slate-200 rounded-xl z-50"
+          onSubmit={handleLogin}
         >
           <p className="text-black text-3xl font-bold text-center">Login</p>
           <div className="flex flex-col space-y-5">
@@ -79,29 +82,41 @@ export default function Login({ open, setOpen }) {
               label="Email"
               type="email"
               id="email"
+              required
             />
             <TextField
               className="rounded-md"
               label="Password"
               type="password"
               id="password"
+              required
             />
+            <div className="flex flex-row justify-between">
+              <Link href="#" className="text-sm">
+                Forgot password?
+              </Link>
+            </div>
             <Button
               variant="outlined"
-              className="text-black rounded-md"
+              className="h-10 normal-case bg-black border-none shadow-2xl text-white font-semibold rounded-md  hover:text-black hover:bg-white hover:border-none"
               onClick={handleLogin}
+              type="submit"
             >
-              {getAccessToken.isLoading ? "Loading" : "Login"}
+              {getAccessToken.isLoading ? <Loading /> : "Login"}
             </Button>
-            <p>{error}</p>
           </div>
-          <div className="flex flex-row space-x-2 justify-center items-center">
-            <p className="text-sm">Don&apos;t have an account yet?</p>
-            <button className="font-semibold text-sm hover:underline">
-              Sign up
-            </button>
+          <div className="flex flex-row justify-center items-center space-x-5">
+            <Divider className="w-1/3" />
+            <p>Or</p>
+            <Divider className="w-1/3" />
           </div>
-        </div>
+          <Button
+            variant="outlined"
+            className="h-10 normal-case bg-white border-none text-black font-semibold rounded-md shadow-2xl hover:text-white hover:bg-black hover:border-none"
+          >
+            Sign Up
+          </Button>
+        </form>
       </Modal>
     </>
   );

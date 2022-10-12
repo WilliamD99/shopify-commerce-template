@@ -25,6 +25,8 @@ export default function Pagination({
     );
   };
 
+  if (!isNext && !isPrevious) return <></>;
+
   return (
     <div className="flex justify-center items-center space-x-5 mt-5">
       <Button

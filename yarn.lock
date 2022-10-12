@@ -489,9 +489,9 @@
   dependencies:
     "glob" "7.1.7"
 
-"@next/swc-win32-x64-msvc@12.2.2":
-  "integrity" "sha512-2D2iinWUL6xx8D9LYVZ5qi7FP6uLAoWymt8m8aaG2Ld/Ka8/k723fJfiklfuAcwOxfufPJI+nRbT5VcgHGzHAQ=="
-  "resolved" "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.2.2.tgz"
+"@next/swc-win32-ia32-msvc@12.2.2":
+  "integrity" "sha512-v7ykeEDbr9eXiblGSZiEYYkWoig6sRhAbLKHUHQtk8vEWWVEqeXFcxmw6LRrKu5rCN1DY357UlYWToCGPQPCRA=="
+  "resolved" "https://registry.npmjs.org/@next/swc-win32-ia32-msvc/-/swc-win32-ia32-msvc-12.2.2.tgz"
   "version" "12.2.2"
 
 "@nodelib/fs.scandir@2.1.5":
@@ -544,18 +544,33 @@
   dependencies:
     "tslib" "^2.4.0"
 
-"@tanstack/query-core@^4.0.0-beta.1":
-  "integrity" "sha512-QOJ2gLbwlf8p0487pMey6vv8EF5X2ib1zINayaD7mb9/LibUtXmZ12uJgTqcnjgNY/4tWZn5qJnEk2ePG5AVGA=="
-  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.0.5.tgz"
-  "version" "4.0.5"
-
-"@tanstack/react-query@^4.0.5":
-  "integrity" "sha512-tIggVlhoFevVpY/LkZroPmrERFHN8tw4aZLtgwSArzHmMJ03WQcaNvbbHy6GERidXtaMdUz+IeQryrE7cO7WPQ=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.0.5.tgz"
-  "version" "4.0.5"
+"@tanstack/match-sorter-utils@^8.1.1":
+  "integrity" "sha512-lVNhzTcOJ2bZ4IU+PeCPQ36vowBHvviJb2ZfdRFX5uhy7G0jM8N34zAMbmS5ZmVH8D2B7oU82OWo0e/5ZFzQrw=="
+  "resolved" "https://registry.npmjs.org/@tanstack/match-sorter-utils/-/match-sorter-utils-8.5.14.tgz"
+  "version" "8.5.14"
   dependencies:
-    "@tanstack/query-core" "^4.0.0-beta.1"
-    "@types/use-sync-external-store" "^0.0.3"
+    "remove-accents" "0.4.2"
+
+"@tanstack/query-core@4.10.3":
+  "integrity" "sha512-+ME02sUmBfx3Pjd+0XtEthK8/4rVMD2jcxvnW9DSgFONpKtpjzfRzjY4ykzpDw1QEo2eoPvl7NS8J5mNI199aA=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.10.3.tgz"
+  "version" "4.10.3"
+
+"@tanstack/react-query-devtools@^4.11.0":
+  "integrity" "sha512-g/414SruE0TEp4jeMYxVUSXGXCc+zMY9j0gB8Q6B91gmyPseNqs9WLkVrqxRXoQDyRvDcphVOaEANNygGx+zGg=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query-devtools/-/react-query-devtools-4.11.0.tgz"
+  "version" "4.11.0"
+  dependencies:
+    "@tanstack/match-sorter-utils" "^8.1.1"
+    "superjson" "^1.10.0"
+    "use-sync-external-store" "^1.2.0"
+
+"@tanstack/react-query@^4.0.5", "@tanstack/react-query@4.10.3":
+  "integrity" "sha512-4OEJjkcsCTmG3ui7RjsVzsXerWQvInTe95CBKFyOV/GchMUlNztoFnnYmlMhX7hLUqJMhbG9l7M507V7+xU8Hw=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.10.3.tgz"
+  "version" "4.10.3"
+  dependencies:
+    "@tanstack/query-core" "4.10.3"
     "use-sync-external-store" "^1.2.0"
 
 "@types/json5@^0.0.29":
@@ -605,11 +620,6 @@
   "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   "version" "0.16.2"
-
-"@types/use-sync-external-store@^0.0.3":
-  "integrity" "sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA=="
-  "resolved" "https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz"
-  "version" "0.0.3"
 
 "@typescript-eslint/parser@^5.21.0":
   "integrity" "sha512-Rg5xwznHWWSy7v2o0cdho6n+xLhK2gntImp0rJroVVFkcYFYQ8C8UJTSuTw/3CnExBmPjycjmUJkxVmjXsld6A=="
@@ -976,6 +986,13 @@
   "version" "1.8.0"
   dependencies:
     "safe-buffer" "~5.1.1"
+
+"copy-anything@^3.0.2":
+  "integrity" "sha512-CzATjGXzUQ0EvuvgOCI6A4BGOo2bcVx8B+eC2nF862iv9fopnPQwlrbACakNCHRIJbCSBj+J/9JeDf60k64MkA=="
+  "resolved" "https://registry.npmjs.org/copy-anything/-/copy-anything-3.0.2.tgz"
+  "version" "3.0.2"
+  dependencies:
+    "is-what" "^4.1.6"
 
 "core-js-pure@^3.20.2":
   "integrity" "sha512-8t78LdpKSuCq4pJYCYk8hl7XEkAX+BP16yRIwL3AanTksxuEf7CM83vRyctmiEL8NDZ3jpUcv56fk9/zG3aIuw=="
@@ -1846,6 +1863,11 @@
   dependencies:
     "call-bind" "^1.0.2"
 
+"is-what@^4.1.6":
+  "integrity" "sha512-DBVOQNiPKnGMxRMLIYSwERAS5MVY1B7xYiGnpgctsOFvVDz9f9PFXXxMcTOHuoqYp4NK9qFYQaIC1NRRxLMpBQ=="
+  "resolved" "https://registry.npmjs.org/is-what/-/is-what-4.1.7.tgz"
+  "version" "4.1.7"
+
 "isexe@^2.0.0":
   "integrity" "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="
   "resolved" "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
@@ -2496,6 +2518,11 @@
   "resolved" "https://registry.npmjs.org/regexpp/-/regexpp-3.2.0.tgz"
   "version" "3.2.0"
 
+"remove-accents@0.4.2":
+  "integrity" "sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA=="
+  "resolved" "https://registry.npmjs.org/remove-accents/-/remove-accents-0.4.2.tgz"
+  "version" "0.4.2"
+
 "resize-observer-polyfill@^1.5.0":
   "integrity" "sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg=="
   "resolved" "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz"
@@ -2701,6 +2728,13 @@
   "integrity" "sha512-xGPXiFVl4YED9Jh7Euv2V220mriG9u4B2TA6Ybjc1catrstKD2PpIdU3U0RKpkVBC2EhmL/F0sPCr9vrFTNRag=="
   "resolved" "https://registry.npmjs.org/stylis/-/stylis-4.0.13.tgz"
   "version" "4.0.13"
+
+"superjson@^1.10.0":
+  "integrity" "sha512-7fvPVDHmkTKg6641B9c6vr6Zz5CwPtF9j0XFExeLxJxrMaeLU2sqebY3/yrI3l0K5zJ+H9QA3H+lIYj5ooCOkg=="
+  "resolved" "https://registry.npmjs.org/superjson/-/superjson-1.10.1.tgz"
+  "version" "1.10.1"
+  dependencies:
+    "copy-anything" "^3.0.2"
 
 "supports-color@^5.3.0":
   "integrity" "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow=="

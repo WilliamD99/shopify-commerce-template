@@ -31,17 +31,16 @@ export default function Test() {
   //     })
   //     .then((res) => console.log(res));
   // }, []);
-
-  useEffect(() => {
-    console.log(decryptText(localStorage.getItem("cartId")));
-    axios
-      .post("/api/storefront/query/cart-get", {
-        data: {
-          id: decryptText(localStorage.getItem("cartId")),
-        },
-      })
-      .then((res) => console.log(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post("/api/storefront/mutation/customer-create", {
+  //       data: {
+  //         email: "admin@gmail.com",
+  //         password: "Williamd99.",
+  //       },
+  //     })
+  //     .then((res) => console.log(res));
+  // }, []);
 
   return (
     <>

@@ -10,7 +10,6 @@ const requests = async (req, res) => {
     let id = params.id;
     let list = params.list; // data e.g: ["", ""] --> array
     let stringList = `"[${list.map((e) => "\\" + `"${e}` + '\\"')}]"`;
-    console.log(list)
     const query = `
     mutation {
         metafieldsSet(metafields: [
@@ -36,10 +35,8 @@ const requests = async (req, res) => {
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,
     });
-    console.log(query)
     res.json(data.data);
   } catch (e) {
-    console.log(e)
     res.json({ error: e });
   }
 };
