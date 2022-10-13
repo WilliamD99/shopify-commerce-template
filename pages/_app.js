@@ -15,6 +15,7 @@ import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 
 import Layout from "../components/layout";
+import AgeGate from "../components/AgeGate";
 // import { encryptText } from "../utils/utils";
 
 const queryClient = new QueryClient({
@@ -68,6 +69,7 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
+      <AgeGate />
       <QueryClientProvider client={queryClient}>
         <userContext.Provider value={{ user, setUser }}>
           <cartContext.Provider value={{ cart, setCart }}>

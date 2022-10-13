@@ -10,14 +10,14 @@ export default function FilterCheckbox() {
   const routerQuery = router.query;
 
   useEffect(() => {
-    if (router.isReady && routerQuery.sales) {
-      setChecked(routerQuery.sales === "true");
+    if (router.isReady && routerQuery.instock) {
+      setChecked(routerQuery.instock === "true");
     }
   }, [routerQuery]);
 
   const handleClick = (e) => {
     if (!checked) {
-      routerQuery.sales = true;
+      routerQuery.instock = true;
       if (!routerQuery.reverse) routerQuery.reverse = false;
       if (routerQuery.cursor) delete routerQuery.cursor;
       router.push(
@@ -30,7 +30,7 @@ export default function FilterCheckbox() {
 
       setChecked(true);
     } else {
-      delete routerQuery.sales;
+      delete routerQuery.instock;
       router.push(
         {
           pathname: window.location.pathname,
@@ -52,7 +52,7 @@ export default function FilterCheckbox() {
             onClick={handleClick}
           />
         }
-        label={<p className="text-lg">Sales</p>}
+        label={<p className="text-lg">Instock</p>}
       />
     </>
   );

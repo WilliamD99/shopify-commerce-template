@@ -41,10 +41,10 @@ const requests = async (req, res) => {
       queryArr.push(priceRange);
     }
 
-    let sales = params.sales;
-    if (sales) {
-      sales = `is_price_reduced:${sales}`;
-      queryArr.push(sales);
+    let instock = params.instock;
+    if (instock) {
+      instock = `available_for_sale:${instock}`;
+      queryArr.push(instock);
     }
 
     let vendors = params.vendors;

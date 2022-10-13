@@ -39,7 +39,7 @@ export default function Shop() {
         isReverse: routerQuery.reverse ? routerQuery.reverse.toString() : "",
         cursor: routerQuery.cursor,
         price: routerQuery.price,
-        sales: routerQuery.sales,
+        instock: routerQuery.instock,
         vendors: routerQuery.vendors
           ? decodeURIComponent(routerQuery.vendors)
           : "",
@@ -57,7 +57,7 @@ export default function Shop() {
       sortKey: params.sortKey ? params.sortKey : sortKey,
       reversed: params.isReverse ? params.isReverse : isReverse,
       price: params.price,
-      sales: params.sales,
+      instock: params.instock,
       vendors: params.vendors,
       type: params.type,
       limit: params.limit,
