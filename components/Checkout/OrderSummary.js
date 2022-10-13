@@ -38,7 +38,6 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
   let checkout = useCheckoutGet();
   let checkoutDiscount = useCheckoutDiscount();
   let checkoutDiscountRemove = useCheckoutDiscountRemove();
-
   useEffect(() => {
     checkout.mutate({ id: checkoutId });
   }, [
@@ -108,6 +107,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
       sessionStorage.setItem("client", encryptText(pi.data.data));
     }
   }, [pi.isLoading]);
+  console.log(checkout);
 
   // If ready is true is done creating pi, re-route
   // useEffect(() => {

@@ -1,22 +1,26 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import Cart from "./cart";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
-import { accessTokenExist } from "../../utils/utils";
+import { accessTokenExist, gsap } from "../../utils/utils";
 import userContext from "../../utils/userContext";
+
 import Account from "../User/account";
 import Link from "../common/Link";
-
 import Slide from "@mui/material/Slide";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "./search";
 import DrawerMobile from "./drawerMobile";
+import { AiOutlineHeart } from "react-icons/ai";
+import Badge from "@mui/material/Badge";
 
 export default function Header(props) {
   let customer = useCustomerGet();
   let { user, setUser } = useContext(userContext);
   let [modalOpen, setModalOpen] = useState(false);
+  let [wlCount, setWlCount] = useState(0);
+  let wlRef = useRef(gsap.timeline({}));
 
   let headerConditionalDisplay = () => {
     if (!user)
@@ -57,6 +61,22 @@ export default function Header(props) {
     }
   }, [customer.isLoading]);
 
+  useEffect(() => {
+    if (user) {
+      wlRef.current
+        .to("#wlBadge", { scale: 1.2, duration: 0.3 })
+        .to("#wlBadge", { scale: 1, duration: 0.3 });
+      setWlCount(
+        JSON.parse(
+          user.metafields[
+            user.metafields.findIndex((e) => e.key === "wishlist")
+          ].value
+        ).length
+      );
+    }
+    return () => wlRef.current.kill();
+  }, [user]);
+
   return (
     <>
       <HideOnScroll {...props}>
@@ -66,9 +86,20 @@ export default function Header(props) {
               Ecommerce Theme
             </Link>
             <DrawerMobile />
-            <div className="hidden md:flex md:flex-row space-x-10 items-center">
+            <div className="hidden md:flex md:flex-row space-x-5 items-center">
               <Search />
               {headerConditionalDisplay()}
+
+              {user ? (
+                <Link href="/my-account">
+                  <Badge id="wlBadge" badgeContent={wlCount}>
+                    <AiOutlineHeart className="text-xl" />
+                  </Badge>
+                </Link>
+              ) : (
+                <></>
+              )}
+
               <Cart />
             </div>
           </Toolbar>

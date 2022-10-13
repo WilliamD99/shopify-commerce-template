@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  useLayoutEffect,
-} from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { cartAdd } from "../../utils/utils";
 
 import Link from "../common/Link";
@@ -13,7 +7,7 @@ import Button from "@mui/material/Button";
 import WishlistButton from "../ProductDetails/wishlistButton";
 
 import cartContext from "../../utils/cartContext";
-import { gsap, formatter } from "../../utils/utils";
+import { formatter } from "../../utils/utils";
 import Loading from "../Loading/dataLoading";
 import userContext from "../../utils/userContext";
 
@@ -36,7 +30,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+          className="rounded-lg bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
         >
           <Link href={`/product/${e.node.handle}`}>Select</Link>
         </Button>
@@ -83,7 +77,6 @@ export default function SingeProduct({ e, index }) {
       e.node.variants.edges.some((variant) => variant.node.compareAtPrice)
     );
   }, []);
-
   return (
     <div
       ref={anim}

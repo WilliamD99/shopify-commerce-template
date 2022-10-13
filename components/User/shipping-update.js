@@ -20,7 +20,9 @@ export default function ShippingForm() {
   const [defaultId, setDefaultId] = useState(
     user.defaultAddress ? user.defaultAddress.id : ""
   );
-  const [addressArr, setAddressArr] = useState(user.addresses.edges);
+  const [addressArr, setAddressArr] = useState(
+    user.addresses ? user.addresses.edges : ""
+  );
   const [state, setState] = useState("");
   const createShipping = useCustomerCreateShipping();
   const updateShipping = useCustomerUpdateShipping();
@@ -62,7 +64,7 @@ export default function ShippingForm() {
       updateFields: {
         address1: address,
         city: city,
-        country: country,
+        country: "Canada",
         province: province,
         zip: postal,
       },
@@ -83,8 +85,24 @@ export default function ShippingForm() {
       let token = accessTokenExist();
       customer.mutate({ accessToken: token });
     }
-    if (updateShipping.isSuccess) toast.success("Update Successfully!");
+    if (updateShipping.isSuccess) console.log(updateShipping);
   }, [updateShipping.isLoading]);
+
+  // Creating Address
+  useEffect(() => {
+    if (createShipping.data && createShipping.isSuccess) {
+      if (
+        createShipping.data.customerAddressCreate.customerUserErrors.length > 0
+      ) {
+        toast.error(
+          createShipping.data.customerAddressCreate.customerUserErrors[0]
+            .message
+        );
+      } else {
+        toast.success("Address Created!");
+      }
+    }
+  }, [createShipping.isLoading]);
 
   if (user.addresses.edges.length === 0)
     return (

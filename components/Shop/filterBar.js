@@ -45,18 +45,8 @@ export default function Filter({
     <>
       <div
         id="filter-bar"
-        className="filter-menu hidden md:flex flex-row justify-between bg-white py-6 z-40 -mb-8"
+        className="filter-menu hidden md:flex flex-row justify-end bg-white py-6 z-40 -mb-8"
       >
-        <div id="filter-bar__product-number">
-          <p className="text-lg">
-            Showing
-            <span className="mx-1">
-              {count === 12 ? "1-12" : `${count - length + 1}-${count}`}
-            </span>
-            of
-            <span className="mx-1">{total}</span>
-          </p>
-        </div>
         <div className="flex flex-row space-x-5 items-center">
           {routerQuery.col ? <></> : <FilterCheckbox />}
 

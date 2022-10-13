@@ -90,7 +90,7 @@ export default function Account() {
           <Dashboard />
         </TabPanel>
 
-        <TabPanel value={tab} index={1}>
+        <TabPanel className="relative" value={tab} index={1}>
           <UpdateForm />
         </TabPanel>
 
