@@ -22,7 +22,6 @@ export default function FilterCheckbox() {
       if (routerQuery.cursor) delete routerQuery.cursor;
       router.push(
         {
-          pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -33,7 +32,6 @@ export default function FilterCheckbox() {
       delete routerQuery.instock;
       router.push(
         {
-          pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined

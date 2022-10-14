@@ -38,10 +38,9 @@ const requests = async (req, res) => {
       queryArr.push(priceRange);
     }
 
-    let sales = params.sales;
-    if (sales) {
-      sales = `is_price_reduced:${sales}`;
-      queryArr.push(sales);
+    let instock = params.instock;
+    if (instock) {
+      queryArr.push(`{available: ${instock}}`);
     }
 
     let vendors = params.vendors;
@@ -77,6 +76,7 @@ const requests = async (req, res) => {
                   title
                   handle
                   tags
+                  totalInventory
                   vendor
                   priceRange {
                     maxVariantPrice {
@@ -118,6 +118,7 @@ const requests = async (req, res) => {
     });
     res.json(data.data);
   } catch (e) {
+    console.log(e);
     res.json({ error: e });
   }
 };

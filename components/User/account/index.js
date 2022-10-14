@@ -21,11 +21,13 @@ export default function Index({ open, setOpen }) {
         open={open}
         onClose={() => setOpen(false)}
       >
-        {index === 0 ? (
-          <Login setIndex={setIndex} />
-        ) : (
-          <Signup setIndex={setIndex} />
-        )}
+        <div>
+          {index === 0 ? (
+            <Login setIndex={setIndex} />
+          ) : (
+            <Signup setIndex={setIndex} />
+          )}
+        </div>
       </Modal>{" "}
     </>
   );

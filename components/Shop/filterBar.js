@@ -48,7 +48,7 @@ export default function Filter({
         className="filter-menu hidden md:flex flex-row justify-end bg-white py-6 z-40 -mb-8"
       >
         <div className="flex flex-row space-x-5 items-center">
-          {routerQuery.col ? <></> : <FilterCheckbox />}
+          <FilterCheckbox />
 
           <div id="sort" className="relative">
             <Button

@@ -34,7 +34,7 @@ export default function Collection() {
           sortKey: routerQuery.sort_key,
           reverse: routerQuery.reverse,
           price: routerQuery.price,
-          sales: routerQuery.sales,
+          instock: routerQuery.instock,
           direction: direction,
           cursor: routerQuery.cursor,
           vendors: routerQuery.vendors
