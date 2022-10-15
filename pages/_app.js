@@ -13,6 +13,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
+import deviceContext from "../utils/deviceContext";
 
 import Layout from "../components/layout";
 import AgeGate from "../components/AgeGate";
@@ -26,10 +27,11 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, isMobileView }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState();
+  const [isMobile] = useState(isMobileView);
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
@@ -71,15 +73,17 @@ function MyApp({ Component, pageProps }) {
       </Helmet>
       <AgeGate />
       <QueryClientProvider client={queryClient}>
-        <userContext.Provider value={{ user, setUser }}>
-          <cartContext.Provider value={{ cart, setCart }}>
-            <loadingContext.Provider value={{ loading, setLoading }}>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </loadingContext.Provider>
-          </cartContext.Provider>
-        </userContext.Provider>
+        <deviceContext.Provider value={{ isMobile }}>
+          <userContext.Provider value={{ user, setUser }}>
+            <cartContext.Provider value={{ cart, setCart }}>
+              <loadingContext.Provider value={{ loading, setLoading }}>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </loadingContext.Provider>
+            </cartContext.Provider>
+          </userContext.Provider>
+        </deviceContext.Provider>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </>
@@ -87,3 +91,14 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
+MyApp.getInitialProps = ({ ctx }) => {
+  let isMobileView = (
+    ctx.req ? ctx.req.headers["user-agent"] : navigator.userAgent
+  ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i);
+
+  //Returning the isMobileView as a prop to the component for further use.
+  return {
+    isMobileView: Boolean(isMobileView),
+  };
+};
