@@ -8,7 +8,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <Header />
-      <div className="mt-24 min-h-screen">{children}</div>
+      <div className=" min-h-screen">{children}</div>
       <Footer />
       <ToastContainer
         position="bottom-right"

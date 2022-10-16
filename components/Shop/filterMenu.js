@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import Link from "../common/Link";
-import Loading from "../Loading/dataLoading";
-
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import PriceFilter from "./filter/price";
 import VendorFilter from "./filter/vendor";
 import ProductType from "./filter/product-type";
@@ -15,20 +11,11 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
 
-export default function FilterMenu() {
-  let [collections, setCollections] = useState([]);
+export default function FilterMenu({ vendors, types, collections }) {
+  let [availableCollections] = useState(collections);
   let [price, setPrice] = useState([0, 1000]);
   let router = useRouter();
   let routerQuery = router.query;
-
-  let collectionQuery = useQuery(["get_collections"], async () => {
-    let data = await axios.post("/api/admin/query/all-collections");
-    return data.data;
-  });
-  useEffect(() => {
-    if (collectionQuery.data)
-      setCollections(collectionQuery.data.data.collections.edges);
-  }, [collectionQuery.isLoading]);
 
   return (
     <>
@@ -46,37 +33,29 @@ export default function FilterMenu() {
           </AccordionSummary>
           <AccordionDetails>
             <div className="relative sb-custom h-full flex flex-col space-y-2 overflow-scroll overflow-x-hidden pl-2">
-              {!collectionQuery.isLoading ? (
-                collectionQuery.data ? (
-                  collections.map((e) => (
-                    <div
-                      key={e.node.handle}
-                      className="flex flex-row justify-between items-center"
-                    >
-                      <Link
-                        className={`${
-                          decodeURIComponent(routerQuery.col) === e.node.id
-                            ? "font-semibold"
-                            : ""
-                        }`}
-                        href={{
-                          pathname: "/shop/products-in-collection/",
-                          query: { col: encodeURIComponent(e.node.id) },
-                        }}
-                      >
-                        {e.node.title}
-                      </Link>
-                      <p className="text-xs opacity-70 font-semibold">
-                        {e.node.productsCount}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No collections found</p>
-                )
-              ) : (
-                <Loading />
-              )}
+              {availableCollections.map((e) => (
+                <div
+                  key={e.node.handle}
+                  className="flex flex-row justify-between items-center"
+                >
+                  <Link
+                    className={`${
+                      decodeURIComponent(routerQuery.col) === e.node.id
+                        ? "font-semibold"
+                        : ""
+                    }`}
+                    href={{
+                      pathname: "/shop/products-in-collection/",
+                      query: { col: encodeURIComponent(e.node.id) },
+                    }}
+                  >
+                    {e.node.title}
+                  </Link>
+                  <p className="text-xs opacity-70 font-semibold">
+                    {e.node.productsCount}
+                  </p>
+                </div>
+              ))}
             </div>
           </AccordionDetails>
         </Accordion>
@@ -115,7 +94,7 @@ export default function FilterMenu() {
             <p className="text-lg font-semibold">Vendor</p>
           </AccordionSummary>
           <AccordionDetails>
-            <VendorFilter />
+            <VendorFilter vendors={vendors} />
           </AccordionDetails>
         </Accordion>
 
@@ -129,7 +108,7 @@ export default function FilterMenu() {
             <p className="text-lg font-semibold">Type</p>
           </AccordionSummary>
           <AccordionDetails>
-            <ProductType />
+            <ProductType types={types} />
           </AccordionDetails>
         </Accordion>
       </div>

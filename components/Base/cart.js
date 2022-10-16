@@ -40,8 +40,12 @@ export default function CartComponent() {
           className="flex items-center"
           onClick={() => setDrawer(!drawerOpen)}
         >
-          <Badge id="cart-badge" badgeContent={total}>
-            <BsCart2 className="text-xl z-5" />
+          <Badge
+            id="cart-badge"
+            className="text-black font-semibold"
+            badgeContent={total}
+          >
+            <BsCart2 className="text-xl z-5 text-black" />
           </Badge>
         </button>
       </div>

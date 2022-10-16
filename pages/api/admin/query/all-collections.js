@@ -1,9 +1,12 @@
-import axios from 'axios'
-import {adminHeadersGraphql, adminURLGraphql} from '../../../../utils/api/header'
+import axios from "axios";
+import {
+  adminHeadersGraphql,
+  adminURLGraphql,
+} from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        const query = `
+  try {
+    const query = `
         {
             collections(first: 100) {
               edges {
@@ -18,17 +21,15 @@ const requests = async (req, res) => {
               }
             }
           }
-        `
-        const data = await axios.post(adminURLGraphql, query, {
-            headers: adminHeadersGraphql
-        })
-        console.log('test')
-        res.json(data.data)
-    }
-    catch(e) {
-      console.log(e)
-        res.json({error: e})
-    }
-}
+        `;
+    const data = await axios.post(adminURLGraphql, query, {
+      headers: adminHeadersGraphql,
+    });
+    res.json(data.data);
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;

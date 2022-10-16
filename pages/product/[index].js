@@ -3,9 +3,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 
-import { productByHandle } from "../../utils/api/requests";
 import { cartAdd, extractId, formatter } from "../../utils/utils";
-import { useMutation } from "@tanstack/react-query";
 import cartContext from "../../utils/cartContext";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import ImageGallery from "../../components/ProductDetails/imageGallery";
@@ -15,6 +13,8 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
@@ -29,9 +29,8 @@ const Related = dynamic(
   }
 );
 
-export default function Products() {
+export default function Products({ data }) {
   const router = useRouter();
-  const { index } = router.query;
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
@@ -41,12 +40,6 @@ export default function Products() {
   const [options, setOptions] = useState("[]");
   const [isInStock, setIsInStock] = useState(true);
   const inputRef = useRef(0);
-
-  let productByHandleMutation = useMutation(async (params) => {
-    let data = await productByHandle(params);
-    setProduct(data.data.productByHandle);
-    setIsInStock(product.availableForSale);
-  });
 
   let debounceInput = debounce((criteria) => {
     onChangeInput(criteria);
@@ -178,8 +171,11 @@ export default function Products() {
 
   // Get the product
   useEffect(() => {
-    if (index !== undefined) productByHandleMutation.mutate({ handle: index });
-  }, [index]);
+    if (data) {
+      setProduct(data.data.productByHandle);
+      setIsInStock(data.data.productByHandle.availableForSale);
+    }
+  }, []);
 
   useEffect(() => {
     if (product) {
@@ -237,15 +233,11 @@ export default function Products() {
         <div className="w-11/12 xl:w-3/4">
           <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
             <div className="w-full md:w-1/2 xl:w-2/3 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
-              {productByHandleMutation.isLoading ? (
-                <></>
-              ) : (
-                <ImageGallery
-                  id={product.id}
-                  tag={product.tags}
-                  images={product.images.edges}
-                />
-              )}
+              <ImageGallery
+                id={product.id}
+                tag={product.tags}
+                images={product.images.edges}
+              />
             </div>
             <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-1/3">
               {/* Title */}
@@ -330,22 +322,6 @@ export default function Products() {
 
               {/* Add to cart */}
               <div className="mt-4 flex flex-row justify-between items-center">
-                {/* {isInStock ? (
-                  <Button
-                    className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
-                    onClick={handleAddToCart}
-                    disabled={displayPrice && quantity ? false : true}
-                  >
-                    Add to cart | ${displayPrice}
-                  </Button>
-                ) : (
-                  <Button
-                    className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
-                    disabled={true}
-                  >
-                    Sold Out
-                  </Button>
-                )} */}
                 {handleDisplayButton()}
               </div>
 
@@ -376,13 +352,88 @@ export default function Products() {
               }
             />
           ) : (
-            <>{/* <p>No related products found</p> */}</>
+            <></>
           )}
         </div>
       </div>
     </>
   );
 }
+export async function getServerSideProps({ query }) {
+  const { index } = query;
+
+  const graphqlQuery = `
+  {
+      productByHandle(handle: "${index}") {
+                  id
+                  title
+                  handle
+                  description
+                  productType
+                  vendor
+                  tags
+                  availableForSale
+                  productType
+                  options {
+                      name
+                      values
+                  }
+                  metafields(identifiers: [
+                      { namespace: "custom", key: "related_products" },
+                      { namespace: "custom", key: "selection_type" }
+                    ]) {
+                      key
+                      value
+                  }
+                  featuredImage {
+                      src
+                  }
+                  priceRange {
+                      maxVariantPrice {
+                          amount
+                      }
+                      minVariantPrice {
+                          amount
+                      }
+                  }
+                  images(first: 5) {
+                      edges {
+                          node {
+                              src
+                              altText
+                          }
+                      }
+                  }
+                  variants(first: 10) {
+                      edges {
+                          node {
+                              id
+                              title
+                              price
+                              compareAtPrice
+                              image {
+                                  url
+                              }
+                              quantityAvailable
+                          }
+                      }
+                  }
+              }
+
+  }
+  `;
+
+  const data = await axios.post(storefrontURL, graphqlQuery, {
+    headers: storefrontHeaders,
+  });
+
+  return {
+    props: {
+      data: data.data,
+    },
+  };
+}
+
 {
   /* <div className="h-full">
                   {alertOpen ? (

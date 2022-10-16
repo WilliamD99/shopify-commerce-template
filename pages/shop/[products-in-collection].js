@@ -8,8 +8,13 @@ import Loading from "../../components/Loading/dataLoading";
 import FilterMenu from "../../components/Shop/filterMenu";
 import FilterBar from "../../components/Shop/filterBar";
 import Pagination from "../../components/Shop/pagination";
+import {
+  collectionGet,
+  productTypeGet,
+  vendorsGet,
+} from "../../lib/serverRequest";
 
-export default function Collection() {
+export default function Collection({ vendors, types, collections }) {
   const router = useRouter();
   const routerQuery = router.query;
   const products = useProductByCollection();
@@ -18,13 +23,11 @@ export default function Collection() {
   const [isPrevious, setPrevious] = useState(false);
 
   // State for query
-  const [query, setQuery] = useState();
   const [sortKey, setSortKey] = useState();
   const [isReverse, setReverse] = useState(false);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
-  const [path, setPath] = useState("admin");
 
   useEffect(() => {
     if (router.isReady) {
@@ -86,10 +89,14 @@ export default function Collection() {
           count={dataArr.length}
           setSortKey={setSortKey}
           setReverse={setReverse}
-          setPath={setPath}
         />
         <div className="flex flex-row justify-between mt-5 space-x-8 z-50">
-          <FilterMenu isLoading={products.isLoading} />
+          <FilterMenu
+            vendors={vendors.data.shop.productVendors.edges}
+            types={types.data.productTypes.edges}
+            collections={collections.data.collections.edges}
+            isLoading={products.isLoading}
+          />
 
           <div className="relative w-9/12 xl:w-10/12">
             <div className="grid lg:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
@@ -117,4 +124,17 @@ export default function Collection() {
       </div>
     </>
   );
+}
+export async function getServerSideProps() {
+  let vendors = await vendorsGet(),
+    types = await productTypeGet(),
+    collections = await collectionGet();
+
+  return {
+    props: {
+      vendors: vendors,
+      types: types,
+      collections: collections,
+    },
+  };
 }

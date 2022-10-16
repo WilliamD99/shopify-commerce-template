@@ -5,6 +5,11 @@ import { useRouter } from "next/router";
 import useGetTotal from "../utils/hooks/useGetTotal";
 import { productAllStorefront } from "../utils/api/requests";
 import { useMutation } from "@tanstack/react-query";
+import {
+  vendorsGet,
+  productTypeGet,
+  collectionGet,
+} from "../lib/serverRequest";
 
 // Components
 import Loading from "../components/Loading/dataLoading";
@@ -14,7 +19,8 @@ import FilterBar from "../components/Shop/filterBar";
 import FilterMenu from "../components/Shop/filterMenu";
 import Pagination from "../components/Shop/pagination";
 
-export default function Shop() {
+export default function Shop({ vendors, types, collections }) {
+  console.log("test");
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
   const [isNext, setNext] = useState(false);
@@ -98,7 +104,12 @@ export default function Shop() {
           id="shop"
           className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50"
         >
-          <FilterMenu isLoading={mutateProductNextSf.isLoading} />
+          <FilterMenu
+            vendors={vendors.data.shop.productVendors.edges}
+            types={types.data.productTypes.edges}
+            collections={collections.data.collections.edges}
+            isLoading={mutateProductNextSf.isLoading}
+          />
 
           <div className="relative md:w-full xl:w-10/12">
             <div
@@ -127,6 +138,20 @@ export default function Shop() {
       </div>
     </>
   );
+}
+
+export async function getStaticProps() {
+  let vendors = await vendorsGet(),
+    types = await productTypeGet(),
+    collections = await collectionGet();
+
+  return {
+    props: {
+      vendors: vendors,
+      types: types,
+      collections: collections,
+    },
+  };
 }
 // if (routerQuery.path === "admin" || !routerQuery.path) {
 //   mutateProductAdmin.mutate({

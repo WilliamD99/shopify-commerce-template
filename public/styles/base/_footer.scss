@@ -1,0 +1,12 @@
+#footer {
+    &_bottom {
+        .footer_links {
+            .footer-link {
+                transition: .2s;
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+}

@@ -55,18 +55,24 @@ input[type=number] {
   .MuiFormControl-root {
     width: 100%;
     .MuiFormLabel-root {
-      color: white
+      color: black
     }
     .MuiInputBase-root {
+      border-radius: 10rem;
       #search {
-        color: white
+        color: black;
+        padding-left:2rem
       }
       &::before {
-        border-color: white
+        border-color: black
       }
       &::after {
-        border-color: papayawhip
+        border-color: black
       }
     }
   }
 }
+.nav-menu {
+  width: 10rem;
+}
+

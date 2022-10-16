@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
-import Cart from "./cart";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
-import { accessTokenExist, gsap } from "../../utils/utils";
 import userContext from "../../utils/userContext";
+import deviceContext from "../../utils/deviceContext";
+import { accessTokenExist, gsap } from "../../utils/utils";
 
+import Cart from "./cart";
 import Account from "../User/account";
 import Link from "../common/Link";
 import Slide from "@mui/material/Slide";
@@ -14,10 +15,13 @@ import Search from "./search";
 import DrawerMobile from "./drawerMobile";
 import { AiOutlineHeart } from "react-icons/ai";
 import Badge from "@mui/material/Badge";
+import Navigation from "./navigation";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
 
-export default function Header(props) {
+export default function Header() {
   let customer = useCustomerGet();
   let { user, setUser } = useContext(userContext);
+  let { isMobile } = useContext(deviceContext);
   let [modalOpen, setModalOpen] = useState(false);
   let [wlCount, setWlCount] = useState(0);
   let wlRef = useRef(gsap.timeline({}));
@@ -27,7 +31,7 @@ export default function Header(props) {
       return (
         <>
           <p
-            className="text-white cursor-pointer"
+            className="text-black font-medium text-lg cursor-pointer"
             onClick={() => setModalOpen(true)}
           >
             Login
@@ -79,44 +83,40 @@ export default function Header(props) {
 
   return (
     <>
-      <HideOnScroll {...props}>
-        <AppBar>
-          <Toolbar className="relative  w-full flex flex-col md:flex-row justify-center items-center md:justify-between bg-black pt-2">
-            <Link className="text-xl" href="/">
-              Ecommerce Theme
-            </Link>
-            <DrawerMobile />
-            <div className="hidden md:flex md:flex-row space-x-5 items-center">
-              <Search />
-              {headerConditionalDisplay()}
+      <div className="shadow-xl border-b-2 w-screen">
+        <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-between px-16 bg-slate-100">
+          <div className="flex flex-row space-x-3 items-center">
+            <FaInstagram className="text-orange-500 text-xl" />
 
-              {user ? (
-                <Link href="/my-account">
-                  <Badge id="wlBadge" badgeContent={wlCount}>
-                    <AiOutlineHeart className="text-xl" />
-                  </Badge>
-                </Link>
-              ) : (
-                <></>
-              )}
+            <FaFacebook className="text-blue-500 text-xl" />
+          </div>
+          <DrawerMobile />
+          <div className="hidden md:flex md:flex-row space-x-10 items-center">
+            {/* <Search /> */}
+            {headerConditionalDisplay()}
 
-              <Cart />
-            </div>
-          </Toolbar>
-        </AppBar>
-      </HideOnScroll>
+            {user ? (
+              <Link href="/my-account">
+                <Badge id="wlBadge" badgeContent={wlCount}>
+                  <AiOutlineHeart className="text-xl" />
+                </Badge>
+              </Link>
+            ) : (
+              <></>
+            )}
+
+            <Cart />
+          </div>
+        </Toolbar>
+        <div className="bg-white flex flex-row justify-between items-center py-8 px-10">
+          <Link className="text-xl text-black " href="/">
+            Ecommerce Theme
+          </Link>
+          <Navigation />
+          <Search />
+        </div>
+      </div>
       <Account open={modalOpen} setOpen={setModalOpen} />
     </>
   );
 }
-
-const HideOnScroll = (props) => {
-  const { children, window } = props;
-  const trigger = useScrollTrigger();
-
-  return (
-    <Slide className="" appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-};

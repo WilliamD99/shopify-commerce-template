@@ -27,7 +27,7 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps, isMobileView }) {
+function MyApp({ Component, pageProps, isMobileView, vendors }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState();
@@ -92,11 +92,10 @@ function MyApp({ Component, pageProps, isMobileView }) {
 
 export default MyApp;
 
-MyApp.getInitialProps = ({ ctx }) => {
+MyApp.getInitialProps = async ({ ctx }) => {
   let isMobileView = (
     ctx.req ? ctx.req.headers["user-agent"] : navigator.userAgent
   ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i);
-
   //Returning the isMobileView as a prop to the component for further use.
   return {
     isMobileView: Boolean(isMobileView),

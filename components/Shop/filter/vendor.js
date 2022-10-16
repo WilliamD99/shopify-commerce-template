@@ -6,20 +6,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 import { useRouter } from "next/router";
-import useVendorGet from "../../../utils/hooks/useVendorGet";
 import { debounce } from "lodash";
 
-export default function VendorFilter() {
+export default function VendorFilter({ vendors }) {
   let router = useRouter();
   let routerQuery = router.query;
-  let [vendorList, setVendorList] = useState([]);
+  let [vendorList] = useState(vendors);
   let [selectedVendors, setSelectedVendors] = useState([]);
-
-  let vendors = useVendorGet();
 
   const handleCheckboxDebounce = debounce((e) => {
     handleCheckbox(e);
-  }, 100);
+  }, 50);
 
   const handleCheckbox = (e) => {
     let newList;
@@ -62,14 +59,6 @@ export default function VendorFilter() {
       }
     }
   }, [routerQuery]);
-
-  useEffect(() => {
-    vendors.mutate();
-  }, []);
-
-  useEffect(() => {
-    if (vendors.data) setVendorList(vendors.data.shop.productVendors.edges);
-  }, [vendors.data]);
 
   return (
     <>

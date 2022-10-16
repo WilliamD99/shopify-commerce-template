@@ -110,9 +110,9 @@ export default function Search() {
         >
           <TextField
             id="search"
-            label="Search"
-            variant="standard"
-            className="text-white border-white"
+            label={<span className="ml-2">Search</span>}
+            variant="outlined"
+            className="text-black border-black rounded-3xl"
             onChange={handleChange}
           />
         </form>
@@ -128,7 +128,7 @@ export default function Search() {
                   key={i}
                   className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
                 >
-                  <div className="relative px-3 py-3 flex flex-row items-center justify-between">
+                  <div className="relative bg-white px-3 py-3 flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center space-x-2">
                       <div className="relative h-8 w-8">
                         <Image

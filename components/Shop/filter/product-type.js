@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import Loading from "../../Loading/dataLoading";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-import useProductTypeGet from "../../../utils/hooks/useProductTypeGet";
 import { useRouter } from "next/router";
 
-export default function ProductType() {
-  let productType = useProductTypeGet();
-  let [productTypeList, setProductTypeList] = useState([]);
+export default function ProductType({ types }) {
+  let [productTypeList] = useState(types);
   let [selectedTypes, setSelectedType] = useState([]);
   let router = useRouter();
   let routerQuery = router.query;
@@ -55,30 +52,17 @@ export default function ProductType() {
     }
   }, [routerQuery]);
 
-  useEffect(() => {
-    productType.mutate();
-  }, []);
-
-  useEffect(() => {
-    if (productType.data)
-      setProductTypeList(productType.data.productTypes.edges);
-  }, [productType.data]);
-
   return (
     <>
       <FormGroup>
-        {productType.isLoading || productType.isIdle ? (
-          <Loading />
-        ) : (
-          productTypeList.map((e, i) => (
-            <FormControlLabel
-              control={<Checkbox onClick={() => handleCheckbox(e.node)} />}
-              label={<p className="text-lg">{e.node}</p>}
-              key={i}
-              checked={selectedTypes.includes(e.node)}
-            />
-          ))
-        )}
+        {productTypeList.map((e, i) => (
+          <FormControlLabel
+            control={<Checkbox onClick={() => handleCheckbox(e.node)} />}
+            label={<p className="text-lg">{e.node}</p>}
+            key={i}
+            checked={selectedTypes.includes(e.node)}
+          />
+        ))}
       </FormGroup>{" "}
     </>
   );
