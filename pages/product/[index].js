@@ -121,7 +121,7 @@ export default function Products({ data }) {
       if (!variantId) {
         return (
           <Button
-            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             disabled={true}
           >
             Please select a variant
@@ -135,7 +135,7 @@ export default function Products({ data }) {
       ) {
         return (
           <Button
-            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             disabled={true}
           >
             Sold Out
@@ -149,7 +149,7 @@ export default function Products({ data }) {
       ) {
         return (
           <Button
-            className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             onClick={handleAddToCart}
             disabled={displayPrice && quantity ? false : true}
           >
@@ -160,7 +160,7 @@ export default function Products({ data }) {
     } else {
       return (
         <Button
-          className="bg-black add-to-cart text-base mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+          className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
           disabled={true}
         >
           Sold Out
@@ -242,26 +242,26 @@ export default function Products({ data }) {
             <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-1/3">
               {/* Title */}
               <div className="flex flex-row items-center space-x-5">
-                <p className="md:text-2xl xl:text-3xl font-semibold">
+                <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
                   Products {product.title}
                 </p>
                 <p
-                  className={`text-xl font-semibold ${
+                  className={`text-lg xl:text-xl font-semibold ${
                     originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
                   }`}
                 >
                   {handlePriceDisplay()}
-                  {originalPrice > parseInt(displayPrice) ? (
+                  {/* {originalPrice > parseInt(displayPrice) ? (
                     <span className="text-lg ml-2 text-black font-semibold line-through">
                       {formatter.format(originalPrice)}
                     </span>
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </p>
               </div>
               {/* Description */}
-              <p className="text-xl">{product.description}</p>
+              <p className="text-base xl:text-xl">{product.description}</p>
 
               {/* Options */}
               <Options

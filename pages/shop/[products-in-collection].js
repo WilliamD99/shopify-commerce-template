@@ -13,6 +13,7 @@ import {
   productTypeGet,
   vendorsGet,
 } from "../../lib/serverRequest";
+import { NextSeo } from "next-seo";
 
 export default function Collection({ vendors, types, collections }) {
   const router = useRouter();
@@ -68,6 +69,7 @@ export default function Collection({ vendors, types, collections }) {
 
   return (
     <>
+      <NextSeo title="Shop" description="" />
       <Breadcrumbs
         path={[
           { name: "Home", path: "/" },

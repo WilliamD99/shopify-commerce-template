@@ -15,7 +15,7 @@ export default function Dropdown({ options, handleFunc }) {
   return (
     <>
       {options.map((option, index) => (
-        <FormControl className="w-96" key={`dropdown-${index}`}>
+        <FormControl className="mt-2 xl:w-96" key={`dropdown-${index}`}>
           <TextField
             select
             value={select[index] ? select[index] : ""}

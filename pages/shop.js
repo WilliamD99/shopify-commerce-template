@@ -18,6 +18,7 @@ import SingeProduct from "../components/Shop/single-product";
 import FilterBar from "../components/Shop/filterBar";
 import FilterMenu from "../components/Shop/filterMenu";
 import Pagination from "../components/Shop/pagination";
+import { NextSeo } from "next-seo";
 
 export default function Shop({ vendors, types, collections }) {
   console.log("test");
@@ -83,6 +84,7 @@ export default function Shop({ vendors, types, collections }) {
 
   return (
     <>
+      <NextSeo title="Shop" description="" />
       <Breadcrumbs
         path={[
           { name: "Home", path: "/" },
@@ -111,7 +113,7 @@ export default function Shop({ vendors, types, collections }) {
             isLoading={mutateProductNextSf.isLoading}
           />
 
-          <div className="relative md:w-full xl:w-10/12">
+          <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
               id="shop-grid"
               className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"

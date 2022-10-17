@@ -28,7 +28,7 @@ export default function Product({ data }) {
 
   return (
     <>
-      <div className="relative pb-5 flex flex-col mr-3 bg-slate-100">
+      <div className="relative pb-5 flex flex-col items-center md:mr-3 bg-slate-100">
         {/* If product is loading */}
         {isLoading ? (
           <>
@@ -50,12 +50,12 @@ export default function Product({ data }) {
         <div className="px-5 flex flex-col mt-2">
           <Link
             href={`/product/${productData.handle}`}
-            className="text-lg font-medium"
+            className="text-lg font-medium text-center"
           >
             {productData.title}
           </Link>
 
-          <p className="text-base">
+          <p className="text-base text-center">
             {parseFloat(productData.priceRangeV2.minVariantPrice.amount) ===
             parseFloat(productData.priceRangeV2.maxVariantPrice.amount)
               ? `${formatter.format(
@@ -68,7 +68,7 @@ export default function Product({ data }) {
                 )}`}
           </p>
 
-          <p className="text-sm text-slate-400 italic">
+          <p className="text-sm text-slate-400 italic text-center">
             By {productData.vendor}
           </p>
 

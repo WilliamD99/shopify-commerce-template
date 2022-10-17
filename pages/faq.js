@@ -5,10 +5,12 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 
 import { MdExpandMore } from "react-icons/md";
+import { NextSeo } from "next-seo";
 
 export default function FAQ() {
   return (
     <>
+      <NextSeo title="FAQ" description="" />
       <div className="mt-20 flex flex-col items-center px-20 space-y-10">
         <p className="text-center text-3xl font-bold">
           Frequently Asked Questions

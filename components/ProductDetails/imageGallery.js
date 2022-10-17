@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import dynamic from "next/dynamic";
 import userContext from "../../utils/userContext";
+import deviceContext from "../../utils/deviceContext";
 
 import Image from "../common/Image";
 import Slider from "react-slick";
@@ -10,20 +11,21 @@ import Link from "../common/Link";
 
 const WishlistButton = dynamic(() => import("./wishlistButton"));
 
-let settings = {
-  infinite: true,
-  arrows: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  swipeToSlide: true,
-};
-
 export default function Gallery({ images, tag, id }) {
   const { user } = useContext(userContext);
+  const { isMobile } = useContext(deviceContext);
   const sliderRef = useRef(null);
 
   const handleImageClick = (e, i) => {
     sliderRef.current.slickGoTo(i);
+  };
+
+  let settings = {
+    infinite: true,
+    arrows: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    swipeToSlide: true,
   };
 
   return (
@@ -33,15 +35,28 @@ export default function Gallery({ images, tag, id }) {
         className="flex flex-col-reverse lg:flex-row lg:space-x-2"
       >
         <div className="flex flex-row image-collections space-x-1 md:space-x-0 lg:flex-col w-full lg:w-32 lg:space-y-2">
-          {images.map((e, i) => (
+          {images.length > 1 ? (
+            images.map((e, i) => (
+              <div
+                onClick={(e) => handleImageClick(e, i)}
+                className="hover:opacity-70 ease-in-out relative cursor-pointer w-full h-20 md:h-24"
+                key={i}
+              >
+                <Image alt={e.node.altText} layout="fill" src={e.node.src} />
+              </div>
+            ))
+          ) : (
             <div
-              onClick={(e) => handleImageClick(e, i)}
-              className="hover:opacity-70 ease-in-out relative cursor-pointer w-full h-20 md:h-24"
-              key={i}
+              onClick={() => handleImageClick(0, 0)}
+              className="hover:opacity-70 ease-in-out relative cursor-pointer w-20 h-20 md:h-24"
             >
-              <Image alt={e.node.altText} layout="fill" src={e.node.src} />
+              <Image
+                alt={images[0].node.altText}
+                layout="fill"
+                src={images[0].node.src}
+              />
             </div>
-          ))}
+          )}
         </div>
         <div className="relative image-container w-full lg:w-5/6">
           <Slider className="w-full relative" ref={sliderRef} {...settings}>
@@ -52,15 +67,6 @@ export default function Gallery({ images, tag, id }) {
                 key={`image-${i}`}
               >
                 <Image layout="fill" src={e.node.src} alt={e.node.altText} />
-                {/* <GlassMagnifier
-                // mouseActivation={MOUSE_ACTIVATION}
-                // touchActivation={TOUCH_ACTIVATION}
-                // dragToMove={true}
-                imageSrc={e.node.src}
-                imageAlt="Example"
-                largeImageSrc={e.node.src} // Optional
-                // allowOverflow={true}
-              /> */}
               </div>
             ))}
           </Slider>

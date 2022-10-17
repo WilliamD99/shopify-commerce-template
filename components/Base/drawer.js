@@ -53,20 +53,24 @@ export default function CartDrawer({ open, setDrawer }) {
             <p className="font-medium">Subtotal:</p>
             <p className="font-medium">${drawerTotal}</p>
           </div>
-          <Button
-            disabled={cart.length > 0 ? false : true}
-            className="rounded-xl"
-            variant="outlined"
-          >
-            <Link href="/cart">View Cart</Link>
-          </Button>
-          <Button
-            disabled={cart.length > 0 ? false : true}
-            className="rounded-xl"
-            variant="outlined"
-          >
-            <Link href="/checkout/review">Checkout</Link>
-          </Button>
+          <Link className="w-full" href="/cart">
+            <Button
+              disabled={cart.length > 0 ? false : true}
+              className="rounded-xl w-full bg-black text-white border-white hover:bg-white hover:text-black hover:border-black"
+              variant="outlined"
+            >
+              View Cart
+            </Button>
+          </Link>
+          <Link className="w-full" href="/checkout/review">
+            <Button
+              disabled={cart.length > 0 ? false : true}
+              className="rounded-xl w-full bg-black text-white border-white hover:bg-white hover:text-black hover:border-black"
+              variant="outlined"
+            >
+              Checkout
+            </Button>
+          </Link>
         </div>
       </Box>
     </Drawer>

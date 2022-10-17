@@ -27,6 +27,7 @@ const Loyalty = dynamic(() => import("../components/User/loyalty"), {
 import useCustomerDeleteAccessToken from "../utils/hooks/useCustomerDeleteAccessToken";
 import useCustomerGet from "../utils/hooks/useCustomerGet";
 import { accessTokenExist, accessTokenDelete } from "../utils/utils";
+import { NextSeo } from "next-seo";
 
 export default function Account() {
   const { user, setUser } = useContext(userContext);
@@ -75,6 +76,7 @@ export default function Account() {
 
   return (
     <>
+      <NextSeo title="My Account" description="" />
       <div className="flex flex-col ml-20">
         <Tabs className="mb-12" value={tab} onChange={handleChangeTab}>
           <Tab label="Dashboard" />

@@ -1,8 +1,10 @@
+import { NextSeo } from "next-seo";
 import React from "react";
 
 export default function Terms() {
   return (
     <>
+      <NextSeo title="Terms of Service" description="" />
       <div className="mt-20 flex flex-col px-20 space-y-10">
         <p className="text-center text-3xl font-bold">Terms of Service</p>
         <div className="px-32 flex flex-col space-y-5">

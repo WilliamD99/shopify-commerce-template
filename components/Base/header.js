@@ -84,15 +84,18 @@ export default function Header() {
   return (
     <>
       <div className="shadow-xl border-b-2 w-screen">
-        <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-between px-16 bg-slate-100">
-          <div className="flex flex-row space-x-3 items-center">
-            <FaInstagram className="text-orange-500 text-xl" />
+        <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-between xl:px-16 bg-slate-100">
+          {!isMobile ? (
+            <div className="flex flex-row space-x-3 items-center">
+              <FaInstagram className="text-orange-500 text-xl" />
 
-            <FaFacebook className="text-blue-500 text-xl" />
-          </div>
-          <DrawerMobile />
+              <FaFacebook className="text-blue-500 text-xl" />
+            </div>
+          ) : (
+            <></>
+          )}
+          {isMobile ? <DrawerMobile /> : <></>}
           <div className="hidden md:flex md:flex-row space-x-10 items-center">
-            {/* <Search /> */}
             {headerConditionalDisplay()}
 
             {user ? (
@@ -104,17 +107,20 @@ export default function Header() {
             ) : (
               <></>
             )}
-
             <Cart />
           </div>
         </Toolbar>
-        <div className="bg-white flex flex-row justify-between items-center py-8 px-10">
-          <Link className="text-xl text-black " href="/">
-            Ecommerce Theme
-          </Link>
-          <Navigation />
-          <Search />
-        </div>
+        {!isMobile ? (
+          <div className="bg-white flex flex-row justify-between items-center py-8 px-10">
+            <Link className="text-xl text-black " href="/">
+              Ecommerce Theme
+            </Link>
+            <Navigation />
+            <Search />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <Account open={modalOpen} setOpen={setModalOpen} />
     </>

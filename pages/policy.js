@@ -1,9 +1,11 @@
+import { NextSeo } from "next-seo";
 import React from "react";
 import Link from "../components/common/Link";
 
 export default function Policy() {
   return (
     <>
+      <NextSeo title="Privacy Policy" description="" />
       <div className="mt-20 flex flex-col px-20 space-y-10">
         <p className="text-center text-3xl font-bold">Privacy Policy</p>
         <div className="text-center text-xl">

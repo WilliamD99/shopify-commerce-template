@@ -39,7 +39,6 @@ export default function Search() {
 
   useEffect(() => {
     if (productSearch.data) {
-      console.log(productSearch.data);
       setDataArr(productSearch.data.products.edges);
       setNext(productSearch.data.products.pageInfo.hasNextPage);
       setPrevious(productSearch.data.products.pageInfo.hasPreviousPage);
