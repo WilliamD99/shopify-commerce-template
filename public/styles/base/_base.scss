@@ -76,3 +76,11 @@ input[type=number] {
   width: 10rem;
 }
 
+.is-sticky {
+  position: fixed;
+  left: 0;
+  z-index: 999;
+  background-color: #ffffff !important;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}

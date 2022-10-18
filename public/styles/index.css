@@ -5,7 +5,6 @@ body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   overflow-x: hidden;
-  /* height: 100%; */
   width: 100%;
   position: relative;
   min-height: 100vh;
@@ -16,22 +15,6 @@ body {
 *::after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
-}
-
-.header {
-
-  animation: transform 10s ease-in-out;
-}
-
-.is-sticky {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  z-index: 999;
-  box-shadow: 0 2px 24px 0 rgb(0 0 0 / 15%);
-  background-color: #ffffff !important;
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -125,6 +108,15 @@ input[type=number] {
 
 .nav-menu {
   width: 10rem;
+}
+
+.is-sticky {
+  position: fixed;
+  left: 0;
+  z-index: 999;
+  background-color: #ffffff !important;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #footer_bottom .footer_links .footer-link {

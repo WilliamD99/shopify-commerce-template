@@ -86,9 +86,16 @@ export default function Header() {
   const test = () => {
     let header = document.querySelector("#header");
     const scrollTop = window.scrollY;
-    if (scrollTop > header.getBoundingClientRect().height + 200) {
+    if (
+      scrollTop > header.getBoundingClientRect().height + 200 &&
+      !header.classList.contains("is-sticky")
+    ) {
       setSticky("is-sticky w-screen");
-    } else {
+      gsap.fromTo("#header", { top: -10, alpha: 0 }, { top: 0, alpha: 1 });
+    } else if (
+      window.pageYOffset === 0 &&
+      header.classList.contains("is-sticky")
+    ) {
       setSticky("");
     }
   };
