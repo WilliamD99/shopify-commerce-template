@@ -63,7 +63,6 @@ function MyApp({ Component, pageProps, isMobileView, vendors }) {
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Template</title>
-        <link rel="manifest" href="images/icons/site.webmanifest" />
         <link
           rel="mask-icon"
           href="images/icons/safari-pinned-tab.svg"

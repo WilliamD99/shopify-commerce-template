@@ -7,10 +7,7 @@ import { accessTokenExist, gsap } from "../../utils/utils";
 import Cart from "./cart";
 import Account from "../User/account";
 import Link from "../common/Link";
-import Slide from "@mui/material/Slide";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "./search";
 import DrawerMobile from "./drawerMobile";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -18,7 +15,7 @@ import Badge from "@mui/material/Badge";
 import Navigation from "./navigation";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
-export default function Header() {
+export default function Header({ sticky }) {
   let customer = useCustomerGet();
   let { user, setUser } = useContext(userContext);
   let { isMobile } = useContext(deviceContext);
@@ -81,35 +78,9 @@ export default function Header() {
     return () => wlRef.current.kill();
   }, [user]);
 
-  const [isStick, setSticky] = useState("");
-
-  const test = () => {
-    let header = document.querySelector("#header");
-    const scrollTop = window.scrollY;
-    if (
-      scrollTop > header.getBoundingClientRect().height + 200 &&
-      !header.classList.contains("is-sticky")
-    ) {
-      setSticky("is-sticky w-screen");
-      gsap.fromTo("#header", { top: -10, alpha: 0 }, { top: 0, alpha: 1 });
-    } else if (
-      window.pageYOffset === 0 &&
-      header.classList.contains("is-sticky")
-    ) {
-      setSticky("");
-    }
-  };
-  // Sticky Menu Area
-  useEffect(() => {
-    window.addEventListener("scroll", test);
-    return () => {
-      window.removeEventListener("scroll", test);
-    };
-  }, []);
-
   return (
     <>
-      <div id="header" className={`shadow-xl border-b-2 w-screen ${isStick}`}>
+      <div id="header" className={`border-b-2 w-screen ${sticky}`}>
         <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-between xl:px-16 bg-slate-100">
           {!isMobile ? (
             <div className="flex flex-row space-x-3 items-center">
