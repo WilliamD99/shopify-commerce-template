@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "./Base/footer";
 import Header from "./Base/header";
 

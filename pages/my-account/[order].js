@@ -11,7 +11,7 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { AiOutlineCheck } from "react-icons/ai";
 
-export default function Order() {
+export default function Order({ index }) {
   const router = useRouter();
   const routerQuery = router.query;
   const order = useOrderGet();
@@ -210,4 +210,14 @@ export default function Order() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ query }) {
+  const { index } = query;
+
+  return {
+    props: {
+      index,
+    },
+  };
 }

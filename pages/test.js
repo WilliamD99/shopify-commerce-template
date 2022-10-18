@@ -43,7 +43,11 @@ function HideOnScroll(props) {
 
 export default function Test(props) {
   console.log(props);
-  return <></>;
+  return (
+    <>
+      <div style={{ height: "200vh" }}></div>
+    </>
+  );
 }
 // "gid://shopify/Cart/e5522a205ac18c36bc776b9d2c447dd6"
 // "gid://shopify/Cart/bf8969c8df0d88b1dd73f5b87cfee7bb"

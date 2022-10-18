@@ -2,8 +2,10 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import cartContext from "../../utils/cartContext";
 import { BsCart2 } from "react-icons/bs";
 import { gsap } from "gsap";
-import CartDrawer from "./drawer";
+// import CartDrawer from "./drawer";
 import Badge from "@mui/material/Badge";
+import dynamic from "next/dynamic";
+const CartDrawer = dynamic(() => import("./drawer"));
 
 export default function CartComponent() {
   const [total, setTotal] = useState(0);

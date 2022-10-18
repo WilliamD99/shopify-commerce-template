@@ -81,9 +81,28 @@ export default function Header() {
     return () => wlRef.current.kill();
   }, [user]);
 
+  const [isStick, setSticky] = useState("");
+
+  const test = () => {
+    let header = document.querySelector("#header");
+    const scrollTop = window.scrollY;
+    if (scrollTop > header.getBoundingClientRect().height + 200) {
+      setSticky("is-sticky w-screen");
+    } else {
+      setSticky("");
+    }
+  };
+  // Sticky Menu Area
+  useEffect(() => {
+    window.addEventListener("scroll", test);
+    return () => {
+      window.removeEventListener("scroll", test);
+    };
+  }, []);
+
   return (
     <>
-      <div className="shadow-xl border-b-2 w-screen">
+      <div id="header" className={`shadow-xl border-b-2 w-screen ${isStick}`}>
         <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-between xl:px-16 bg-slate-100">
           {!isMobile ? (
             <div className="flex flex-row space-x-3 items-center">

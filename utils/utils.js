@@ -44,6 +44,7 @@ const encryptText = (e) => {
 };
 
 const decryptText = (e) => {
+  console.trace();
   try {
     let bytes = CryptoJS.AES.decrypt(e, secret_key);
     let originalText = bytes.toString(CryptoJS.enc.Utf8);
@@ -158,7 +159,9 @@ let cartRemoveItem = async (params, setCart) => {
 let accessTokenExist = () => {
   let token = localStorage.getItem("tn");
   if (!token) token = false;
-  token = decryptText(JSON.parse(token).value);
+  else {
+    token = decryptText(JSON.parse(token).value);
+  }
 
   return token;
 };
