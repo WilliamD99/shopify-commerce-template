@@ -1,0 +1,5 @@
+nextjs
+shopify
+yotpo
+mailchimp*
+upstash

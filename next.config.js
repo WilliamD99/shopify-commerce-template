@@ -2,8 +2,11 @@
 const nextConfig = {
   swcMinify: true,
   images: {
-    domains: ["cdn.shopify.com"]
-  }
-}
+    domains: ["cdn.shopify.com"],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

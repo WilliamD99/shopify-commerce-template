@@ -1,76 +1,82 @@
 import axios from "axios";
 import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
+import redisClient from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
     const params = req.body.data;
     let handle = params.handle;
+    let redisProduct = redisClient.get(`product-${handle}`);
 
-    const query = `
-        {
-            productByHandle(handle: "${handle}") {
-                        id
-                        title
-                        handle
-                        description
-                        productType
-                        vendor
-                        tags
-                        availableForSale
-                        productType
-                        options {
-                            name
-                            values
-                        }
-                        metafields(identifiers: [
-                            { namespace: "custom", key: "related_products" },
-                            { namespace: "custom", key: "selection_type" }
-                          ]) {
-                            key
-                            value
-                        }
-                        featuredImage {
-                            src
-                        }
-                        priceRange {
-                            maxVariantPrice {
-                                amount
+    if (redisProduct) {
+      res.json(JSON.parse(redisProduct));
+    } else {
+      const query = `
+            {
+                productByHandle(handle: "${handle}") {
+                            id
+                            title
+                            handle
+                            description
+                            productType
+                            vendor
+                            tags
+                            availableForSale
+                            productType
+                            options {
+                                name
+                                values
                             }
-                            minVariantPrice {
-                                amount
+                            metafields(identifiers: [
+                                { namespace: "custom", key: "related_products" },
+                                { namespace: "custom", key: "selection_type" }
+                              ]) {
+                                key
+                                value
                             }
-                        }
-                        images(first: 5) {
-                            edges {
-                                node {
-                                    src
-                                    altText
+                            featuredImage {
+                                src
+                            }
+                            priceRange {
+                                maxVariantPrice {
+                                    amount
+                                }
+                                minVariantPrice {
+                                    amount
                                 }
                             }
-                        }
-                        variants(first: 10) {
-                            edges {
-                                node {
-                                    id
-                                    title
-                                    price
-                                    compareAtPrice
-                                    image {
-                                        url
+                            images(first: 5) {
+                                edges {
+                                    node {
+                                        src
+                                        altText
                                     }
-                                    quantityAvailable
+                                }
+                            }
+                            variants(first: 10) {
+                                edges {
+                                    node {
+                                        id
+                                        title
+                                        price
+                                        compareAtPrice
+                                        image {
+                                            url
+                                        }
+                                        quantityAvailable
+                                    }
                                 }
                             }
                         }
-                    }
-
-        }
-        `;
-    console.log(query);
-    const data = await axios.post(storefrontURL, query, {
-      headers: storefrontHeaders,
-    });
-    res.json(data.data);
+    
+            }
+            `;
+      const data = await axios.post(storefrontURL, query, {
+        headers: storefrontHeaders,
+      });
+      redisClient.set(`product-${handle}`, data.data, "EX", 86400);
+      res.json(data.data);
+    }
   } catch (e) {
     res.json({ error: e });
   }

@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
 import axios from "axios";
 import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
+import redisClient from "../../lib/redis";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
@@ -361,116 +362,85 @@ export default function Products({ data }) {
 }
 export async function getServerSideProps({ query }) {
   const { index } = query;
+  let cacheProduct = await redisClient.get(`product-${index}`);
+  if (cacheProduct) {
+    return {
+      props: {
+        data: JSON.parse(cacheProduct),
+      },
+    };
+  } else {
+    const graphqlQuery = `
+    {
+        productByHandle(handle: "${index}") {
+                    id
+                    title
+                    handle
+                    description
+                    productType
+                    vendor
+                    tags
+                    availableForSale
+                    productType
+                    options {
+                        name
+                        values
+                    }
+                    metafields(identifiers: [
+                        { namespace: "custom", key: "related_products" },
+                        { namespace: "custom", key: "selection_type" }
+                      ]) {
+                        key
+                        value
+                    }
+                    featuredImage {
+                        src
+                    }
+                    priceRange {
+                        maxVariantPrice {
+                            amount
+                        }
+                        minVariantPrice {
+                            amount
+                        }
+                    }
+                    images(first: 5) {
+                        edges {
+                            node {
+                                src
+                                altText
+                            }
+                        }
+                    }
+                    variants(first: 10) {
+                        edges {
+                            node {
+                                id
+                                title
+                                price
+                                compareAtPrice
+                                image {
+                                    url
+                                }
+                                quantityAvailable
+                            }
+                        }
+                    }
+                }
+  
+    }
+    `;
 
-  const graphqlQuery = `
-  {
-      productByHandle(handle: "${index}") {
-                  id
-                  title
-                  handle
-                  description
-                  productType
-                  vendor
-                  tags
-                  availableForSale
-                  productType
-                  options {
-                      name
-                      values
-                  }
-                  metafields(identifiers: [
-                      { namespace: "custom", key: "related_products" },
-                      { namespace: "custom", key: "selection_type" }
-                    ]) {
-                      key
-                      value
-                  }
-                  featuredImage {
-                      src
-                  }
-                  priceRange {
-                      maxVariantPrice {
-                          amount
-                      }
-                      minVariantPrice {
-                          amount
-                      }
-                  }
-                  images(first: 5) {
-                      edges {
-                          node {
-                              src
-                              altText
-                          }
-                      }
-                  }
-                  variants(first: 10) {
-                      edges {
-                          node {
-                              id
-                              title
-                              price
-                              compareAtPrice
-                              image {
-                                  url
-                              }
-                              quantityAvailable
-                          }
-                      }
-                  }
-              }
+    const data = await axios.post(storefrontURL, graphqlQuery, {
+      headers: storefrontHeaders,
+    });
 
+    redisClient.set(`product-${index}`, JSON.stringify(data.data), "EX", 86400);
+
+    return {
+      props: {
+        data: data.data,
+      },
+    };
   }
-  `;
-
-  const data = await axios.post(storefrontURL, graphqlQuery, {
-    headers: storefrontHeaders,
-  });
-
-  return {
-    props: {
-      data: data.data,
-    },
-  };
-}
-
-{
-  /* <div className="h-full">
-                  {alertOpen ? (
-                    <Alert severity="warning">
-                      Please select variant and/or quantity
-                    </Alert>
-                  ) : (
-                    <></>
-                  )}
-                </div> */
-}
-{
-  /* <div className="flex flex-col w-3/4 md:flex-row md:space-x-10">
-                <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
-                  <p className="font-semibold text-base">By:</p>
-                  <Link
-                    href="#"
-                    className="col-span-2 text-lg md:italic hover:underline"
-                  >
-                    {product.vendor}
-                  </Link>
-                </div>
-                {product.productType ? (
-                  <>
-                    <span className="hidden md:block">|</span>
-                    <div className="grid grid-cols-4 md:flex md:flex-row items-center md:space-x-3">
-                      <p className="font-semibold text-base">Type:</p>
-                      <Link
-                        href="#"
-                        className="col-span-2 text-lg md:italic hover:underline"
-                      >
-                        {product.productType}
-                      </Link>
-                    </div>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div> */
 }

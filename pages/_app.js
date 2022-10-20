@@ -70,7 +70,7 @@ function MyApp({ Component, pageProps, isMobileView, vendors }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <AgeGate />
+      {/* <AgeGate /> */}
       <QueryClientProvider client={queryClient}>
         <deviceContext.Provider value={{ isMobile }}>
           <userContext.Provider value={{ user, setUser }}>

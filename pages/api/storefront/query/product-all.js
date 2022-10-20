@@ -1,10 +1,10 @@
 import axios from "axios";
 import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
+import client from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
     const params = req.body.data;
-
     // Limit
     const limit = params.limit ? params.limit : 12;
 
@@ -120,12 +120,13 @@ const requests = async (req, res) => {
             }
         }
         `;
-    console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
+    res.setHeader("Cache-Control", "s-maxage=86400");
     res.json(data.data);
   } catch (e) {
+    console.log(e);
     res.json({ error: e });
   }
 };

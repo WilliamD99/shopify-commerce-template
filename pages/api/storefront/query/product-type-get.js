@@ -1,23 +1,29 @@
 import axios from "axios";
 import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
+import redisClient from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
-    const query = `
+    let redisTypes = redisClient.get("types");
 
-            {
-                productTypes(first: 100) {
-                  edges {
-                    node
-                  }
+    if (redisTypes) {
+      res.json(JSON.parse(redisTypes));
+    } else {
+      const query = `  
+          {
+              productTypes(first: 100) {
+                edges {
+                  node
                 }
               }
-
-        `;
-    const data = await axios.post(storefrontURL, query, {
-      headers: storefrontHeaders,
-    });
-    res.json(data.data);
+            }
+          `;
+      const data = await axios.post(storefrontURL, query, {
+        headers: storefrontHeaders,
+      });
+      redisClient.set("types", data.data, "EX", 86400);
+      res.json(data.data);
+    }
   } catch (e) {
     res.json({ error: e });
   }

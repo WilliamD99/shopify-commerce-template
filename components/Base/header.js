@@ -3,13 +3,15 @@ import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import userContext from "../../utils/userContext";
 import deviceContext from "../../utils/deviceContext";
 import { accessTokenExist, gsap } from "../../utils/utils";
+import dynamic from "next/dynamic";
 
+const DrawerMobile = dynamic(() => import("./drawerMobile"));
 import Cart from "./cart";
 import Account from "../User/account";
 import Link from "../common/Link";
 import Toolbar from "@mui/material/Toolbar";
 import Search from "./search";
-import DrawerMobile from "./drawerMobile";
+// import DrawerMobile from "./drawerMobile";
 import { AiOutlineHeart } from "react-icons/ai";
 import Badge from "@mui/material/Badge";
 import Navigation from "./navigation";
