@@ -265,9 +265,15 @@ export default function Products({ data }) {
                 type={
                   product.metafields[
                     product.metafields.findIndex(
-                      (e) => e.key === "selection_type"
+                      (e) => e && e.key === "selection_type"
                     )
-                  ].value
+                  ]
+                    ? product.metafields[
+                        product.metafields.findIndex(
+                          (e) => e && e.key === "selection_type"
+                        )
+                      ].value
+                    : "Default"
                 }
               />
 

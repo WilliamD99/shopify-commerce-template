@@ -1,17 +1,15 @@
-import axios from 'axios'
-import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        let params = req.body.data
-        let lineItems = `${
-            params.edges.map(e => {
-              let field = `{variantId: "${e.merchandiseId}", quantity: ${e.quantity}}`
-              return field
-            })
-          }
-        `
-        const query = `
+  try {
+    let params = req.body.data;
+    let lineItems = `${params.edges.map((e) => {
+      let field = `{variantId: "${e.merchandiseId}", quantity: ${e.quantity}}`;
+      return field;
+    })}
+        `;
+    const query = `
         mutation {
             checkoutCreate(input: {
                 lineItems: [
@@ -32,15 +30,15 @@ const requests = async (req, res) => {
               }
             }
           }
-        `
-        const data = await axios.post(storefrontURL, query, {
-            headers: storefrontHeaders
-        })
-        res.json(data.data)
-    }
-    catch(e) {
-      res.json({error: e})
-    }
-}
+        `;
+    const data = await axios.post(storefrontURL, query, {
+      headers: storefrontHeaders,
+    });
+    res.json(data.data);
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e });
+  }
+};
 
-export default requests
+export default requests;

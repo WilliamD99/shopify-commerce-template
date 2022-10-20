@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import NavItem from "./navItem";
 import useVendorGet from "../../utils/hooks/useVendorGet";
+import Link from "../common/Link";
 
 function Navigation() {
   let getVendor = useVendorGet();
@@ -12,6 +13,9 @@ function Navigation() {
   return (
     <>
       <div className="flex flex-row items-center space-x-10">
+        <Link href="/shop" className="text-xl ">
+          Shop
+        </Link>
         <NavItem
           name="Vendor"
           link={false}

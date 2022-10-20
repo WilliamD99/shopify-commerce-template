@@ -16,18 +16,41 @@ export default function Related({ data }) {
     swipeToSlide: true,
   };
 
+  const handleDisplay = () => {
+    if (isMobile) {
+      return (
+        <Slider {...settings} className="mt-5 relative">
+          {data.map((e) => (
+            <Product key={`related-${e}`} data={e} />
+          ))}
+        </Slider>
+      );
+    } else {
+      if (data.length > 3) {
+        return (
+          <Slider {...settings} className="mt-5 relative">
+            {data.map((e) => (
+              <Product key={`related-${e}`} data={e} />
+            ))}
+          </Slider>
+        );
+      } else {
+        return (
+          <div className={`grid grid-cols-4`}>
+            {data.map((e) => (
+              <Product key={`related-${e}`} data={e} />
+            ))}
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <p className="text-3xl font-semibold mb-8">Related Products</p>
 
-      {/* {data.length > 3 ? ( */}
-      <Slider {...settings} className="mt-5 relative">
-        {data.map((e) => (
-          <Product key={`related-${e}`} data={e} />
-        ))}
-      </Slider>
-
-      {/* )} */}
+      {handleDisplay()}
     </>
   );
 }

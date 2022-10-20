@@ -77,7 +77,7 @@ export default function Account() {
   return (
     <>
       <NextSeo title="My Account" description="" />
-      <div className="flex flex-col ml-20">
+      <div className="flex flex-col ml-20 mt-10">
         <Tabs className="mb-12" value={tab} onChange={handleChangeTab}>
           <Tab label="Dashboard" />
           <Tab label="Personal Info" />

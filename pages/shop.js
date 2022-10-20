@@ -21,7 +21,6 @@ import Pagination from "../components/Shop/pagination";
 import { NextSeo } from "next-seo";
 
 export default function Shop({ vendors, types, collections }) {
-  console.log("test");
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
   const [isNext, setNext] = useState(false);

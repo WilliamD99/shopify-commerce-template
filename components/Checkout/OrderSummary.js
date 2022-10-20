@@ -228,6 +228,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
                         <Radio
                           size="small"
                           value={e.handle}
+                          color="default"
                           onClick={() => handleShippingRadio(e)}
                         />
                       }
@@ -271,7 +272,11 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
           <Coupon checkoutMutation={checkoutDiscount} />
         </div>
       </div>
-      <Button variant="outlined" onClick={handleComplete}>
+      <Button
+        className="h-12 text-black border-black hover:text-white hover:bg-black hover:border-white"
+        variant="outlined"
+        onClick={handleComplete}
+      >
         Continue to Payment
       </Button>
     </div>

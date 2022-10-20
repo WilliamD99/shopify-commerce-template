@@ -21,6 +21,8 @@ export default function ShippingUpdate({ setShippingOptions }) {
   let checkoutEmailUpdate = useCheckoutUpdateEmail();
   let checkoutToCustomer = useCheckoutToCustomer();
 
+  console.log(user);
+
   const handleDefaultAddress = (e) => {
     if (!useDefault) {
       checkoutShippingUpdate.mutate({
@@ -99,7 +101,6 @@ export default function ShippingUpdate({ setShippingOptions }) {
         accessToken: accessToken,
         checkoutId: checkoutId,
       });
-      console.log(user);
     }
   }, [user]);
 
@@ -185,11 +186,13 @@ export default function ShippingUpdate({ setShippingOptions }) {
               id="firstName"
               type="text"
               label="First Name"
+              required
               defaultValue={user ? user.firstName : ""}
             />
             <TextField
               className="w-1/2"
               id="lastName"
+              required
               label="Last Name"
               defaultValue={user ? user.lastName : ""}
             />
@@ -198,6 +201,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
             <TextField
               className="w-full"
               id="email"
+              required
               label="Email"
               defaultValue={user ? (user.email ? user.email : "") : ""}
             />
@@ -210,6 +214,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               className="w-full"
               id="address"
               label="Address"
+              required
               defaultValue={
                 user
                   ? user.addresses.edges.length > 0
@@ -223,6 +228,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
             <TextField
               className="w-1/2"
               id="city"
+              required
               label="City"
               defaultValue={
                 user
@@ -233,8 +239,9 @@ export default function ShippingUpdate({ setShippingOptions }) {
               }
             />
 
-            <Select
-              labelId="province-select"
+            <TextField
+              select
+              required
               className="w-1/2"
               id={`province`}
               label="Province"
@@ -251,12 +258,13 @@ export default function ShippingUpdate({ setShippingOptions }) {
                   {e.label}
                 </MenuItem>
               ))}
-            </Select>
+            </TextField>
           </div>
           <div className="flex flex-row space-x-5">
             <TextField
               className="w-1/2"
               id="postal"
+              required
               label="Postal Code"
               defaultValue={
                 user
@@ -283,18 +291,25 @@ export default function ShippingUpdate({ setShippingOptions }) {
         </div>
         <div className="flex flex-row space-x-5">
           <Button
-            className="w-44 text-center text-black border-black"
+            className="w-44 xl:w-56 text-center text-black border-black hover:text-white hover:bg-black hover:border-white"
             type="submit"
             variant="outlined"
           >
             Confirm
           </Button>
-          <FormControlLabel
-            control={
-              <Checkbox disabled={useDefault} onClick={handleDefaultAddress} />
-            }
-            label="Use my default"
-          />
+          {user.defaultAddress ? (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  disabled={useDefault}
+                  onClick={handleDefaultAddress}
+                />
+              }
+              label="Use my default"
+            />
+          ) : (
+            <></>
+          )}
         </div>
         {checkoutShippingUpdate.isLoading ? <p>Loading...</p> : <></>}
       </form>

@@ -1,14 +1,14 @@
-import axios from 'axios'
-import {storefrontHeaders, storefrontURL} from '../../../../utils/api/header'
+import axios from "axios";
+import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-    try {
-        let params = req.body.data
-        let checkoutId = params.checkoutId
-        let shippingAddress = JSON.stringify(params.address)
-        shippingAddress = shippingAddress.replace(/"([^"]+)":/g, '$1:');
+  try {
+    let params = req.body.data;
+    let checkoutId = params.checkoutId;
+    let shippingAddress = JSON.stringify(params.address);
+    shippingAddress = shippingAddress.replace(/"([^"]+)":/g, "$1:");
 
-        const query = `
+    const query = `
         mutation {
             checkoutShippingAddressUpdateV2(
                 shippingAddress: ${shippingAddress},
@@ -33,16 +33,15 @@ const requests = async (req, res) => {
               }
             }
         }
-        `
-        const data = await axios.post(storefrontURL, query, {
-            headers: storefrontHeaders
-        })
-        res.json(data.data)
-    }
-    catch(e) {
-        res.json({error: e})
-    }
-}
+        `;
+    const data = await axios.post(storefrontURL, query, {
+      headers: storefrontHeaders,
+    });
+    res.json(data.data);
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e });
+  }
+};
 
-export default requests
-
+export default requests;

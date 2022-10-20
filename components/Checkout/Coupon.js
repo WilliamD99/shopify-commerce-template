@@ -49,7 +49,10 @@ export default function Coupon({ checkoutMutation }) {
           variant="standard"
           className="py-1"
         />
-        <Button onClick={handleClick} className="normal-case text-sm">
+        <Button
+          onClick={handleClick}
+          className="normal-case text-black text-sm"
+        >
           Apply
         </Button>
       </div>

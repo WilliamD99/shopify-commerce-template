@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import Link from "../common/Link";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 export default function Footer() {
+  const subscribeUser = async (e) => {
+    e.preventDefault();
+    const field = document.querySelector("#subscribe-form");
+    const data = await axios.post("/api/mailchimp/subscribe", {
+      data: {
+        email: field.value,
+      },
+    });
+    console.log(data);
+  };
+
   return (
     <div id="footer" className="mt-5 xl:mt-10 shadow-inner">
       <div
@@ -11,18 +23,23 @@ export default function Footer() {
         className="w-screen bg-slate-100 px-5 py-10 xl:py-20 flex flex-col items-center justify-center space-y-5"
       >
         <p className="text-xl xl:text-2xl">Subscribe to our newsletters</p>
-        <div className="flex flex-col items-center space-y-5">
+        <form className="flex flex-col items-center space-y-5">
           <TextField
-            label={<p className="text-sm xl:text-lg">Enter your email</p>}
+            id="subscribe-form"
+            type="email"
+            required
+            label={<span className="text-sm xl:text-lg">Enter your email</span>}
             className="w-72 xl:w-96"
           />
           <Button
             variant="outlined"
             className="xl:w-44 normal-case text-black border-black hover:text-white hover:border-white hover:bg-black"
+            type="submit"
+            onClick={subscribeUser}
           >
             Sign Up
           </Button>
-        </div>
+        </form>
       </div>
       <div
         id="footer_bottom"
