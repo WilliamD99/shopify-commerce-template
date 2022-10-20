@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Loading from "next/dist/server/config";
+import Loading from "../Loading/dataLoading";
 
 export default function Footer() {
   const [isLoading, setLoading] = useState(false);
