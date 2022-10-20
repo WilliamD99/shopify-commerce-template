@@ -32,14 +32,16 @@ const Related = dynamic(
 
 export default function Products({ data }) {
   const router = useRouter();
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState(data.data.productByHandle);
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
-  const [isInStock, setIsInStock] = useState(true);
+  const [isInStock, setIsInStock] = useState(
+    data.data.productByHandle.availableForSale
+  );
   const inputRef = useRef(0);
 
   let debounceInput = debounce((criteria) => {
@@ -170,14 +172,6 @@ export default function Products({ data }) {
     }
   };
 
-  // Get the product
-  useEffect(() => {
-    if (data) {
-      setProduct(data.data.productByHandle);
-      setIsInStock(data.data.productByHandle.availableForSale);
-    }
-  }, []);
-
   useEffect(() => {
     if (product) {
       if (product.variants.edges.length === 1) {
@@ -244,7 +238,7 @@ export default function Products({ data }) {
               {/* Title */}
               <div className="flex flex-row items-center space-x-5">
                 <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
-                  Products {product.title}
+                  {product.title}
                 </p>
                 <p
                   className={`text-lg xl:text-xl font-semibold ${
@@ -252,13 +246,13 @@ export default function Products({ data }) {
                   }`}
                 >
                   {handlePriceDisplay()}
-                  {/* {originalPrice > parseInt(displayPrice) ? (
+                  {originalPrice > parseInt(displayPrice) ? (
                     <span className="text-lg ml-2 text-black font-semibold line-through">
                       {formatter.format(originalPrice)}
                     </span>
                   ) : (
                     <></>
-                  )} */}
+                  )}
                 </p>
               </div>
               {/* Description */}
