@@ -1,19 +1,30 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import Link from "../common/Link";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { toast } from "react-toastify";
+import Loading from "next/dist/server/config";
 
 export default function Footer() {
+  const [isLoading, setLoading] = useState(false);
+
   const subscribeUser = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const field = document.querySelector("#subscribe-form");
     const data = await axios.post("/api/mailchimp/subscribe", {
       data: {
         email: field.value,
       },
     });
-    console.log(data);
+    if (data.data.status === 400) {
+      let text = JSON.parse(data.data.response.text);
+      toast.warning(text.detail);
+    } else if (data.data.status === "subscribed") {
+      toast.success("Succeed!");
+    }
+    setLoading(false);
   };
 
   return (
@@ -37,7 +48,7 @@ export default function Footer() {
             type="submit"
             onClick={subscribeUser}
           >
-            Sign Up
+            Sign Up {isLoading ? <Loading /> : ""}
           </Button>
         </form>
       </div>
