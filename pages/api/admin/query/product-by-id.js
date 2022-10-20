@@ -58,7 +58,6 @@ const requests = async (req, res) => {
       res.json(data.data);
     }
   } catch (e) {
-    console.log(e);
     res.json({ error: e });
   }
 };
