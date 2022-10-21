@@ -14,7 +14,6 @@ import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
-import useCustomerGet from "../utils/hooks/useCustomerGet";
 import { customerGet } from "../utils/api/requests";
 
 import Layout from "../components/layout";
@@ -33,12 +32,11 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps, isMobileView }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({ state: "loading" });
   const [cookie, setCookie] = useState(
-    typeof document !== "undefined" ? getCookie("test") : ""
+    typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
   const [isMobile] = useState(isMobileView);
-  // let customerGet = useCustomerGet();
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
@@ -46,10 +44,17 @@ function MyApp({ Component, pageProps, isMobileView }) {
       setCart(JSON.parse(localStorage.getItem("items")));
     }
   }, []);
-  let test = useRef();
+
+  // Cookie
   useEffect(() => {
     if (cookie) {
-      test.current = customerGet({ accessToken: cookie });
+      let fetchUser = async () => {
+        let data = await customerGet({ accessToken: cookie });
+        setUser(data.data.customer);
+      };
+      fetchUser();
+    } else {
+      setUser({ state: "none" });
     }
   }, []);
 
@@ -88,16 +93,8 @@ function MyApp({ Component, pageProps, isMobileView }) {
         <deviceContext.Provider value={{ isMobile }}>
           <userContext.Provider value={{ user, setUser }}>
             <cartContext.Provider value={{ cart, setCart }}>
-              <loadingContext.Provider value={{ loading, setLoading, test }}>
-                <Layout>
-                  <p
-                    onClick={async () => {
-                      let test2 = await test.current;
-                      console.log(test2);
-                    }}
-                  >
-                    Test
-                  </p>
+              <loadingContext.Provider value={{ loading, setLoading }}>
+                <Layout user={user}>
                   <Component {...pageProps} />
                 </Layout>
               </loadingContext.Provider>

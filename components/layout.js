@@ -5,8 +5,10 @@ import Header from "./Base/header";
 import { ToastContainer } from "react-toastify";
 import { gsap } from "../utils/utils";
 
-export default function Layout({ children }) {
-  // const [stickyClass, setStickyClass] = useState("");
+export default function Layout({ children, user }) {
+  console.log(user);
+  const [test, setTest] = useState(user);
+  const [stickyClass, setStickyClass] = useState("");
   const [marginTop, setMarginTop] = useState(0);
 
   // const handleStickyHeader = () => {
@@ -38,7 +40,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      {/* <Header sticky={stickyClass} /> */}
+      <Header sticky={stickyClass} />
       <div className="min-h-screen" style={{ marginTop: marginTop }}>
         {children}
       </div>

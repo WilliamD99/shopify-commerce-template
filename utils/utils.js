@@ -163,12 +163,12 @@ let accessTokenExist = () => {
   else {
     tn = decryptText(JSON.parse(tn).value);
   }
-  if (!token) token = false;
-  else {
-    token = decryptText(JSON.parse(token).value);
-  }
+  // if (!token) token = false;
+  // else {
+  //   token = decryptText(JSON.parse(token).value);
+  // }
 
-  return token;
+  return tn;
 };
 // Delete access token
 let accessTokenDelete = () => {
@@ -230,7 +230,7 @@ function getCookie(name) {
     while (c.charAt(0) == " ") c = c.substring(1, c.length);
     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
   }
-  return null;
+  return "";
 }
 function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";

@@ -26,7 +26,9 @@ export default function Header({ sticky }) {
   let wlRef = useRef(gsap.timeline({}));
 
   let headerConditionalDisplay = () => {
-    if (!user)
+    if (user.state === "loading") {
+      return <p>Loading</p>;
+    } else if (user.state === "none")
       return (
         <>
           <p
@@ -49,14 +51,14 @@ export default function Header({ sticky }) {
   };
 
   // Get customer if there's a token
-  useEffect(() => {
-    if (!user) {
-      let token = accessTokenExist();
-      if (token) {
-        customer.mutate({ accessToken: token });
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user) {
+  //     let token = accessTokenExist();
+  //     if (token) {
+  //       customer.mutate({ accessToken: token });
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (customer.data) {
@@ -65,7 +67,7 @@ export default function Header({ sticky }) {
   }, [customer.isLoading]);
 
   useEffect(() => {
-    if (user) {
+    if (user.state !== "loading" && user.state !== "none") {
       wlRef.current
         .to("#wlBadge", { scale: 1.2, duration: 0.3 })
         .to("#wlBadge", { scale: 1, duration: 0.3 });

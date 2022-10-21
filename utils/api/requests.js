@@ -154,6 +154,7 @@ let customerAll = async () => {
 // Get customer by id
 let customerGet = async (params) => {
   let url = "/api/storefront/query/customer";
+  console.log(params);
   let data = await axios.post(url, {
     data: params,
   });
