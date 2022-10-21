@@ -88,6 +88,14 @@
     .single-product__image-main {
         height: 25rem
     }
+    .slick-dots {
+        top: 50%;
+        transform: translateY(-50%);
+        bottom: 0;
+        li {
+            display: block;
+        }
+    }
     @media (min-width: 768px) {
         .single-product__image-main {
             height: 30rem
@@ -103,5 +111,11 @@
 #magnifier {
     img {
         max-width: none !important;
+    }
+}
+
+#filter-drawer {
+    .MuiAccordionSummary-root::before, .MuiPaper-root::before {
+        display: none;
     }
 }

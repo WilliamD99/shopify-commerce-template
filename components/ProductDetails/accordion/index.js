@@ -16,15 +16,17 @@ export default function ProductAccordion({ id }) {
 
   return (
     <>
-      <div id="product-accordion" className="flex flex-col space-y-0">
+      <div id="product-accordion" className="flex flex-col space-y-0 pt-5">
         <Accordion disableGutters={true} className="shadow-none">
           <AccordionSummary
             expandIcon={<MdExpandMore className="text-2xl" />}
             aria-controls="panel1a-content"
             id="panel1a-header"
-            className="bg-amber-50 shadow-none pl-0"
+            className="bg-slate-100 shadow-none pl-0"
           >
-            <p className="text-xl font-semibold">Details</p>
+            <p className="text-base uppercase md:text-xl font-semibold">
+              Details
+            </p>
           </AccordionSummary>
           <AccordionDetails>
             <p>
@@ -39,9 +41,11 @@ export default function ProductAccordion({ id }) {
             expandIcon={<MdExpandMore className="text-2xl" />}
             aria-controls="panel1a-content"
             id="panel1a-header"
-            className="bg-amber-50 shadow-none pl-0"
+            className="bg-slate-100 shadow-none pl-0"
           >
-            <p className="text-xl font-semibold">Return Policy</p>
+            <p className="text-base uppercase md:text-xl font-semibold">
+              Return Policy
+            </p>
           </AccordionSummary>
           <AccordionDetails>
             <p>
@@ -52,9 +56,9 @@ export default function ProductAccordion({ id }) {
           </AccordionDetails>
         </Accordion>
         <Accordion disableGutters={true} className="shadow-none">
-          <AccordionSummary className="bg-amber-50 shadow-none pl-0">
+          <AccordionSummary className="bg-slate-100 shadow-none pl-0">
             <div className="flex flex-row justify-between items-center w-full">
-              <p className="text-xl font-semibold">
+              <p className="text-base uppercase md:text-xl font-semibold">
                 Reviews
                 {reviewBottom.data ? (
                   <span className="ml-1">
@@ -64,12 +68,16 @@ export default function ProductAccordion({ id }) {
                   <></>
                 )}
               </p>
-              {reviewBottom.data ? reviewBottom.data.response.bottomline.average_score > 0 ? (
-                <Rating
-                  readOnly
-                  value={reviewBottom.data.response.bottomline.average_score}
-                />
-              ) : <></> : (
+              {reviewBottom.data ? (
+                reviewBottom.data.response.bottomline.average_score > 0 ? (
+                  <Rating
+                    readOnly
+                    value={reviewBottom.data.response.bottomline.average_score}
+                  />
+                ) : (
+                  <></>
+                )
+              ) : (
                 <></>
               )}
             </div>

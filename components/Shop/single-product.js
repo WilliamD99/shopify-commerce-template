@@ -30,7 +30,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-lg bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+          className="rounded-md normal-case text-xs bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           <Link href={`/product/${e.node.handle}`}>Select</Link>
         </Button>
@@ -39,7 +39,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+          className="rounded-md normal-case text-xs bg-white text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
           disabled={true}
         >
           Sold out
@@ -64,7 +64,7 @@ export default function SingeProduct({ e, index }) {
             setLoading(false);
           }}
           variant="outlined"
-          className="rounded-lg absolute bottom-5 w-40 left-1/2 -translate-x-1/2"
+          className="rounded-md normal-case text-xs bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           Add to cart
         </Button>
@@ -77,10 +77,11 @@ export default function SingeProduct({ e, index }) {
       e.node.variants.edges.some((variant) => variant.node.compareAtPrice)
     );
   }, []);
+
   return (
     <div
       ref={anim}
-      className="single-product relative flex flex-col bg-slate-100 product rounded-tr-md shadow-sm"
+      className="single-product relative flex flex-col md:bg-slate-100 product md:rounded-tr-md md:shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -92,7 +93,7 @@ export default function SingeProduct({ e, index }) {
         <></>
       )}
 
-      {user ? (
+      {!user.state ? (
         <div className="absolute wishlist-button top-5 left-5 z-50">
           <WishlistButton
             id={e.node.id}
@@ -111,7 +112,7 @@ export default function SingeProduct({ e, index }) {
       {/* If product is on sales */}
       {onSale ? (
         <div className="absolute top-0 right-0 bg-red-400 rounded-tr-md rounded-bl-md px-2 py-2 z-40">
-          <p className="text-sm text-white">Sales</p>
+          <p className="text-xs md:text-sm text-white">Sales</p>
         </div>
       ) : (
         <></>
@@ -126,23 +127,23 @@ export default function SingeProduct({ e, index }) {
           blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
         />
       </div>
-      <div className="flex flex-col justify-between space-y-3 px-5 py-5">
+      <div className="flex flex-col md:justify-between space-y-3 md:px-5 py-2 md:py-5">
         <Link
-          className="text-center text-xl font-semibold"
+          className="md:text-center text-base md:text-xl font-semibold"
           href={`/product/${e.node.handle}`}
         >
           {e.node.title}
         </Link>
-        <p className="text-base text-center">
+        <p className="text-sm md:text-base md:text-center">
           {parseFloat(minPrice) === parseFloat(maxPrice)
             ? `${formatter.format(minPrice)}`
             : `${formatter.format(minPrice)} - ${formatter.format(maxPrice)}`}
         </p>
-        <p className="text-sm text-slate-400 italic text-center">
+        <p className="text-sm invisible md:visible text-slate-400 italic text-center">
           By {e.node.vendor}
         </p>
 
-        <div className="h-12 w-full">{handleDisplayButton()}</div>
+        <div className="h-2 md:h-12 w-full">{handleDisplayButton()}</div>
       </div>
     </div>
   );

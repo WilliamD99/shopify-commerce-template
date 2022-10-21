@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Link from "../common/Link";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { toast } from "react-toastify";
 import Loading from "../Loading/dataLoading";
 
@@ -12,6 +11,7 @@ export default function Footer() {
   const subscribeUser = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const axios = (await import("axios")).default;
     const field = document.querySelector("#subscribe-form");
     const data = await axios.post("/api/mailchimp/subscribe", {
       data: {
@@ -44,7 +44,7 @@ export default function Footer() {
           />
           <Button
             variant="outlined"
-            className="xl:w-44 normal-case text-black border-black hover:text-white hover:border-white hover:bg-black"
+            className="w-32 xl:w-44 normal-case text-white border-white bg-black hover:text-black hover:border-black hover:bg-white"
             type="submit"
             onClick={subscribeUser}
           >

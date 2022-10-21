@@ -124,7 +124,7 @@ export default function Products({ data }) {
       if (!variantId) {
         return (
           <Button
-            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base xl:mr-5 w-full h-10 md:h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             disabled={true}
           >
             Please select a variant
@@ -138,7 +138,7 @@ export default function Products({ data }) {
       ) {
         return (
           <Button
-            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base xl:mr-5 w-full h-10 md:h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             disabled={true}
           >
             Sold Out
@@ -152,7 +152,7 @@ export default function Products({ data }) {
       ) {
         return (
           <Button
-            className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base xl:mr-5 w-full h-10 md:h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
             onClick={handleAddToCart}
             disabled={displayPrice && quantity ? false : true}
           >
@@ -163,7 +163,7 @@ export default function Products({ data }) {
     } else {
       return (
         <Button
-          className="bg-black add-to-cart text-base xl:mr-5 w-full h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+          className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base xl:mr-5 w-full h-10 md:h-16 font-semibold text-white px-5 py-2 rounded-lg hover:bg-slate-100 hover:text-black"
           disabled={true}
         >
           Sold Out
@@ -224,7 +224,7 @@ export default function Products({ data }) {
           { name: `Product: ${product.title}`, path: "#" },
         ]}
       />
-      <div className="product-details pb-10 bg-amber-50 flex justify-center">
+      <div className="product-details py-10 pb-10 bg-slate-100 flex justify-center">
         <div className="w-11/12 xl:w-3/4">
           <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
             <div className="w-full md:w-1/2 xl:w-2/3 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
@@ -256,7 +256,7 @@ export default function Products({ data }) {
                 </p>
               </div>
               {/* Description */}
-              <p className="text-base xl:text-xl">{product.description}</p>
+              <p className="text-xs xl:text-xl">{product.description}</p>
 
               {/* Options */}
               <Options

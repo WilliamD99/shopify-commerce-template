@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,9 +14,11 @@ import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
+import { customerGet } from "../utils/api/requests";
 
 import Layout from "../components/layout";
 import AgeGate from "../components/AgeGate";
+import { getCookie } from "../utils/utils";
 // import { encryptText } from "../utils/utils";
 
 const queryClient = new QueryClient({
@@ -27,16 +29,32 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps, isMobileView, vendors }) {
+function MyApp({ Component, pageProps, isMobileView }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({ state: "loading" });
+  const [cookie, setCookie] = useState(
+    typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
+  );
   const [isMobile] = useState(isMobileView);
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
     if (items !== null) {
       setCart(JSON.parse(localStorage.getItem("items")));
+    }
+  }, []);
+
+  // Cookie
+  useEffect(() => {
+    if (cookie) {
+      let fetchUser = async () => {
+        let data = await customerGet({ accessToken: cookie });
+        setUser(data.data.customer);
+      };
+      fetchUser();
+    } else {
+      setUser({ state: "none" });
     }
   }, []);
 

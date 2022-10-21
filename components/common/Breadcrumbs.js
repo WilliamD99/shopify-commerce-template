@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "./Link";
 
@@ -7,7 +7,7 @@ export default function CustomBreadcrumbs({ path }) {
 
   return (
     <>
-      <div className="px-5 my-10 md:px-10">
+      <div className="px-5 my-5 md:my-10 md:px-10">
         <Breadcrumbs className="breadcrumbs">
           {path.map((e, i) => (
             <Link

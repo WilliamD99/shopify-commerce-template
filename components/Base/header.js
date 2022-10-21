@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, useRef } from "react";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import userContext from "../../utils/userContext";
 import deviceContext from "../../utils/deviceContext";
-import { accessTokenExist, gsap } from "../../utils/utils";
+import { gsap } from "../../utils/utils";
 import dynamic from "next/dynamic";
 
 const DrawerMobile = dynamic(() => import("./drawerMobile"));
@@ -16,6 +16,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import Badge from "@mui/material/Badge";
 import Navigation from "./navigation";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
+import LoginButton from "./loginButton";
 
 export default function Header({ sticky }) {
   let customer = useCustomerGet();
@@ -26,7 +27,9 @@ export default function Header({ sticky }) {
   let wlRef = useRef(gsap.timeline({}));
 
   let headerConditionalDisplay = () => {
-    if (!user)
+    if (user.state === "loading") {
+      return <p>Loading</p>;
+    } else if (user.state === "none")
       return (
         <>
           <p
@@ -37,26 +40,8 @@ export default function Header({ sticky }) {
           </p>
         </>
       );
-    return (
-      <div className="relative">
-        <Link href="/my-account" className="hover:underline">
-          <span className="font-semibold ml-1">
-            {user.firstName ? user.firstName : user.email} {user.lastName}
-          </span>
-        </Link>
-      </div>
-    );
+    return <LoginButton />;
   };
-
-  // Get customer if there's a token
-  useEffect(() => {
-    if (!user) {
-      let token = accessTokenExist();
-      if (token) {
-        customer.mutate({ accessToken: token });
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (customer.data) {
@@ -65,7 +50,7 @@ export default function Header({ sticky }) {
   }, [customer.isLoading]);
 
   useEffect(() => {
-    if (user) {
+    if (user.state !== "loading" && user.state !== "none") {
       wlRef.current
         .to("#wlBadge", { scale: 1.2, duration: 0.3 })
         .to("#wlBadge", { scale: 1, duration: 0.3 });

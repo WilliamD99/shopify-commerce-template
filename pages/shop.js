@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import deviceContext from "../utils/deviceContext";
 
 // Hooks
 import { useRouter } from "next/router";
@@ -10,17 +11,23 @@ import {
   productTypeGet,
   collectionGet,
 } from "../lib/serverRequest";
+import dynamic from "next/dynamic";
 
 // Components
 import Loading from "../components/Loading/dataLoading";
 import Breadcrumbs from "../components/common/Breadcrumbs";
 import SingeProduct from "../components/Shop/single-product";
-import FilterBar from "../components/Shop/filterBar";
-import FilterMenu from "../components/Shop/filterMenu";
+// import FilterBar from "../components/Shop/filterBar";
+// import FilterMenu from "../components/Shop/filterMenu";
 import Pagination from "../components/Shop/pagination";
 import { NextSeo } from "next-seo";
+import FilterDrawer from "../components/Shop/filterDrawer";
+
+const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
+const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 
 export default function Shop({ vendors, types, collections }) {
+  const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
   const [isNext, setNext] = useState(false);
@@ -84,38 +91,58 @@ export default function Shop({ vendors, types, collections }) {
   return (
     <>
       <NextSeo title="Shop" description="" />
-      <Breadcrumbs
-        path={[
-          { name: "Home", path: "/" },
-          { name: "Shop", path: "/shop" },
-        ]}
-      />
+
+      <div className="flex flex-row items-center justify-between">
+        <Breadcrumbs
+          path={[
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/shop" },
+          ]}
+        />
+        {isMobile ? (
+          <FilterDrawer
+            vendors={vendors.data.shop.productVendors.edges}
+            types={types.data.productTypes.edges}
+            collections={collections.data.collections.edges}
+          />
+        ) : (
+          <></>
+        )}
+      </div>
 
       <div id="shop-container" className="px-3 md:px-10">
-        <FilterBar
-          count={count}
-          length={dataArr.length}
-          isLoading={mutateProductNextSf.isLoading}
-          total={total.data ? total.data.count : 0}
-          setSortKey={setSortKey}
-          setReverse={setReverse}
-        />
+        {!isMobile ? (
+          <FilterBar
+            count={count}
+            length={dataArr.length}
+            isLoading={mutateProductNextSf.isLoading}
+            total={total.data ? total.data.count : 0}
+            setSortKey={setSortKey}
+            setReverse={setReverse}
+          />
+        ) : (
+          <></>
+        )}
 
         <div
           id="shop"
           className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50"
         >
-          <FilterMenu
-            vendors={vendors.data.shop.productVendors.edges}
-            types={types.data.productTypes.edges}
-            collections={collections.data.collections.edges}
-            isLoading={mutateProductNextSf.isLoading}
-          />
+          {!isMobile ? (
+            <FilterMenu
+              vendors={vendors.data.shop.productVendors.edges}
+              types={types.data.productTypes.edges}
+              collections={collections.data.collections.edges}
+              isLoading={mutateProductNextSf.isLoading}
+            />
+          ) : (
+            <></>
+          )}
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
               id="shop-grid"
-              className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
+              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
             >
               {mutateProductNextSf.isLoading ? (
                 <Loading />

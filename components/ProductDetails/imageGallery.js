@@ -16,6 +16,8 @@ export default function Gallery({ images, tag, id }) {
   const { isMobile } = useContext(deviceContext);
   const sliderRef = useRef(null);
 
+  console.log(isMobile);
+
   const handleImageClick = (e, i) => {
     sliderRef.current.slickGoTo(i);
   };
@@ -26,6 +28,9 @@ export default function Gallery({ images, tag, id }) {
     slidesToShow: 1,
     slidesToScroll: 1,
     swipeToSlide: true,
+    dots: isMobile ? true : false,
+    vertical: isMobile ? true : false,
+    verticalSwiping: isMobile ? true : false,
   };
 
   return (
@@ -35,7 +40,7 @@ export default function Gallery({ images, tag, id }) {
         className="flex flex-col-reverse lg:flex-row lg:space-x-2"
       >
         <div className="flex flex-row image-collections space-x-1 md:space-x-0 lg:flex-col w-full lg:w-32 lg:space-y-2">
-          {images.length > 1 ? (
+          {/* {images.length > 1 ? (
             images.map((e, i) => (
               <div
                 onClick={(e) => handleImageClick(e, i)}
@@ -56,7 +61,7 @@ export default function Gallery({ images, tag, id }) {
                 src={images[0].node.src}
               />
             </div>
-          )}
+          )} */}
         </div>
         <div className="relative image-container w-full lg:w-5/6">
           <Slider className="w-full relative" ref={sliderRef} {...settings}>
@@ -70,7 +75,7 @@ export default function Gallery({ images, tag, id }) {
               </div>
             ))}
           </Slider>
-          {user ? (
+          {!user.state ? (
             <div className="absolute wishlist-button top-5 left-5">
               <WishlistButton
                 id={id}

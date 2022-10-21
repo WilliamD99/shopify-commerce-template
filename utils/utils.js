@@ -158,16 +158,22 @@ let cartRemoveItem = async (params, setCart) => {
 // Get access token
 let accessTokenExist = () => {
   let token = localStorage.getItem("tn");
-  if (!token) token = false;
+  let tn = getCookie("tn");
+  if (!tn) tn = false;
   else {
-    token = decryptText(JSON.parse(token).value);
+    tn = decryptText(JSON.parse(tn).value);
   }
+  // if (!token) token = false;
+  // else {
+  //   token = decryptText(JSON.parse(token).value);
+  // }
 
-  return token;
+  return tn;
 };
 // Delete access token
 let accessTokenDelete = () => {
-  localStorage.removeItem("tn");
+  // localStorage.removeItem("tn");
+  setCookie("tn", null);
 };
 
 // Check if object is empty
@@ -225,7 +231,7 @@ function getCookie(name) {
     while (c.charAt(0) == " ") c = c.substring(1, c.length);
     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
   }
-  return null;
+  return "";
 }
 function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
