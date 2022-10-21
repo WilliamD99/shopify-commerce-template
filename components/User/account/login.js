@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import useCustomerGetAccessToken from "../../../utils/hooks/useCustomerGetAccessToken";
-import { encryptText } from "../../../utils/utils";
+import { encryptText, setCookie } from "../../../utils/utils";
 import useCustomerGet from "../../../utils/hooks/useCustomerGet";
 import userContext from "../../../utils/userContext";
 
@@ -30,7 +30,6 @@ export default function Login({ setIndex }) {
     e.preventDefault();
     let email = document.getElementById("email");
     let password = document.getElementById("password");
-    console.log(email.value, password.value);
     getAccessToken.mutate({ email: email.value, password: password.value });
   }, []);
 
@@ -62,6 +61,7 @@ export default function Login({ setIndex }) {
             expiresAt: "",
           })
         );
+        setCookie("tn", JSON.stringify(token.accessToken), 30);
       } else {
         let error =
           getAccessToken.data.customerAccessTokenCreate.customerUserErrors[0]

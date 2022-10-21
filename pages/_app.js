@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,9 +14,12 @@ import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
+import useCustomerGet from "../utils/hooks/useCustomerGet";
+import { customerGet } from "../utils/api/requests";
 
 import Layout from "../components/layout";
 import AgeGate from "../components/AgeGate";
+import { getCookie } from "../utils/utils";
 // import { encryptText } from "../utils/utils";
 
 const queryClient = new QueryClient({
@@ -27,16 +30,26 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps, isMobileView, vendors }) {
+function MyApp({ Component, pageProps, isMobileView }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState();
+  const [cookie, setCookie] = useState(
+    typeof document !== "undefined" ? getCookie("test") : ""
+  );
   const [isMobile] = useState(isMobileView);
+  // let customerGet = useCustomerGet();
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
     if (items !== null) {
       setCart(JSON.parse(localStorage.getItem("items")));
+    }
+  }, []);
+  let test = useRef();
+  useEffect(() => {
+    if (cookie) {
+      test.current = customerGet({ accessToken: cookie });
     }
   }, []);
 
@@ -75,8 +88,16 @@ function MyApp({ Component, pageProps, isMobileView, vendors }) {
         <deviceContext.Provider value={{ isMobile }}>
           <userContext.Provider value={{ user, setUser }}>
             <cartContext.Provider value={{ cart, setCart }}>
-              <loadingContext.Provider value={{ loading, setLoading }}>
+              <loadingContext.Provider value={{ loading, setLoading, test }}>
                 <Layout>
+                  <p
+                    onClick={async () => {
+                      let test2 = await test.current;
+                      console.log(test2);
+                    }}
+                  >
+                    Test
+                  </p>
                   <Component {...pageProps} />
                 </Layout>
               </loadingContext.Provider>
