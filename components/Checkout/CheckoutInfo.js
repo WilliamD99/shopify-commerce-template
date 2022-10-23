@@ -110,7 +110,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
   //   }
   // }, [checkoutToCustomer.data]);
 
-  if (!user)
+  if (user.state)
     return (
       <>
         <form
