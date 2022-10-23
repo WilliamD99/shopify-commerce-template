@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps, isMobileView }) {
   const [cookie, setCookie] = useState(
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
-  const [isMobile] = useState(isMobileView);
+  const [isMobile] = useState(false);
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
@@ -109,12 +109,12 @@ function MyApp({ Component, pageProps, isMobileView }) {
 
 export default MyApp;
 
-MyApp.getInitialProps = async ({ ctx }) => {
-  let isMobileView = (
-    ctx.req ? ctx.req.headers["user-agent"] : navigator.userAgent
-  ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i);
-  //Returning the isMobileView as a prop to the component for further use.
-  return {
-    isMobileView: Boolean(isMobileView),
-  };
-};
+// MyApp.getInitialProps = async ({ ctx }) => {
+//   let isMobileView = (
+//     ctx.req ? ctx.req.headers["user-agent"] : navigator.userAgent
+//   ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i);
+//   //Returning the isMobileView as a prop to the component for further use.
+//   return {
+//     isMobileView: Boolean(isMobileView),
+//   };
+// };
