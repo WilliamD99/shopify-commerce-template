@@ -38,14 +38,20 @@ export default function Gallery({ images, tag, id }) {
         className="flex flex-col-reverse lg:flex-row lg:space-x-2"
       >
         <div className="flex flex-row image-collections space-x-1 md:space-x-0 lg:flex-col w-full lg:w-32 lg:space-y-2">
-          {/* {images.length > 1 ? (
+          {images.length > 1 ? (
             images.map((e, i) => (
               <div
                 onClick={(e) => handleImageClick(e, i)}
                 className="hover:opacity-70 ease-in-out relative cursor-pointer w-full h-20 md:h-24"
                 key={i}
               >
-                <Image alt={e.node.altText} layout="fill" src={e.node.src} />
+                <Image
+                  alt={e.node.altText}
+                  layout="fill"
+                  src={e.node.src}
+                  placeholder="blur"
+                  blurDataURL="/placeholder.webp"
+                />
               </div>
             ))
           ) : (
@@ -57,9 +63,11 @@ export default function Gallery({ images, tag, id }) {
                 alt={images[0].node.altText}
                 layout="fill"
                 src={images[0].node.src}
+                placeholder="blur"
+                blurDataURL="/placeholder.webp"
               />
             </div>
-          )} */}
+          )}
         </div>
         <div className="relative image-container w-full lg:w-5/6">
           <Slider className="w-full relative" ref={sliderRef} {...settings}>

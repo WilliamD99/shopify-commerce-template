@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 // Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -19,7 +19,6 @@ import { customerGet } from "../utils/api/requests";
 import Layout from "../components/layout";
 import AgeGate from "../components/AgeGate";
 import { getCookie } from "../utils/utils";
-// import { encryptText } from "../utils/utils";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,14 +28,24 @@ const queryClient = new QueryClient({
   },
 });
 
-function MyApp({ Component, pageProps, isMobileView }) {
+function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
   const [cookie, setCookie] = useState(
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
-  const [isMobile] = useState(false);
+  const [isMobile, setMobile] = useState("none");
+
+  useEffect(() => {
+    setMobile(
+      Boolean(
+        navigator.userAgent.match(
+          /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+        )
+      )
+    );
+  }, []);
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("items"));
@@ -59,6 +68,8 @@ function MyApp({ Component, pageProps, isMobileView }) {
   }, []);
 
   const getLayout = Component.getLayout || ((page) => page);
+
+  if (isMobile === "none") return <></>;
 
   return getLayout(
     <>
@@ -88,7 +99,7 @@ function MyApp({ Component, pageProps, isMobileView }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      {/* <AgeGate /> */}
+      <AgeGate />
       <QueryClientProvider client={queryClient}>
         <deviceContext.Provider value={{ isMobile }}>
           <userContext.Provider value={{ user, setUser }}>
@@ -108,13 +119,3 @@ function MyApp({ Component, pageProps, isMobileView }) {
 }
 
 export default MyApp;
-
-// MyApp.getInitialProps = async ({ ctx }) => {
-//   let isMobileView = (
-//     ctx.req ? ctx.req.headers["user-agent"] : navigator.userAgent
-//   ).match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i);
-//   //Returning the isMobileView as a prop to the component for further use.
-//   return {
-//     isMobileView: Boolean(isMobileView),
-//   };
-// };

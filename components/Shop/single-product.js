@@ -122,9 +122,9 @@ export default function SingeProduct({ e, index }) {
           alt={e.node.title}
           src={e.node.featuredImage.url}
           layout="fill"
-          placeholder="blur"
           className="rounded-tr-md"
-          blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
+          placeholder="blur"
+          blurDataURL="/placeholder.webp"
         />
       </div>
       <div className="flex flex-col md:justify-between space-y-3 md:px-5 py-2 md:py-5">
