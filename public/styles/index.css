@@ -263,6 +263,14 @@ input[type=number] {
   display: none;
 }
 
+#reviews .slick-list {
+  margin: 0 -5px;
+}
+
+#reviews .slick-slide > div {
+  padding: 0 5px;
+}
+
 #filter-bar #sort #sort_icon {
   -webkit-transition: .3s;
   transition: .3s;

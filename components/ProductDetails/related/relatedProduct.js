@@ -18,10 +18,6 @@ export default function Product({ data }) {
   let productHook = useProductById();
   const router = useRouter();
 
-  const refreshData = () => {
-    router.replace(router.asPath);
-  };
-
   useEffect(() => {
     productHook.mutate({ id: data });
   }, []);
@@ -50,20 +46,16 @@ export default function Product({ data }) {
             src={productData.featuredImage.url}
             layout="fill"
             placeholder="blur"
-            blurDataURL="https://prohygiene.com/usa/wp-content/uploads/sites/18/2015/12/placeholder.gif"
+            blurDataURL="/placeholder.webp"
           />
         </div>
         <div className="px-5 flex flex-col mt-2">
-          <p
-            onClick={() => {
-              router.push(`/product/${productData.handle}`);
-              refreshData();
-            }}
-            // href={`/product/${productData.handle}`}
+          <Link
+            href={`/product/${productData.handle}`}
             className="text-lg font-medium text-center"
           >
             {productData.title}
-          </p>
+          </Link>
 
           <p className="text-base text-center">
             {parseFloat(productData.priceRangeV2.minVariantPrice.amount) ===
@@ -86,7 +78,7 @@ export default function Product({ data }) {
             {productData.variants.edges.length > 1 ? (
               <Button
                 variant="outlined"
-                className="rounded-lg absolute bottom-5"
+                className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
               >
                 <Link href={`/product/${productData.handle}`}>
                   Select Options
@@ -110,7 +102,7 @@ export default function Product({ data }) {
                   setLoading(false);
                 }}
                 variant="outlined"
-                className="rounded-lg absolute bottom-5"
+                className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
               >
                 Add to cart
               </Button>

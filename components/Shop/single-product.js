@@ -30,7 +30,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-md normal-case text-xs bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           <Link href={`/product/${e.node.handle}`}>Select</Link>
         </Button>
@@ -39,7 +39,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-md normal-case text-xs bg-white text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-md normal-case text-xs md:text-base bg-white text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
           disabled={true}
         >
           Sold out
@@ -64,7 +64,7 @@ export default function SingeProduct({ e, index }) {
             setLoading(false);
           }}
           variant="outlined"
-          className="rounded-md normal-case text-xs bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           Add to cart
         </Button>

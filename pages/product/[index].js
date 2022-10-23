@@ -272,7 +272,7 @@ export default function Products() {
                 </p>
               </div>
               {/* Description */}
-              <p className="text-xs xl:text-xl">{product.description}</p>
+              {/* <p className="text-xs xl:text-xl">{product.description}</p> */}
 
               {/* Options */}
               <Options
@@ -342,7 +342,11 @@ export default function Products() {
                 {handleDisplayButton()}
               </div>
 
-              <Accordion id={extractId(product.id)} />
+              <Accordion
+                id={extractId(product.id)}
+                description={product.description}
+                title={product.title}
+              />
             </div>
           </div>
         </div>
