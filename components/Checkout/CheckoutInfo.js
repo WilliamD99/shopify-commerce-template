@@ -216,7 +216,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               label="Address"
               required
               defaultValue={
-                user
+                !user.state
                   ? user.addresses.edges.length > 0
                     ? user.addresses.edges[0].node.address1
                     : ""
@@ -231,7 +231,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               required
               label="City"
               defaultValue={
-                user
+                !user.state
                   ? user.addresses.edges.length > 0
                     ? user.addresses.edges[0].node.city
                     : ""
@@ -246,7 +246,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               id={`province`}
               label="Province"
               defaultValue={
-                user
+                !user.state
                   ? user.addresses.edges.length > 0
                     ? user.addresses.edges[0].node.province
                     : ""
@@ -267,7 +267,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               required
               label="Postal Code"
               defaultValue={
-                user
+                !user.state
                   ? user.addresses.edges.length > 0
                     ? user.addresses.edges[0].node.zip
                     : ""
@@ -280,7 +280,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
               label="Country"
               disabled
               defaultValue={
-                user
+                !user.state
                   ? user.addresses.edges.length > 0
                     ? user.addresses.edges[0].node.country
                     : ""
