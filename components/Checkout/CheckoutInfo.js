@@ -104,12 +104,6 @@ export default function ShippingUpdate({ setShippingOptions }) {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   if (checkoutToCustomer.data) {
-  //     console.log(checkoutToCustomer.data);
-  //   }
-  // }, [checkoutToCustomer.data]);
-
   if (user.state)
     return (
       <>
