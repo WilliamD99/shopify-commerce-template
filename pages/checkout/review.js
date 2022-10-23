@@ -16,6 +16,7 @@ export default function Checkout() {
 
   let checkout = useCheckoutCreate();
   // Update the line incase user comeback and add more to cart
+  // let checkoutUpdate = useCheckoutUpdateLines()
 
   // Create checkout when first enter only
   useEffect(() => {
