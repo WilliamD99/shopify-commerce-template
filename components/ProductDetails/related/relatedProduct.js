@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import cartContext from "../../../utils/cartContext";
 import { formatter, cartAdd } from "../../../utils/utils";
+import { useRouter } from "next/router";
 
 import useProductById from "../../../utils/hooks/useProductById";
 
@@ -15,6 +16,11 @@ export default function Product({ data }) {
   let { setCart } = useContext(cartContext);
   const [isLoading, setLoading] = useState(false);
   let productHook = useProductById();
+  const router = useRouter();
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   useEffect(() => {
     productHook.mutate({ id: data });
@@ -48,12 +54,16 @@ export default function Product({ data }) {
           />
         </div>
         <div className="px-5 flex flex-col mt-2">
-          <Link
-            href={`/product/${productData.handle}`}
+          <p
+            onClick={() => {
+              router.push(`/product/${productData.handle}`);
+              refreshData();
+            }}
+            // href={`/product/${productData.handle}`}
             className="text-lg font-medium text-center"
           >
             {productData.title}
-          </Link>
+          </p>
 
           <p className="text-base text-center">
             {parseFloat(productData.priceRangeV2.minVariantPrice.amount) ===

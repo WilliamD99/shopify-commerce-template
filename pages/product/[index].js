@@ -13,9 +13,11 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
-import axios from "axios";
-import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
-import redisClient from "../../lib/redis";
+// import axios from "axios";
+// import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
+// import redisClient from "../../lib/redis";
+import { productByHandle } from "../../utils/api/requests";
+import { useMutation } from "@tanstack/react-query";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
@@ -30,19 +32,24 @@ const Related = dynamic(
   }
 );
 
-export default function Products({ data }) {
+export default function Products() {
   const router = useRouter();
-  const [product, setProduct] = useState(data.data.productByHandle);
+  const { index } = router.query;
+  const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
-  const [isInStock, setIsInStock] = useState(
-    data.data.productByHandle.availableForSale
-  );
+  const [isInStock, setIsInStock] = useState();
+  // data.data.productByHandle.availableForSale
   const inputRef = useRef(0);
+  let productByHandleMutation = useMutation(async (params) => {
+    let data = await productByHandle(params);
+    setProduct(data.data.productByHandle);
+    setIsInStock(data.data.productByHandle.availableForSale);
+  });
 
   let debounceInput = debounce((criteria) => {
     onChangeInput(criteria);
@@ -172,6 +179,11 @@ export default function Products({ data }) {
     }
   };
 
+  // Get the product
+  useEffect(() => {
+    if (index !== undefined) productByHandleMutation.mutate({ handle: index });
+  }, [index]);
+
   useEffect(() => {
     if (product) {
       if (product.variants.edges.length === 1) {
@@ -228,11 +240,15 @@ export default function Products({ data }) {
         <div className="w-11/12 xl:w-3/4">
           <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
             <div className="w-full md:w-1/2 xl:w-2/3 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
-              <ImageGallery
-                id={product.id}
-                tag={product.tags}
-                images={product.images.edges}
-              />
+              {product ? (
+                <ImageGallery
+                  id={product.id}
+                  tag={product.tags}
+                  images={product.images.edges}
+                />
+              ) : (
+                <></>
+              )}
             </div>
             <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-1/3">
               {/* Title */}
@@ -360,87 +376,5 @@ export default function Products({ data }) {
     </>
   );
 }
-export async function getServerSideProps({ query }) {
-  const { index } = query;
-  let cacheProduct = await redisClient.get(`product-${index}`);
-  if (cacheProduct) {
-    return {
-      props: {
-        data: JSON.parse(cacheProduct),
-      },
-    };
-  } else {
-    const graphqlQuery = `
-    {
-        productByHandle(handle: "${index}") {
-                    id
-                    title
-                    handle
-                    description
-                    productType
-                    vendor
-                    tags
-                    availableForSale
-                    productType
-                    options {
-                        name
-                        values
-                    }
-                    metafields(identifiers: [
-                        { namespace: "custom", key: "related_products" },
-                        { namespace: "custom", key: "selection_type" }
-                      ]) {
-                        key
-                        value
-                    }
-                    featuredImage {
-                        src
-                    }
-                    priceRange {
-                        maxVariantPrice {
-                            amount
-                        }
-                        minVariantPrice {
-                            amount
-                        }
-                    }
-                    images(first: 5) {
-                        edges {
-                            node {
-                                src
-                                altText
-                            }
-                        }
-                    }
-                    variants(first: 10) {
-                        edges {
-                            node {
-                                id
-                                title
-                                price
-                                compareAtPrice
-                                image {
-                                    url
-                                }
-                                quantityAvailable
-                            }
-                        }
-                    }
-                }
-  
-    }
-    `;
 
-    const data = await axios.post(storefrontURL, graphqlQuery, {
-      headers: storefrontHeaders,
-    });
-
-    redisClient.set(`product-${index}`, JSON.stringify(data.data), "EX", 86400);
-
-    return {
-      props: {
-        data: data.data,
-      },
-    };
-  }
-}
+//

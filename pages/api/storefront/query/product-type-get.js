@@ -4,7 +4,7 @@ import redisClient from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
-    let redisTypes = redisClient.get("types");
+    let redisTypes = await redisClient.get("types");
 
     if (redisTypes) {
       res.json(JSON.parse(redisTypes));
@@ -21,7 +21,7 @@ const requests = async (req, res) => {
       const data = await axios.post(storefrontURL, query, {
         headers: storefrontHeaders,
       });
-      redisClient.set("types", data.data, "EX", 86400);
+      redisClient.set("types", JSON.stringify(data.data), "EX", 86400);
       res.json(data.data);
     }
   } catch (e) {

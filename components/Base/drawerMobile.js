@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import userContext from "../../utils/userContext";
+import { useRouter } from "next/router";
 
 import { AiOutlineMenu, AiFillShop } from "react-icons/ai";
 import { FiLogIn } from "react-icons/fi";
@@ -9,10 +10,12 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Cart from "./cart";
 import Divider from "@mui/material/Divider";
 import Link from "../common/Link";
+import { MdAccountCircle } from "react-icons/md";
 
-export default function DrawerMobile() {
+export default function DrawerMobile({ setModalOpen }) {
   const [open, setOpen] = useState(false);
   const { user } = useContext(userContext);
+  const router = useRouter();
 
   const toggleDrawer = (e) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
@@ -20,6 +23,10 @@ export default function DrawerMobile() {
     }
     setOpen(!open);
   };
+
+  useEffect(() => {
+    setOpen(false);
+  }, [router.query]);
 
   return (
     <>
@@ -49,7 +56,7 @@ export default function DrawerMobile() {
           <div className="pl-5">
             <div className="flex flex-row space-x-4 items-center">
               <FaQuestion className="text-xl" />
-              <Link className="text-lg" href="#">
+              <Link className="text-lg" href="/faq">
                 FAQ
               </Link>
             </div>
@@ -68,12 +75,23 @@ export default function DrawerMobile() {
 
           <div className="pl-5">
             <div className="flex flex-row space-x-4 items-center">
-              {user ? (
-                <></>
+              {!user.state ? (
+                <>
+                  <MdAccountCircle className="text-xl" />
+                  <p className="text-lg">My Account</p>
+                </>
               ) : (
                 <>
                   <FiLogIn className="text-xl" />
-                  <p className="text-lg">Login</p>
+                  <p
+                    className="text-lg"
+                    onClick={() => {
+                      setOpen(false);
+                      setModalOpen(true);
+                    }}
+                  >
+                    Login
+                  </p>
                 </>
               )}
             </div>

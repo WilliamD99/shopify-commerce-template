@@ -16,8 +16,6 @@ export default function Gallery({ images, tag, id }) {
   const { isMobile } = useContext(deviceContext);
   const sliderRef = useRef(null);
 
-  console.log(isMobile);
-
   const handleImageClick = (e, i) => {
     sliderRef.current.slickGoTo(i);
   };

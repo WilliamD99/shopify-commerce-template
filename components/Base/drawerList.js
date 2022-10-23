@@ -8,7 +8,6 @@ import { cartRemoveItem, cartAdd } from "../../utils/utils";
 
 export default function DrawerList({ e }) {
   const { setCart } = useContext(cartContext);
-
   // let checkoutUpdate = useCheckoutUpdateLinesMutation()
   return (
     <>
@@ -19,8 +18,7 @@ export default function DrawerList({ e }) {
         <div className="w-3/4 flex flex-col space-x-2 md:space-y-4">
           <div className="flex flex-row justify-between space-x-5">
             <p className="font-medium text-sm">
-              {e.title}{" "}
-              {e.variantTitle !== "Default Title" ? `(${e.variantTitle})` : ""}
+              {e.title} {e.title !== "Default Product" ? `(${e.title})` : ""}
             </p>
             <p
               className="font-medium cursor-pointer"

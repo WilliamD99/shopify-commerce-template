@@ -12,9 +12,9 @@ export default function Index({ id }) {
     productReviews.mutate({ id: id });
   }, []);
 
-  useEffect(() => {
-    if (productReviews.data) console.log(productReviews.data);
-  }, [productReviews.data]);
+  // useEffect(() => {
+  //   if (productReviews.data) console.log(productReviews.data);
+  // }, [productReviews.data]);
 
   if (!productReviews.data) return <></>;
 

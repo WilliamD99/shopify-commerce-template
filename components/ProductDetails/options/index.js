@@ -6,7 +6,6 @@ const Dropdown = dynamic(() => import("./Dropdown"));
 // import Bubble from './Bubble'
 
 export default function Options({ options, type, handleFunc }) {
-  console.log(type);
   let handleOptionsDisplay = () => {
     switch (type) {
       case "Bubble":

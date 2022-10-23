@@ -75,10 +75,12 @@ export default function Login({ setIndex }) {
     <>
       <form
         id="loginForm"
-        className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-10 py-8 flex flex-col justify-between space-y-3 bg-slate-200 rounded-xl z-50"
+        className="absolute w-80 md:w-96 h-96 md:h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-10 py-5 md:py-8 flex flex-col justify-between space-y-3 bg-slate-200 rounded-xl z-50"
         onSubmit={handleLogin}
       >
-        <p className="text-black text-2xl mb-5 font-bold text-center">Login</p>
+        <p className="text-black text-xl md:text-2xl mb-3 md:mb-5 font-bold text-center">
+          Login
+        </p>
         <div className="flex flex-col space-y-5">
           <TextField
             className="rounded-md"

@@ -78,7 +78,7 @@ export default function Header({ sticky }) {
           ) : (
             <></>
           )}
-          {isMobile ? <DrawerMobile /> : <></>}
+          {isMobile ? <DrawerMobile setModalOpen={setModalOpen} /> : <></>}
           <div className="hidden md:flex md:flex-row space-x-10 items-center">
             {headerConditionalDisplay()}
 

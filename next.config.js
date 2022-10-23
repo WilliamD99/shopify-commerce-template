@@ -8,6 +8,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   webpack: (config, { isServer }) => {
+    // config.resolve.alias["ioredis"] = false;
     if (!isServer) {
       config.resolve.fallback = { fs: false, path: false };
     }
