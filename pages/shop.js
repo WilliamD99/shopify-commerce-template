@@ -3,7 +3,6 @@ import deviceContext from "../utils/deviceContext";
 
 // Hooks
 import { useRouter } from "next/router";
-import useGetTotal from "../utils/hooks/useGetTotal";
 import { productAllStorefront } from "../utils/api/requests";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -41,8 +40,6 @@ export default function Shop({ vendors, types, collections }) {
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
-
-  let total = useGetTotal();
 
   useEffect(() => {
     setDataArr([]);
@@ -116,7 +113,6 @@ export default function Shop({ vendors, types, collections }) {
             count={count}
             length={dataArr.length}
             isLoading={mutateProductNextSf.isLoading}
-            total={total.data ? total.data.count : 0}
             setSortKey={setSortKey}
             setReverse={setReverse}
           />

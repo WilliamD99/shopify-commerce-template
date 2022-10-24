@@ -11,7 +11,7 @@ export default function CustomBreadcrumbs({ path }) {
         <Breadcrumbs className="breadcrumbs">
           {path.map((e, i) => (
             <Link
-              className="breadcrumbs-crumb text-base md:text-xl text-black"
+              className="breadcrumbs-crumb text-xs md:text-xl text-black"
               key={`breadcrumb-${i}`}
               href={e.path}
             >

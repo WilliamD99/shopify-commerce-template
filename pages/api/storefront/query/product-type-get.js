@@ -7,6 +7,7 @@ const requests = async (req, res) => {
     let redisTypes = await redisClient.get("types");
 
     if (redisTypes) {
+      redisClient.quit();
       res.json(JSON.parse(redisTypes));
     } else {
       const query = `  
@@ -22,6 +23,7 @@ const requests = async (req, res) => {
         headers: storefrontHeaders,
       });
       redisClient.set("types", JSON.stringify(data.data), "EX", 86400);
+      redisClient.quit();
       res.json(data.data);
     }
   } catch (e) {

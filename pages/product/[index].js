@@ -170,7 +170,7 @@ export default function Products() {
     } else {
       return (
         <Button
-          className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base w-full h-10 md:h-16 font-semibold text-white py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+          className="bg-gray-300 add-to-cart text-xs normal-case md:uppercase md:text-base w-full h-10 md:h-16 font-semibold  py-2 rounded-lg hover:bg-slate-100 hover:text-black"
           disabled={true}
         >
           Sold Out

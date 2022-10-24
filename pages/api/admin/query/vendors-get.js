@@ -10,6 +10,7 @@ const requests = async (req, res) => {
     let redisVendor = await redisClient.get("vendors");
 
     if (redisVendor) {
+      redisClient.quit();
       res.json(JSON.parse(redisVendor));
     } else {
       const query = `
@@ -27,6 +28,7 @@ const requests = async (req, res) => {
         headers: adminHeadersGraphql,
       });
       redisClient.set("vendors", JSON.stringify(data.data), "EX", 86400);
+      redisClient.quit();
       // res.setHeader("Cache-Control", "s-maxage=86400");
       res.json(data.data);
     }

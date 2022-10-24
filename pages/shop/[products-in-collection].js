@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import deviceContext from "../../utils/deviceContext";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import useProductByCollection from "../../utils/hooks/useProductByCollection";
 import SingleProduct from "../../components/Shop/single-product";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import Loading from "../../components/Loading/dataLoading";
 
-import FilterMenu from "../../components/Shop/filterMenu";
-import FilterBar from "../../components/Shop/filterBar";
+const FilterMenu = dynamic(() => import("../../components/Shop/filterMenu"));
+const FilterBar = dynamic(() => import("../../components/Shop/filterBar"));
+const FilterDrawer = dynamic(() =>
+  import("../../components/Shop/filterDrawer")
+);
 import Pagination from "../../components/Shop/pagination";
 import {
   collectionGet,
@@ -16,6 +21,7 @@ import {
 import { NextSeo } from "next-seo";
 
 export default function Collection({ vendors, types, collections }) {
+  const { isMobile } = useContext(deviceContext);
   const router = useRouter();
   const routerQuery = router.query;
   const products = useProductByCollection();
@@ -70,38 +76,55 @@ export default function Collection({ vendors, types, collections }) {
   return (
     <>
       <NextSeo title="Shop" description="" />
-      <Breadcrumbs
-        path={[
-          { name: "Home", path: "/" },
-          { name: "Shop", path: "/shop" },
-          {
-            name: `Collection: ${
-              products.data ? products.data.collection.title : ""
-            }`,
-            path: "#",
-          },
-        ]}
-      />
-
-      <div id="shop-container" className="px-10 overflow-hidden">
-        <FilterBar
-          total={products.data ? products.data.collection.productsCount : 0}
-          isLoading={products.isLoading}
-          length={dataArr.length}
-          count={dataArr.length}
-          setSortKey={setSortKey}
-          setReverse={setReverse}
+      <div className="flex flex-row items-center justify-between">
+        <Breadcrumbs
+          path={[
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/shop" },
+            {
+              name: `${products.data ? products.data.collection.title : ""}`,
+              path: "#",
+            },
+          ]}
         />
-        <div className="flex flex-row justify-between mt-5 space-x-8 z-50">
-          <FilterMenu
+        {isMobile ? (
+          <FilterDrawer
             vendors={vendors.data.shop.productVendors.edges}
             types={types.data.productTypes.edges}
             collections={collections.data.collections.edges}
-            isLoading={products.isLoading}
           />
+        ) : (
+          <></>
+        )}
+      </div>
 
-          <div className="relative w-9/12 xl:w-10/12">
-            <div className="grid lg:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
+      <div id="shop-container">
+        {!isMobile ? (
+          <FilterBar
+            total={products.data ? products.data.collection.productsCount : 0}
+            isLoading={products.isLoading}
+            length={dataArr.length}
+            count={dataArr.length}
+            setSortKey={setSortKey}
+            setReverse={setReverse}
+          />
+        ) : (
+          <></>
+        )}
+        <div className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50">
+          {!isMobile ? (
+            <FilterMenu
+              vendors={vendors.data.shop.productVendors.edges}
+              types={types.data.productTypes.edges}
+              collections={collections.data.collections.edges}
+              isLoading={products.isLoading}
+            />
+          ) : (
+            <></>
+          )}
+
+          <div className="relative w-11/12 md:w-full xl:w-10/12">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
               {products.isLoading ? (
                 <Loading />
               ) : (

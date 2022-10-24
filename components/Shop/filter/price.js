@@ -48,7 +48,9 @@ export default function PriceFilter({ setPrice, price }) {
         step={10}
       />
       <div className="flex justify-end">
-        <Button onClick={handleApply}>Apply</Button>
+        <Button className="text-black" onClick={handleApply}>
+          Apply
+        </Button>
       </div>
     </>
   );

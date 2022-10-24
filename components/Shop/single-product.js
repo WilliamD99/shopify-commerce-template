@@ -39,7 +39,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-md normal-case text-xs md:text-base bg-white text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-md normal-case text-xs md:text-base bg-gray-300 border-gray-300 absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
           disabled={true}
         >
           Sold out

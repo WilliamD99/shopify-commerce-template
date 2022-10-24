@@ -45,7 +45,6 @@ export default function FilterDrawer({ vendors, types, collections }) {
     }
     if (newList.length > 0) {
       routerQuery.vendors = encodeURIComponent(newList.join(","));
-      console.log(window.location.pathname);
       router.push(
         {
           // pathname: "/shop",

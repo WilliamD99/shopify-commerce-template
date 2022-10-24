@@ -77,7 +77,12 @@ export default function Gallery({ images, tag, id }) {
                 className="w-full single-product__image-main relative image-gallery-main"
                 key={`image-${i}`}
               >
-                <Image layout="fill" src={e.node.src} alt={e.node.altText} />
+                <Image
+                  priority
+                  layout="fill"
+                  src={e.node.src}
+                  alt={e.node.altText}
+                />
               </div>
             ))}
           </Slider>
