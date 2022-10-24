@@ -82,7 +82,7 @@ export default function Header({ sticky }) {
           <div className="hidden md:flex md:flex-row space-x-10 items-center">
             {headerConditionalDisplay()}
 
-            {user ? (
+            {!user.state ? (
               <Link href="/my-account">
                 <Badge id="wlBadge" badgeContent={wlCount}>
                   <AiOutlineHeart className="text-xl" />

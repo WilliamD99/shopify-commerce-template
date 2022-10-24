@@ -79,10 +79,9 @@ export default function Product({ data }) {
               <Button
                 variant="outlined"
                 className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+                onClick={() => router.push(`/product/${productData.handle}`)}
               >
-                <Link href={`/product/${productData.handle}`}>
-                  Select Options
-                </Link>
+                Select Options
               </Button>
             ) : (
               <Button
