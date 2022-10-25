@@ -14,7 +14,7 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import loadingContext from "../utils/loadingContext";
+// import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
@@ -23,6 +23,11 @@ import { customerGet } from "../utils/api/requests";
 import Layout from "../components/layout";
 import AgeGate from "../components/AgeGate";
 import { getCookie } from "../utils/utils";
+
+import dynamic from "next/dynamic";
+const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
+  ssr: false,
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +38,7 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
   const [cookie, setCookie] = useState(
@@ -73,12 +78,7 @@ function MyApp({ Component, pageProps }) {
 
   const getLayout = Component.getLayout || ((page) => page);
 
-  if (isMobile === "none")
-    return (
-      <>
-        <p>Test</p>
-      </>
-    );
+  if (isMobile === "none") return <></>;
 
   return getLayout(
     <>
@@ -112,19 +112,20 @@ function MyApp({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>
+            {/* <loadingContext.Provider value={{ loading, setLoading }}> */}
             <userContext.Provider value={{ user, setUser }}>
               <cartContext.Provider value={{ cart, setCart }}>
-                <loadingContext.Provider value={{ loading, setLoading }}>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </loadingContext.Provider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
               </cartContext.Provider>
             </userContext.Provider>
+            {/* </loadingContext.Provider> */}
           </deviceContext.Provider>
         </Hydrate>
         <ReactQueryDevtools />
       </QueryClientProvider>
+      <ProgressBar />
     </>
   );
 }
