@@ -189,7 +189,7 @@ export default function Shop({ vendors, types, collections }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, res }) {
   const {
     index,
     limit,
@@ -202,7 +202,6 @@ export async function getServerSideProps({ query }) {
     vendors,
     type,
   } = query;
-  console.log(vendors);
 
   let _vendor = await vendorsGet(),
     types = await productTypeGet(),
@@ -222,6 +221,10 @@ export async function getServerSideProps({ query }) {
       vendors: vendors ? decodeURIComponent(vendors) : undefined,
       type: type ? decodeURIComponent(type) : undefined,
     })
+  );
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
   );
 
   return {
