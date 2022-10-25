@@ -145,6 +145,8 @@ const requests = async (req, res) => {
       headers: adminHeadersGraphql,
     });
     // console.log('not')
+    res.setHeader("Cache-Control", "public, s-maxage=86400");
+
     // redis.set("all-p-cache", JSON.stringify(data.data), "EX", 60)
     res.json(data.data);
 

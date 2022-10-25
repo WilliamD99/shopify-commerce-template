@@ -1,19 +1,22 @@
 import { useState, useEffect, useContext } from "react";
 import deviceContext from "../utils/deviceContext";
+import loadingContext from "../utils/loadingContext";
 
 // Hooks
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { productAllStorefront } from "../utils/api/requests";
 import { useMutation } from "@tanstack/react-query";
 import {
   vendorsGet,
   productTypeGet,
   collectionGet,
+  productsGet,
 } from "../lib/serverRequest";
 import dynamic from "next/dynamic";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 
 // Components
-import Loading from "../components/Loading/dataLoading";
+// import Loading from "../components/Loading/dataLoading";
 import Breadcrumbs from "../components/common/Breadcrumbs";
 import SingeProduct from "../components/Shop/single-product";
 // import FilterBar from "../components/Shop/filterBar";
@@ -26,13 +29,39 @@ const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
 const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 
 export default function Shop({ vendors, types, collections }) {
+  // const { loading } = useContext(loadingContext);
+  const router = useRouter();
+  const routerQuery = router.query;
+  const { data } = useQuery(["product-all"], () =>
+    productsGet({
+      index: routerQuery.index,
+      limit: routerQuery.limit,
+      reversed: routerQuery.reversed,
+      sortKey: routerQuery.sortKey,
+      cursor: routerQuery.cursor,
+      direction: routerQuery.direction,
+      price: routerQuery.price,
+      instock: routerQuery.instock,
+      vendors: routerQuery.vendors
+        ? decodeURIComponent(routerQuery.vendors)
+        : undefined,
+      type: routerQuery.type ? decodeURIComponent(routerQuery.type) : undefined,
+    })
+  );
+  // console.log(isLoading, isStale, isSuccess, isInitialLoading, isFetching);
   const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
-  const [isNext, setNext] = useState(false);
-  const [isPrevious, setPrevious] = useState(false);
-  const router = useRouter();
-  const routerQuery = router.query;
+  const [isNext, setNext] = useState(data.data.products.pageInfo.hasNextPage);
+  const [isPrevious, setPrevious] = useState(
+    data.data.products.pageInfo.hasPreviousPage
+  );
+
+  useEffect(() => {
+    if (data) {
+      setDataArr(data.data.products.edges);
+    }
+  }, [routerQuery]);
 
   // State for query
   const [sortKey, setSortKey] = useState();
@@ -41,54 +70,54 @@ export default function Shop({ vendors, types, collections }) {
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
 
-  useEffect(() => {
-    setDataArr([]);
-    if (router.isReady) {
-      mutateProductNextSf.mutate({
-        sortKey: routerQuery.sort_key,
-        isReverse: routerQuery.reverse ? routerQuery.reverse.toString() : "",
-        cursor: routerQuery.cursor,
-        price: routerQuery.price,
-        instock: routerQuery.instock,
-        vendors: routerQuery.vendors
-          ? decodeURIComponent(routerQuery.vendors)
-          : "",
-        type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
-        limit: routerQuery.limit,
-      });
-      // }
-    }
-  }, [routerQuery]);
+  // useEffect(() => {
+  //   setDataArr([]);
+  //   if (router.isReady) {
+  //     mutateProductNextSf.mutate({
+  //       sortKey: routerQuery.sort_key,
+  //       isReverse: routerQuery.reverse ? routerQuery.reverse.toString() : "",
+  //       cursor: routerQuery.cursor,
+  //       price: routerQuery.price,
+  //       instock: routerQuery.instock,
+  //       vendors: routerQuery.vendors
+  //         ? decodeURIComponent(routerQuery.vendors)
+  //         : "",
+  //       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
+  //       limit: routerQuery.limit,
+  //     });
+  //     // }
+  //   }
+  // }, [routerQuery]);
 
-  let mutateProductNextSf = useMutation(async (params) => {
-    let data = await productAllStorefront({
-      cursor: params.cursor,
-      direction: direction,
-      sortKey: params.sortKey ? params.sortKey : sortKey,
-      reversed: params.isReverse ? params.isReverse : isReverse,
-      price: params.price,
-      instock: params.instock,
-      vendors: params.vendors,
-      type: params.type,
-      limit: params.limit,
-    });
-    let edges = data.data.products.edges;
-    setDataArr(edges);
-    setNext(data.data.products.pageInfo.hasNextPage);
-    setPrevious(data.data.products.pageInfo.hasPreviousPage);
+  // let mutateProductNextSf = useMutation(async (params) => {
+  //   let data = await productAllStorefront({
+  //     cursor: params.cursor,
+  //     direction: direction,
+  //     sortKey: params.sortKey ? params.sortKey : sortKey,
+  //     reversed: params.isReverse ? params.isReverse : isReverse,
+  //     price: params.price,
+  //     instock: params.instock,
+  //     vendors: params.vendors,
+  //     type: params.type,
+  //     limit: params.limit,
+  //   });
+  //   let edges = data.data.products.edges;
+  //   setDataArr(edges);
+  //   setNext(data.data.products.pageInfo.hasNextPage);
+  //   setPrevious(data.data.products.pageInfo.hasPreviousPage);
 
-    setCursorNext(edges[0].cursor);
-    setCursorLast(edges[edges.length - 1].cursor);
+  //   setCursorNext(edges[0].cursor);
+  //   setCursorLast(edges[edges.length - 1].cursor);
 
-    if (direction) setCount(edges.length + count);
-    else setCount(count - edges.length);
-    return data.data;
-  });
+  //   if (direction) setCount(edges.length + count);
+  //   else setCount(count - edges.length);
+  //   return data.data;
+  // });
 
   return (
     <>
       <NextSeo title="Shop" description="" />
-
+      {/* {loading ? <Loading /> : <></>} */}
       <div className="flex flex-row items-center justify-between">
         <Breadcrumbs
           path={[
@@ -112,7 +141,6 @@ export default function Shop({ vendors, types, collections }) {
           <FilterBar
             count={count}
             length={dataArr.length}
-            isLoading={mutateProductNextSf.isLoading}
             setSortKey={setSortKey}
             setReverse={setReverse}
           />
@@ -129,7 +157,6 @@ export default function Shop({ vendors, types, collections }) {
               vendors={vendors.data.shop.productVendors.edges}
               types={types.data.productTypes.edges}
               collections={collections.data.collections.edges}
-              isLoading={mutateProductNextSf.isLoading}
             />
           ) : (
             <></>
@@ -140,13 +167,11 @@ export default function Shop({ vendors, types, collections }) {
               id="shop-grid"
               className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
             >
-              {mutateProductNextSf.isLoading ? (
-                <Loading />
-              ) : (
-                dataArr.map((e, i) => <SingeProduct key={i} index={i} e={e} />)
-              )}
+              {dataArr.map((e, i) => (
+                <SingeProduct key={i} index={i} e={e} />
+              ))}
             </div>
-            {mutateProductNextSf.isLoading ? (
+            {data ? (
               <></>
             ) : (
               <Pagination
@@ -164,16 +189,47 @@ export default function Shop({ vendors, types, collections }) {
   );
 }
 
-export async function getStaticProps() {
-  let vendors = await vendorsGet(),
+export async function getServerSideProps({ query }) {
+  const {
+    index,
+    limit,
+    reversed,
+    sortKey,
+    cursor,
+    direction,
+    price,
+    instock,
+    vendors,
+    type,
+  } = query;
+  console.log(vendors);
+
+  let _vendor = await vendorsGet(),
     types = await productTypeGet(),
     collections = await collectionGet();
 
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(["product-all"], () =>
+    productsGet({
+      index: index,
+      limit: limit,
+      reversed: reversed,
+      sortKey: sortKey,
+      cursor: cursor,
+      direction: direction,
+      price: price,
+      instock: instock,
+      vendors: vendors ? decodeURIComponent(vendors) : undefined,
+      type: type ? decodeURIComponent(type) : undefined,
+    })
+  );
+
   return {
     props: {
-      vendors: vendors,
+      vendors: _vendor,
       types: types,
       collections: collections,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 }
