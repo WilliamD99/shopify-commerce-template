@@ -7,6 +7,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  reactStrictMode: false,
   webpack: (config, { isServer }) => {
     // config.resolve.alias["ioredis"] = false;
     if (!isServer) {

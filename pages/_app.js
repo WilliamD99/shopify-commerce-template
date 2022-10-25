@@ -7,7 +7,11 @@ import "../public/styles/index.css";
 import "react-toastify/dist/ReactToastify.css";
 // Library
 import Helmet from "react-helmet";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  Hydrate,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import loadingContext from "../utils/loadingContext";
@@ -69,7 +73,12 @@ function MyApp({ Component, pageProps }) {
 
   const getLayout = Component.getLayout || ((page) => page);
 
-  if (isMobile === "none") return <></>;
+  if (isMobile === "none")
+    return (
+      <>
+        <p>Test</p>
+      </>
+    );
 
   return getLayout(
     <>
@@ -99,19 +108,21 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <AgeGate />
+      {/* <AgeGate /> */}
       <QueryClientProvider client={queryClient}>
-        <deviceContext.Provider value={{ isMobile }}>
-          <userContext.Provider value={{ user, setUser }}>
-            <cartContext.Provider value={{ cart, setCart }}>
-              <loadingContext.Provider value={{ loading, setLoading }}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </loadingContext.Provider>
-            </cartContext.Provider>
-          </userContext.Provider>
-        </deviceContext.Provider>
+        <Hydrate state={pageProps.dehydratedState}>
+          <deviceContext.Provider value={{ isMobile }}>
+            <userContext.Provider value={{ user, setUser }}>
+              <cartContext.Provider value={{ cart, setCart }}>
+                <loadingContext.Provider value={{ loading, setLoading }}>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </loadingContext.Provider>
+              </cartContext.Provider>
+            </userContext.Provider>
+          </deviceContext.Provider>
+        </Hydrate>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </>
