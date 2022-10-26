@@ -29,6 +29,19 @@ const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
 const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 
 export default function Shop({ vendors, types, collections }) {
+  const { isMobile } = useContext(deviceContext);
+  const [dataArr, setDataArr] = useState([]);
+  const [count, setCount] = useState(0);
+  const [isNext, setNext] = useState(false);
+  const [isPrevious, setPrevious] = useState(
+    false
+  );
+  // State for query
+  const [sortKey, setSortKey] = useState();
+  const [isReverse, setReverse] = useState(false);
+  const [cursorNext, setCursorNext] = useState();
+  const [cursorLast, setCursorLast] = useState();
+  const [direction, setDirection] = useState(true);
   // const { loading } = useContext(loadingContext);
   const router = useRouter();
   const routerQuery = router.query;
@@ -48,26 +61,16 @@ export default function Shop({ vendors, types, collections }) {
       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : undefined,
     })
   );
-  const { isMobile } = useContext(deviceContext);
-  const [dataArr, setDataArr] = useState([]);
-  const [count, setCount] = useState(0);
-  const [isNext, setNext] = useState(data.data.products.pageInfo.hasNextPage);
-  const [isPrevious, setPrevious] = useState(
-    data.data.products.pageInfo.hasPreviousPage
-  );
+
 
   useEffect(() => {
     if (data) {
       setDataArr(data.data.products.edges);
+      setNext(data.data.products.pageInfo.hasNextPage)
+      setPrevious(data.data.products.pageInfo.hasPreviousPage)
     }
   }, [routerQuery]);
 
-  // State for query
-  const [sortKey, setSortKey] = useState();
-  const [isReverse, setReverse] = useState(false);
-  const [cursorNext, setCursorNext] = useState();
-  const [cursorLast, setCursorLast] = useState();
-  const [direction, setDirection] = useState(true);
 
   // useEffect(() => {
   //   setDataArr([]);
@@ -170,7 +173,7 @@ export default function Shop({ vendors, types, collections }) {
                 <SingeProduct key={i} index={i} e={e} />
               ))}
             </div>
-            {data ? (
+            {!dataArr ? (
               <></>
             ) : (
               <Pagination
@@ -223,7 +226,7 @@ export async function getServerSideProps({ query, res }) {
   );
   res.setHeader(
     "Cache-Control",
-    "public, s-maxage=86400, stale-while-revalidate=59"
+    "public, s-maxage=10, stale-while-revalidate=59"
   );
 
   return {
