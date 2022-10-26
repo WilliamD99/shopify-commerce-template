@@ -74,7 +74,7 @@ export default function Shop({ vendors, types, collections }) {
         ? decodeURIComponent(routerQuery.vendors)
         : null,
       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
-    }), { staleTime: 1000 }
+    }), { staleTime: 10000 }
   );
   console.log(data)
 
@@ -251,7 +251,7 @@ export async function getServerSideProps({ query, res }) {
       instock: instock,
       vendors: vendors ? decodeURIComponent(vendors) : null,
       type: type ? decodeURIComponent(type) : null,
-    }), { staleTime: 1000 }
+    }), { staleTime: 10000 }
   );
   res.setHeader(
     "Cache-Control",
