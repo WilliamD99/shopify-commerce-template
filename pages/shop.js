@@ -45,7 +45,22 @@ export default function Shop({ vendors, types, collections }) {
   // const { loading } = useContext(loadingContext);
   const router = useRouter();
   const routerQuery = router.query;
-  const { data } = useQuery(["product-all"], () =>
+  const { data } = useQuery([
+    "product",
+    { index: routerQuery.index ? routerQuery.index : null },
+    { limit: routerQuery.limit ? routerQuery.limit : null },
+    { reversed: routerQuery.reversed ? routerQuery.reversed : null },
+    { sortKey: routerQuery.sortKey ? routerQuery.sortKey : null },
+    { cursor: routerQuery.cursor ? routerQuery.cursor : null },
+    { direction: routerQuery.direction ? routerQuery.direction : null },
+    { price: routerQuery.price ? routerQuery.price : null },
+    { instock: routerQuery.instock ? routerQuery.instock : null },
+    {
+      vendors: routerQuery.vendors
+        ? decodeURIComponent(routerQuery.vendors)
+        : null
+    },
+    { type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null },], () =>
     productsGet({
       index: routerQuery.index,
       limit: routerQuery.limit,
@@ -57,8 +72,8 @@ export default function Shop({ vendors, types, collections }) {
       instock: routerQuery.instock,
       vendors: routerQuery.vendors
         ? decodeURIComponent(routerQuery.vendors)
-        : undefined,
-      type: routerQuery.type ? decodeURIComponent(routerQuery.type) : undefined,
+        : null,
+      type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
     })
   );
 
@@ -68,6 +83,8 @@ export default function Shop({ vendors, types, collections }) {
       setDataArr(data.data.products.edges);
       setNext(data.data.products.pageInfo.hasNextPage)
       setPrevious(data.data.products.pageInfo.hasPreviousPage)
+      setCursorNext(data.data.products.edges[0].cursor)
+      setCursorLast(data.data.products.edges[data.data.products.edges.length - 1].cursor)
     }
   }, [routerQuery]);
 
@@ -210,7 +227,18 @@ export async function getServerSideProps({ query, res }) {
     collections = await collectionGet();
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["product-all"], () =>
+  await queryClient.prefetchQuery(["product",
+    { index: index === undefined ? null : index },
+    { limit: limit === undefined ? null : limit },
+    { reversed: reversed === undefined ? null : reversed },
+    { sortKey: sortKey === undefined ? null : sortKey },
+    { cursor: cursor === undefined ? null : cursor },
+    { direction: direction === undefined ? null : direction },
+    { price: price === undefined ? null : price },
+    { instock: instock === undefined ? null : instock },
+    { vendors: vendors ? decodeURIComponent(vendors) : null },
+    { type: type ? decodeURIComponent(type) : null },
+  ], () =>
     productsGet({
       index: index,
       limit: limit,
@@ -220,8 +248,8 @@ export async function getServerSideProps({ query, res }) {
       direction: direction,
       price: price,
       instock: instock,
-      vendors: vendors ? decodeURIComponent(vendors) : undefined,
-      type: type ? decodeURIComponent(type) : undefined,
+      vendors: vendors ? decodeURIComponent(vendors) : null,
+      type: type ? decodeURIComponent(type) : null,
     })
   );
   res.setHeader(
