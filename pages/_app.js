@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-// import loadingContext from "../utils/loadingContext";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
@@ -29,16 +28,7 @@ const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
   ssr: false,
 });
 
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       refetchOnWindowFocus: false,
-//     },
-//   },
-// });
-
 function MyApp({ Component, pageProps }) {
-  // const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
   const [cookie, setCookie] = useState(
@@ -121,7 +111,6 @@ function MyApp({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>
-            {/* <loadingContext.Provider value={{ loading, setLoading }}> */}
             <userContext.Provider value={{ user, setUser }}>
               <cartContext.Provider value={{ cart, setCart }}>
                 <Layout>
@@ -129,7 +118,6 @@ function MyApp({ Component, pageProps }) {
                 </Layout>
               </cartContext.Provider>
             </userContext.Provider>
-            {/* </loadingContext.Provider> */}
           </deviceContext.Provider>
         </Hydrate>
         <ReactQueryDevtools />

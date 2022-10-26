@@ -1,12 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server'
 
-export function middleware() {
-  // Store the response so we can modify its headers
-  const response = NextResponse.next();
+export const config = {
+  matcher: ['/my-account/:path*', '/checkout/:path*'],
+}
 
-  // Set custom header
-  response.headers.set("x-modified-edge", "true");
-
-  // Return response
-  return response;
+export function middleware(req) {
+  // Parse the cookie
+  const isLogin = JSON.parse(req.cookies.get('tn') || 'false')
+  if (req.nextUrl.pathname.startsWith("/my-account")) {
+    // Update url pathname
+    req.nextUrl.pathname = `/${isLogin ? 'my-account' : 'my-account/err'}`
+    // Rewrite to url
+    return NextResponse.rewrite(req.nextUrl)
+  } else if (req.nextUrl.pathname.startsWith("/checkout")) {
+    req.nextUrl.pathname = `/${isLogin ? 'checkout' : 'my-account/err'}`
+    return NextResponse.rewrite(req.nextUrl)
+  }
 }
