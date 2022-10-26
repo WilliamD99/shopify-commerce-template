@@ -13,26 +13,36 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
-// import axios from "axios";
 // import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
 // import redisClient from "../../lib/redis";
-import { productByHandle } from "../../utils/api/requests";
-import { useMutation } from "@tanstack/react-query";
+import { productByHandle } from "../../lib/serverRequest";
+import {
+  useMutation,
+  dehydrate,
+  QueryClient,
+  useQuery,
+} from "@tanstack/react-query";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
   {
     loading: () => <p>Loading...</p>,
+    ssr: false,
   }
 );
 const Related = dynamic(
   () => import("../../components/ProductDetails/related/relatedProducts"),
   {
     loading: () => <p>Loading...</p>,
+    ssr: false,
   }
 );
 
-export default function Products() {
+export default function Products({ handle }) {
+  const { data } = useQuery([`product-${handle}`], () =>
+    productByHandle(handle)
+  );
+
   const router = useRouter();
   const { index } = router.query;
   const [product, setProduct] = useState();
@@ -180,9 +190,16 @@ export default function Products() {
   };
 
   // Get the product
+  // useEffect(() => {
+  //   if (index !== undefined) productByHandleMutation.mutate({ handle: index });
+  // }, [index]);
+
   useEffect(() => {
-    if (index !== undefined) productByHandleMutation.mutate({ handle: index });
-  }, [index]);
+    if (data) {
+      setProduct(data.data.productByHandle);
+      setIsInStock(data.data.productByHandle.availableForSale);
+    }
+  }, [handle]);
 
   useEffect(() => {
     if (product) {
@@ -227,6 +244,7 @@ export default function Products() {
   }, [variantId]);
 
   if (!product) return <Loading />;
+
   return (
     <>
       <Breadcrumbs
@@ -381,4 +399,18 @@ export default function Products() {
   );
 }
 
+export async function getServerSideProps({ query, res }) {
+  const { index } = query;
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery([`product-${index}`], () =>
+    productByHandle(index)
+  );
+
+  return {
+    props: {
+      handle: index,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
 //

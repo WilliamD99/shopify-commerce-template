@@ -48,7 +48,6 @@ export default function Shop({ vendors, types, collections }) {
       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : undefined,
     })
   );
-  // console.log(isLoading, isStale, isSuccess, isInitialLoading, isFetching);
   const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);

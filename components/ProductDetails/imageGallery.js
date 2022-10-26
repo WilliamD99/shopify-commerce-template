@@ -30,7 +30,6 @@ export default function Gallery({ images, tag, id }) {
     vertical: isMobile ? true : false,
     verticalSwiping: isMobile ? true : false,
   };
-
   return (
     <>
       <div
