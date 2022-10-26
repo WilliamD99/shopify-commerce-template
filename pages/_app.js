@@ -29,13 +29,13 @@ const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
   ssr: false,
 });
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       refetchOnWindowFocus: false,
+//     },
+//   },
+// });
 
 function MyApp({ Component, pageProps }) {
   // const [loading, setLoading] = useState(false);
@@ -45,6 +45,15 @@ function MyApp({ Component, pageProps }) {
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
   const [isMobile, setMobile] = useState("none");
+  const [queryClient] = useState(() => new QueryClient(
+    {
+      defaultOptions: {
+        queries: {
+          refetchOnWindowFocus: false,
+        },
+      },
+    }
+  ))
 
   useEffect(() => {
     setMobile(

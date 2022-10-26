@@ -74,8 +74,9 @@ export default function Shop({ vendors, types, collections }) {
         ? decodeURIComponent(routerQuery.vendors)
         : null,
       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
-    })
+    }), { staleTime: 1000 }
   );
+  console.log(data)
 
 
   useEffect(() => {
@@ -208,6 +209,7 @@ export default function Shop({ vendors, types, collections }) {
   );
 }
 
+const queryClient = new QueryClient();
 export async function getServerSideProps({ query, res }) {
   const {
     index,
@@ -226,7 +228,6 @@ export async function getServerSideProps({ query, res }) {
     types = await productTypeGet(),
     collections = await collectionGet();
 
-  const queryClient = new QueryClient();
   await queryClient.prefetchQuery(["product",
     { index: index === undefined ? null : index },
     { limit: limit === undefined ? null : limit },
@@ -250,7 +251,7 @@ export async function getServerSideProps({ query, res }) {
       instock: instock,
       vendors: vendors ? decodeURIComponent(vendors) : null,
       type: type ? decodeURIComponent(type) : null,
-    })
+    }), { staleTime: 1000 }
   );
   res.setHeader(
     "Cache-Control",
