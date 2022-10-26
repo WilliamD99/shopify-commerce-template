@@ -7,15 +7,16 @@ export default function Pagination({
   isNext,
   cursorFirst,
   cursorLast,
-  setDirection,
+  // setDirection,
 }) {
   const router = useRouter();
   const routerQuery = router.query;
 
   const handlePaginateClick = async (direction, cursor) => {
     scroll(0, 0);
-    await setDirection(direction);
+    // await setDirection(direction);
     routerQuery.cursor = cursor;
+    routerQuery.direction = direction
     router.push(
       {
         pathname: window.location.pathname,

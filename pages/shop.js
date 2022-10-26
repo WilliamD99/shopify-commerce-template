@@ -41,7 +41,7 @@ export default function Shop({ vendors, types, collections }) {
   const [isReverse, setReverse] = useState(false);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
-  const [direction, setDirection] = useState(true);
+  // const [direction, setDirection] = useState(true);
   // const { loading } = useContext(loadingContext);
   const router = useRouter();
   const routerQuery = router.query;
@@ -199,7 +199,7 @@ export default function Shop({ vendors, types, collections }) {
                 isNext={isNext}
                 cursorFirst={cursorNext}
                 cursorLast={cursorLast}
-                setDirection={setDirection}
+              // setDirection={setDirection}
               />
             )}
           </div>
