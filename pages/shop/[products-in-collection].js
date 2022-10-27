@@ -16,11 +16,7 @@ const FilterDrawer = dynamic(() =>
   import("../../components/Shop/filterDrawer")
 );
 import Pagination from "../../components/Shop/pagination";
-import {
-  collectionGet,
-  productTypeGet,
-  vendorsGet,
-} from "../../lib/serverRequest";
+
 import { NextSeo } from "next-seo";
 
 export default function Collection({ vendors, types, collections }) {
