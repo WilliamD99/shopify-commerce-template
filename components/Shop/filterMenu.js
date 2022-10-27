@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { collectionGet } from '../../lib/serverRequest'
 
 import Link from "../common/Link";
 import PriceFilter from "./filter/price";
@@ -11,11 +13,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
 
-export default function FilterMenu({ vendors, types, collections }) {
-  let [availableCollections] = useState(collections);
+export default function FilterMenu() {
   let [price, setPrice] = useState([0, 1000]);
   let router = useRouter();
   let routerQuery = router.query;
+
+  const { data } = useQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
 
   return (
     <>
@@ -33,17 +36,16 @@ export default function FilterMenu({ vendors, types, collections }) {
           </AccordionSummary>
           <AccordionDetails>
             <div className="relative sb-custom h-full flex flex-col space-y-2 overflow-scroll overflow-x-hidden pl-2">
-              {availableCollections.map((e) => (
+              {data.data.collections.edges.map((e) => (
                 <div
                   key={e.node.handle}
                   className="flex flex-row justify-between items-center"
                 >
                   <Link
-                    className={`${
-                      decodeURIComponent(routerQuery.col) === e.node.id
-                        ? "font-semibold"
-                        : ""
-                    }`}
+                    className={`${decodeURIComponent(routerQuery.col) === e.node.id
+                      ? "font-semibold"
+                      : ""
+                      }`}
                     href={{
                       pathname: "/shop/products-in-collection/",
                       query: { col: encodeURIComponent(e.node.id) },
@@ -94,7 +96,7 @@ export default function FilterMenu({ vendors, types, collections }) {
             <p className="text-lg font-semibold">Vendor</p>
           </AccordionSummary>
           <AccordionDetails>
-            <VendorFilter vendors={vendors} />
+            <VendorFilter />
           </AccordionDetails>
         </Accordion>
 
@@ -108,7 +110,7 @@ export default function FilterMenu({ vendors, types, collections }) {
             <p className="text-lg font-semibold">Type</p>
           </AccordionSummary>
           <AccordionDetails>
-            <ProductType types={types} />
+            <ProductType />
           </AccordionDetails>
         </Accordion>
       </div>
@@ -116,14 +118,3 @@ export default function FilterMenu({ vendors, types, collections }) {
   );
 }
 
-// useLayoutEffect(() => {
-//   filterMenuAnim.current = gsap.timeline({
-//     scrollTrigger: {
-//       trigger: "#shop-container",
-//       start: "top top",
-//       end: "center+=800 bottom",
-//       pin: "#filter",
-//     },
-//   });
-//   return () => filterMenuAnim.current.kill();
-// }, [isLoading]);

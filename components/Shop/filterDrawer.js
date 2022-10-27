@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { BsFilterRight } from "react-icons/bs";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -10,13 +10,19 @@ import Link from "../common/Link";
 import PriceFilter from "./filter/price";
 
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { vendorsGet, productTypeGet, collectionGet } from '../../lib/serverRequest'
 
-export default function FilterDrawer({ vendors, types, collections }) {
+export default function FilterDrawer() {
   const [drawerOpen, setDrawer] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [price, setPrice] = useState([0, 1000]);
   let [selectedVendors, setSelectedVendors] = useState([]);
   let [selectedTypes, setSelectedType] = useState([]);
+
+  const getVendors = useQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
+  const getTypes = useQuery(['types-all'], productTypeGet, { staleTime: 24 * 60 * 60 * 1000 })
+  const getCollections = useQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
 
   let router = useRouter();
   let routerQuery = router.query;
@@ -34,6 +40,10 @@ export default function FilterDrawer({ vendors, types, collections }) {
 
   const handleVendor = (e) => {
     let newList;
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
+
     if (selectedVendors.includes(e)) {
       newList = selectedVendors.filter((selected) => selected !== e);
 
@@ -53,7 +63,7 @@ export default function FilterDrawer({ vendors, types, collections }) {
         undefined
       );
     } else {
-      routerQuery.vendors = "";
+      delete routerQuery.vendors;
       router.push(
         {
           // pathname: window.location.pathname,
@@ -66,6 +76,10 @@ export default function FilterDrawer({ vendors, types, collections }) {
 
   const handleType = (e) => {
     let newList;
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
+
     if (selectedTypes.includes(e)) {
       newList = selectedTypes.filter((selected) => selected !== e);
 
@@ -85,7 +99,7 @@ export default function FilterDrawer({ vendors, types, collections }) {
         undefined
       );
     } else {
-      routerQuery.type = "";
+      delete routerQuery.type;
       router.push(
         {
           // pathname: window.location.pathname,
@@ -130,7 +144,7 @@ export default function FilterDrawer({ vendors, types, collections }) {
               </AccordionSummary>
               <AccordionDetails>
                 <div className="grid grid-cols-2 gap-4">
-                  {collections.map((e) => (
+                  {getCollections.data.data.collections.edges.map((e) => (
                     <Link
                       href={{
                         pathname: "/shop/products-in-collection/",
@@ -163,17 +177,16 @@ export default function FilterDrawer({ vendors, types, collections }) {
               </AccordionSummary>
               <AccordionDetails>
                 <div className="grid grid-cols-2 gap-4">
-                  {vendors.map((e) => (
+                  {getVendors.data.data.shop.productVendors.edges.map((e) => (
                     <p
                       onClick={() => handleVendor(e.node)}
                       key={`vendor-${e.node}`}
-                      className={`${
-                        decodeURIComponent(routerQuery.vendors)
-                          .split(",")
-                          .includes(e.node)
-                          ? "font-bold"
-                          : ""
-                      }`}
+                      className={`${decodeURIComponent(routerQuery.vendors)
+                        .split(",")
+                        .includes(e.node)
+                        ? "font-bold"
+                        : ""
+                        }`}
                     >
                       {e.node}
                     </p>
@@ -200,17 +213,16 @@ export default function FilterDrawer({ vendors, types, collections }) {
               </AccordionSummary>
               <AccordionDetails>
                 <div className="grid grid-cols-2 gap-4">
-                  {types.map((e) => (
+                  {getTypes.data.data.productTypes.edges.map((e) => (
                     <p
                       onClick={() => handleType(e.node)}
                       key={`type-${e.node}`}
-                      className={`${
-                        decodeURIComponent(routerQuery.type)
-                          .split(",")
-                          .includes(e.node)
-                          ? "font-bold"
-                          : ""
-                      }`}
+                      className={`${decodeURIComponent(routerQuery.type)
+                        .split(",")
+                        .includes(e.node)
+                        ? "font-bold"
+                        : ""
+                        }`}
                     >
                       {e.node}
                     </p>
@@ -240,12 +252,6 @@ export default function FilterDrawer({ vendors, types, collections }) {
                 <PriceFilter price={price} setPrice={setPrice} />
               </AccordionDetails>
             </Accordion>
-            <div className="flex flex-row justify-between mt-3">
-              <p className="text-base uppercase md:text-xl font-semibold">
-                Test
-              </p>
-              <p>Test</p>
-            </div>
           </div>
         </Box>
       </Drawer>

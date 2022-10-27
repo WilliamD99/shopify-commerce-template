@@ -28,7 +28,7 @@ import FilterDrawer from "../components/Shop/filterDrawer";
 const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
 const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 
-export default function Shop({ vendors, types, collections }) {
+export default function Shop() {
   const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
@@ -76,8 +76,6 @@ export default function Shop({ vendors, types, collections }) {
       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
     }), { staleTime: 10000 }
   );
-  console.log(data)
-
 
   useEffect(() => {
     if (data) {
@@ -137,7 +135,6 @@ export default function Shop({ vendors, types, collections }) {
   return (
     <>
       <NextSeo title="Shop" description="" />
-      {/* {loading ? <Loading /> : <></>} */}
       <div className="flex flex-row items-center justify-between">
         <Breadcrumbs
           path={[
@@ -147,9 +144,6 @@ export default function Shop({ vendors, types, collections }) {
         />
         {isMobile ? (
           <FilterDrawer
-            vendors={vendors.data.shop.productVendors.edges}
-            types={types.data.productTypes.edges}
-            collections={collections.data.collections.edges}
           />
         ) : (
           <></>
@@ -174,9 +168,6 @@ export default function Shop({ vendors, types, collections }) {
         >
           {!isMobile ? (
             <FilterMenu
-              vendors={vendors.data.shop.productVendors.edges}
-              types={types.data.productTypes.edges}
-              collections={collections.data.collections.edges}
             />
           ) : (
             <></>
@@ -199,7 +190,6 @@ export default function Shop({ vendors, types, collections }) {
                 isNext={isNext}
                 cursorFirst={cursorNext}
                 cursorLast={cursorLast}
-              // setDirection={setDirection}
               />
             )}
           </div>
@@ -223,10 +213,9 @@ export async function getServerSideProps({ query, res }) {
     vendors,
     type,
   } = query;
-
-  let _vendor = await vendorsGet(),
-    types = await productTypeGet(),
-    collections = await collectionGet();
+  await queryClient.prefetchQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
+  await queryClient.prefetchQuery(['types-all'], productTypeGet, { staleTime: 24 * 60 * 60 * 1000 })
+  await queryClient.prefetchQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
 
   await queryClient.prefetchQuery(["product",
     { index: index === undefined ? null : index },
@@ -260,9 +249,9 @@ export async function getServerSideProps({ query, res }) {
 
   return {
     props: {
-      vendors: _vendor,
-      types: types,
-      collections: collections,
+      // vendors: _vendor,
+      // types: types,
+      // collections: collections,
       dehydratedState: dehydrate(queryClient),
     },
   };

@@ -7,12 +7,16 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { vendorsGet } from "../../../lib/serverRequest";
 
-export default function VendorFilter({ vendors }) {
+export default function VendorFilter() {
   let router = useRouter();
   let routerQuery = router.query;
-  let [vendorList] = useState(vendors);
+  // let [vendorList] = useState();
   let [selectedVendors, setSelectedVendors] = useState([]);
+
+  const { data } = useQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
 
   const handleCheckboxDebounce = debounce((e) => {
     handleCheckbox(e);
@@ -20,6 +24,10 @@ export default function VendorFilter({ vendors }) {
 
   const handleCheckbox = (e) => {
     let newList;
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
+
     if (selectedVendors.includes(e)) {
       newList = selectedVendors.filter((selected) => selected !== e);
 
@@ -31,19 +39,16 @@ export default function VendorFilter({ vendors }) {
     }
     if (newList.length > 0) {
       routerQuery.vendors = encodeURIComponent(newList.join(","));
-      console.log(window.location.pathname);
       router.push(
         {
-          // pathname: "/shop",
           query: routerQuery,
         },
         undefined
       );
     } else {
-      routerQuery.vendors = "";
+      delete routerQuery.vendors;
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -63,7 +68,7 @@ export default function VendorFilter({ vendors }) {
   return (
     <>
       <FormGroup>
-        {vendors.isLoading || vendors.isIdle ? (
+        {/* {vendors.isLoading || vendors.isIdle ? (
           <Loading />
         ) : (
           vendorList.map((e, i) => (
@@ -76,7 +81,19 @@ export default function VendorFilter({ vendors }) {
               checked={selectedVendors.includes(e.node)}
             />
           ))
-        )}
+        )} */}
+        {
+          data.data.shop.productVendors.edges.map((e, i) => (
+            <FormControlLabel
+              control={
+                <Checkbox onClick={() => handleCheckboxDebounce(e.node)} />
+              }
+              label={<p className="text-lg">{e.node}</p>}
+              key={i}
+              checked={selectedVendors.includes(e.node)}
+            />
+          ))
+        }
       </FormGroup>{" "}
     </>
   );

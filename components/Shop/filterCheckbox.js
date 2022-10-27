@@ -16,8 +16,12 @@ export default function FilterCheckbox() {
   }, [routerQuery]);
 
   const handleClick = (e) => {
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
     if (!checked) {
       routerQuery.instock = true;
+
       if (!routerQuery.reverse) routerQuery.reverse = false;
       if (routerQuery.cursor) delete routerQuery.cursor;
       router.push(

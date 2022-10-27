@@ -23,12 +23,12 @@ export default function PriceFilter({ setPrice, price }) {
 
   const handleApply = () => {
     routerQuery.price = `${price[0]},${price[1]}`;
-    if (!routerQuery.reverse) routerQuery.reverse = false;
-    if (routerQuery.cursor) delete routerQuery.cursor;
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
 
     router.push(
       {
-        // pathname: window.location.pathname,
         query: routerQuery,
       },
       undefined

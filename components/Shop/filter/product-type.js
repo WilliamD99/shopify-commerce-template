@@ -5,15 +5,21 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { productTypeGet } from '../../../lib/serverRequest'
 
-export default function ProductType({ types }) {
-  let [productTypeList] = useState(types);
+export default function ProductType() {
   let [selectedTypes, setSelectedType] = useState([]);
   let router = useRouter();
   let routerQuery = router.query;
+  const { data } = useQuery(["types-all"], productTypeGet, { staleTime: 24 * 60 * 60 * 1000 })
 
   const handleCheckbox = (e) => {
     let newList;
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
+
     if (selectedTypes.includes(e)) {
       newList = selectedTypes.filter((selected) => selected !== e);
 
@@ -27,16 +33,14 @@ export default function ProductType({ types }) {
       routerQuery.type = encodeURIComponent(newList.join(","));
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
       );
     } else {
-      routerQuery.type = "";
+      delete routerQuery.type;
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -55,7 +59,7 @@ export default function ProductType({ types }) {
   return (
     <>
       <FormGroup>
-        {productTypeList.map((e, i) => (
+        {data.data.productTypes.edges.map((e, i) => (
           <FormControlLabel
             control={<Checkbox onClick={() => handleCheckbox(e.node)} />}
             label={<p className="text-lg">{e.node}</p>}

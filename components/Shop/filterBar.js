@@ -26,6 +26,10 @@ export default function Filter({
   const handleSortingClick = async (key, reverse) => {
     routerQuery.sort_key = key;
     routerQuery.reverse = reverse.toString();
+    delete routerQuery['cursor']
+    delete routerQuery['direction']
+    delete routerQuery['reversed']
+
     router.push(
       {
         query: routerQuery,
