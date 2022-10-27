@@ -3,6 +3,9 @@ import deviceContext from "../../utils/deviceContext";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import useProductByCollection from "../../utils/hooks/useProductByCollection";
+import { useQuery, QueryClient, dehydrate } from "@tanstack/react-query";
+import { collectionGet, vendorsGet, productTypeGet } from '../../lib/serverRequest'
+
 import SingleProduct from "../../components/Shop/single-product";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import Loading from "../../components/Loading/dataLoading";
@@ -154,6 +157,8 @@ export async function getServerSideProps() {
   let vendors = await vendorsGet(),
     types = await productTypeGet(),
     collections = await collectionGet();
+
+
 
   return {
     props: {

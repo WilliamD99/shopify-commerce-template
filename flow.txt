@@ -14,3 +14,6 @@
     + Create token for Payment Method
 - Complete Checkout using PM token 
 
+***
+Add collections, vendors, and product types
+***

@@ -1,11 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import deviceContext from "../utils/deviceContext";
-import loadingContext from "../utils/loadingContext";
-
 // Hooks
-import Router, { useRouter } from "next/router";
-import { productAllStorefront } from "../utils/api/requests";
-import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import {
   vendorsGet,
   productTypeGet,
@@ -16,11 +12,8 @@ import dynamic from "next/dynamic";
 import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 
 // Components
-// import Loading from "../components/Loading/dataLoading";
 import Breadcrumbs from "../components/common/Breadcrumbs";
 import SingeProduct from "../components/Shop/single-product";
-// import FilterBar from "../components/Shop/filterBar";
-// import FilterMenu from "../components/Shop/filterMenu";
 import Pagination from "../components/Shop/pagination";
 import { NextSeo } from "next-seo";
 import FilterDrawer from "../components/Shop/filterDrawer";
@@ -41,8 +34,6 @@ export default function Shop() {
   const [isReverse, setReverse] = useState(false);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
-  // const [direction, setDirection] = useState(true);
-  // const { loading } = useContext(loadingContext);
   const router = useRouter();
   const routerQuery = router.query;
   const { data } = useQuery([
@@ -86,51 +77,6 @@ export default function Shop() {
       setCursorLast(data.data.products.edges[data.data.products.edges.length - 1].cursor)
     }
   }, [routerQuery]);
-
-
-  // useEffect(() => {
-  //   setDataArr([]);
-  //   if (router.isReady) {
-  //     mutateProductNextSf.mutate({
-  //       sortKey: routerQuery.sort_key,
-  //       isReverse: routerQuery.reverse ? routerQuery.reverse.toString() : "",
-  //       cursor: routerQuery.cursor,
-  //       price: routerQuery.price,
-  //       instock: routerQuery.instock,
-  //       vendors: routerQuery.vendors
-  //         ? decodeURIComponent(routerQuery.vendors)
-  //         : "",
-  //       type: routerQuery.type ? decodeURIComponent(routerQuery.type) : "",
-  //       limit: routerQuery.limit,
-  //     });
-  //     // }
-  //   }
-  // }, [routerQuery]);
-
-  // let mutateProductNextSf = useMutation(async (params) => {
-  //   let data = await productAllStorefront({
-  //     cursor: params.cursor,
-  //     direction: direction,
-  //     sortKey: params.sortKey ? params.sortKey : sortKey,
-  //     reversed: params.isReverse ? params.isReverse : isReverse,
-  //     price: params.price,
-  //     instock: params.instock,
-  //     vendors: params.vendors,
-  //     type: params.type,
-  //     limit: params.limit,
-  //   });
-  //   let edges = data.data.products.edges;
-  //   setDataArr(edges);
-  //   setNext(data.data.products.pageInfo.hasNextPage);
-  //   setPrevious(data.data.products.pageInfo.hasPreviousPage);
-
-  //   setCursorNext(edges[0].cursor);
-  //   setCursorLast(edges[edges.length - 1].cursor);
-
-  //   if (direction) setCount(edges.length + count);
-  //   else setCount(count - edges.length);
-  //   return data.data;
-  // });
 
   return (
     <>
@@ -249,9 +195,6 @@ export async function getServerSideProps({ query, res }) {
 
   return {
     props: {
-      // vendors: _vendor,
-      // types: types,
-      // collections: collections,
       dehydratedState: dehydrate(queryClient),
     },
   };

@@ -98,16 +98,3 @@ export default function Filter({
     </>
   );
 }
-
-// Pin the bar while scrolling
-// useLayoutEffect(() => {
-//   filterBarAnim.current = gsap.timeline({
-//     scrollTrigger: {
-//       trigger: "#shop-container",
-//       start: "top top",
-//       end: "bottom bottom",
-//       pin: "#filter-bar",
-//     },
-//   });
-//   return () => filterBarAnim.current.kill();
-// }, [isLoading]);

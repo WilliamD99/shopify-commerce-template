@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Loading from "../../Loading/dataLoading";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,7 +12,6 @@ import { vendorsGet } from "../../../lib/serverRequest";
 export default function VendorFilter() {
   let router = useRouter();
   let routerQuery = router.query;
-  // let [vendorList] = useState();
   let [selectedVendors, setSelectedVendors] = useState([]);
 
   const { data } = useQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
@@ -68,20 +66,6 @@ export default function VendorFilter() {
   return (
     <>
       <FormGroup>
-        {/* {vendors.isLoading || vendors.isIdle ? (
-          <Loading />
-        ) : (
-          vendorList.map((e, i) => (
-            <FormControlLabel
-              control={
-                <Checkbox onClick={() => handleCheckboxDebounce(e.node)} />
-              }
-              label={<p className="text-lg">{e.node}</p>}
-              key={i}
-              checked={selectedVendors.includes(e.node)}
-            />
-          ))
-        )} */}
         {
           data.data.shop.productVendors.edges.map((e, i) => (
             <FormControlLabel
