@@ -15,7 +15,10 @@ import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
 // import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
 // import redisClient from "../../lib/redis";
-import { productByHandle } from "../../lib/serverRequest";
+import {
+  productByHandle,
+  productHandleGenerate,
+} from "../../lib/serverRequest";
 import {
   useMutation,
   dehydrate,
@@ -38,10 +41,11 @@ const Related = dynamic(
   }
 );
 
-export default function Products({ handle }) {
-  const { data } = useQuery([`product-${handle}`], () =>
-    productByHandle(handle)
-  );
+export default function Products({ data, handle }) {
+  // const { data } = useQuery([`product-${handle}`], () =>
+  //   productByHandle(handle)
+  // );
+  console.log(data);
 
   const router = useRouter();
   const { index } = router.query;
@@ -399,18 +403,40 @@ export default function Products({ handle }) {
   );
 }
 
-export async function getServerSideProps({ query, res }) {
-  const { index } = query;
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery([`product-${index}`], () =>
-    productByHandle(index)
-  );
-
+export async function getStaticProps({ params }) {
+  let data = await productByHandle(params.index);
   return {
     props: {
-      handle: index,
-      dehydratedState: dehydrate(queryClient),
+      data: data,
+      handle: params.index,
     },
+    revalidate: 30,
   };
 }
-//
+
+export async function getStaticPaths() {
+  const data = await productHandleGenerate();
+  let paths = data.data.products.edges.map((handle) => ({
+    params: { index: handle.node.handle },
+  }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+// export async function getServerSideProps({ query, res }) {
+//   const { index } = query;
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery([`product-${index}`], () =>
+//     productByHandle(index)
+//   );
+
+//   return {
+//     props: {
+//       handle: index,
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
