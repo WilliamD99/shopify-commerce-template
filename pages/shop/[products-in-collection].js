@@ -4,7 +4,12 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import useProductByCollection from "../../utils/hooks/useProductByCollection";
 import { useQuery, QueryClient, dehydrate } from "@tanstack/react-query";
-import { collectionGet, vendorsGet, productTypeGet } from '../../lib/serverRequest'
+import {
+  collectionGet,
+  vendorsGet,
+  productTypeGet,
+  productInCollection,
+} from "../../lib/serverRequest";
 
 import SingleProduct from "../../components/Shop/single-product";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
@@ -19,7 +24,8 @@ import Pagination from "../../components/Shop/pagination";
 
 import { NextSeo } from "next-seo";
 
-export default function Collection({ vendors, types, collections }) {
+export default function Collection({ col }) {
+  console.log(col);
   const { isMobile } = useContext(deviceContext);
   const router = useRouter();
   const routerQuery = router.query;
@@ -27,6 +33,16 @@ export default function Collection({ vendors, types, collections }) {
   const [dataArr, setDataArr] = useState([]);
   const [isNext, setNext] = useState(false);
   const [isPrevious, setPrevious] = useState(false);
+
+  const { data } = useQuery(
+    [`collection-${col}`],
+    () =>
+      productInCollection({
+        id: col,
+      }),
+    { staleTime: 10000 }
+  );
+  console.log(data);
 
   // State for query
   const [sortKey, setSortKey] = useState();
@@ -86,41 +102,13 @@ export default function Collection({ vendors, types, collections }) {
             },
           ]}
         />
-        {isMobile ? (
-          <FilterDrawer
-            vendors={vendors.data.shop.productVendors.edges}
-            types={types.data.productTypes.edges}
-            collections={collections.data.collections.edges}
-          />
-        ) : (
-          <></>
-        )}
+        {isMobile ? <FilterDrawer /> : <></>}
       </div>
 
       <div id="shop-container">
-        {!isMobile ? (
-          <FilterBar
-            total={products.data ? products.data.collection.productsCount : 0}
-            isLoading={products.isLoading}
-            length={dataArr.length}
-            count={dataArr.length}
-            setSortKey={setSortKey}
-            setReverse={setReverse}
-          />
-        ) : (
-          <></>
-        )}
+        {!isMobile ? <FilterBar /> : <></>}
         <div className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50">
-          {!isMobile ? (
-            <FilterMenu
-              vendors={vendors.data.shop.productVendors.edges}
-              types={types.data.productTypes.edges}
-              collections={collections.data.collections.edges}
-              isLoading={products.isLoading}
-            />
-          ) : (
-            <></>
-          )}
+          {!isMobile ? <FilterMenu /> : <></>}
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
@@ -149,18 +137,42 @@ export default function Collection({ vendors, types, collections }) {
     </>
   );
 }
-export async function getServerSideProps() {
-  let vendors = await vendorsGet(),
-    types = await productTypeGet(),
-    collections = await collectionGet();
 
+const queryClient = new QueryClient();
+export async function getServerSideProps({ query, res }) {
+  let { col } = query;
+  col = decodeURIComponent(col);
 
+  await queryClient.prefetchQuery(["vendors-all"], vendorsGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["types-all"], productTypeGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["collections-all"], collectionGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+
+  await queryClient.prefetchQuery(
+    [`collection-${col}`],
+    () =>
+      productInCollection({
+        id: col,
+      }),
+    {
+      staleTime: 10000,
+    }
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
 
   return {
     props: {
-      vendors: vendors,
-      types: types,
-      collections: collections,
+      col: col,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 }
