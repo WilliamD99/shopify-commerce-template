@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 
@@ -13,18 +12,10 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
-// import { storefrontHeaders, storefrontURL } from "../../utils/api/header";
-// import redisClient from "../../lib/redis";
 import {
   productByHandle,
   productHandleGenerate,
 } from "../../lib/serverRequest";
-import {
-  useMutation,
-  dehydrate,
-  QueryClient,
-  useQuery,
-} from "@tanstack/react-query";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
@@ -42,28 +33,17 @@ const Related = dynamic(
 );
 
 export default function Products({ data, handle }) {
-  // const { data } = useQuery([`product-${handle}`], () =>
-  //   productByHandle(handle)
-  // );
-  console.log(data);
-
-  const router = useRouter();
-  const { index } = router.query;
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState(data?.data.productByHandle);
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
-  const [isInStock, setIsInStock] = useState();
-  // data.data.productByHandle.availableForSale
+  const [isInStock, setIsInStock] = useState(
+    data?.data.productByHandle.availableForSale
+  );
   const inputRef = useRef(0);
-  let productByHandleMutation = useMutation(async (params) => {
-    let data = await productByHandle(params);
-    setProduct(data.data.productByHandle);
-    setIsInStock(data.data.productByHandle.availableForSale);
-  });
 
   let debounceInput = debounce((criteria) => {
     onChangeInput(criteria);
@@ -193,17 +173,12 @@ export default function Products({ data, handle }) {
     }
   };
 
-  // Get the product
   // useEffect(() => {
-  //   if (index !== undefined) productByHandleMutation.mutate({ handle: index });
-  // }, [index]);
-
-  useEffect(() => {
-    if (data) {
-      setProduct(data.data.productByHandle);
-      setIsInStock(data.data.productByHandle.availableForSale);
-    }
-  }, [handle]);
+  //   if (data) {
+  //     setProduct(data.data.productByHandle);
+  //     setIsInStock(data.data.productByHandle.availableForSale);
+  //   }
+  // }, [handle]);
 
   useEffect(() => {
     if (product) {
@@ -247,7 +222,7 @@ export default function Products({ data, handle }) {
     }
   }, [variantId]);
 
-  if (!product) return <Loading />;
+  if (!product) return <p>Something went wrong</p>;
 
   return (
     <>

@@ -11,7 +11,11 @@ import PriceFilter from "./filter/price";
 
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { vendorsGet, productTypeGet, collectionGet } from '../../lib/serverRequest'
+import {
+  vendorsGet,
+  productTypeGet,
+  collectionGet,
+} from "../../lib/serverRequest";
 
 export default function FilterDrawer() {
   const [drawerOpen, setDrawer] = useState(false);
@@ -20,9 +24,15 @@ export default function FilterDrawer() {
   let [selectedVendors, setSelectedVendors] = useState([]);
   let [selectedTypes, setSelectedType] = useState([]);
 
-  const getVendors = useQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
-  const getTypes = useQuery(['types-all'], productTypeGet, { staleTime: 24 * 60 * 60 * 1000 })
-  const getCollections = useQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
+  const getVendors = useQuery(["vendors-all"], vendorsGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  const getTypes = useQuery(["types-all"], productTypeGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  const getCollections = useQuery(["collections-all"], collectionGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
 
   let router = useRouter();
   let routerQuery = router.query;
@@ -40,9 +50,9 @@ export default function FilterDrawer() {
 
   const handleVendor = (e) => {
     let newList;
-    delete routerQuery['cursor']
-    delete routerQuery['direction']
-    delete routerQuery['reversed']
+    delete routerQuery["cursor"];
+    delete routerQuery["direction"];
+    delete routerQuery["reversed"];
 
     if (selectedVendors.includes(e)) {
       newList = selectedVendors.filter((selected) => selected !== e);
@@ -76,9 +86,9 @@ export default function FilterDrawer() {
 
   const handleType = (e) => {
     let newList;
-    delete routerQuery['cursor']
-    delete routerQuery['direction']
-    delete routerQuery['reversed']
+    delete routerQuery["cursor"];
+    delete routerQuery["direction"];
+    delete routerQuery["reversed"];
 
     if (selectedTypes.includes(e)) {
       newList = selectedTypes.filter((selected) => selected !== e);
@@ -147,8 +157,8 @@ export default function FilterDrawer() {
                   {getCollections.data.data.collections.edges.map((e) => (
                     <Link
                       href={{
-                        pathname: "/shop/products-in-collection/",
-                        query: { col: encodeURIComponent(e.node.id) },
+                        pathname: `/shop/${e.node.handle}`,
+                        // query: { col: encodeURIComponent(e.node.handle) },
                       }}
                       key={`category-${e.node.title}`}
                     >
@@ -181,12 +191,13 @@ export default function FilterDrawer() {
                     <p
                       onClick={() => handleVendor(e.node)}
                       key={`vendor-${e.node}`}
-                      className={`${decodeURIComponent(routerQuery.vendors)
-                        .split(",")
-                        .includes(e.node)
-                        ? "font-bold"
-                        : ""
-                        }`}
+                      className={`${
+                        decodeURIComponent(routerQuery.vendors)
+                          .split(",")
+                          .includes(e.node)
+                          ? "font-bold"
+                          : ""
+                      }`}
                     >
                       {e.node}
                     </p>
@@ -217,12 +228,13 @@ export default function FilterDrawer() {
                     <p
                       onClick={() => handleType(e.node)}
                       key={`type-${e.node}`}
-                      className={`${decodeURIComponent(routerQuery.type)
-                        .split(",")
-                        .includes(e.node)
-                        ? "font-bold"
-                        : ""
-                        }`}
+                      className={`${
+                        decodeURIComponent(routerQuery.type)
+                          .split(",")
+                          .includes(e.node)
+                          ? "font-bold"
+                          : ""
+                      }`}
                     >
                       {e.node}
                     </p>

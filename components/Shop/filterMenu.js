@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { collectionGet } from '../../lib/serverRequest'
+import { collectionGet } from "../../lib/serverRequest";
 
 import Link from "../common/Link";
 import PriceFilter from "./filter/price";
@@ -18,7 +18,9 @@ export default function FilterMenu() {
   let router = useRouter();
   let routerQuery = router.query;
 
-  const { data } = useQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
+  const { data } = useQuery(["collections-all"], collectionGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
 
   return (
     <>
@@ -42,13 +44,14 @@ export default function FilterMenu() {
                   className="flex flex-row justify-between items-center"
                 >
                   <Link
-                    className={`${decodeURIComponent(routerQuery.col) === e.node.id
-                      ? "font-semibold"
-                      : ""
-                      }`}
+                    className={`${
+                      decodeURIComponent(routerQuery.col) === e.node.id
+                        ? "font-semibold"
+                        : ""
+                    }`}
                     href={{
-                      pathname: "/shop/products-in-collection/",
-                      query: { col: encodeURIComponent(e.node.id) },
+                      pathname: `/shop/${e.node.handle}`,
+                      // query: { col: encodeURIComponent(e.node.handle) },
                     }}
                   >
                     {e.node.title}
@@ -117,4 +120,3 @@ export default function FilterMenu() {
     </>
   );
 }
-

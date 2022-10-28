@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import deviceContext from "../../utils/deviceContext";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import useProductByCollection from "../../utils/hooks/useProductByCollection";
 import { useQuery, QueryClient, dehydrate } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 import {
   collectionGet,
   vendorsGet,
@@ -21,28 +21,54 @@ const FilterDrawer = dynamic(() =>
   import("../../components/Shop/filterDrawer")
 );
 import Pagination from "../../components/Shop/pagination";
-
 import { NextSeo } from "next-seo";
 
 export default function Collection({ col }) {
-  console.log(col);
-  const { isMobile } = useContext(deviceContext);
   const router = useRouter();
-  const routerQuery = router.query;
-  const products = useProductByCollection();
-  const [dataArr, setDataArr] = useState([]);
-  const [isNext, setNext] = useState(false);
-  const [isPrevious, setPrevious] = useState(false);
-
+  let routerQuery = router.query;
   const { data } = useQuery(
-    [`collection-${col}`],
+    [
+      `collection-${col}`,
+      { limit: routerQuery.limit ? routerQuery.limit : null },
+      { reversed: routerQuery.reversed ? routerQuery.reversed : null },
+      { sortKey: routerQuery.sortKey ? routerQuery.sortKey : null },
+      { cursor: routerQuery.cursor ? routerQuery.cursor : null },
+      { direction: routerQuery.direction ? routerQuery.direction : null },
+      { price: routerQuery.price ? routerQuery.price : null },
+      { instock: routerQuery.instock ? routerQuery.instock : null },
+      {
+        vendors: routerQuery.vendors
+          ? decodeURIComponent(routerQuery.vendors)
+          : null,
+      },
+      { type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null },
+    ],
     () =>
       productInCollection({
-        id: col,
+        handle: col,
+        limit: routerQuery.limit,
+        reversed: routerQuery.reversed,
+        sortKey: routerQuery.sortKey,
+        cursor: routerQuery.cursor,
+        direction: routerQuery.direction,
+        price: routerQuery.price,
+        instock: routerQuery.instock,
+        vendors: routerQuery.vendors
+          ? decodeURIComponent(routerQuery.vendors)
+          : null,
+        type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
       }),
     { staleTime: 10000 }
   );
-  console.log(data);
+  const { isMobile } = useContext(deviceContext);
+  const products = useProductByCollection();
+  const [dataArr, setDataArr] = useState(data?.data.collection.products.edges);
+  const [isNext] = useState(
+    data ? data.data.collection.products.pageInfo.hasNextPage : false
+  );
+  const [isPrevious] = useState(
+    data ? data.data.collection.products.pageInfo.hasPreviousPage : false
+  );
 
   // State for query
   const [sortKey, setSortKey] = useState();
@@ -51,42 +77,42 @@ export default function Collection({ col }) {
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
 
-  useEffect(() => {
-    if (router.isReady) {
-      if (routerQuery.col) {
-        products.mutate({
-          id: decodeURIComponent(routerQuery.col),
-          sortKey: routerQuery.sort_key,
-          reverse: routerQuery.reverse,
-          price: routerQuery.price,
-          instock: routerQuery.instock,
-          direction: direction,
-          cursor: routerQuery.cursor,
-          vendors: routerQuery.vendors
-            ? decodeURIComponent(routerQuery.vendors)
-            : "",
-          type: routerQuery.type ? routerQuery.type : "",
-          limit: routerQuery.limit,
-        });
-      }
-    }
-  }, [routerQuery]);
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     if (routerQuery.col) {
+  //       products.mutate({
+  //         id: decodeURIComponent(routerQuery.col),
+  //         sortKey: routerQuery.sort_key,
+  //         reverse: routerQuery.reverse,
+  //         price: routerQuery.price,
+  //         instock: routerQuery.instock,
+  //         direction: direction,
+  //         cursor: routerQuery.cursor,
+  //         vendors: routerQuery.vendors
+  //           ? decodeURIComponent(routerQuery.vendors)
+  //           : "",
+  //         type: routerQuery.type ? routerQuery.type : "",
+  //         limit: routerQuery.limit,
+  //       });
+  //     }
+  //   }
+  // }, [routerQuery]);
 
-  useEffect(() => {
-    setDataArr([]);
-    if (products.data && products.data.collection.products.edges.length > 0) {
-      setDataArr(products.data.collection.products.edges);
-      setNext(products.data.collection.products.pageInfo.hasNextPage);
-      setPrevious(products.data.collection.products.pageInfo.hasPreviousPage);
+  // useEffect(() => {
+  //   setDataArr([]);
+  //   if (products.data && products.data.collection.products.edges.length > 0) {
+  //     setDataArr(products.data.collection.products.edges);
+  //     setNext(products.data.collection.products.pageInfo.hasNextPage);
+  //     setPrevious(products.data.collection.products.pageInfo.hasPreviousPage);
 
-      setCursorLast(
-        products.data.collection.products.edges[
-          products.data.collection.products.edges.length - 1
-        ].cursor
-      );
-      setCursorNext(products.data.collection.products.edges[0].cursor);
-    }
-  }, [products.isLoading]);
+  //     setCursorLast(
+  //       products.data.collection.products.edges[
+  //         products.data.collection.products.edges.length - 1
+  //       ].cursor
+  //     );
+  //     setCursorNext(products.data.collection.products.edges[0].cursor);
+  //   }
+  // }, [products.isLoading]);
 
   return (
     <>
@@ -97,7 +123,7 @@ export default function Collection({ col }) {
             { name: "Home", path: "/" },
             { name: "Shop", path: "/shop" },
             {
-              name: `${products.data ? products.data.collection.title : ""}`,
+              name: `${data ? data.data.collection.title : ""}`,
               path: "#",
             },
           ]}
@@ -112,7 +138,7 @@ export default function Collection({ col }) {
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
-              {products.isLoading ? (
+              {!data ? (
                 <Loading />
               ) : (
                 dataArr.map((e, i) => (
@@ -140,7 +166,18 @@ export default function Collection({ col }) {
 
 const queryClient = new QueryClient();
 export async function getServerSideProps({ query, res }) {
-  let { col } = query;
+  let {
+    ["products-in-collection"]: col,
+    limit,
+    reversed,
+    sortKey,
+    cursor,
+    direction,
+    price,
+    instock,
+    vendors,
+    type,
+  } = query;
   col = decodeURIComponent(col);
 
   await queryClient.prefetchQuery(["vendors-all"], vendorsGet, {
@@ -154,10 +191,30 @@ export async function getServerSideProps({ query, res }) {
   });
 
   await queryClient.prefetchQuery(
-    [`collection-${col}`],
+    [
+      `collection-${col}`,
+      { limit: limit === undefined ? null : limit },
+      { reversed: reversed === undefined ? null : reversed },
+      { sortKey: sortKey === undefined ? null : sortKey },
+      { cursor: cursor === undefined ? null : cursor },
+      { direction: direction === undefined ? null : direction },
+      { price: price === undefined ? null : price },
+      { instock: instock === undefined ? null : instock },
+      { vendors: vendors ? decodeURIComponent(vendors) : null },
+      { type: type ? decodeURIComponent(type) : null },
+    ],
     () =>
       productInCollection({
-        id: col,
+        handle: col,
+        limit,
+        reversed,
+        sortKey,
+        cursor,
+        direction,
+        price,
+        instock,
+        vendors,
+        type,
       }),
     {
       staleTime: 10000,

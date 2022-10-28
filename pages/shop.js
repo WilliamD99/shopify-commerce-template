@@ -26,9 +26,7 @@ export default function Shop() {
   const [dataArr, setDataArr] = useState([]);
   const [count, setCount] = useState(0);
   const [isNext, setNext] = useState(false);
-  const [isPrevious, setPrevious] = useState(
-    false
-  );
+  const [isPrevious, setPrevious] = useState(false);
   // State for query
   const [sortKey, setSortKey] = useState();
   const [isReverse, setReverse] = useState(false);
@@ -36,45 +34,51 @@ export default function Shop() {
   const [cursorLast, setCursorLast] = useState();
   const router = useRouter();
   const routerQuery = router.query;
-  const { data } = useQuery([
-    "product",
-    { index: routerQuery.index ? routerQuery.index : null },
-    { limit: routerQuery.limit ? routerQuery.limit : null },
-    { reversed: routerQuery.reversed ? routerQuery.reversed : null },
-    { sortKey: routerQuery.sortKey ? routerQuery.sortKey : null },
-    { cursor: routerQuery.cursor ? routerQuery.cursor : null },
-    { direction: routerQuery.direction ? routerQuery.direction : null },
-    { price: routerQuery.price ? routerQuery.price : null },
-    { instock: routerQuery.instock ? routerQuery.instock : null },
-    {
-      vendors: routerQuery.vendors
-        ? decodeURIComponent(routerQuery.vendors)
-        : null
-    },
-    { type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null },], () =>
-    productsGet({
-      index: routerQuery.index,
-      limit: routerQuery.limit,
-      reversed: routerQuery.reversed,
-      sortKey: routerQuery.sortKey,
-      cursor: routerQuery.cursor,
-      direction: routerQuery.direction,
-      price: routerQuery.price,
-      instock: routerQuery.instock,
-      vendors: routerQuery.vendors
-        ? decodeURIComponent(routerQuery.vendors)
-        : null,
-      type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
-    }), { staleTime: 10000 }
+  const { data } = useQuery(
+    [
+      "product",
+      { index: routerQuery.index ? routerQuery.index : null },
+      { limit: routerQuery.limit ? routerQuery.limit : null },
+      { reversed: routerQuery.reversed ? routerQuery.reversed : null },
+      { sortKey: routerQuery.sortKey ? routerQuery.sortKey : null },
+      { cursor: routerQuery.cursor ? routerQuery.cursor : null },
+      { direction: routerQuery.direction ? routerQuery.direction : null },
+      { price: routerQuery.price ? routerQuery.price : null },
+      { instock: routerQuery.instock ? routerQuery.instock : null },
+      {
+        vendors: routerQuery.vendors
+          ? decodeURIComponent(routerQuery.vendors)
+          : null,
+      },
+      { type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null },
+    ],
+    () =>
+      productsGet({
+        index: routerQuery.index,
+        limit: routerQuery.limit,
+        reversed: routerQuery.reversed,
+        sortKey: routerQuery.sortKey,
+        cursor: routerQuery.cursor,
+        direction: routerQuery.direction,
+        price: routerQuery.price,
+        instock: routerQuery.instock,
+        vendors: routerQuery.vendors
+          ? decodeURIComponent(routerQuery.vendors)
+          : null,
+        type: routerQuery.type ? decodeURIComponent(routerQuery.type) : null,
+      }),
+    { staleTime: 10000 }
   );
 
   useEffect(() => {
     if (data) {
       setDataArr(data.data.products.edges);
-      setNext(data.data.products.pageInfo.hasNextPage)
-      setPrevious(data.data.products.pageInfo.hasPreviousPage)
-      setCursorNext(data.data.products.edges[0].cursor)
-      setCursorLast(data.data.products.edges[data.data.products.edges.length - 1].cursor)
+      setNext(data.data.products.pageInfo.hasNextPage);
+      setPrevious(data.data.products.pageInfo.hasPreviousPage);
+      setCursorNext(data.data.products.edges[0].cursor);
+      setCursorLast(
+        data.data.products.edges[data.data.products.edges.length - 1].cursor
+      );
     }
   }, [routerQuery]);
 
@@ -88,12 +92,7 @@ export default function Shop() {
             { name: "Shop", path: "/shop" },
           ]}
         />
-        {isMobile ? (
-          <FilterDrawer
-          />
-        ) : (
-          <></>
-        )}
+        {isMobile ? <FilterDrawer /> : <></>}
       </div>
 
       <div id="shop-container" className="px-3 md:px-10">
@@ -112,12 +111,7 @@ export default function Shop() {
           id="shop"
           className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50"
         >
-          {!isMobile ? (
-            <FilterMenu
-            />
-          ) : (
-            <></>
-          )}
+          {!isMobile ? <FilterMenu /> : <></>}
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
@@ -159,34 +153,44 @@ export async function getServerSideProps({ query, res }) {
     vendors,
     type,
   } = query;
-  await queryClient.prefetchQuery(['vendors-all'], vendorsGet, { staleTime: 24 * 60 * 60 * 1000 })
-  await queryClient.prefetchQuery(['types-all'], productTypeGet, { staleTime: 24 * 60 * 60 * 1000 })
-  await queryClient.prefetchQuery(['collections-all'], collectionGet, { staleTime: 24 * 60 * 60 * 1000 })
+  await queryClient.prefetchQuery(["vendors-all"], vendorsGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["types-all"], productTypeGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["collections-all"], collectionGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
 
-  await queryClient.prefetchQuery(["product",
-    { index: index === undefined ? null : index },
-    { limit: limit === undefined ? null : limit },
-    { reversed: reversed === undefined ? null : reversed },
-    { sortKey: sortKey === undefined ? null : sortKey },
-    { cursor: cursor === undefined ? null : cursor },
-    { direction: direction === undefined ? null : direction },
-    { price: price === undefined ? null : price },
-    { instock: instock === undefined ? null : instock },
-    { vendors: vendors ? decodeURIComponent(vendors) : null },
-    { type: type ? decodeURIComponent(type) : null },
-  ], () =>
-    productsGet({
-      index: index,
-      limit: limit,
-      reversed: reversed,
-      sortKey: sortKey,
-      cursor: cursor,
-      direction: direction,
-      price: price,
-      instock: instock,
-      vendors: vendors ? decodeURIComponent(vendors) : null,
-      type: type ? decodeURIComponent(type) : null,
-    }), { staleTime: 10000 }
+  await queryClient.prefetchQuery(
+    [
+      "product",
+      { index: index === undefined ? null : index },
+      { limit: limit === undefined ? null : limit },
+      { reversed: reversed === undefined ? null : reversed },
+      { sortKey: sortKey === undefined ? null : sortKey },
+      { cursor: cursor === undefined ? null : cursor },
+      { direction: direction === undefined ? null : direction },
+      { price: price === undefined ? null : price },
+      { instock: instock === undefined ? null : instock },
+      { vendors: vendors ? decodeURIComponent(vendors) : null },
+      { type: type ? decodeURIComponent(type) : null },
+    ],
+    () =>
+      productsGet({
+        index: index,
+        limit: limit,
+        reversed: reversed,
+        sortKey: sortKey,
+        cursor: cursor,
+        direction: direction,
+        price: price,
+        instock: instock,
+        vendors: vendors ? decodeURIComponent(vendors) : null,
+        type: type ? decodeURIComponent(type) : null,
+      }),
+    { staleTime: 10000 }
   );
   res.setHeader(
     "Cache-Control",
