@@ -35,15 +35,16 @@ function MyApp({ Component, pageProps }) {
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
   const [isMobile, setMobile] = useState("none");
-  const [queryClient] = useState(() => new QueryClient(
-    {
-      defaultOptions: {
-        queries: {
-          refetchOnWindowFocus: false,
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
         },
-      },
-    }
-  ))
+      })
+  );
 
   useEffect(() => {
     setMobile(
@@ -107,7 +108,7 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      {/* <AgeGate /> */}
+      <AgeGate />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>

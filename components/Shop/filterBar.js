@@ -7,15 +7,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Limit from "./filter/limit";
 
-export default function Filter({
-  length,
-  isLoading,
-  count,
-  total,
-  setSortKey,
-  setReverse,
-  // setPath,
-}) {
+export default function Filter({ setSortKey, setReverse }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -23,22 +15,17 @@ export default function Filter({
   const routerQuery = router.query;
 
   // Handle sorting router
-  const handleSortingClick = async (key, reverse) => {
+  const handleSortingClick = (key, reverse) => {
     routerQuery.sort_key = key;
-    routerQuery.reverse = reverse.toString();
-    delete routerQuery['cursor']
-    delete routerQuery['direction']
-    delete routerQuery['reversed']
-
+    routerQuery.reversed = reverse.toString();
+    delete routerQuery["cursor"];
+    delete routerQuery["direction"];
     router.push(
       {
         query: routerQuery,
       },
       undefined
     );
-
-    await setSortKey(key);
-    await setReverse(reverse);
   };
 
   let handleMenuClick = (e) => {

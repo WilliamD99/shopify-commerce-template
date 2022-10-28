@@ -31,7 +31,7 @@ export default function Collection({ col }) {
       `collection-${col}`,
       { limit: routerQuery.limit ? routerQuery.limit : null },
       { reversed: routerQuery.reversed ? routerQuery.reversed : null },
-      { sortKey: routerQuery.sortKey ? routerQuery.sortKey : null },
+      { sortKey: routerQuery.sort_key ? routerQuery.sort_key : null },
       { cursor: routerQuery.cursor ? routerQuery.cursor : null },
       { direction: routerQuery.direction ? routerQuery.direction : null },
       { price: routerQuery.price ? routerQuery.price : null },
@@ -48,7 +48,7 @@ export default function Collection({ col }) {
         handle: col,
         limit: routerQuery.limit,
         reversed: routerQuery.reversed,
-        sortKey: routerQuery.sortKey,
+        sortKey: routerQuery.sort_key,
         cursor: routerQuery.cursor,
         direction: routerQuery.direction,
         price: routerQuery.price,
@@ -60,7 +60,7 @@ export default function Collection({ col }) {
       }),
     { staleTime: 10000 }
   );
-  console.log(data);
+
   const { isMobile } = useContext(deviceContext);
   const products = useProductByCollection();
   const [dataArr, setDataArr] = useState([]);
@@ -81,11 +81,11 @@ export default function Collection({ col }) {
       data ? data.data.collection.products.pageInfo.hasPreviousPage : false
     );
     setCursorLast(
-      data.data.collection.products.edges[
+      data?.data.collection.products.edges[
         data.data.collection.products.edges.length - 1
       ].cursor
     );
-    setCursorNext(data.data.collection.products.edges[0].cursor);
+    setCursorNext(data?.data.collection.products.edges[0].cursor);
   }, [routerQuery]);
 
   return (
@@ -144,7 +144,7 @@ export async function getServerSideProps({ query, res }) {
     ["products-in-collection"]: col,
     limit,
     reversed,
-    sortKey,
+    sort_key,
     cursor,
     direction,
     price,
@@ -169,7 +169,7 @@ export async function getServerSideProps({ query, res }) {
       `collection-${col}`,
       { limit: limit === undefined ? null : limit },
       { reversed: reversed === undefined ? null : reversed },
-      { sortKey: sortKey === undefined ? null : sortKey },
+      { sortKey: sort_key === undefined ? null : sort_key },
       { cursor: cursor === undefined ? null : cursor },
       { direction: direction === undefined ? null : direction },
       { price: price === undefined ? null : price },
@@ -182,7 +182,7 @@ export async function getServerSideProps({ query, res }) {
         handle: col,
         limit,
         reversed,
-        sortKey,
+        sort_key,
         cursor,
         direction,
         price,
