@@ -60,15 +60,12 @@ export default function Collection({ col }) {
       }),
     { staleTime: 10000 }
   );
+  console.log(data);
   const { isMobile } = useContext(deviceContext);
   const products = useProductByCollection();
-  const [dataArr, setDataArr] = useState(data?.data.collection.products.edges);
-  const [isNext] = useState(
-    data ? data.data.collection.products.pageInfo.hasNextPage : false
-  );
-  const [isPrevious] = useState(
-    data ? data.data.collection.products.pageInfo.hasPreviousPage : false
-  );
+  const [dataArr, setDataArr] = useState([]);
+  const [isNext, setNext] = useState(false);
+  const [isPrevious, setPrevious] = useState(false);
 
   // State for query
   const [sortKey, setSortKey] = useState();
@@ -77,42 +74,19 @@ export default function Collection({ col }) {
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
 
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     if (routerQuery.col) {
-  //       products.mutate({
-  //         id: decodeURIComponent(routerQuery.col),
-  //         sortKey: routerQuery.sort_key,
-  //         reverse: routerQuery.reverse,
-  //         price: routerQuery.price,
-  //         instock: routerQuery.instock,
-  //         direction: direction,
-  //         cursor: routerQuery.cursor,
-  //         vendors: routerQuery.vendors
-  //           ? decodeURIComponent(routerQuery.vendors)
-  //           : "",
-  //         type: routerQuery.type ? routerQuery.type : "",
-  //         limit: routerQuery.limit,
-  //       });
-  //     }
-  //   }
-  // }, [routerQuery]);
-
-  // useEffect(() => {
-  //   setDataArr([]);
-  //   if (products.data && products.data.collection.products.edges.length > 0) {
-  //     setDataArr(products.data.collection.products.edges);
-  //     setNext(products.data.collection.products.pageInfo.hasNextPage);
-  //     setPrevious(products.data.collection.products.pageInfo.hasPreviousPage);
-
-  //     setCursorLast(
-  //       products.data.collection.products.edges[
-  //         products.data.collection.products.edges.length - 1
-  //       ].cursor
-  //     );
-  //     setCursorNext(products.data.collection.products.edges[0].cursor);
-  //   }
-  // }, [products.isLoading]);
+  useEffect(() => {
+    setDataArr(data?.data.collection.products.edges);
+    setNext(data ? data.data.collection.products.pageInfo.hasNextPage : false);
+    setPrevious(
+      data ? data.data.collection.products.pageInfo.hasPreviousPage : false
+    );
+    setCursorLast(
+      data.data.collection.products.edges[
+        data.data.collection.products.edges.length - 1
+      ].cursor
+    );
+    setCursorNext(data.data.collection.products.edges[0].cursor);
+  }, [routerQuery]);
 
   return (
     <>
@@ -131,7 +105,7 @@ export default function Collection({ col }) {
         {isMobile ? <FilterDrawer /> : <></>}
       </div>
 
-      <div id="shop-container">
+      <div id="shop-container" className="px-10">
         {!isMobile ? <FilterBar /> : <></>}
         <div className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50">
           {!isMobile ? <FilterMenu /> : <></>}

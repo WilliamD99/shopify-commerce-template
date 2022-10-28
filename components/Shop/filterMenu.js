@@ -45,7 +45,9 @@ export default function FilterMenu() {
                 >
                   <Link
                     className={`${
-                      decodeURIComponent(routerQuery.col) === e.node.id
+                      decodeURIComponent(
+                        routerQuery["products-in-collection"]
+                      ) === e.node.handle
                         ? "font-semibold"
                         : ""
                     }`}

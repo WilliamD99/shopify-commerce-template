@@ -103,7 +103,6 @@ export default function FilterDrawer() {
       routerQuery.type = encodeURIComponent(newList.join(","));
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -112,7 +111,6 @@ export default function FilterDrawer() {
       delete routerQuery.type;
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -158,9 +156,13 @@ export default function FilterDrawer() {
                     <Link
                       href={{
                         pathname: `/shop/${e.node.handle}`,
-                        // query: { col: encodeURIComponent(e.node.handle) },
                       }}
                       key={`category-${e.node.title}`}
+                      className={
+                        routerQuery["products-in-collection"] === e.node.handle
+                          ? "font-bold"
+                          : ""
+                      }
                     >
                       {e.node.title}
                     </Link>

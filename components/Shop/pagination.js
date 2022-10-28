@@ -14,10 +14,9 @@ export default function Pagination({
   const handlePaginateClick = async (direction, cursor) => {
     scroll(0, 0);
     routerQuery.cursor = cursor;
-    routerQuery.direction = direction
+    routerQuery.direction = direction;
     router.push(
       {
-        pathname: window.location.pathname,
         query: routerQuery,
       },
       undefined
@@ -33,7 +32,7 @@ export default function Pagination({
         onClick={async () => {
           handlePaginateClick(false, cursorFirst);
         }}
-        className=""
+        className="text-black"
       >
         Prev
       </Button>
@@ -42,7 +41,7 @@ export default function Pagination({
         onClick={async () => {
           handlePaginateClick(true, cursorLast);
         }}
-        className=""
+        className="text-black"
       >
         Next
       </Button>

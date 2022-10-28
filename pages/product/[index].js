@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
+import { useRouter } from "next/router";
 
 import { cartAdd, extractId, formatter } from "../../utils/utils";
 import cartContext from "../../utils/cartContext";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import ImageGallery from "../../components/ProductDetails/imageGallery";
-import Loading from "../../components/Loading/dataLoading";
 import Button from "@mui/material/Button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
@@ -32,18 +32,18 @@ const Related = dynamic(
   }
 );
 
-export default function Products({ data, handle }) {
-  const [product, setProduct] = useState(data?.data.productByHandle);
+export default function Products({ data }) {
+  const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [options, setOptions] = useState("[]");
-  const [isInStock, setIsInStock] = useState(
-    data?.data.productByHandle.availableForSale
-  );
+  const [isInStock, setIsInStock] = useState(false);
   const inputRef = useRef(0);
+  const router = useRouter();
+  let routerQuery = router.query;
 
   let debounceInput = debounce((criteria) => {
     onChangeInput(criteria);
@@ -173,21 +173,14 @@ export default function Products({ data, handle }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setProduct(data.data.productByHandle);
-  //     setIsInStock(data.data.productByHandle.availableForSale);
-  //   }
-  // }, [handle]);
-
   useEffect(() => {
-    if (product) {
-      if (product.variants.edges.length === 1) {
-        setVariantId(product.variants.edges[0].node.id);
-        setDisplayPrice(product.variants.edges[0].node.price);
-      }
+    setProduct(data?.data.productByHandle);
+    setIsInStock(data?.data.productByHandle.availableForSale);
+    if (data.data.productByHandle.variants.edges.length === 1) {
+      setVariantId(data.data.productByHandle.variants.edges[0].node.id);
+      setDisplayPrice(data.data.productByHandle.variants.edges[0].node.price);
     }
-  }, [product]);
+  }, [routerQuery]);
 
   // Keeping track of ref value using state
   useEffect(() => {
@@ -383,7 +376,6 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       data: data,
-      handle: params.index,
     },
     revalidate: 30,
   };
@@ -400,18 +392,3 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
-
-// export async function getServerSideProps({ query, res }) {
-//   const { index } = query;
-//   const queryClient = new QueryClient();
-//   await queryClient.prefetchQuery([`product-${index}`], () =>
-//     productByHandle(index)
-//   );
-
-//   return {
-//     props: {
-//       handle: index,
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
