@@ -36,13 +36,17 @@ export default function AgeGate() {
 
   useEffect(() => {
     let ageGateVerify = getCookie("age-gate-verify");
-    setTimeout(() => {
-      if (JSON.parse(ageGateVerify)) {
-        setOpen(false);
-      } else {
-        setOpen(true);
-      }
-    }, 1000);
+    if (!ageGateVerify) {
+      setOpen(true);
+    } else {
+      setTimeout(() => {
+        if (JSON.parse(ageGateVerify)) {
+          setOpen(false);
+        } else {
+          setOpen(true);
+        }
+      }, 1000);
+    }
   }, []);
 
   return (

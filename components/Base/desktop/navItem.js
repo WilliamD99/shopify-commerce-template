@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Link from "../common/Link";
+import Link from "../../common/Link";
 
 export default function BasicMenu({ name, items, link, href }) {
   const [anchorEl, setAnchorEl] = useState(null);

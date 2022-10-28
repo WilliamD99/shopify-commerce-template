@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { gsap, formatter } from "../../utils/utils";
+import { gsap, formatter } from "../../../utils/utils";
 import { debounce } from "lodash";
 
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
-import Link from "../common/Link";
-import Image from "../common/Image";
-import Loading from "../Loading/dataLoading";
+import Link from "../../common/Link";
+import Image from "../../common/Image";
+import Loading from "../../Loading/dataLoading";
 
 import { useRouter } from "next/router";
-import useProductSearch from "../../utils/hooks/useProductSearch";
+import useProductSearch from "../../../utils/hooks/useProductSearch";
 
 export default function Search() {
   let [searchQuery, setSearchQuery] = useState();
@@ -102,17 +102,18 @@ export default function Search() {
         onFocus={() => {
           if (searchData.length > 0) resultsAnimRef.current.play();
         }}
-        className="w-96 relative flex flex-col items-end justify-center"
+        className="w-44 relative flex flex-col items-end justify-center"
       >
         <form
           onSubmit={handleSubmit}
           className="w-full flex flex-row space-x-2 justify-center items-end"
         >
           <TextField
+            size="small"
             id="search"
             label={<span className="ml-2">Search</span>}
             variant="outlined"
-            className="text-black border-black rounded-3xl"
+            className="text-black border-black rounded-3xl bg-gray-100"
             onChange={handleChange}
           />
         </form>
