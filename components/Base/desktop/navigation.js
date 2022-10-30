@@ -15,17 +15,17 @@ function Navigation() {
 
   return (
     <>
-      <div className="flex flex-row items-center space-x-8">
-        <Link href="/shop" className={`text-base`}>
+      <div className="flex flex-row items-center space-x-10">
+        <Link href="/shop" className={`text-lg`}>
           Shop
         </Link>
-        <Link href="/shop" className={`text-base`}>
-          Shop
+        <Link href="/shop" className={`text-lg`}>
+          New Release
         </Link>
-        <Link href="/shop" className={`text-base`}>
-          Shop
+        <Link href="/shop" className={`text-lg`}>
+          Price Drop
         </Link>
-        <Link href="/faq" className={`text-base`}>
+        <Link href="/faq" className={`text-lg`}>
           FAQ
         </Link>
         {/* <NavItem

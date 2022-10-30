@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import Link from "../../common/Link";
 import Image from "../../common/Image";
 import Loading from "../../Loading/dataLoading";
+import { FiSearch } from "react-icons/fi";
 
 import { useRouter } from "next/router";
 import useProductSearch from "../../../utils/hooks/useProductSearch";
@@ -102,7 +103,7 @@ export default function Search() {
         onFocus={() => {
           if (searchData.length > 0) resultsAnimRef.current.play();
         }}
-        className="w-44 relative flex flex-col items-end justify-center"
+        className="w-56 relative flex flex-col items-end justify-center"
       >
         <form
           onSubmit={handleSubmit}
@@ -111,7 +112,11 @@ export default function Search() {
           <TextField
             size="small"
             id="search"
-            label={<span className="ml-2">Search</span>}
+            label={
+              <span className="ml-2 flex flex-row items-center">
+                <FiSearch className="mr-2" /> Search
+              </span>
+            }
             variant="outlined"
             className="text-black border-black rounded-3xl bg-gray-100"
             onChange={handleChange}

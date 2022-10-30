@@ -84,3 +84,12 @@ input[type=number] {
   padding-top: 0px;
   padding-bottom: 0px;
 }
+
+#header-drawer__mobile {
+  .MuiFormControl-root {
+    .MuiInputBase-root {
+      border-radius: 10rem;
+
+    }
+  }
+}

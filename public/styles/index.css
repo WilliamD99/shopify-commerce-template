@@ -119,6 +119,10 @@ input[type=number] {
   padding-bottom: 0px;
 }
 
+#header-drawer__mobile .MuiFormControl-root .MuiInputBase-root {
+  border-radius: 10rem;
+}
+
 #footer_bottom .footer_links .footer-link {
   -webkit-transition: .2s;
   transition: .2s;
