@@ -14,6 +14,8 @@ export default function Related({ data }) {
     slidesToScroll: isMobile ? 1 : 4,
     arrows: true,
     swipeToSlide: true,
+    centerMode: true,
+    centerPadding: "60px",
   };
 
   const handleDisplay = () => {
@@ -47,10 +49,16 @@ export default function Related({ data }) {
   };
 
   return (
-    <>
-      <p className="text-3xl font-semibold mb-8">Related Products</p>
+    <div id="related">
+      <div className="flex flex-row justify-between items-center mb-8">
+        <p className="text-2xl font-semibold">Related Products</p>
+        <div className="flex flex-row space-x-2">
+          <p>Test</p>
+          <p>test</p>
+        </div>
+      </div>
 
       {handleDisplay()}
-    </>
+    </div>
   );
 }

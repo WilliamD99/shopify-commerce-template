@@ -30,7 +30,7 @@ export default function Product({ data }) {
 
   return (
     <>
-      <div className="relative pb-5 flex flex-col items-center md:mr-3 bg-slate-100">
+      <div className="relative pb-5 flex flex-col md:mr-3">
         {/* If product is loading */}
         {isLoading ? (
           <>
@@ -49,15 +49,17 @@ export default function Product({ data }) {
             blurDataURL="/placeholder.webp"
           />
         </div>
-        <div className="px-5 flex flex-col mt-2">
+        <div className="flex flex-col mt-5">
           <Link
             href={`/product/${productData.handle}`}
-            className="text-lg font-medium text-center"
+            className="text-base font-medium"
           >
             {productData.title}
           </Link>
-
-          <p className="text-base text-center">
+          <p className="text-sm text-slate-400 italic">
+            By {productData.vendor}
+          </p>
+          <p className="text-base">
             {parseFloat(productData.priceRangeV2.minVariantPrice.amount) ===
             parseFloat(productData.priceRangeV2.maxVariantPrice.amount)
               ? `${formatter.format(
@@ -69,44 +71,6 @@ export default function Product({ data }) {
                   productData.priceRangeV2.maxVariantPrice.amount
                 )}`}
           </p>
-
-          <p className="text-sm text-slate-400 italic text-center">
-            By {productData.vendor}
-          </p>
-
-          <div className="h-16">
-            {productData.variants.edges.length > 1 ? (
-              <Button
-                variant="outlined"
-                className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
-                onClick={() => router.push(`/product/${productData.handle}`)}
-              >
-                Select Options
-              </Button>
-            ) : (
-              <Button
-                onClick={async () => {
-                  setLoading(true);
-                  await cartAdd(
-                    {
-                      title: productData.title,
-                      merchandiseId: productData.variants.edges[0].node.id,
-                      quantity: 1,
-                      price: productData.variants.edges[0].node.price,
-                      image: productData.featuredImage.url,
-                      variantTitle: "",
-                    },
-                    setCart
-                  );
-                  setLoading(false);
-                }}
-                variant="outlined"
-                className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
-              >
-                Add to cart
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </>

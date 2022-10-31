@@ -17,6 +17,10 @@ body {
           box-sizing: inherit;
 }
 
+#nprogress {
+  z-index: 999999 !important;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -273,6 +277,14 @@ input[type=number] {
 
 #reviews .slick-slide > div {
   padding: 0 5px;
+}
+
+#related .slick-list {
+  margin: 0 -15px;
+}
+
+#related .slick-slide > div {
+  padding: 0 15px;
 }
 
 #filter-bar #sort #sort_icon {
