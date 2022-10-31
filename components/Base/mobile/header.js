@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { AiOutlineMenu } from "react-icons/ai";
-import Cart from "../cart";
 import Toolbar from "@mui/material/Toolbar";
 import Search from "./search";
 import Drawer from "./drawer";
+import Link from '../../common/Link'
+import { BsCart2 } from "react-icons/bs";
 
 export default function DrawerMobile({ setModalOpen }) {
   const [open, setOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function DrawerMobile({ setModalOpen }) {
       <div className="md:hidden flex flex-row w-full items-center justify-between my-3">
         <p>Test</p>
         <div className="flex flex-row items-center justify-center space-x-5">
-          <Cart />
+          <Link href="/cart"><BsCart2 /></Link>
           <Search />
           <AiOutlineMenu className="text-2xl" onClick={toggleDrawer} />
         </div>
