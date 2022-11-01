@@ -3,7 +3,7 @@ import Image from "../Image";
 
 import Link from "../Link";
 
-export default function SingleProduct({ data }) {
+export default function SingleProduct({ data, type }) {
   return (
     <>
       <Link
@@ -12,7 +12,7 @@ export default function SingleProduct({ data }) {
       >
         <div className="relative h-64 w-full bg-slate-100">
           <Image
-            src={data.featuredImage.url}
+            src={type === "id" ? data.featuredImage.url : data.featuredImage.src}
             layout="fill"
             placeholder="blur"
             blurDataURL="/images/animated-placeholder.mp4"

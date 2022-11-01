@@ -7,7 +7,7 @@ const requests = async (req, res) => {
     const params = req.body.data;
     let handle = params.handle;
     let redisProduct = await redisClient.get(`product-${handle}`);
-
+    console.log(redisProduct)
     if (redisProduct) {
       res.json(JSON.parse(redisProduct));
     } else {
@@ -23,6 +23,13 @@ const requests = async (req, res) => {
                             tags
                             availableForSale
                             productType
+                            collections(first: 10) {
+                              edges {
+                                node {
+                                  title
+                                }
+                              }
+                            }
                             options {
                                 name
                                 values
@@ -74,12 +81,14 @@ const requests = async (req, res) => {
       const data = await axios.post(storefrontURL, query, {
         headers: storefrontHeaders,
       });
-      redisClient.set(
-        `product-${handle}`,
-        JSON.stringify(data.data),
-        "EX",
-        86400
-      );
+      if (!data.data.errors) {
+        redisClient.set(
+          `product-${handle}`,
+          JSON.stringify(data.data),
+          "EX",
+          86400
+        );
+      }
       res.json(data.data);
     }
   } catch (e) {

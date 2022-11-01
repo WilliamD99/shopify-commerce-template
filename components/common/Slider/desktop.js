@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick";
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import SingleProduct from "./single-product";
@@ -6,9 +6,8 @@ import Skeleton from '@mui/material/Skeleton'
 
 const NUMBER_OF_SLIDE = 3;
 
-export default function SliderDesktop({ data, title }) {
+export default function SliderDesktop({ data, title, type }) {
     const sliderRef = useRef(null);
-
     const settings = {
         infinite: data.length < NUMBER_OF_SLIDE ? false : true,
         speed: 400,
@@ -68,7 +67,7 @@ export default function SliderDesktop({ data, title }) {
             </div>
             <Slider ref={sliderRef} {...settings}>
                 {data.map((e, i) => (
-                    <SingleProduct data={e.data.data?.product} key={`slide-${i}`} />
+                    <SingleProduct type={type} data={type === "id" ? e.data.data?.product : e.data.data?.productByHandle} key={`slide-${i}`} />
                 ))}
             </Slider>
         </div>
