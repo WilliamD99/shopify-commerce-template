@@ -3,52 +3,60 @@ import {
   adminHeadersGraphql,
   adminURLGraphql,
 } from "../../../../utils/api/header";
+import redisClient from '../../../../lib/redis'
 
 const requests = async (req, res) => {
   try {
     const params = req.body.data;
     const id = params.id;
-    const query = `
-      {
-          product(id:"${id}") {
-              id
-              title
-              handle
-              vendor
-              collections(first: 5) {
-                  edges {
-                  node {
-                      title
-                      id
-                  }
-                  }
-              }
-              featuredImage{
-                  url
-              }
-              priceRangeV2 {
-                  minVariantPrice {
-                  amount
-                  }
-                  maxVariantPrice {
-                  amount
-                  }
-              }
-              vendor
-              variants(first: 5) {
-                  edges {
-                      node {
-                          id
-                      }
-                  }
-              }
-          }
-      }
-      `;
-    const data = await axios.post(adminURLGraphql, query, {
-      headers: adminHeadersGraphql,
-    });
-    res.json(data.data);
+    let cacheProduct = await redisClient.get(`product-${id}`);
+    if (cacheProduct) {
+      res.json(JSON.parse(cacheProduct));
+    } else {
+      const query = `
+        {
+            product(id:"${id}") {
+                id
+                title
+                handle
+                vendor
+                collections(first: 5) {
+                    edges {
+                    node {
+                        title
+                        id
+                    }
+                    }
+                }
+                featuredImage{
+                    url
+                }
+                priceRangeV2 {
+                    minVariantPrice {
+                    amount
+                    }
+                    maxVariantPrice {
+                    amount
+                    }
+                }
+                vendor
+                variants(first: 5) {
+                    edges {
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+        }
+        `;
+      const data = await axios.post(adminURLGraphql, query, {
+        headers: adminHeadersGraphql,
+      });
+      await redisClient.set(`product-${id}`, JSON.stringify(data.data), "EX", 86400);
+      res.json(data.data);
+    }
+
   } catch (e) {
     res.json({ error: e });
   }

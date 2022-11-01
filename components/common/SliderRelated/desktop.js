@@ -8,8 +8,6 @@ const NUMBER_OF_SLIDE = 3;
 
 export default function SliderDesktop({ data, title }) {
     const sliderRef = useRef(null);
-    const [slideIndex, setSlideIndex] = useState(0);
-    const totalSlide = parseInt(data.length / NUMBER_OF_SLIDE) + 1;
 
     const settings = {
         infinite: data.length < NUMBER_OF_SLIDE ? false : true,
@@ -17,13 +15,6 @@ export default function SliderDesktop({ data, title }) {
         slidesToShow: NUMBER_OF_SLIDE,
         arrows: false,
         centerMode: true,
-        afterChange: (e) => {
-            if (e + NUMBER_OF_SLIDE >= data.length) {
-                setSlideIndex(totalSlide);
-            } else {
-                setSlideIndex(Math.ceil(e / NUMBER_OF_SLIDE));
-            }
-        },
     };
 
     if (data.some(e => e.isLoading)) return (
@@ -59,8 +50,7 @@ export default function SliderDesktop({ data, title }) {
                                 className="bg-slate-100 hover:bg-slate-200 ease-linear px-3 py-3 rounded-full cursor-pointer"
                             >
                                 <MdArrowBackIosNew
-                                    className={`${slideIndex === 0 ? "text-gray-400" : "text-black"
-                                        }`}
+
                                 />
                             </div>
                             <div
@@ -68,8 +58,6 @@ export default function SliderDesktop({ data, title }) {
                                 className="bg-slate-100 hover:bg-slate-200 ease-linear px-3 py-3 rounded-full cursor-pointer"
                             >
                                 <MdArrowForwardIos
-                                    className={`${slideIndex === totalSlide ? "text-gray-400" : "text-black"
-                                        }`}
                                 />
                             </div>
                         </>

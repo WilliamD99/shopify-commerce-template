@@ -266,6 +266,7 @@ input[type=number] {
   opacity: 1;
 }
 
-.custom-slider__desktop .slick-list {
+.custom-slider__desktop .slick-list,
+.custom-slider__mobile .slick-list {
   padding: 0 20% 0 0 !important;
 }/*# sourceMappingURL=index.css.map */

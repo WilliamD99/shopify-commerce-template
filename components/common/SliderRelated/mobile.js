@@ -4,15 +4,15 @@ import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import SingleProduct from "./single-product";
 import Skeleton from '@mui/material/Skeleton'
 
-const NUMBER_OF_SLIDE = 1.5;
+const NUMBER_OF_SLIDE = 1.;
 
 export default function SliderMobile({ data, title }) {
   const sliderRef = useRef(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const totalSlide = parseInt(data.length / NUMBER_OF_SLIDE) + 1;
+  // const [slideIndex, setSlideIndex] = useState(0);
+  // const totalSlide = parseInt(data.length / NUMBER_OF_SLIDE) + 1;
 
   const settings = {
-    infinite: false,
+    infinite: true,
     speed: 500,
     arrows: false,
     slidesToShow: NUMBER_OF_SLIDE,
@@ -20,18 +20,19 @@ export default function SliderMobile({ data, title }) {
     focusOnSelect: true,
     swipeToSlide: true,
     swipe: true,
-    afterChange: (e) => {
-      if (e + NUMBER_OF_SLIDE >= data.length) {
-        setSlideIndex(totalSlide);
-      } else {
-        setSlideIndex(Math.ceil(e / NUMBER_OF_SLIDE));
-      }
-    },
+    centerMode: true,
+    // afterChange: (e) => {
+    //   if (e + NUMBER_OF_SLIDE >= data.length) {
+    //     setSlideIndex(totalSlide);
+    //   } else {
+    //     setSlideIndex(Math.ceil(e / NUMBER_OF_SLIDE));
+    //   }
+    // },
   };
 
   if (data.some(e => e.isLoading)) return (
     <>
-      <div className="custom-slider__desktop pl-5">
+      <div className="custom-slider__mobile pl-5">
         <div className="flex flex-row items-center justify-between mb-10">
           <p className="text-2xl font-medium">{title}</p>
 
@@ -52,7 +53,7 @@ export default function SliderMobile({ data, title }) {
   )
   else if (!data.some(e => e.data?.errors?.length > 0))
     return (
-      <div className="custom-slider__desktop pl-2">
+      <div className="custom-slider__mobile pl-2">
         <div className="flex flex-row items-center justify-between mb-10">
           <p className="text-2xl font-medium">{title}</p>
           <div className="flex flex-row items-center space-x-2 my-3">
@@ -63,8 +64,6 @@ export default function SliderMobile({ data, title }) {
                   className="bg-slate-100 hover:bg-slate-200 ease-linear px-3 py-3 rounded-full cursor-pointer"
                 >
                   <MdArrowBackIosNew
-                    className={`${slideIndex === 0 ? "text-gray-400" : "text-black"
-                      }`}
                   />
                 </div>
                 <div
@@ -72,8 +71,6 @@ export default function SliderMobile({ data, title }) {
                   className="bg-slate-100 hover:bg-slate-200 ease-linear px-3 py-3 rounded-full cursor-pointer"
                 >
                   <MdArrowForwardIos
-                    className={`${slideIndex === totalSlide ? "text-gray-400" : "text-black"
-                      }`}
                   />
                 </div>
               </>
