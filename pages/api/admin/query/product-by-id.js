@@ -1,5 +1,4 @@
 import axios from "axios";
-import redisClient from "../../../../lib/redis";
 import {
   adminHeadersGraphql,
   adminURLGraphql,
@@ -9,12 +8,7 @@ const requests = async (req, res) => {
   try {
     const params = req.body.data;
     const id = params.id;
-
-    let cacheProduct = await redisClient.get(`product-${id}`);
-    if (cacheProduct) {
-      res.json(JSON.parse(cacheProduct));
-    } else {
-      const query = `
+    const query = `
       {
           product(id:"${id}") {
               id
@@ -51,12 +45,10 @@ const requests = async (req, res) => {
           }
       }
       `;
-      const data = await axios.post(adminURLGraphql, query, {
-        headers: adminHeadersGraphql,
-      });
-      redisClient.set(`product-${id}`, JSON.stringify(data.data), "EX", 86400);
-      res.json(data.data);
-    }
+    const data = await axios.post(adminURLGraphql, query, {
+      headers: adminHeadersGraphql,
+    });
+    res.json(data.data);
   } catch (e) {
     res.json({ error: e });
   }

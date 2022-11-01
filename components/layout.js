@@ -38,11 +38,11 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      {/* <Header sticky={stickyClass} /> */}
+      <Header sticky={stickyClass} />
       <div className="min-h-screen" style={{ marginTop: marginTop }}>
         {children}
       </div>
-      {/* <Footer /> */}
+      <Footer />
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
