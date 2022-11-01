@@ -264,4 +264,8 @@ input[type=number] {
 }
 #shop-container .single-product:hover .wishlist-button {
   opacity: 1;
+}
+
+.custom-slider__desktop .slick-list {
+  padding: 0 20% 0 0 !important;
 }/*# sourceMappingURL=index.css.map */
