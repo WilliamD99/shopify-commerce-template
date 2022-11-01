@@ -8,7 +8,6 @@ import { FiSearch } from "react-icons/fi";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { AiOutlineClose } from "react-icons/ai";
 import Image from "../../common/Image";
 import Link from "../../common/Link";
 import Skeleton from "@mui/material/Skeleton";
@@ -120,6 +119,8 @@ export default function Search() {
                   src={e.node.featuredImage.url}
                   layout="fill"
                   alt={e.node.title}
+                  placeholder="blur"
+                  blurDataURL="/placeholder.webp"
                 />
               </div>
 

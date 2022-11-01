@@ -28,7 +28,7 @@ export default function DrawerMobile({ setModalOpen }) {
       <div className="md:hidden flex flex-row w-full items-center justify-between my-3">
         <p>Test</p>
         <div className="flex flex-row items-center justify-center space-x-5">
-          <Link href="/cart"><BsCart2 /></Link>
+          <Link href="/cart"><BsCart2 className="text-2xl" /></Link>
           <Search />
           <AiOutlineMenu className="text-2xl" onClick={toggleDrawer} />
         </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import Slider from "react-slick";
 import { MdArrowForwardIos, MdArrowBackIosNew } from 'react-icons/md'
+import Image from '../../common/Image'
 
 const NUMBER_OF_SLIDE = 1.5
 
@@ -41,7 +42,12 @@ export default function SliderMobile({ data }) {
                 {data.map((e, i) => (
                     <div key={`slide-${i}`} className='w-11/12 px-2 flex flex-col space-y-2'>
                         <div className='relative h-44 w-full bg-slate-100'>
-
+                            <Image
+                                src="/placeholder.webp"
+                                layout="fill"
+                                placeholder="blur"
+                                blurDataURL="/images/animated-placeholder.mp4"
+                            />
                         </div>
                         <div className='flex flex-col'>
                             <p>Test-{e}</p>

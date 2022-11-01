@@ -35,7 +35,7 @@ export default function Drawer({
               href="/shop"
               className="flex flex-row space-x-4 justify-between items-center"
             >
-              <div className="text-2xl font-medium" href="/shop">
+              <div className="text-xl font-medium" href="/shop">
                 Shop
               </div>
               <MdOutlineArrowForwardIos className="text-xl" />
@@ -48,7 +48,7 @@ export default function Drawer({
               href="/shop"
               className="flex flex-row space-x-4 justify-between items-center"
             >
-              <div className="text-2xl font-medium" href="/shop">
+              <div className="text-xl font-medium" href="/shop">
                 Price Drops
               </div>
               <MdOutlineArrowForwardIos className="text-xl" />
@@ -61,7 +61,7 @@ export default function Drawer({
               href="/shop"
               className="flex flex-row space-x-4 justify-between items-center"
             >
-              <div className="text-2xl font-medium" href="/shop">
+              <div className="text-xl font-medium" href="/shop">
                 New Release
               </div>
               <MdOutlineArrowForwardIos className="text-xl" />
