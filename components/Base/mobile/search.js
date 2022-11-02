@@ -3,6 +3,9 @@ import { debounce } from "lodash";
 import { productSearchTemp } from "../../../lib/serverRequest";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { gsap } from '../../../utils/utils'
+import { Transition } from "react-transition-group";
+
 
 import { FiSearch } from "react-icons/fi";
 import Drawer from "@mui/material/Drawer";
@@ -21,6 +24,7 @@ export default function Search() {
   const [searchData, setSearchData] = useState([]);
   const router = useRouter();
   const routerQuery = router.query;
+  const animationRef = useRef(null)
 
   const toggleDrawer = (e, open) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
@@ -38,7 +42,6 @@ export default function Search() {
       }),
     { enabled: Boolean(term || term === ""), staleTime: 10000 * 100 }
   );
-  console.log(data);
 
   let handlePriceDisplay = (e) => {
     let displayPrice;
@@ -55,25 +58,6 @@ export default function Search() {
     }
     return displayPrice;
   };
-
-  // let handlePriceDisplay = (e) => {
-  //   let display;
-
-  //   // if (displayPrice === 0) {
-  //     if (
-  //       parseFloat(e.priceRange.maxVariantPrice.amount) ===
-  //       parseFloat(e.priceRange.minVariantPrice.amount)
-  //     ) {
-  //       display = formatter.format(e.priceRange.maxVariantPrice.amount);
-  //     } else {
-  //       display = `${formatter.format(
-  //         e.priceRange.minVariantPrice.amount
-  //       )} - ${formatter.format(e.priceRange.maxVariantPrice.amount)}`;
-  //     }
-  //   }
-
-  //   return display;
-  // };
 
   let search = useCallback(async (term) => {
     if (term === "") {
@@ -149,32 +133,48 @@ export default function Search() {
     if (open) setOpen(false);
   }, [routerQuery]);
 
+  useEffect(() => {
+    if (open) console.log(animationRef.current)
+  }, [open])
+
   return (
     <>
       <FiSearch className="text-2xl" onClick={() => setOpen(true)} />
       <Drawer anchor="top" open={open} onClose={() => toggleDrawer(false)}>
-        <Box id="header-drawer__mobile" className="w-screen h-screen py-5 px-5">
-          <div className="flex flex-row items-center space-x-10 mb-10">
-            <TextField
-              className="rounded-2xl"
-              size="small"
-              type="text"
-              placeholder="Search ..."
-              onChange={handleChangeInput}
-            />
-            <p className="cursor-pointer" onClick={() => setOpen(false)}>
-              Cancel
-            </p>
-          </div>
-          <div className="mb-10 px-3 flex flex-col space-y-3">
-            <p className="text-gray-500">Top Suggestion</p>
-            <div className="flex flex-col space-y-1">
-              <p onClick={() => handleLinkSuggestion("allo")}>Allo</p>{" "}
-              <Link href="#">Hooti</Link>
-              <Link href="#">Vssx</Link>
+        <Box ref={animationRef} id="header-drawer__mobile" className="w-screen h-screen py-5 px-5">
+
+          <>
+            <div className="flex flex-row items-center space-x-10 mb-10">
+              <TextField
+                className="rounded-2xl"
+                size="small"
+                type="text"
+                placeholder="Search ..."
+                onChange={handleChangeInput}
+              />
+              <Transition timeout={1000} mountOnEnter unmountOnExit in={open} addEndListener={(node, done) => {
+                gsap.to(node, 0.5, {
+                  x: open ? 0 : 100,
+                  autoAlpha: open ? 1 : 0,
+                  onComplete: done
+                })
+              }}>
+
+                <p id="test" className="cursor-pointer" onClick={() => setOpen(false)}>
+                  Cancel
+                </p>
+              </Transition>
             </div>
-          </div>
-          {handleDisplaySearch()}
+            <div className="mb-10 px-3 flex flex-col space-y-3">
+              <p className="text-gray-500">Top Suggestion</p>
+              <div className="flex flex-col space-y-1">
+                <p onClick={() => handleLinkSuggestion("allo")}>Allo</p>{" "}
+                <Link href="#">Hooti</Link>
+                <Link href="#">Vssx</Link>
+              </div>
+            </div>
+            {handleDisplaySearch()}
+          </>
         </Box>
       </Drawer>
     </>

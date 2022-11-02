@@ -1,10 +1,34 @@
-import React from 'react'
-import Slider from '../components/common/Slider'
+import React, { useState, useEffect } from 'react'
+import { Transition } from 'react-transition-group'
+import { gsap } from '../utils/utils'
+import TextField from '@mui/material/TextField'
 
 export default function Test() {
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setTimeout(() => setOpen(!open), 1000)
+    }, [open])
+
     return (
         <>
-            <Slider data={["test-product"]} title="test" type="handle" />
+            <p onClick={() => setOpen(!open)}>Test</p>
+            <Transition
+                timeout={1000}
+                mountOnEnter
+                unmountOnExit
+                in={open}
+                addEndListener={(node, done) => {
+                    let tl = gsap.timeline({ onComplete: done })
+                    tl.fromTo("#test", { width: open ? 0 : "10rem", alpha: open ? 0 : 1 }, { width: open ? "10rem" : 0, alpha: open ? 1 : 0, ease: "Sine.easeInOut" })
+                    tl.fromTo("#test2", { alpha: open ? 0 : 1 }, { alpha: open ? 1 : 0, ease: "Sine.easeInOut" })
+                }}
+            >
+                <>
+                    <TextField type={`text`} placeholder="test" id="test" />
+                    <p id="test2">Cancel</p>
+                </>
+            </Transition>
         </>
     )
 }

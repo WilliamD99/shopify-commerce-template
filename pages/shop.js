@@ -122,16 +122,13 @@ export default function Shop() {
                 <SingeProduct key={i} index={i} e={e} />
               ))}
             </div>
-            {!dataArr ? (
-              <></>
-            ) : (
-              <Pagination
-                isPrevious={isPrevious}
-                isNext={isNext}
-                cursorFirst={cursorNext}
-                cursorLast={cursorLast}
-              />
-            )}
+
+            <Pagination
+              isPrevious={isPrevious}
+              isNext={isNext}
+              cursorFirst={cursorNext}
+              cursorLast={cursorLast}
+            />
           </div>
         </div>
       </div>

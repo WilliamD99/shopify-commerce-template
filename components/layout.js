@@ -42,7 +42,7 @@ export default function Layout({ children }) {
       <div className="min-h-screen" style={{ marginTop: marginTop }}>
         {children}
       </div>
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
