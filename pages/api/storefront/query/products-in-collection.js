@@ -4,7 +4,7 @@ import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 const requests = async (req, res) => {
   try {
     let params = req.body.data;
-    let id = params.id;
+    let handle = params.handle;
     let limit = params.limit ? params.limit : 12;
     let cursor = params.cursor;
     let direction = params.direction;
@@ -58,7 +58,7 @@ const requests = async (req, res) => {
 
     const query = `
         {
-          collection(id:"${id}") {
+          collection(handle:"${handle}") {
             title
             description
             handle
