@@ -3,7 +3,7 @@ import deviceContext from "../../../utils/deviceContext";
 import Product from "./relatedProduct";
 
 import Slider from "react-slick";
-import CustomSlider from "../../common/SliderRelated";
+import CustomSlider from "../../common/Slider";
 
 export default function Related({ data }) {
   const { isMobile } = useContext(deviceContext);

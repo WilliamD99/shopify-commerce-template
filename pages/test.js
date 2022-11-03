@@ -6,9 +6,6 @@ import TextField from '@mui/material/TextField'
 export default function Test() {
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {
-        setTimeout(() => setOpen(!open), 1000)
-    }, [open])
 
     return (
         <>
@@ -22,6 +19,9 @@ export default function Test() {
                     let tl = gsap.timeline({ onComplete: done })
                     tl.fromTo("#test", { width: open ? 0 : "10rem", alpha: open ? 0 : 1 }, { width: open ? "10rem" : 0, alpha: open ? 1 : 0, ease: "Sine.easeInOut" })
                     tl.fromTo("#test2", { alpha: open ? 0 : 1 }, { alpha: open ? 1 : 0, ease: "Sine.easeInOut" })
+                }}
+                onEnter={() => {
+                    console.log('test')
                 }}
             >
                 <>

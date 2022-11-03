@@ -4,7 +4,7 @@ import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 const requests = async (req, res) => {
   try {
     let params = req.body.data;
-    let id = params.id;
+    let handle = params.handle;
     let limit = params.limit ? params.limit : 12;
     let cursor = params.cursor;
     let direction = params.direction;
@@ -58,13 +58,12 @@ const requests = async (req, res) => {
 
     const query = `
         {
-          collection(id:"${id}") {
+          collection(handle:"${handle}") {
             title
             description
             handle
-            products(${position}, ${sortQuery}, ${reverseQuery}, ${
-      queryArr.length > 0 ? `filters: [${queryArr}]` : ""
-    }) {
+            products(${position}, ${sortQuery}, ${reverseQuery}, ${queryArr.length > 0 ? `filters: [${queryArr}]` : ""
+      }) {
               pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -116,6 +115,7 @@ const requests = async (req, res) => {
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
     res.json(data.data);
   } catch (e) {
     console.log(e);
