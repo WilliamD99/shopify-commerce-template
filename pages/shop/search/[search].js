@@ -9,7 +9,7 @@ import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import FilterMenu from "../../../components/Shop/filterMenu";
 import Filter from "../../../components/Shop/filterBar";
 import Pagination from "../../../components/Shop/pagination";
-import { productSearch, productsGet } from "../../../lib/serverRequest";
+import { productsGet, vendorsGet, productTypeGet, collectionGet } from "../../../lib/serverRequest";
 
 export default function Search() {
   let router = useRouter();
@@ -19,7 +19,6 @@ export default function Search() {
   const [dataArr, setDataArr] = useState([]);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
-  const [direction, setDirection] = useState(true);
   const { data } = useQuery(
     [
       "search",
@@ -55,36 +54,19 @@ export default function Search() {
       }),
     { staleTime: 10000 * 6 }
   );
+  console.log(data)
 
-  // useEffect(() => {
-  //   if (routerQuery.search) {
-  //     if (routerQuery.search !== "") {
-  //       productSearch.mutate({
-  //         search: routerQuery.search,
-  //         sortKey: routerQuery.sort_key,
-  //         reverse: routerQuery.reverse,
-  //         price: routerQuery.price,
-  //         sales: routerQuery.sales,
-  //         direction: direction,
-  //         cursor: routerQuery.cursor,
-  //       });
-  //     }
-  //   }
-  // }, [routerQuery]);
-
-  // useEffect(() => {
-  //   if (productSearch.data) {
-  //     setDataArr(productSearch.data.products.edges);
-  //     setNext(productSearch.data.products.pageInfo.hasNextPage);
-  //     setPrevious(productSearch.data.products.pageInfo.hasPreviousPage);
-  //     setCursorLast(
-  //       productSearch.data.products.edges[
-  //         productSearch.data.products.edges.length - 1
-  //       ].cursor
-  //     );
-  //     setCursorNext(productSearch.data.products.edges[0].cursor);
-  //   }
-  // }, [productSearch.data]);
+  useEffect(() => {
+    if (data) {
+      setDataArr(data.data.products.edges)
+      setNext(data.data.products.pageInfo.hasNextPage)
+      setPrevious(data.data.products.pageInfo.hasPreviousPage)
+      setCursorNext(data.data.products.edges[0].cursor);
+      setCursorLast(
+        data.data.products.edges[data.data.products.edges.length - 1].cursor
+      );
+    }
+  }, [routerQuery])
 
   return (
     <>
@@ -95,18 +77,13 @@ export default function Search() {
           { name: `Search: "${routerQuery.search}"`, path: "#" },
         ]}
       />
-      {/* <div>Search</div>
-      {productSearch.isLoading ? (
-        <></>
-      ) : (
-        <Pagination
-          isPrevious={isPrevious}
-          isNext={isNext}
-          setDirection={setDirection}
-          cursorFirst={cursorNext}
-          cursorLast={cursorLast}
-        />
-      )} */}
+
+      <Pagination
+        isPrevious={isPrevious}
+        isNext={isNext}
+        cursorFirst={cursorNext}
+        cursorLast={cursorLast}
+      />
     </>
   );
 }
@@ -126,6 +103,16 @@ export async function getServerSideProps({ query, res }) {
     search
   } = query;
 
+  await queryClient.prefetchQuery(["vendors-all"], vendorsGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["types-all"], productTypeGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+  await queryClient.prefetchQuery(["collections-all"], collectionGet, {
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+
   await queryClient.prefetchQuery([
     "search",
     query.search,
@@ -138,7 +125,7 @@ export async function getServerSideProps({ query, res }) {
     { instock: instock === undefined ? null : instock },
     { vendors: vendors ? decodeURIComponent(vendors) : null },
     { type: type ? decodeURIComponent(type) : null },
-  ], () => productSearch({
+  ], () => productsGet({
     limit: limit,
     search: search,
     reversed: reversed,

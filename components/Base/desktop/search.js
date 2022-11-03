@@ -53,7 +53,6 @@ export default function Search() {
   // handle search data
   useEffect(() => {
     if (searchProduct.data) {
-      console.log(searchProduct.data);
       if (searchProduct.data.products.edges.length > 0)
         setSearchData(searchProduct.data.products.edges);
       resultsAnimRef.current.play();
@@ -148,15 +147,15 @@ export default function Search() {
                     <div className="">
                       <p className="text-xs">
                         {e.node.priceRangeV2.maxVariantPrice.amount ===
-                        e.node.priceRangeV2.minVariantPrice.amount
+                          e.node.priceRangeV2.minVariantPrice.amount
                           ? formatter.format(
-                              e.node.priceRangeV2.maxVariantPrice.amount
-                            )
+                            e.node.priceRangeV2.maxVariantPrice.amount
+                          )
                           : `${formatter.format(
-                              e.node.priceRangeV2.minVariantPrice.amount
-                            )} - ${formatter.format(
-                              e.node.priceRangeV2.maxVariantPrice.amount
-                            )}`}
+                            e.node.priceRangeV2.minVariantPrice.amount
+                          )} - ${formatter.format(
+                            e.node.priceRangeV2.maxVariantPrice.amount
+                          )}`}
                       </p>
                     </div>
                   </div>
@@ -164,7 +163,7 @@ export default function Search() {
                 </Link>
               ))}
               <Link
-                href={`/shop/search/products?search=${searchQuery}`}
+                href={`/shop/search/${searchQuery}`}
                 className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
               >
                 <div className="px-3 py-3 flex justify-center">
