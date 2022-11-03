@@ -62,18 +62,26 @@ let productAllStorefront = async (params) => {
 
 // Reviews
 let productReviews = async (params) => {
-  let url = "/api/reviews/get_product_reviews";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/reviews/get_product_reviews?${query}`;
+  let data = await axios.get(url);
   return data;
 };
 
 let productReviewsBottom = async (params) => {
-  let url = "/api/reviews/get_product_bottom";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/reviews/get_product_bottom?${query}`;
+  let data = await axios.get(url);
   return data;
 };
 
@@ -88,7 +96,7 @@ let productReviewsPost = async (params) => {
 // Get all collections
 let collectionAll = async () => {
   let url = "api/admin/query/all-collections";
-  let data = await axios.post(url);
+  let data = await axios.get(url);
 
   return data.data;
 };
@@ -375,16 +383,26 @@ let productTypeGet = async () => {
 
 // Get customer profile
 let customer_get_loyalty = async (params) => {
-  let url = "/api/loyalty/get_customer";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/loyalty/get_customer?${query}`;
+  let data = await axios.get(url);
   return data.data;
 };
 
 // Get all the available redemption options for that customer
 let redemption_get_loyalty = async (params) => {
-  let url = "/api/loyalty/get_redemption_option";
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/loyalty/get_redemption_option${query}`;
   let data = await axios.post(url, {
     data: params,
   });

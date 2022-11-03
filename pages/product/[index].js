@@ -21,14 +21,12 @@ const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
   {
     loading: () => <p>Loading...</p>,
-    ssr: false,
   }
 );
 const Related = dynamic(
   () => import("../../components/ProductDetails/related/relatedProducts"),
   {
     loading: () => <p>Loading...</p>,
-    ssr: false,
   }
 );
 
@@ -62,10 +60,9 @@ export default function Products({ data }) {
     } else {
       setQuantity(0);
       toast.warning(
-        `There is only ${
-          product.variants.edges[
-            product.variants.edges.findIndex((e) => e.node.id === variantId)
-          ].node.quantityAvailable
+        `There is only ${product.variants.edges[
+          product.variants.edges.findIndex((e) => e.node.id === variantId)
+        ].node.quantityAvailable
         } items of this product instock now`
       );
     }
@@ -247,9 +244,8 @@ export default function Products({ data }) {
                   {product.title}
                 </p>
                 <p
-                  className={`text-lg xl:text-xl font-semibold ${
-                    originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
-                  }`}
+                  className={`text-lg xl:text-xl font-semibold ${originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
+                    }`}
                 >
                   {handlePriceDisplay()}
                   {originalPrice > parseInt(displayPrice) ? (
@@ -275,10 +271,10 @@ export default function Products({ data }) {
                     )
                   ]
                     ? product.metafields[
-                        product.metafields.findIndex(
-                          (e) => e && e.key === "selection_type"
-                        )
-                      ].value
+                      product.metafields.findIndex(
+                        (e) => e && e.key === "selection_type"
+                      )
+                    ].value
                     : "Default"
                 }
               />
@@ -356,9 +352,9 @@ export default function Products({ data }) {
             <Related
               data={
                 product.metafields[
-                  product.metafields.findIndex(
-                    (e) => e.key === "related_products"
-                  )
+                product.metafields.findIndex(
+                  (e) => e.key === "related_products"
+                )
                 ]
               }
             />
@@ -377,7 +373,7 @@ export async function getStaticProps({ params }) {
     props: {
       data: data,
     },
-    revalidate: 30,
+    revalidate: 59,
   };
 }
 

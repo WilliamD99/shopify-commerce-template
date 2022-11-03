@@ -2,7 +2,7 @@ import axios from "axios";
 
 const request = async (req, res) => {
   try {
-    const params = req.body.data;
+    const params = req.query;
     let email = params.email;
 
     let url = `https://loyalty.yotpo.com/api/v2/redemption_options?customer_email=${encodeURIComponent(
@@ -15,6 +15,7 @@ const request = async (req, res) => {
     };
 
     let data = await axios.get(url, { headers: headers });
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
     res.json(data.data);
   } catch (e) {
     res.json(e);

@@ -236,16 +236,6 @@ function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
-const generateQueryFromParams = (params) => {
-  let query = [];
-  for (let key in params) {
-    if (params.hasOwnProperty(key)) {
-      query.push(`${key}=${params[key]}`);
-    }
-  }
-  return query.join("&");
-};
-
 export {
   updateSessionStorage,
   encryptObject,
@@ -264,5 +254,4 @@ export {
   getCookie,
   setCookie,
   eraseCookie,
-  generateQueryFromParams,
 };
