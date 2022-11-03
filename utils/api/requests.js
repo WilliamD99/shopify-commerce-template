@@ -11,10 +11,14 @@ let productSearch = async (params) => {
 
 // Get products in collections
 let productInCollection = async (params) => {
-  let url = "/api/storefront/query/products-in-collection";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = []
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`)
+    }
+  }
+  let url = `/api/storefront/query/products-in-collection?${query.join("&")}`;
+  let data = await axios.get(url);
   return data.data;
 };
 

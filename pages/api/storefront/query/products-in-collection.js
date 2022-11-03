@@ -3,7 +3,7 @@ import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
   try {
-    let params = req.body.data;
+    let params = req.query;
     let handle = params.handle;
     let limit = params.limit ? params.limit : 12;
     let cursor = params.cursor;
@@ -111,14 +111,12 @@ const requests = async (req, res) => {
           }
         }
         `;
-    console.log(query);
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
     res.json(data.data);
   } catch (e) {
-    console.log(e);
     res.json({ error: e });
   }
 };
