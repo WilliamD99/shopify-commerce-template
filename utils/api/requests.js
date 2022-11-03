@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { generateQueryFromParams } from "../utils";
 // Get search products by title
 let productSearch = async (params) => {
   let url = "/api/admin/query/products-search";
@@ -11,10 +11,10 @@ let productSearch = async (params) => {
 
 // Get products in collections
 let productInCollection = async (params) => {
-  let query = []
+  let query = [];
   for (let key in params) {
     if (params.hasOwnProperty(key)) {
-      query.push(`${key}=${params[key]}`)
+      query.push(`${key}=${params[key]}`);
     }
   }
   let url = `/api/storefront/query/products-in-collection?${query.join("&")}`;

@@ -51,7 +51,7 @@ export default function Related({ data }) {
 
   return (
     <div id="related">
-      <CustomSlider data={data} title="Related Products" />
+      {/* <CustomSlider data={data} title="Related Products" /> */}
       {/* {handleDisplay()} */}
     </div>
   );

@@ -62,8 +62,9 @@ const requests = async (req, res) => {
             title
             description
             handle
-            products(${position}, ${sortQuery}, ${reverseQuery}, ${queryArr.length > 0 ? `filters: [${queryArr}]` : ""
-      }) {
+            products(${position}, ${sortQuery}, ${reverseQuery}, ${
+      queryArr.length > 0 ? `filters: [${queryArr}]` : ""
+    }) {
               pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -114,7 +115,7 @@ const requests = async (req, res) => {
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
     res.json(data.data);
   } catch (e) {
     res.json({ error: e });

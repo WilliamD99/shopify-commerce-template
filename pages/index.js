@@ -5,7 +5,7 @@ import { productInCollection } from "../utils/api/requests";
 import Slider from "../components/Home/Slider";
 
 export default function Index() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
   const sliderData = useQueries({
     queries: [
       {
@@ -13,14 +13,20 @@ export default function Index() {
         queryFn: () => productInCollection({ handle: "price-drop", limit: 7 }),
         staleTime: 1000 * 60 * 60 * 12,
       },
+      {
+        queryKey: ["collection", "test-collection"],
+        queryFn: () =>
+          productInCollection({ handle: "test-collection", limit: 7 }),
+        staleTime: 1000 * 60 * 60 * 12,
+      },
     ],
   });
-  console.log(open)
 
   return (
     <>
       <p onClick={() => setOpen(!open)}>Test</p>
-      {/* <Slider data={sliderData[0]} title="Disposable" /> */}
+      <Slider data={sliderData[0]} title="Disposable" />
+      <Slider data={sliderData[1]} title="Disposable" />
     </>
   );
 }

@@ -6,7 +6,7 @@ import {
 
 const requests = async (req, res) => {
   try {
-    let params = req.body.data;
+    let params = req.query;
     const query = `
     {
       products(
@@ -38,6 +38,7 @@ const requests = async (req, res) => {
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,
     });
+    res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
     res.json(data.data);
   } catch (e) {
     res.json({ error: e });

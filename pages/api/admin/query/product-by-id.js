@@ -3,14 +3,15 @@ import {
   adminHeadersGraphql,
   adminURLGraphql,
 } from "../../../../utils/api/header";
-import redisClient from '../../../../lib/redis'
+import redisClient from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
-    const params = req.body.data;
+    const params = req.query;
     const id = params.id;
     let cacheProduct = await redisClient.get(`product-${id}`);
     if (cacheProduct) {
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
       res.json(JSON.parse(cacheProduct));
     } else {
       const query = `
@@ -53,10 +54,15 @@ const requests = async (req, res) => {
       const data = await axios.post(adminURLGraphql, query, {
         headers: adminHeadersGraphql,
       });
-      await redisClient.set(`product-${id}`, JSON.stringify(data.data), "EX", 86400);
+      await redisClient.set(
+        `product-${id}`,
+        JSON.stringify(data.data),
+        "EX",
+        86400
+      );
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
       res.json(data.data);
     }
-
   } catch (e) {
     res.json({ error: e });
   }

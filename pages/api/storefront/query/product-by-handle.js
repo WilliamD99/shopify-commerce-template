@@ -4,11 +4,12 @@ import redisClient from "../../../../lib/redis";
 
 const requests = async (req, res) => {
   try {
-    const params = req.body.data;
+    const params = req.query;
     let handle = params.handle;
     let redisProduct = await redisClient.get(`product-${handle}`);
-    console.log(redisProduct)
+    console.log(redisProduct);
     if (redisProduct) {
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
       res.json(JSON.parse(redisProduct));
     } else {
       const query = `
@@ -89,6 +90,7 @@ const requests = async (req, res) => {
           86400
         );
       }
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
       res.json(data.data);
     }
   } catch (e) {
