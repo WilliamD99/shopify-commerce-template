@@ -98,7 +98,6 @@ export default function Shop() {
       <div id="shop-container" className="px-3 md:px-10">
         {!isMobile ? (
           <FilterBar
-            count={count}
             length={dataArr.length}
             setSortKey={setSortKey}
             setReverse={setReverse}

@@ -6,7 +6,7 @@ import {
 
 const requests = async (req, res) => {
   try {
-    const params = req.body.data;
+    const params = req.query;
     const id = params.id;
 
     const query = `

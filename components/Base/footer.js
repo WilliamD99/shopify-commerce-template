@@ -54,35 +54,24 @@ export default function Footer() {
       </div>
       <div
         id="footer_bottom"
-        className="w-full flex flex-col space-y-5 px-5 pt-8 pb-3 bg-white"
+        className="w-full flex flex-row justify-between items-center px-10 py-3 bg-white"
       >
+        <p className="text-black text-center"> &copy; 2022 Ecommerce. All Rights Reserved</p>
+
         <div className="flex flex-row justify-center space-x-10 footer_links">
           <Link
-            className="text-sm xl:text-lg font-semibold footer-link"
-            href="/contact"
-          >
-            Contact
-          </Link>
-          <Link
-            className="text-sm xl:text-lg font-semibold footer-link"
-            href="/faq"
-          >
-            FAQ
-          </Link>
-          <Link
-            className="text-sm xl:text-lg font-semibold footer-link"
+            className="text-sm xl:text-base hover:underline"
             href="/terms"
           >
             Term of Use
           </Link>
           <Link
-            className="text-sm xl:text-lg font-semibold footer-link"
+            className="text-sm xl:text-base hover:underline"
             href="/policy"
           >
             Privacy Policy
           </Link>
         </div>
-        <p className="text-black text-center"> &copy; 2022 Ecommerce.</p>
       </div>
     </div>
   );

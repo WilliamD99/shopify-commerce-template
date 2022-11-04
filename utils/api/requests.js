@@ -165,10 +165,14 @@ let customerAll = async () => {
 
 // Get customer by id
 let customerGet = async (params) => {
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
   let url = "/api/storefront/query/customer";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let data = await axios.get(url);
   return data.data;
 };
 
@@ -359,10 +363,14 @@ let deliveryAll = async () => {
 
 // Get an order by Id
 let orderGet = async (params) => {
-  let url = "/api/admin/query/order-get";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/admin/query/order-get?${query}`;
+  let data = await axios.get(url);
   return data.data;
 };
 

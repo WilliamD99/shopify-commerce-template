@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import deviceContext from "../../../utils/deviceContext";
 
 // Hooks
 import { useRouter } from "next/router";
@@ -7,18 +8,22 @@ import { useQuery, QueryClient, dehydrate } from "@tanstack/react-query";
 // Components
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import FilterMenu from "../../../components/Shop/filterMenu";
-import Filter from "../../../components/Shop/filterBar";
+import FilterBar from "../../../components/Shop/filterBar";
 import Pagination from "../../../components/Shop/pagination";
 import { productsGet, vendorsGet, productTypeGet, collectionGet } from "../../../lib/serverRequest";
 
 export default function Search() {
   let router = useRouter();
   let routerQuery = router.query;
+  const { isMobile } = useContext(deviceContext)
   const [isNext, setNext] = useState(false);
   const [isPrevious, setPrevious] = useState(false);
   const [dataArr, setDataArr] = useState([]);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
+  const [sortKey, setSortKey] = useState();
+  const [isReverse, setReverse] = useState(false);
+
   const { data } = useQuery(
     [
       "search",
@@ -77,6 +82,19 @@ export default function Search() {
           { name: `Search: "${routerQuery.search}"`, path: "#" },
         ]}
       />
+
+      <div id="shop-container">
+        {!isMobile ? (
+          <FilterBar
+            length={dataArr.length}
+            setSortKey={setSortKey}
+            setReverse={setReverse}
+          />
+        ) : (
+          <></>
+        )}
+        <div id="shop"></div>
+      </div>
 
       <Pagination
         isPrevious={isPrevious}
