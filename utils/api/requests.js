@@ -74,7 +74,7 @@ let productReviews = async (params) => {
   }
   let url = `/api/reviews/get_product_reviews?${query.join("&")}`;
   let data = await axios.get(url);
-  return data;
+  return data.data;
 };
 
 let productReviewsBottom = async (params) => {

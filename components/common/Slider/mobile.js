@@ -6,7 +6,8 @@ import Skeleton from '@mui/material/Skeleton'
 
 const NUMBER_OF_SLIDE = 1.;
 
-export default function SliderMobile({ data, title }) {
+export default function SliderMobile({ data, title, type }) {
+  console.log(data)
   const sliderRef = useRef(null);
   // const [slideIndex, setSlideIndex] = useState(0);
   // const totalSlide = parseInt(data.length / NUMBER_OF_SLIDE) + 1;
@@ -81,7 +82,7 @@ export default function SliderMobile({ data, title }) {
         </div>
         <Slider ref={sliderRef} {...settings}>
           {data.map((e, i) => (
-            <SingleProduct data={e.data.data?.product} key={`slide-${i}`} />
+            <SingleProduct type={type} data={e.data.data?.product} key={`slide-${i}`} />
           ))}
         </Slider>
       </div>
