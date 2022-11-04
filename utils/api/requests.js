@@ -171,7 +171,7 @@ let customerGet = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = "/api/storefront/query/customer";
+  let url = `/api/storefront/query/customer?${query}`;
   let data = await axios.get(url);
   return data.data;
 };

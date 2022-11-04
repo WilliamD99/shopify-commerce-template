@@ -31,8 +31,9 @@ export default function Account() {
     setTab(newValue);
   };
 
-  if (user.state === "loading") return <Loading />;
-  if (user.state === "none") return <p>Please Sign In first</p>;
+  // Maybe deleted due to redirect by middleware
+  if (user?.state === "loading") return <Loading />;
+  if (user?.state === "none") return <p>Please Sign In first</p>;
 
   if (!user)
     return (
@@ -83,7 +84,6 @@ export default function Account() {
           <Loyalty />
         </TabPanel>
       </div>
-      {/* <Button onClick={handleLogout}>Logout</Button> */}
     </>
   );
 }

@@ -13,13 +13,13 @@ export function middleware(req) {
         req.nextUrl.pathname = `/my-account/dashboard`
       }
     } else {
-      req.nextUrl.pathname = `/err`
+      req.nextUrl.pathname = `/no-user`
     }
     // Update url pathname
     // Rewrite to url
     return NextResponse.rewrite(req.nextUrl)
   } else if (req.nextUrl.pathname.startsWith("/checkout")) {
-    req.nextUrl.pathname = `/${isLogin ? 'checkout' : 'err'}`
+    req.nextUrl.pathname = `/${isLogin ? 'checkout' : 'no-user'}`
     return NextResponse.rewrite(req.nextUrl)
   }
 }

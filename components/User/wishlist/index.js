@@ -3,6 +3,7 @@ import userContext from "../../../utils/userContext";
 
 import WishlistItem from "./wishlistItem";
 
+
 export default function Wishlist() {
   let [list, setList] = useState([]);
   let { user } = useContext(userContext);
@@ -10,7 +11,6 @@ export default function Wishlist() {
   useEffect(() => {
     if (user) {
       setList(JSON.parse(user.metafields[0].value));
-      console.log(user);
     }
   }, [user]);
 
@@ -22,6 +22,7 @@ export default function Wishlist() {
           <WishlistItem key={i} id={e} />
         ))}
       </div>
+
     </>
   );
 }

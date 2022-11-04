@@ -68,7 +68,7 @@ function MyApp({ Component, pageProps }) {
     if (cookie) {
       let fetchUser = async () => {
         let data = await customerGet({ accessToken: cookie });
-        setUser(data.data.customer);
+        setUser({ ...data.data.customer, status: "success" });
       };
       fetchUser();
     } else {

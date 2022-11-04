@@ -10,6 +10,7 @@ import Link from "../../../components/common/Link";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { AiOutlineCheck } from "react-icons/ai";
+import { NextSeo } from "next-seo";
 
 export default function Order() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function Order() {
   const { data } = useQuery(["order", routerQuery.order], () => orderGetById({ id: routerQuery.order }), { staleTime: 1000 * 60 * 60 * 24 })
 
   if (!data) return <div>No order found</div>;
-  if (data.errors[0]) return (
+  if (data.errors) return (
     <>
       <p>{data.errors[0].message}</p>
     </>
@@ -26,6 +27,7 @@ export default function Order() {
 
   return (
     <>
+      <NextSeo title={`My Order || Order ${data.data.order.name}`} description="" />
       <div className="flex relative flex-col w-2/3 ml-20 space-y-5">
         <div className="flex flex-row items-center">
           <span className="text-xl font-medium flex flex-row items-center">
