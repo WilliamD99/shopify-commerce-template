@@ -66,9 +66,9 @@ export default function Search() {
       setDataArr(data.data.products.edges)
       setNext(data.data.products.pageInfo.hasNextPage)
       setPrevious(data.data.products.pageInfo.hasPreviousPage)
-      setCursorNext(data.data.products.edges[0].cursor);
+      setCursorNext(data.data.products.edges[0]?.cursor);
       setCursorLast(
-        data.data.products.edges[data.data.products.edges.length - 1].cursor
+        data.data.products.edges[data.data.products.edges.length - 1]?.cursor
       );
     }
   }, [routerQuery])

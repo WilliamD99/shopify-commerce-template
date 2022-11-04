@@ -2,10 +2,14 @@ import axios from "axios";
 import { generateQueryFromParams } from "../utils";
 // Get search products by title
 let productSearch = async (params) => {
-  let url = "/api/admin/query/products-search";
-  let data = await axios.post(url, {
-    data: params,
-  });
+  let query = [];
+  for (let key in params) {
+    if (params.hasOwnProperty(key)) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  let url = `/api/admin/query/products-search?${query.join('&')}`;
+  let data = await axios.get(url);
   return data.data;
 };
 
@@ -68,7 +72,7 @@ let productReviews = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/reviews/get_product_reviews?${query}`;
+  let url = `/api/reviews/get_product_reviews?${query.join("&")}`;
   let data = await axios.get(url);
   return data;
 };
@@ -80,7 +84,7 @@ let productReviewsBottom = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/reviews/get_product_bottom?${query}`;
+  let url = `/api/reviews/get_product_bottom?${query.join("&")}`;
   let data = await axios.get(url);
   return data;
 };
@@ -171,7 +175,7 @@ let customerGet = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/storefront/query/customer?${query}`;
+  let url = `/api/storefront/query/customer?${query.join("&")}`;
   let data = await axios.get(url);
   return data.data;
 };
@@ -369,7 +373,7 @@ let orderGet = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/admin/query/order-get?${query}`;
+  let url = `/api/admin/query/order-get?${query.join("&")}`;
   let data = await axios.get(url);
   return data.data;
 };
@@ -397,7 +401,7 @@ let customer_get_loyalty = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/loyalty/get_customer?${query}`;
+  let url = `/api/loyalty/get_customer?${query.join("&")}`;
   let data = await axios.get(url);
   return data.data;
 };
@@ -410,7 +414,7 @@ let redemption_get_loyalty = async (params) => {
       query.push(`${key}=${params[key]}`);
     }
   }
-  let url = `/api/loyalty/get_redemption_option${query}`;
+  let url = `/api/loyalty/get_redemption_option${query.join("&")}`;
   let data = await axios.post(url, {
     data: params,
   });

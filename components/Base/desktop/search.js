@@ -10,21 +10,20 @@ import Loading from "../../Loading/dataLoading";
 import { FiSearch } from "react-icons/fi";
 
 import { useRouter } from "next/router";
-import useProductSearch from "../../../utils/hooks/useProductSearch";
+import { productSearchTemp } from '../../../lib/serverRequest'
+import { useQuery } from "@tanstack/react-query";
 
 export default function Search() {
+  let [show, setShow] = useState(false)
   let [searchQuery, setSearchQuery] = useState();
-  let [searchData, setSearchData] = useState([]);
-  let searchProduct = useProductSearch();
   let router = useRouter();
 
+  const { data, isLoading, isFetching, isSuccess } = useQuery([`search-${searchQuery}`], () => productSearchTemp({ search: searchQuery, number: 7 }), { enabled: Boolean(searchQuery) })
   let search = useCallback((criteria) => {
     if (criteria === "") {
-      setSearchData([]);
       setSearchQuery(null);
     } else {
       setSearchQuery(criteria);
-      searchProduct.mutate({ search: criteria });
     }
   }, []);
 
@@ -40,8 +39,9 @@ export default function Search() {
 
   let handleSubmit = useCallback((e) => {
     e.preventDefault();
-    router.push(`/shop/search/products?search=${searchQuery}`);
-    resultsAnimRef.current.reverse();
+    let input = document.querySelector("#search")
+    router.push(`/shop/search/${input.value}`);
+    // resultsAnimRef.current.reverse();
   }, []);
 
   useEffect(() => {
@@ -50,58 +50,54 @@ export default function Search() {
     };
   }, [debouncedSearch]);
 
-  // handle search data
-  useEffect(() => {
-    if (searchProduct.data) {
-      if (searchProduct.data.products.edges.length > 0)
-        setSearchData(searchProduct.data.products.edges);
-      resultsAnimRef.current.play();
-    }
-  }, [searchProduct.data]);
-
   // Handle search animation
-  let resultsAnimRef = useRef(null);
-  useEffect(() => {
-    resultsAnimRef.current = gsap
-      .timeline({
-        paused: true,
-        onStart: () => {
-          document
-            .querySelector("#search-results")
-            .classList.remove("invisible");
-        },
-        ease: "Sine.easeInOut",
-        duration: 0.3,
-      })
-      .fromTo(
-        "#search-results",
-        {
-          autoAlpha: 0,
-        },
-        {
-          autoAlpha: 1,
-        }
-      )
-      .fromTo(
-        "#search-results .search-results_content",
-        { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, stagger: (i) => i * 0.15 },
-        "<0.1"
-      );
+  // let resultsAnimRef = useRef(null);
+  // useEffect(() => {
+  //   resultsAnimRef.current = gsap
+  //     .timeline({
+  //       paused: true,
+  //       onStart: () => {
+  //         console.log('running')
+  //         document
+  //           .querySelector("#search-results")
+  //           .classList.remove("invisible");
+  //       },
+  //       onReverseComplete: () => {
+  //         console.log('end')
+  //         document
+  //           .querySelector("#search-results")
+  //           .classList.add("invisible");
+  //       },
+  //       ease: "Sine.easeInOut",
+  //       duration: 0.3,
+  //     })
+  //     .fromTo(
+  //       "#search-results",
+  //       {
+  //         autoAlpha: 0,
+  //       },
+  //       {
+  //         autoAlpha: 1,
+  //       }
+  //     )
+  //     .fromTo(
+  //       "#search-results .search-results_content",
+  //       { autoAlpha: 0, y: 20 },
+  //       { autoAlpha: 1, y: 0, stagger: (i) => i * 0.15 },
+  //       "<0.1"
+  //     );
 
-    return () => {
-      resultsAnimRef.current.kill();
-    };
-  }, []);
+  //   return () => {
+  //     resultsAnimRef.current.kill();
+  //   };
+  // }, []);
 
   return (
     <>
       <div
         id="search-bar"
-        onBlur={() => resultsAnimRef.current.reverse()}
-        onFocus={() => {
-          if (searchData.length > 0) resultsAnimRef.current.play();
-        }}
+        onBlur={() => setShow(false)}
+        onFocus={() => setShow(true)}
         className="w-56 relative flex flex-col items-end justify-center"
       >
         <form
@@ -121,69 +117,81 @@ export default function Search() {
             onChange={handleChange}
           />
         </form>
-        <div
-          id="search-results"
-          className="absolute bg-white invisible z-50 sb-custom rounded-md translate-y-full max-h-44 overflow-auto overflow-x-hidden -bottom-3 border-2 w-full"
-        >
-          {searchData.length > 0 ? (
-            <>
-              {searchData.map((e, i) => (
-                <Link
-                  href={`/product/${e.node.handle}`}
-                  key={i}
-                  className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
-                >
-                  <div className="relative bg-white px-3 py-3 flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center space-x-2">
-                      <div className="relative h-8 w-8">
-                        <Image
-                          alt={e.node.handle}
-                          layout="fill"
-                          src={e.node.featuredImage.url}
-                        />
+
+        {
+          !(!isFetching && !isSuccess) && show ?
+            <div
+              id="search-results"
+              className={`absolute bg-white z-50 sb-custom rounded-md translate-y-full max-h-44 overflow-auto overflow-x-hidden -bottom-3 border-2 w-full`}
+            >
+              {!isFetching ? (
+                <>
+                  {data.data.products.edges.map((e, i) => (
+                    <Link
+                      href={`/product/${e.node.handle}`}
+                      key={i}
+                      className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
+                    >
+                      <div className="relative bg-white px-3 py-3 flex flex-row items-center justify-between">
+                        <div className="flex flex-row items-center space-x-2">
+                          <div className="relative h-8 w-8">
+                            <Image
+                              alt={e.node.handle}
+                              layout="fill"
+                              src={e.node.featuredImage.url}
+                            />
+                          </div>
+                          <p className="text-sm">{e.node.title}</p>
+                        </div>
+                        <div className="">
+                          <p className="text-xs">
+                            {e.node.priceRangeV2.maxVariantPrice.amount ===
+                              e.node.priceRangeV2.minVariantPrice.amount
+                              ? formatter.format(
+                                e.node.priceRangeV2.maxVariantPrice.amount
+                              )
+                              : `${formatter.format(
+                                e.node.priceRangeV2.minVariantPrice.amount
+                              )} - ${formatter.format(
+                                e.node.priceRangeV2.maxVariantPrice.amount
+                              )}`}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-sm">{e.node.title}</p>
-                    </div>
-                    <div className="">
-                      <p className="text-xs">
-                        {e.node.priceRangeV2.maxVariantPrice.amount ===
-                          e.node.priceRangeV2.minVariantPrice.amount
-                          ? formatter.format(
-                            e.node.priceRangeV2.maxVariantPrice.amount
-                          )
-                          : `${formatter.format(
-                            e.node.priceRangeV2.minVariantPrice.amount
-                          )} - ${formatter.format(
-                            e.node.priceRangeV2.maxVariantPrice.amount
-                          )}`}
-                      </p>
-                    </div>
-                  </div>
-                  <Divider />
-                </Link>
-              ))}
-              <Link
-                href={`/shop/search/${searchQuery}`}
-                className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
-              >
-                <div className="px-3 py-3 flex justify-center">
-                  <p className="text-sm font-medium">View All</p>
+                      <Divider />
+                    </Link>
+                  ))}
+                  {
+                    data.data.products.edges.length > 0 ?
+                      <Link
+                        href={`/shop/search/${searchQuery}`}
+                        className="w-full search-results_content flex flex-col justify-center transition ease-in-out hover:bg-slate-100"
+                      >
+                        <div className="px-3 py-3 flex justify-center">
+                          <p className="text-sm font-medium">View All</p>
+                        </div>
+                      </Link>
+                      :
+                      <div className="px-3 py-3 flex justify-center">
+                        <p className="text-sm font-medium">No data found</p>
+                      </div>
+                  }
+                </>
+              ) : (
+                <p className="flex justify-center items-center px-3 py-16 font-semibold">
+                </p>
+              )}
+              {isFetching ? (
+                <div className="absolute top-0 z-50 w-full h-full backdrop-blur-sm">
+                  <Loading />
                 </div>
-              </Link>
-            </>
-          ) : (
-            <p className="flex justify-center items-center px-3 py-16 font-semibold">
-              No data
-            </p>
-          )}
-          {searchProduct.isLoading ? (
-            <div className="absolute top-0 z-50 w-full h-full backdrop-blur-sm">
-              <Loading />
+              ) : (
+                <></>
+              )}
             </div>
-          ) : (
+            :
             <></>
-          )}
-        </div>
+        }
       </div>
     </>
   );
