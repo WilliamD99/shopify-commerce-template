@@ -5,9 +5,9 @@ export default function Terms() {
   return (
     <>
       <NextSeo title="Terms of Service" description="" />
-      <div className="mt-20 flex flex-col px-20 space-y-10">
-        <p className="text-center text-3xl font-bold">Terms of Service</p>
-        <div className="px-32 flex flex-col space-y-5">
+      <div className="mt-20 flex flex-col px-5 lg:px-20 space-y-5 lg:space-y-10">
+        <p className="text-center text-3xl font-bold mb-5">Terms of Service</p>
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">Overview</p>
           <p>
             This website is operated by weTheBest. Throughout the site, the
@@ -47,7 +47,7 @@ export default function Terms() {
             to you.
           </p>
         </div>
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 1 - ONLINE STORE TERMS
           </p>
@@ -72,7 +72,7 @@ export default function Terms() {
             immediate termination of your Services.
           </p>
         </div>
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 2 - GENERAL CONDITIONS
           </p>
@@ -99,7 +99,7 @@ export default function Terms() {
             only and will not limit or otherwise affect these Terms.
           </p>
         </div>
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 3 - ACCURACY, COMPLETENESS AND TIMELINESS OF INFORMATION
           </p>
@@ -122,7 +122,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 4 - MODIFICATIONS TO THE SERVICE AND PRICES
           </p>
@@ -137,7 +137,7 @@ export default function Terms() {
             Service.
           </p>
         </div>
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 5 - PRODUCTS OR SERVICES (if applicable)
           </p>
@@ -170,7 +170,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 6 - ACCURACY OF BILLING AND ACCOUNT INFORMATION
           </p>
@@ -194,7 +194,7 @@ export default function Terms() {
           <p>For more detail, please review our Returns Policy.</p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 7 - OPTIONAL TOOLS</p>
           <p>
             We may provide you with access to third-party tools over which we
@@ -221,7 +221,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 8 - THIRD-PARTY LINKS</p>
           <p>
             Certain content, products and Services available via our Service may
@@ -246,7 +246,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 9 - USER COMMENTS, FEEDBACK AND OTHER SUBMISSIONS
           </p>
@@ -282,7 +282,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 10 - PERSONAL INFORMATION
           </p>
@@ -293,7 +293,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 11 - ERRORS, INACCURACIES AND OMISSIONS
           </p>
@@ -318,7 +318,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 12 - PROHIBITED USES</p>
           <p>
             In addition to other prohibitions as set forth in the Terms of
@@ -349,7 +349,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 13 - DISCLAIMER OF WARRANTIES; LIMITATION OF LIABILITY
           </p>
@@ -397,7 +397,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 14 - INDEMNIFICATION</p>
           <p>
             You agree to indemnify, defend and hold harmless weTheBest and our
@@ -411,7 +411,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 15 - SEVERABILITY</p>
           <p>
             In the event that any provision of these Terms of Service is
@@ -424,7 +424,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 16 - TERMINATION</p>
           <p>
             The obligations and liabilities of the parties incurred prior to the
@@ -447,7 +447,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 17 - ENTIRE AGREEMENT</p>
           <p>
             The failure of us to exercise or enforce any right or provision of
@@ -469,7 +469,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">SECTION 18 - GOVERNING LAW</p>
           <p>
             These Terms of Service and any separate agreements whereby we
@@ -478,7 +478,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 19 - CHANGES TO TERMS OF SERVICE
           </p>
@@ -496,7 +496,7 @@ export default function Terms() {
           </p>
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             SECTION 20 - CONTACT INFORMATION
           </p>

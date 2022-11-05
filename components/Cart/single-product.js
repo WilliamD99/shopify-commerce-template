@@ -7,6 +7,7 @@ import Image from "../common/Image";
 
 export default function Single({ e }) {
   const { setCart } = useContext(cartContext);
+  console.log(e);
   return (
     <>
       <TableRow>
@@ -17,8 +18,8 @@ export default function Single({ e }) {
             </div>
             <p>
               {e.title}
-              {e.variantTitle !== "Default Title" ? (
-                <span className="ml-1 font-semibold">({e.variantTitle})</span>
+              {e.title !== "Default Product" ? (
+                <span className="ml-1 font-semibold">({e.title})</span>
               ) : (
                 <></>
               )}

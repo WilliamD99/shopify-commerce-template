@@ -3,9 +3,8 @@ import { debounce } from "lodash";
 import { productSearchTemp } from "../../../lib/serverRequest";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { gsap } from '../../../utils/utils'
+import { gsap } from "../../../utils/utils";
 import { Transition } from "react-transition-group";
-
 
 import { FiSearch } from "react-icons/fi";
 import Drawer from "@mui/material/Drawer";
@@ -24,7 +23,7 @@ export default function Search() {
   const [searchData, setSearchData] = useState([]);
   const router = useRouter();
   const routerQuery = router.query;
-  const animationRef = useRef(null)
+  const animationRef = useRef(null);
 
   const toggleDrawer = (e, open) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
@@ -45,7 +44,6 @@ export default function Search() {
 
   let handlePriceDisplay = (e) => {
     let displayPrice;
-    console.log(e);
     if (
       parseFloat(e.priceRangeV2.maxVariantPrice.amount) ===
       parseFloat(e.priceRangeV2.minVariantPrice.amount)
@@ -134,43 +132,63 @@ export default function Search() {
   }, [routerQuery]);
 
   useEffect(() => {
-    if (open) console.log(animationRef.current)
-  }, [open])
+    if (open) console.log(animationRef.current);
+  }, [open]);
 
   return (
     <>
       <FiSearch className="text-2xl" onClick={() => setOpen(true)} />
       <Drawer anchor="top" open={open} onClose={() => toggleDrawer(false)}>
-        <Box ref={animationRef} id="header-drawer__mobile" className="w-screen h-screen py-5 px-5">
-
+        <Box
+          ref={animationRef}
+          id="header-drawer__mobile"
+          className="w-screen h-screen py-5 px-5"
+        >
           <>
-            <div className="flex flex-row items-center space-x-10 mb-10">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                let input = document.querySelector("#search").value;
+                router.push(`/shop/search/${input}`);
+              }}
+              className="flex flex-row items-center space-x-10 mb-10"
+            >
               <TextField
+                id="search"
                 className="rounded-2xl"
                 size="small"
                 type="text"
                 placeholder="Search ..."
                 onChange={handleChangeInput}
               />
-              <Transition timeout={1000} mountOnEnter unmountOnExit in={open} addEndListener={(node, done) => {
-                gsap.to(node, 0.5, {
-                  x: open ? 0 : 100,
-                  autoAlpha: open ? 1 : 0,
-                  onComplete: done
-                })
-              }}>
-
-                <p id="test" className="cursor-pointer" onClick={() => setOpen(false)}>
+              <Transition
+                timeout={1000}
+                mountOnEnter
+                unmountOnExit
+                in={open}
+                addEndListener={(node, done) => {
+                  gsap.to(node, 0.5, {
+                    x: open ? 0 : 100,
+                    autoAlpha: open ? 1 : 0,
+                    onComplete: done,
+                  });
+                }}
+              >
+                <p
+                  id="test"
+                  className="cursor-pointer"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </p>
               </Transition>
-            </div>
+            </form>
             <div className="mb-10 px-3 flex flex-col space-y-3">
               <p className="text-gray-500">Top Suggestion</p>
               <div className="flex flex-col space-y-1">
-                <p onClick={() => handleLinkSuggestion("allo")}>Allo</p>{" "}
-                <Link href="#">Hooti</Link>
-                <Link href="#">Vssx</Link>
+                <Link href="/shop/search/allo">Allo</Link>
+                <Link href="/shop/search/hooti">Hooti</Link>
+                <Link href="/shop/search/vssx">Vssx</Link>
               </div>
             </div>
             {handleDisplaySearch()}

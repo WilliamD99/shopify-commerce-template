@@ -69,15 +69,16 @@ export default function Shop() {
       }),
     { staleTime: 10000 }
   );
+  console.log(data)
 
   useEffect(() => {
     if (data) {
       setDataArr(data.data.products.edges);
       setNext(data.data.products.pageInfo.hasNextPage);
       setPrevious(data.data.products.pageInfo.hasPreviousPage);
-      setCursorNext(data.data.products.edges[0].cursor);
+      setCursorNext(data.data.products.edges[0]?.cursor);
       setCursorLast(
-        data.data.products.edges[data.data.products.edges.length - 1].cursor
+        data.data.products.edges[data.data.products.edges.length - 1]?.cursor
       );
     }
   }, [routerQuery]);
@@ -98,7 +99,6 @@ export default function Shop() {
       <div id="shop-container" className="px-3 md:px-10">
         {!isMobile ? (
           <FilterBar
-            count={count}
             length={dataArr.length}
             setSortKey={setSortKey}
             setReverse={setReverse}

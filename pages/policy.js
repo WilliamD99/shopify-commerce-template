@@ -6,7 +6,7 @@ export default function Policy() {
   return (
     <>
       <NextSeo title="Privacy Policy" description="" />
-      <div className="mt-20 flex flex-col px-20 space-y-10">
+      <div className="mt-20 flex flex-col px-5 lg:px-20 space-y-5 lg:space-y-10">
         <p className="text-center text-3xl font-bold">Privacy Policy</p>
         <div className="text-center text-xl">
           This Privacy Policy describes how your personal information is
@@ -17,7 +17,7 @@ export default function Policy() {
           (the “Site”).
         </div>
 
-        <div className="px-32 flex flex-col space-y-5">
+        <div className="lg:px-32 flex flex-col space-y-5">
           <p className="text-xl font-semibold">
             PERSONAL INFORMATION WE COLLECT
           </p>

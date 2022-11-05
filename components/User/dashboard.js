@@ -73,7 +73,7 @@ export default function Dashboard() {
                       size="medium"
                       onClick={() => {
                         router.push(
-                          `/my-account/order?id=${encodeURIComponent(
+                          `/my-account/orders/${encodeURIComponent(
                             e.node.id
                           )}`
                         );

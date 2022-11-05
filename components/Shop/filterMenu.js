@@ -26,7 +26,7 @@ export default function FilterMenu() {
     <>
       <div
         id="filter"
-        className="filter-menu hidden md:block overflow-scroll pl-2 overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-slate-50 py-5"
+        className="filter-menu overflow-scroll pl-2 overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-slate-50 py-5"
       >
         <Accordion
           defaultExpanded={true}
@@ -44,13 +44,12 @@ export default function FilterMenu() {
                   className="flex flex-row justify-between items-center"
                 >
                   <Link
-                    className={`${
-                      decodeURIComponent(
-                        routerQuery["products-in-collection"]
-                      ) === e.node.handle
+                    className={`${decodeURIComponent(
+                      routerQuery["products-in-collection"]
+                    ) === e.node.handle
                         ? "font-semibold"
                         : ""
-                    }`}
+                      }`}
                     href={{
                       pathname: `/shop/${e.node.handle}`,
                       // query: { col: encodeURIComponent(e.node.handle) },

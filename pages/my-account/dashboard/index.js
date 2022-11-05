@@ -1,24 +1,24 @@
 import React, { useState, useContext } from "react";
 import dynamic from "next/dynamic";
-import userContext from "../utils/userContext";
+import userContext from "../../../utils/userContext";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Loading from "../components/Loading/dataLoading";
-import Dashboard from "../components/User/dashboard";
+import Loading from "../../../components/Loading/dataLoading";
+import Dashboard from "../../../components/User/dashboard";
 
 // Dynamic component
-const Wishlist = dynamic(() => import("../components/User/wishlist"), {
+const Wishlist = dynamic(() => import("../../../components/User/wishlist"), {
   loading: () => <p>Loading ...</p>,
 });
 const ShippingForm = dynamic(
-  () => import("../components/User/shipping-update"),
+  () => import("../../../components/User/shipping-update"),
   { loading: () => <p>Loading...</p> }
 );
-const UpdateForm = dynamic(() => import("../components/User/user-update"), {
+const UpdateForm = dynamic(() => import("../../../components/User/user-update"), {
   loading: () => <p>Loading...</p>,
 });
-const Loyalty = dynamic(() => import("../components/User/loyalty"), {
+const Loyalty = dynamic(() => import("../../../components/User/loyalty"), {
   loading: () => <p>Loading ...</p>,
 });
 import { NextSeo } from "next-seo";
@@ -31,8 +31,9 @@ export default function Account() {
     setTab(newValue);
   };
 
-  if (user.state === "loading") return <Loading />;
-  if (user.state === "none") return <p>Please Sign In first</p>;
+  // Maybe deleted due to redirect by middleware
+  if (user?.state === "loading") return <Loading />;
+  if (user?.state === "none") return <p>Please Sign In first</p>;
 
   if (!user)
     return (
@@ -83,7 +84,6 @@ export default function Account() {
           <Loyalty />
         </TabPanel>
       </div>
-      {/* <Button onClick={handleLogout}>Logout</Button> */}
     </>
   );
 }

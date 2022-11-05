@@ -17,6 +17,8 @@ import {
   collectionGet,
 } from "../../../lib/serverRequest";
 
+import SingleProduct from "../../../components/Shop/single-product";
+
 export default function Search() {
   const { isMobile } = useContext(deviceContext);
   let router = useRouter();
@@ -26,6 +28,7 @@ export default function Search() {
   const [dataArr, setDataArr] = useState([]);
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
+
   const { data } = useQuery(
     [
       "search",
@@ -61,7 +64,6 @@ export default function Search() {
       }),
     { staleTime: 10000 * 6 }
   );
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -99,9 +101,11 @@ export default function Search() {
               id="shop-grid"
               className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
             >
-              {dataArr.map((e, i) => (
-                <SingeProduct key={i} index={i} e={e} />
-              ))}
+              {dataArr.length > 0 ? (
+                dataArr.map((e, i) => <SingleProduct key={i} index={i} e={e} />)
+              ) : (
+                <p className="font-semibold">No product found</p>
+              )}
             </div>
 
             <Pagination

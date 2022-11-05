@@ -1,41 +1,46 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import useProductById from "../../../utils/hooks/useProductById";
+import { useQuery } from "@tanstack/react-query";
+import { productById } from '../../../lib/serverRequest'
 
 import Image from "../../common/Image";
 import Link from "../../common/Link";
+import Skeleton from '@mui/material/Skeleton'
 
 export default function WishlistItem({ id }) {
-  let product = useProductById();
+  const { data, isLoading } = useQuery(['product', id], () => productById({ id: id }))
 
-  useEffect(() => {
-    product.mutate({ id: id });
-  }, []);
-
-  useEffect(() => {
-    if (product.data) console.log(product.data);
-  }, [product.data]);
-
-  if (product.isIdle) return <></>;
-  if (product.isLoading) return <p>Loading</p>;
-
-  return (
-    <>
-      <div className="flex flex-col space-y-5">
-        <div className="relative h-80 w-80">
-          <Image
-            layout="fill"
-            src={product.data.product.featuredImage.url}
-            alt={product.data.product.handle}
-          />
+  if (isLoading) return <>
+    <div className="flex flex-col space-y-2 ">
+      <Skeleton variant="rectangular" className="relative h-80 w-80" />
+      <Skeleton
+        className="w-80"
+      />
+    </div>
+  </>
+  else if (!data) return <>
+  </>
+  else {
+    return (
+      <>
+        <div className="flex flex-col space-y-5">
+          <div className="relative h-80 w-80">
+            <Image
+              layout="fill"
+              src={data.data.product.featuredImage.url}
+              alt={data.data.product.handle}
+              placeholder="blur"
+              blurDataURL="/placeholder.webp"
+            />
+          </div>
+          <Link
+            href={`/product/${data.data.product.handle}`}
+            className="text-lg font-semibold"
+          >
+            {data.data.product.title}
+          </Link>
         </div>
-        <Link
-          href={`/product/${product.data.product.handle}`}
-          className="text-lg font-semibold"
-        >
-          {product.data.product.title}
-        </Link>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 }

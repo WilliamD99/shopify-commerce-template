@@ -2,10 +2,10 @@ import axios from "axios";
 import { storefrontHeaders, storefrontURL } from "../../../../utils/api/header";
 
 const requests = async (req, res) => {
-  try {
-    const params = req.body.data;
-    const accessToken = params.accessToken;
-    const query = `
+    try {
+        const params = req.query;
+        const accessToken = params.accessToken;
+        const query = `
             {
                 customer(customerAccessToken: "${accessToken}") {
                     id
@@ -55,14 +55,15 @@ const requests = async (req, res) => {
                 }
             }
         `;
-    const data = await axios.post(storefrontURL, query, {
-      headers: storefrontHeaders,
-    });
-    res.json(data.data);
-  } catch (e) {
-    console.log(e);
-    res.json({ error: e });
-  }
+        const data = await axios.post(storefrontURL, query, {
+            headers: storefrontHeaders,
+        });
+        res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
+        res.json(data.data);
+    } catch (e) {
+        console.log(e);
+        res.json({ error: e });
+    }
 };
 
 export default requests;

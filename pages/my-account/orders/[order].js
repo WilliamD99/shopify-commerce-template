@@ -1,52 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { formatter } from "../../utils/utils";
+import React from "react";
+import { formatter } from "../../../utils/utils";
 
-import useOrderGet from "../../utils/hooks/useOrderGet";
 import { useRouter } from "next/router";
+import { useQuery, QueryClient, dehydrate } from "@tanstack/react-query";
+import { orderGetById } from '../../../lib/serverRequest'
 
-import Image from "../../components/common/Image";
-import Loading from "../../components/Loading/dataLoading";
-import Link from "../../components/common/Link";
+import Image from "../../../components/common/Image";
+import Link from "../../../components/common/Link";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { AiOutlineCheck } from "react-icons/ai";
+import { NextSeo } from "next-seo";
 
-export default function Order({ index }) {
+export default function Order() {
   const router = useRouter();
   const routerQuery = router.query;
-  const order = useOrderGet();
-  const [data, setData] = useState();
 
-  useEffect(() => {
-    if (router.isReady) {
-      if (routerQuery.id) {
-        order.mutate({ id: routerQuery.id });
-      }
-    }
-  }, [router.isReady]);
-
-  useEffect(() => {
-    if (order.data) {
-      setData(order.data.order);
-    }
-  }, [order.data]);
-
-  if (order.isLoading)
-    return (
-      <div className="relative h-screen w-screen">
-        <Loading />
-      </div>
-    );
+  const { data } = useQuery(["order", routerQuery.order], () => orderGetById({ id: routerQuery.order }), { staleTime: 1000 * 60 * 60 * 24 })
 
   if (!data) return <div>No order found</div>;
+  if (data.errors) return (
+    <>
+      <p>{data.errors[0].message}</p>
+    </>
+  )
 
   return (
     <>
+      <NextSeo title={`My Order || Order ${data.data.order.name}`} description="" />
       <div className="flex relative flex-col w-2/3 ml-20 space-y-5">
         <div className="flex flex-row items-center">
-          <p className="text-xl font-medium flex flex-row items-center">
-            Order {data.name}
-            {data.confirmed ? (
+          <span className="text-xl font-medium flex flex-row items-center">
+            Order {data.data.order.name}
+            {data.data.order.confirmed ? (
               <Chip
                 className="ml-2 px-1"
                 label="Confirmed"
@@ -54,7 +40,7 @@ export default function Order({ index }) {
                 color="success"
               />
             ) : null}
-          </p>
+          </span>
         </div>
         <div className="flex flex-row space-x-10">
           <div className="w-2/3 flex flex-col space-y-5">
@@ -62,11 +48,11 @@ export default function Order({ index }) {
               <p className="text-xl">
                 Created at:
                 <span className="ml-2 text-lg font-semibold">
-                  {new Date(data.createdAt).toUTCString()}
+                  {new Date(data.data.order.createdAt).toUTCString()}
                 </span>
               </p>
               <div className="grid grid-cols-1">
-                {data.lineItems.edges.map((e, i) => (
+                {data.data.order.lineItems.edges.map((e, i) => (
                   <div key={i}>
                     <Divider className="my-5" />
                     <div className="flex flex-row justify-between items-center">
@@ -112,7 +98,7 @@ export default function Order({ index }) {
               </div>
             </div>
             <div className="px-5 py-5 flex flex-col space-y-5 bg-slate-100 w-full shadow-md rounded-md">
-              {data.fullyPaid ? (
+              {data.data.order.fullyPaid ? (
                 <p className="text-xl flex flex-row items-center">
                   Paid{" "}
                   <AiOutlineCheck className="ml-2 text-lg text-green-500" />
@@ -124,37 +110,37 @@ export default function Order({ index }) {
                 <div className="grid grid-cols-4 justify-between">
                   <p>Subtotal</p>
                   <p className="col-span-2">
-                    {data.subtotalLineItemsQuantity} items
+                    {data.data.order.subtotalLineItemsQuantity} items
                   </p>
                   <p className="text-right">
                     {formatter.format(
-                      data.subtotalPriceSet.presentmentMoney.amount
+                      data.data.order.subtotalPriceSet.presentmentMoney.amount
                     )}
                   </p>
                 </div>
                 <div className="grid grid-cols-4 justify-between">
                   <p>Shipping</p>
-                  <p className="col-span-2">{data.shippingLine.title}</p>
+                  <p className="col-span-2">{data.data.order.shippingLine?.title}</p>
                   <p className="text-right">
                     {formatter.format(
-                      data.totalShippingPriceSet.presentmentMoney.amount
+                      data.data.order.totalShippingPriceSet.presentmentMoney.amount
                     )}
                   </p>
                 </div>
                 <div className="grid grid-cols-4 justify-between">
                   <p>Tax</p>
                   <p className="col-span-2">
-                    {data.taxLines[0].title} ({data.taxLines[0].rate})
+                    {data.data.order.taxLines[0].title} ({data.data.order.taxLines[0].rate})
                   </p>
                   <p className="text-right">
-                    {formatter.format(data.totalTaxSet.presentmentMoney.amount)}
+                    {formatter.format(data.data.order.totalTaxSet.presentmentMoney.amount)}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 justify-between">
                   <p className="font-semibold">Total</p>
                   <p className="text-right font-semibold">
                     {formatter.format(
-                      data.totalPriceSet.presentmentMoney.amount
+                      data.data.order.totalPriceSet.presentmentMoney.amount
                     )}
                   </p>
                 </div>
@@ -164,8 +150,8 @@ export default function Order({ index }) {
           <div className="w-1/3 flex flex-col space-y-5">
             <div className="px-5 py-5 flex flex-col space-y-3 bg-slate-100 w-full shadow-md rounded-md">
               <p className="font-bold text-xl">Note</p>
-              {data.note ? (
-                <p className="text-base">{data.note}</p>
+              {data.data.order.note ? (
+                <p className="text-base">{data.data.order.note}</p>
               ) : (
                 <p className="text-base">No notes from customer</p>
               )}
@@ -173,7 +159,7 @@ export default function Order({ index }) {
             <div className="px-5 py-5 flex flex-col space-y-5 bg-slate-100 w-full shadow-md rounded-md">
               <p className="font-bold text-xl">Customer</p>
               <p className="font-semibold">
-                {data.customer.displayName} ({data.customer.numberOfOrders}{" "}
+                {data.data.order.customer.displayName} ({data.data.order.customer.numberOfOrders}{" "}
                 orders)
               </p>
               <Divider />
@@ -181,13 +167,13 @@ export default function Order({ index }) {
                 <p className="font-semibold text-lg">Contact Information</p>
                 <div className="ml-3 flex flex-col space-y-2">
                   <p>
-                    {data.customer.email
-                      ? data.customer.email
+                    {data.data.order.customer.email
+                      ? data.data.order.customer.email
                       : "No email address"}
                   </p>
                   <p>
-                    {data.customer.phone
-                      ? data.customer.phone
+                    {data.data.order.customer.phone
+                      ? data.data.order.customer.phone
                       : "No phone number"}
                   </p>
                 </div>
@@ -196,12 +182,12 @@ export default function Order({ index }) {
               <div className="flex flex-col space-y-3">
                 <p className="font-semibold text-lg">Shipping Address</p>
                 <div className="ml-3 flex flex-col space-y-2">
-                  <p>{data.shippingAddress.address1}</p>
+                  <p>{data.data.order.shippingAddress?.address1}</p>
                   <p>
-                    {data.shippingAddress.city} {data.shippingAddress.province}{" "}
-                    {data.shippingAddress.zip}
+                    {data.data.order.shippingAddress?.city} {data.data.order.shippingAddress?.province}{" "}
+                    {data.data.order.shippingAddress?.zip}
                   </p>
-                  <p>{data.shippingAddress.country}</p>
+                  <p>{data.data.order.shippingAddress?.country}</p>
                 </div>
               </div>
             </div>
@@ -212,12 +198,19 @@ export default function Order({ index }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
-  const { index } = query;
+const queryClient = new QueryClient()
+export async function getServerSideProps({ query, res }) {
+  const { order } = query;
+
+  await queryClient.prefetchQuery(["order", order], () => orderGetById({ id: order }))
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=30, stale-while-revalidate=59"
+  );
 
   return {
     props: {
-      index,
+      dehydratedState: dehydrate(queryClient)
     },
   };
 }
