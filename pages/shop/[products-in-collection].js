@@ -73,7 +73,7 @@ export default function Collection({ col }) {
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
-
+  console.log(data)
   useEffect(() => {
     setDataArr(data?.data.collection.products.edges);
     setNext(data ? data.data.collection.products.pageInfo.hasNextPage : false);
@@ -83,9 +83,9 @@ export default function Collection({ col }) {
     setCursorLast(
       data?.data.collection.products.edges[
         data.data.collection.products.edges.length - 1
-      ].cursor
+      ]?.cursor
     );
-    setCursorNext(data?.data.collection.products.edges[0].cursor);
+    setCursorNext(data?.data.collection.products.edges[0]?.cursor);
   }, [routerQuery]);
 
   return (
@@ -112,13 +112,14 @@ export default function Collection({ col }) {
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
-              {!data ? (
-                <Loading />
-              ) : (
-                dataArr.map((e, i) => (
-                  <SingleProduct index={i} e={e} key={e.node.title} />
-                ))
-              )}
+              {
+                data.data.collection.products.edges.length > 0 ?
+                  dataArr.map((e, i) => (
+                    <SingleProduct index={i} e={e} key={e.node.title} />
+                  ))
+                  :
+                  <p>No product found</p>
+              }
             </div>
             {products.isLoading ? (
               <></>
