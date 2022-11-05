@@ -25,6 +25,7 @@ export default function Index() {
   return (
     <>
       <p onClick={() => setOpen(!open)}>Test</p>
+      {/* <CollectionSlider /> */}
       {/* <Slider data={sliderData[0]} title="Disposable" />
       <Slider data={sliderData[1]} title="Disposable" /> */}
     </>

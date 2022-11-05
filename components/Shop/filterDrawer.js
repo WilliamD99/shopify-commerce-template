@@ -18,11 +18,17 @@ import {
 } from "../../lib/serverRequest";
 
 export default function FilterDrawer() {
+  let router = useRouter();
+  let routerQuery = router.query;
   const [drawerOpen, setDrawer] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [price, setPrice] = useState([0, 1000]);
-  let [selectedVendors, setSelectedVendors] = useState([]);
-  let [selectedTypes, setSelectedType] = useState([]);
+  let [selectedVendors, setSelectedVendors] = useState(
+    typeof document !== "undefined" ? decodeURIComponent(routerQuery.vendors).split(",") : []
+  );
+  let [selectedTypes, setSelectedType] = useState(
+    typeof document !== "undefined" ? decodeURIComponent(routerQuery.type).split(",") : []
+  );
 
   const getVendors = useQuery(["vendors-all"], vendorsGet, {
     staleTime: 24 * 60 * 60 * 1000,
@@ -33,9 +39,6 @@ export default function FilterDrawer() {
   const getCollections = useQuery(["collections-all"], collectionGet, {
     staleTime: 24 * 60 * 60 * 1000,
   });
-
-  let router = useRouter();
-  let routerQuery = router.query;
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -67,7 +70,6 @@ export default function FilterDrawer() {
       routerQuery.vendors = encodeURIComponent(newList.join(","));
       router.push(
         {
-          // pathname: "/shop",
           query: routerQuery,
         },
         undefined
@@ -76,7 +78,6 @@ export default function FilterDrawer() {
       delete routerQuery.vendors;
       router.push(
         {
-          // pathname: window.location.pathname,
           query: routerQuery,
         },
         undefined
@@ -193,13 +194,12 @@ export default function FilterDrawer() {
                     <p
                       onClick={() => handleVendor(e.node)}
                       key={`vendor-${e.node}`}
-                      className={`${
-                        decodeURIComponent(routerQuery.vendors)
-                          .split(",")
-                          .includes(e.node)
-                          ? "font-bold"
-                          : ""
-                      }`}
+                      className={`${decodeURIComponent(routerQuery.vendors)
+                        .split(",")
+                        .includes(e.node)
+                        ? "font-bold"
+                        : ""
+                        }`}
                     >
                       {e.node}
                     </p>
@@ -230,13 +230,12 @@ export default function FilterDrawer() {
                     <p
                       onClick={() => handleType(e.node)}
                       key={`type-${e.node}`}
-                      className={`${
-                        decodeURIComponent(routerQuery.type)
-                          .split(",")
-                          .includes(e.node)
-                          ? "font-bold"
-                          : ""
-                      }`}
+                      className={`${decodeURIComponent(routerQuery.type)
+                        .split(",")
+                        .includes(e.node)
+                        ? "font-bold"
+                        : ""
+                        }`}
                     >
                       {e.node}
                     </p>
