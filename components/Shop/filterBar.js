@@ -7,7 +7,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Limit from "./filter/limit";
 
-export default function Filter({ setSortKey, setReverse }) {
+export default function Filter() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
