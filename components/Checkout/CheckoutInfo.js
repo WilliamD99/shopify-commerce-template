@@ -86,7 +86,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
     if (checkoutShippingUpdate.data && !checkoutShippingUpdate.isLoading) {
       setShippingOptions(
         checkoutShippingUpdate.data.data.checkoutShippingAddressUpdateV2
-          .checkout.availableShippingRates.shippingRates
+          .checkout.availableShippingRates?.shippingRates
       );
     }
   }, [checkoutShippingUpdate.isLoading]);
@@ -104,73 +104,11 @@ export default function ShippingUpdate({ setShippingOptions }) {
     }
   }, [user]);
 
-  if (user.state)
-    return (
-      <>
-        <form
-          onSubmit={handleFormInfo}
-          className="flex flex-col space-y-5 md:px-10 md:w-2/3"
-        >
-          <div className="flex flex-col space-y-5">
-            <p className="text-xl font-medium">Contact Information</p>
-            <div className="flex flex-row space-x-5">
-              <TextField
-                className="w-1/2"
-                id="firstName"
-                type="text"
-                label="First Name"
-              />
-              <TextField className="w-1/2" id="lastName" label="Last Name" />
-            </div>
-            <div className="flex flex-row space-x-5">
-              <TextField className="w-full" id="email" label="Email" />
-            </div>
-          </div>
-          <div className="flex flex-col space-y-5">
-            <p className="text-xl font-medium">Delivery Address</p>
-            <div>
-              <TextField className="w-full" id="address" label="Address" />
-            </div>
-            <div className="flex flex-row space-x-5">
-              <TextField className="w-1/2" id="city" label="City" />
-
-              <Select
-                labelId="province-select"
-                className="w-1/2"
-                id={`province`}
-                label="Province"
-              >
-                {provinces.map((e, i) => (
-                  <MenuItem key={i} value={e.label}>
-                    {e.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </div>
-            <div className="flex flex-row space-x-5">
-              <TextField className="w-1/2" id="postal" label="Postal Code" />
-              <TextField
-                className="w-1/2"
-                id="country"
-                label="Country"
-                disabled
-                defaultValue="Canada"
-              />
-            </div>
-          </div>
-          <Button type="submit" variant="outlined">
-            Confirm
-          </Button>
-          {checkoutShippingUpdate.isLoading ? <p>Loading...</p> : <></>}
-        </form>{" "}
-      </>
-    );
-
   return (
     <>
       <form
         onSubmit={handleFormInfo}
-        className="flex flex-col space-y-5 px-10 w-2/3"
+        className="flex flex-col space-y-5 lg:px-10 lg:w-2/3"
       >
         <div className="flex flex-col space-y-5">
           <p className="text-xl font-medium">Contact Information</p>
@@ -273,19 +211,13 @@ export default function ShippingUpdate({ setShippingOptions }) {
               id="country"
               label="Country"
               disabled
-              defaultValue={
-                !user.state
-                  ? user.addresses.edges.length > 0
-                    ? user.addresses.edges[0].node.country
-                    : ""
-                  : ""
-              }
+              defaultValue="Canada"
             />
           </div>
         </div>
         <div className="flex flex-row space-x-5">
           <Button
-            className="w-44 xl:w-56 text-center text-black border-black hover:text-white hover:bg-black hover:border-white"
+            className="w-full rounded-full xl:w-56 text-center text-white bg-black border-black hover:text-black hover:bg-white hover:border-black"
             type="submit"
             variant="outlined"
           >

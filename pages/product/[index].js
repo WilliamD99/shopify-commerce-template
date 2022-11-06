@@ -60,9 +60,10 @@ export default function Products({ data }) {
     } else {
       setQuantity(0);
       toast.warning(
-        `There is only ${product.variants.edges[
-          product.variants.edges.findIndex((e) => e.node.id === variantId)
-        ].node.quantityAvailable
+        `There is only ${
+          product.variants.edges[
+            product.variants.edges.findIndex((e) => e.node.id === variantId)
+          ].node.quantityAvailable
         } items of this product instock now`
       );
     }
@@ -150,7 +151,7 @@ export default function Products({ data }) {
       ) {
         return (
           <Button
-            className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base w-full h-10 md:h-16 font-semibold text-white py-2 rounded-lg hover:bg-slate-100 hover:text-black"
+            className="bg-black add-to-cart text-xs normal-case md:uppercase md:text-base w-full rounded-full h-10 md:h-16 font-semibold text-white py-2 hover:opacity-80"
             onClick={handleAddToCart}
             disabled={displayPrice && quantity ? false : true}
           >
@@ -225,9 +226,9 @@ export default function Products({ data }) {
       />
 
       <div className="product-details py-10 pb-10 bg-slate-100 flex justify-center">
-        <div className="w-11/12 xl:w-3/4">
+        <div className="w-11/12">
           <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
-            <div className="w-full md:w-1/2 xl:w-2/3 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
+            <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
               {product ? (
                 <ImageGallery
                   id={product.id}
@@ -238,15 +239,16 @@ export default function Products({ data }) {
                 <></>
               )}
             </div>
-            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-1/3">
+            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
               {/* Title */}
               <div className="flex flex-row items-center space-x-5">
                 <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
                   {product.title}
                 </p>
                 <p
-                  className={`text-lg xl:text-xl font-semibold ${originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
-                    }`}
+                  className={`text-lg xl:text-xl font-semibold ${
+                    originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
+                  }`}
                 >
                   {handlePriceDisplay()}
                   {originalPrice > parseInt(displayPrice) ? (
@@ -272,10 +274,10 @@ export default function Products({ data }) {
                     )
                   ]
                     ? product.metafields[
-                      product.metafields.findIndex(
-                        (e) => e && e.key === "selection_type"
-                      )
-                    ].value
+                        product.metafields.findIndex(
+                          (e) => e && e.key === "selection_type"
+                        )
+                      ].value
                     : "Default"
                 }
               />
@@ -331,7 +333,7 @@ export default function Products({ data }) {
 
               <Accordion
                 id={extractId(product.id)}
-                description={product.description}
+                description={product.descriptionHtml}
                 title={product.title}
               />
             </div>
@@ -353,9 +355,9 @@ export default function Products({ data }) {
             <Related
               data={
                 product.metafields[
-                product.metafields.findIndex(
-                  (e) => e.key === "related_products"
-                )
+                  product.metafields.findIndex(
+                    (e) => e.key === "related_products"
+                  )
                 ]
               }
             />

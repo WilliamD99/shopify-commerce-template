@@ -287,6 +287,11 @@ input[type=number] {
   padding: 0 15px;
 }
 
+.product-description h3
+p {
+  font-size: 1.05rem;
+}
+
 #filter-bar #sort #sort_icon {
   -webkit-transition: .3s;
   transition: .3s;

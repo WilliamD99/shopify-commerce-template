@@ -68,6 +68,17 @@ export default function Drawer({
             </Link>
           </div>
           <Divider className="opacity-80 " />
+          <div className="pl-8 pr-5">
+            <Link
+              href="/shop"
+              className="flex flex-row space-x-4 justify-between items-center"
+            >
+              <div className="text-xl font-medium" href="/shop">
+                Logout
+              </div>
+            </Link>
+          </div>
+          <Divider className="opacity-80 " />
         </div>
       </SwipeableDrawer>
     </>

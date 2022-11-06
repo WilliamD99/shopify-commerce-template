@@ -8,7 +8,6 @@ import { decryptText, encryptText } from "../../utils/utils";
 // Component
 import OrderSummary from "../../components/Checkout/OrderSummary";
 import CheckoutInfo from "../../components/Checkout/CheckoutInfo";
-import Breadcrumbs from "../../components/Checkout/Breadcrumbs";
 
 export default function Checkout() {
   let [shippingOptions, setShippingOptions] = useState([]);
@@ -33,9 +32,7 @@ export default function Checkout() {
 
   return (
     <>
-      <Breadcrumbs step={2} />
-
-      <div className="px-5 md:px-16 xl:px-44">
+      <div className="px-5 mt-10 md:px-16 xl:px-44">
         <div className="flex flex-col md:flex-row space-y-5 justify-between">
           <CheckoutInfo setShippingOptions={setShippingOptions} />
           {checkoutId ? (

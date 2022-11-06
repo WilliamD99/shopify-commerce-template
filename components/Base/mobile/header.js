@@ -54,7 +54,7 @@ export default function DrawerMobile({ setModalOpen }) {
   return (
     <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-end xl:px-16 bg-slate-100">
       <div className="md:hidden flex flex-row w-full items-center justify-between my-3">
-        <p>Test</p>
+        <Link href="/">Test</Link>
         <div className="flex flex-row items-center justify-center space-x-5">
           <Link href="/cart">
             <Badge

@@ -30,7 +30,10 @@ export default function ProductAccordion({ id, description, title }) {
             </p>
           </AccordionSummary>
           <AccordionDetails>
-            <p>{description}</p>
+            <div
+              className="product-description"
+              dangerouslySetInnerHTML={{ __html: description }}
+            ></div>
           </AccordionDetails>
         </Accordion>
         <Accordion disableGutters={true} className="shadow-none">

@@ -236,6 +236,10 @@ function eraseCookie(name) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
+let idGenerator = (str) => {
+  return str.replace(/\s/g, "-").toLowerCase();
+};
+
 export {
   updateSessionStorage,
   encryptObject,
@@ -254,4 +258,5 @@ export {
   getCookie,
   setCookie,
   eraseCookie,
+  idGenerator,
 };

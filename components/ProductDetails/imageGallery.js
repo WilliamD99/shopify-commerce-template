@@ -56,7 +56,7 @@ export default function Gallery({ images, tag, id }) {
           ) : (
             <div
               onClick={() => handleImageClick(0, 0)}
-              className="hover:opacity-70 ease-in-out relative cursor-pointer w-20 h-20 md:h-24"
+              className="hover:opacity-70 ease-in-out relative cursor-pointer w-full h-20 md:h-24"
             >
               <Image
                 alt={images[0].node.altText}
@@ -68,7 +68,7 @@ export default function Gallery({ images, tag, id }) {
             </div>
           )}
         </div>
-        <div className="relative image-container w-full lg:w-5/6">
+        <div className="relative image-container w-full lg:w-10/12">
           <Slider className="w-full relative" ref={sliderRef} {...settings}>
             {images.map((e, i) => (
               <div

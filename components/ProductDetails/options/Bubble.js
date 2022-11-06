@@ -2,10 +2,11 @@ import React from "react";
 import Chip from "@mui/material/Chip";
 
 import stc from "string-to-color";
+import { idGenerator } from "../../../utils/utils";
 
 export default function Bubble({ options, handleFunc }) {
   let handleClick = (index, value, name) => {
-    let element = document.querySelector(`#${value}-${index}`);
+    let element = document.querySelector(`#${idGenerator(value)}-${index}`);
     let others = document.querySelectorAll(`.options.options-${index}`);
     if (name.toUpperCase() !== "COLOR") {
       for (let other of others) {
@@ -38,7 +39,7 @@ export default function Bubble({ options, handleFunc }) {
     <>
       {options.map((e, i) => (
         <div key={`variant-${i}`} className="flex flex-col space-y-2">
-          <p className="font-semibold text-xl">
+          <p className="font-semibold text-xl mb-3">
             {e.name}:
             {e.name.toUpperCase() === "COLOR" ? (
               <span className="selected-color text-lg ml-2"></span>
@@ -46,15 +47,15 @@ export default function Bubble({ options, handleFunc }) {
               <></>
             )}
           </p>
-          <div className="flex flex-row flex-wrap space-x-2">
+          <div className="flex flex-row flex-wrap">
             {e.values.map((value, index) => {
               if (e.name.toUpperCase() !== "COLOR")
                 return (
                   <Chip
-                    id={value + "-" + i}
+                    id={idGenerator(value) + "-" + i}
                     size="medium"
                     key={`value-${index}`}
-                    className={`py-2 px-2 mb-2 options options-${i}`}
+                    className={`py-2 px-2 mb-4 mr-3 options options-${i}`}
                     label={<p className="text-lg">{value}</p>}
                     onClick={() => handleClick(i, value, e.name)}
                   />

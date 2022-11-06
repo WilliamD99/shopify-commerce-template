@@ -273,7 +273,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
         </div>
       </div>
       <Button
-        className="h-12 text-black border-black hover:text-white hover:bg-black hover:border-white"
+        className="h-12 rounded-full text-white bg-black hover:text-black hover:bg-white hover:border-black"
         variant="outlined"
         onClick={handleComplete}
       >

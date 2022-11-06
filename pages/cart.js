@@ -28,7 +28,7 @@ export default function Cart() {
               : "text-white bg-black border-black"
           }  normal-case text-lg`}
           onClick={() => {
-            router.push("/checkout/review");
+            router.push("/checkout");
           }}
         >
           Checkout
