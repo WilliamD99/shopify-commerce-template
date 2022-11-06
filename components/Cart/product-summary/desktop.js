@@ -1,57 +1,138 @@
-import React, { useContext, useEffect, useState } from "react";
-import cartContext from "../../../utils/cartContext";
+import React, { useContext } from "react";
+import userContext from "../../../utils/userContext";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Single from "../single-product";
+import Image from "../../common/Image";
+import Link from "../../common/Link";
+import Button from "@mui/material/Button";
 
-import { formatter } from "../../../utils/utils";
+import { formatter, cartAdd } from "../../../utils/utils";
 
-export default function ProductSummaryDesktop({ data }) {
+export default function ProductSummaryDesktop({ data, setCart }) {
+  const { user } = useContext(userContext);
   let displayCartTotal = () => {
     let total = 0;
     data.map((e) => (total += parseFloat(e.price) * e.quantity));
-    return <p className="font-semibold text-lg">{formatter.format(total)}</p>;
+    return total;
   };
-
   if (!data) return <></>;
-
   return (
     <>
-      <div>
-        <p className="font-semibold text-2xl mb-10">Shopping Cart</p>
-        {data.length > 0 ? (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell className="text-lg font-medium">Product</TableCell>
-                <TableCell className="text-lg font-medium">Price</TableCell>
-                <TableCell className="text-lg font-medium">Quantity</TableCell>
-                <TableCell className="text-lg font-medium">Subtotal</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data ? data.map((e, i) => <Single e={e} key={i} />) : <></>}
-              <TableRow>
-                <TableCell>
-                  <p className="text-lg font-medium">Total</p>
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell>{data ? displayCartTotal() : <></>}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="py-5">
-            <p className="text-lg">
-              No products in cart yet, please comeback later.
+      <div className="flex flex-row justify-between">
+        <div className="rows-span-2 w-8/12 pr-10">
+          <p className="text-2xl font-medium mb-10">Cart</p>
+          <div className="flex flex-col space-y-5">
+            {data.length > 0 ? (
+              data.map((e, i) => (
+                <div
+                  className="flex flex-row justify-between first-of-type:border-t-2 border-b-2 py-4"
+                  key={i}
+                >
+                  <div className="relative w-44 h-44">
+                    <Image src={e.image} layout="fill" />
+                  </div>
+                  <div className="w-96 flex flex-col justify-between space-y-3">
+                    <div className="flex flex-col space-y-2">
+                      <Link className="text-xl font-semibold" href="#">
+                        {e.title}
+                      </Link>
+                      {e.variantTitle === "" ? (
+                        <></>
+                      ) : (
+                        <p className="text-lg italic text-gray-500">
+                          {e.variantTitle}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-row items-center space-x-5">
+                      <p className="text-lg">Quantity:</p>
+                      <button
+                        className="text-2xl"
+                        onClick={() => {
+                          e.quantity = -1;
+                          cartAdd(e, setCart);
+                        }}
+                      >
+                        -
+                      </button>
+                      <p className="text-xl">{e.quantity}</p>
+                      <button
+                        className="text-2xl"
+                        onClick={() => {
+                          e.quantity = 1;
+                          cartAdd(e, setCart);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-lg">
+                    {formatter.format(parseFloat(e.price) * e.quantity)}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No product in cart yet</p>
+            )}
+          </div>
+        </div>
+        <div className="w-4/12">
+          <p className="text-2xl font-medium mb-5">Summary</p>
+          <div className="flex flex-col space-y-2 border-b-2 py-5">
+            <div className="flex flex-row justify-between">
+              <p className="text-lg font-medium">Subtotal</p>
+              <p className="text-lg">{formatter.format(displayCartTotal())}</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-lg font-medium">Delivery & Handling</p>
+              <p className="text-lg italic">Calculate at checkout</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-lg font-medium">Taxes(Estimated)</p>
+              <p className="text-lg">
+                {formatter.format(displayCartTotal() * 0.05)}
+              </p>
+            </div>
+          </div>
+          <div className="py-5 flex flex-row justify-between border-b-2">
+            <p className="text-lg font-medium">Total</p>
+            <p className="text-lg font-medium">
+              {formatter.format(displayCartTotal() * 1.05)}
             </p>
           </div>
-        )}
+          <div className="py-5">
+            <Button
+              variant="outlined"
+              disabled={user.state !== "success" ? true : false}
+              className={`w-full rounded-full h-12 ${
+                user.state === "success"
+                  ? "text-white bg-black border-black"
+                  : "bg-gray-200"
+              } hover:bg-white hover:text-black hover:border-black`}
+            >
+              Checkout
+            </Button>
+          </div>
+          {user.state !== "success" ? (
+            <div className="py-5 border-t-2">
+              <p className="text-center">
+                You need to sign in in order to checkout
+              </p>
+              <div className="flex flex-row justify-center space-x-2">
+                <Link className="font-medium underline" href="#">
+                  Join us
+                </Link>{" "}
+                <span>or</span>
+                <Link className="font-medium underline" href="#">
+                  Sign in
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </>
   );

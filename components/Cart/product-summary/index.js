@@ -19,7 +19,7 @@ export default function ProductSummary() {
       {isMobile ? (
         <Mobile data={cartData} setCart={setCart} />
       ) : (
-        <Desktop data={cartData} />
+        <Desktop data={cartData} setCart={setCart} />
       )}
     </>
   );
