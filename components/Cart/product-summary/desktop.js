@@ -4,8 +4,9 @@ import userContext from "../../../utils/userContext";
 import Image from "../../common/Image";
 import Link from "../../common/Link";
 import Button from "@mui/material/Button";
+import { BsTrash } from "react-icons/bs";
 
-import { formatter, cartAdd } from "../../../utils/utils";
+import { formatter, cartAdd, cartRemoveItem } from "../../../utils/utils";
 
 export default function ProductSummaryDesktop({ data, setCart }) {
   const { user } = useContext(userContext);
@@ -14,6 +15,7 @@ export default function ProductSummaryDesktop({ data, setCart }) {
     data.map((e) => (total += parseFloat(e.price) * e.quantity));
     return total;
   };
+  console.log(user);
   if (!data) return <></>;
   return (
     <>
@@ -65,6 +67,12 @@ export default function ProductSummaryDesktop({ data, setCart }) {
                       >
                         +
                       </button>
+                      <BsTrash
+                        className="text-lg cursor-pointer"
+                        onClick={() => {
+                          cartRemoveItem(e, setCart);
+                        }}
+                      />
                     </div>
                   </div>
                   <p className="text-lg">
@@ -104,17 +112,15 @@ export default function ProductSummaryDesktop({ data, setCart }) {
           <div className="py-5">
             <Button
               variant="outlined"
-              disabled={user.state !== "success" ? true : false}
+              disabled={!user.id ? true : false}
               className={`w-full rounded-full h-12 ${
-                user.state === "success"
-                  ? "text-white bg-black border-black"
-                  : "bg-gray-200"
+                user.id ? "text-white bg-black border-black" : "bg-gray-200"
               } hover:bg-white hover:text-black hover:border-black`}
             >
               Checkout
             </Button>
           </div>
-          {user.state !== "success" ? (
+          {!user.id ? (
             <div className="py-5 border-t-2">
               <p className="text-center">
                 You need to sign in in order to checkout

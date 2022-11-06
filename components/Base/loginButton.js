@@ -52,7 +52,7 @@ export default function LoginButton() {
           onClick={() => router.push("/my-account")}
           onMouseOver={handleClick}
           onMouseLeave={handleCloseHover}
-          className="text-black normal-case text-lg"
+          className="text-black normal-case text-sm"
         >
           My Account
         </Button>

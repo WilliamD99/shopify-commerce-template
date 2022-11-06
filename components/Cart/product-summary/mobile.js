@@ -109,7 +109,7 @@ export default function ProductSummaryMobile({ data, setCart }) {
           </div>
         </div>
       </div>
-      {user.state !== "success" ? (
+      {!user.id ? (
         <div className="mt-10">
           <p className="text-red-500 font-semibold text-center italic">
             You need to sign in in order to checkout
