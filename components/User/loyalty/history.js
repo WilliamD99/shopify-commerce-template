@@ -67,13 +67,12 @@ export default function History({ data }) {
                   <TableCell align="right">{row.status}</TableCell>
                   <TableCell
                     align="right"
-                    className={`${
-                      parseInt(row.points) > 0
+                    className={`${parseInt(row.points) > 0
                         ? "text-green-500"
                         : "text-red-500"
-                    }`}
+                      }`}
                   >
-                    {row.points}
+                    {row.points > 0 ? `+${row.points}` : `-${row.points}`}
                   </TableCell>
                 </TableRow>
               ))}
@@ -102,7 +101,7 @@ export default function History({ data }) {
             }}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            // ActionsComponent={TablePaginationActions}
+          // ActionsComponent={TablePaginationActions}
           />
         </TableContainer>
       </div>

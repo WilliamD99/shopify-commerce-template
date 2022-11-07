@@ -12,7 +12,6 @@ export default function Loyalty() {
   let { user } = useContext(userContext);
 
   const { data, isFetching } = useQuery(['loyalty', getCookie('tn')], () => customer_get_loyalty({ email: user.email }))
-  console.log(data)
 
   if (!data) return <></>
   else if (isFetching) return <Loading />
