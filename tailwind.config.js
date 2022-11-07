@@ -10,6 +10,10 @@ module.exports = {
         112: "28rem",
         128: "32rem",
       },
+      width: {
+        112: "28rem",
+        128: "32rem",
+      },
     },
   },
   plugins: [],

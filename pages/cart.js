@@ -21,11 +21,9 @@ export default function Cart() {
       <div className="fixed bottom-0 flex lg:hidden justify-center bg-white z-50 py-5 w-screen">
         <Button
           variant="outlined"
-          disabled={user.state === "none" ? true : false}
+          disabled={!user?.id ? true : false}
           className={`text-center w-11/12 h-12 rounded-full ${
-            user.state === "none"
-              ? "bg-gray-200"
-              : "text-white bg-black border-black"
+            !user?.id ? "bg-gray-200" : "text-white bg-black border-black"
           }  normal-case text-lg`}
           onClick={() => {
             router.push("/checkout");

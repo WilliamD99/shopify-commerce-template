@@ -35,8 +35,10 @@ const requests = async (req, res) => {
     const data = await axios.post(adminURLGraphql, query, {
       headers: adminHeadersGraphql,
     });
+    console.log(query);
     res.json(data.data);
   } catch (e) {
+    console.log(e);
     res.json({ error: e });
   }
 };

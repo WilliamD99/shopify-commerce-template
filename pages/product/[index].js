@@ -112,6 +112,8 @@ export default function Products({ data }) {
             product.variants.edges.findIndex((e) => e.node.id === variantId)
           ].node.price,
         variantTitle: variantTitle,
+        handle: product.handle,
+        productId: product.id,
       },
       setCart
     );
@@ -241,7 +243,7 @@ export default function Products({ data }) {
             </div>
             <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
               {/* Title */}
-              <div className="flex flex-row items-center space-x-5">
+              <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-5">
                 <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
                   {product.title}
                 </p>
@@ -281,54 +283,55 @@ export default function Products({ data }) {
                     : "Default"
                 }
               />
-
-              {/* Quantity Input */}
-              <div className="flex flex-row justify-center w-full">
-                <button
-                  className="text-base"
-                  onClick={() => {
-                    if (parseInt(inputRef.current.value) > 0) {
-                      inputRef.current.value =
-                        parseInt(inputRef.current.value) - 1;
+              <div className="cta">
+                {/* Quantity Input */}
+                <div className="flex flex-row justify-center w-full">
+                  <button
+                    className="text-base"
+                    onClick={() => {
+                      if (parseInt(inputRef.current.value) > 0) {
+                        inputRef.current.value =
+                          parseInt(inputRef.current.value) - 1;
+                        setQuantity(parseInt(inputRef.current.value));
+                      }
+                    }}
+                    disabled={variantId ? false : true}
+                  >
+                    <AiOutlineMinus />
+                  </button>
+                  <input
+                    className="text-center bg-transparent w-24 text-2xl focus:outline-none"
+                    type="number"
+                    ref={inputRef}
+                    defaultValue={0}
+                    onChange={debounceInput}
+                    disabled={variantId ? false : true}
+                  />
+                  <button
+                    className="text-base"
+                    onClick={() => {
+                      if (
+                        parseInt(inputRef.current.value) <
+                        product.variants.edges[
+                          product.variants.edges.findIndex(
+                            (e) => e.node.id === variantId
+                          )
+                        ].node.quantityAvailable
+                      )
+                        inputRef.current.value =
+                          parseInt(inputRef.current.value) + 1;
                       setQuantity(parseInt(inputRef.current.value));
-                    }
-                  }}
-                  disabled={variantId ? false : true}
-                >
-                  <AiOutlineMinus />
-                </button>
-                <input
-                  className="text-center bg-transparent w-24 text-2xl focus:outline-none"
-                  type="number"
-                  ref={inputRef}
-                  defaultValue={0}
-                  onChange={debounceInput}
-                  disabled={variantId ? false : true}
-                />
-                <button
-                  className="text-base"
-                  onClick={() => {
-                    if (
-                      parseInt(inputRef.current.value) <
-                      product.variants.edges[
-                        product.variants.edges.findIndex(
-                          (e) => e.node.id === variantId
-                        )
-                      ].node.quantityAvailable
-                    )
-                      inputRef.current.value =
-                        parseInt(inputRef.current.value) + 1;
-                    setQuantity(parseInt(inputRef.current.value));
-                  }}
-                  disabled={variantId ? false : true}
-                >
-                  <AiOutlinePlus />
-                </button>
-              </div>
+                    }}
+                    disabled={variantId ? false : true}
+                  >
+                    <AiOutlinePlus />
+                  </button>
+                </div>
 
-              {/* Add to cart */}
-              <div className="mt-4 flex flex-row justify-between items-center">
-                {handleDisplayButton()}
+                {/* Add to cart */}
+                <div className="mt-4 flex flex-row justify-between items-center">
+                  {handleDisplayButton()}
+                </div>
               </div>
 
               <Accordion

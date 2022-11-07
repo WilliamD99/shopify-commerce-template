@@ -48,7 +48,7 @@ export default function Layout({ children }) {
         autoClose={2000}
         hideProgressBar={true}
         closeOnClick
-        theme="light"
+        theme="dark"
       />
     </div>
   );

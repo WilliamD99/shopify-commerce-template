@@ -58,6 +58,8 @@ export default function SingeProduct({ e, index }) {
                 price: e.node.variants.edges[0].node.price,
                 image: e.node.featuredImage.url,
                 variantTitle: "",
+                handle: e.node.handle,
+                productId: e.node.id,
               },
               setCart
             );

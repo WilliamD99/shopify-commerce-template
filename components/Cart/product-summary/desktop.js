@@ -6,6 +6,7 @@ import Image from "../../common/Image";
 import Link from "../../common/Link";
 import Button from "@mui/material/Button";
 import { BsTrash } from "react-icons/bs";
+import WishlishButton from "../../ProductDetails/wishlistButton";
 
 import { formatter, cartAdd, cartRemoveItem } from "../../../utils/utils";
 
@@ -36,7 +37,10 @@ export default function ProductSummaryDesktop({ data, setCart }) {
                   </div>
                   <div className="w-96 flex flex-col justify-between space-y-3">
                     <div className="flex flex-col space-y-2">
-                      <Link className="text-xl font-semibold" href="#">
+                      <Link
+                        className="text-xl font-semibold"
+                        href={`/product/${e.handle}`}
+                      >
                         {e.title}
                       </Link>
                       {e.variantTitle === "" ? (
@@ -46,6 +50,29 @@ export default function ProductSummaryDesktop({ data, setCart }) {
                           {e.variantTitle}
                         </p>
                       )}
+                      <div className="flex flex-row space-x-4">
+                        {user?.id ? (
+                          <WishlishButton
+                            list={
+                              user.metafields[
+                                user.metafields.findIndex(
+                                  (e) => e.key === "wishlist"
+                                )
+                              ].value
+                            }
+                            id={e.productId}
+                            userId={user.id}
+                          />
+                        ) : (
+                          <></>
+                        )}
+                        <BsTrash
+                          className="text-lg cursor-pointer"
+                          onClick={() => {
+                            cartRemoveItem(e, setCart);
+                          }}
+                        />
+                      </div>
                     </div>
 
                     <div className="flex flex-row items-center space-x-5">
@@ -69,12 +96,6 @@ export default function ProductSummaryDesktop({ data, setCart }) {
                       >
                         +
                       </button>
-                      <BsTrash
-                        className="text-lg cursor-pointer"
-                        onClick={() => {
-                          cartRemoveItem(e, setCart);
-                        }}
-                      />
                     </div>
                   </div>
                   <p className="text-lg">

@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
 import userContext from "../../../utils/userContext";
 import { formatter } from "../../../utils/utils";
-import { cartAdd } from "../../../utils/utils";
+import { cartAdd, cartRemoveItem } from "../../../utils/utils";
 
 import Link from "../../common/Link";
 import Image from "../../common/Image";
+import { BsTrash } from "react-icons/bs";
+import WishlishButton from "../../ProductDetails/wishlistButton";
 
 export default function ProductSummaryMobile({ data, setCart }) {
   const { user } = useContext(userContext);
@@ -43,7 +45,7 @@ export default function ProductSummaryMobile({ data, setCart }) {
                 <Image src={e.image} layout="fill" />
               </div>
               <div className="w-44">
-                <Link href={"#"} className="font-semibold">
+                <Link href={`/product/${e.handle}`} className="font-semibold">
                   {e.title}
                 </Link>
                 {e.variantTitle === "" ? (
@@ -51,7 +53,8 @@ export default function ProductSummaryMobile({ data, setCart }) {
                 ) : (
                   <p className="text-sm italic ml-2">{e.variantTitle}</p>
                 )}
-                <div className="flex flex-row items-center space-x-5">
+                <div className="flex flex-row items-center mt-2 space-x-5">
+                  <p className="text-sm">Quantity:</p>
                   <button
                     className="text-lg"
                     onClick={() => {
@@ -71,6 +74,25 @@ export default function ProductSummaryMobile({ data, setCart }) {
                   >
                     +
                   </button>
+                </div>
+                <div className="mt-3 flex flex-row items-center space-x-3">
+                  {user?.id ? (
+                    <WishlishButton
+                      list={
+                        user.metafields[
+                          user.metafields.findIndex((e) => e.key === "wishlist")
+                        ].value
+                      }
+                      id={e.productId}
+                      userId={user.id}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <BsTrash
+                    className="cursor-pointer"
+                    onClick={() => cartRemoveItem(e, setCart)}
+                  />
                 </div>
               </div>
               <p>{formatter.format(parseFloat(e.price) * e.quantity)}</p>
@@ -109,7 +131,7 @@ export default function ProductSummaryMobile({ data, setCart }) {
           </div>
         </div>
       </div>
-      {!user.id ? (
+      {!user?.id ? (
         <div className="mt-10">
           <p className="text-red-500 font-semibold text-center italic">
             You need to sign in in order to checkout

@@ -117,10 +117,6 @@ export default function Search() {
     else return <></>;
   };
 
-  const handleLinkSuggestion = (e) => {
-    setTerm(e);
-  };
-
   useEffect(() => {
     if (!isLoading && isSuccess && data) {
       setSearchData(data.data.products.edges);
@@ -155,7 +151,7 @@ export default function Search() {
             >
               <TextField
                 id="search"
-                className="rounded-2xl"
+                className="rounded-2xl w-96"
                 size="small"
                 type="text"
                 placeholder="Search ..."

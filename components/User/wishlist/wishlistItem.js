@@ -1,26 +1,28 @@
 import React from "react";
 
 import { useQuery } from "@tanstack/react-query";
-import { productById } from '../../../lib/serverRequest'
+import { productById } from "../../../lib/serverRequest";
 
 import Image from "../../common/Image";
 import Link from "../../common/Link";
-import Skeleton from '@mui/material/Skeleton'
+import Skeleton from "@mui/material/Skeleton";
 
 export default function WishlistItem({ id }) {
-  const { data, isLoading } = useQuery(['product', id], () => productById({ id: id }))
+  const { data, isLoading, isFetching } = useQuery(["product", id], () =>
+    productById({ id: id })
+  );
+  console.log(data?.data);
 
-  if (isLoading) return <>
-    <div className="flex flex-col space-y-2 ">
-      <Skeleton variant="rectangular" className="relative h-80 w-80" />
-      <Skeleton
-        className="w-80"
-      />
-    </div>
-  </>
-  else if (!data) return <>
-  </>
-  else {
+  if (isLoading && isFetching)
+    return (
+      <>
+        <div className="flex flex-col space-y-2 ">
+          <Skeleton variant="rectangular" className="relative h-80 w-80" />
+          <Skeleton className="w-80" />
+        </div>
+      </>
+    );
+  else if (!isFetching && data && !isLoading) {
     return (
       <>
         <div className="flex flex-col space-y-5">
@@ -42,5 +44,7 @@ export default function WishlistItem({ id }) {
         </div>
       </>
     );
+  } else {
+    return <></>;
   }
 }

@@ -61,29 +61,8 @@ let cartAdd = async (params, setCart) => {
   // If there's no localStorage
   if (items === null) {
     if (params.quantity > 0) {
-      localStorage.setItem(
-        "items",
-        JSON.stringify([
-          {
-            title: params.title,
-            merchandiseId: params.merchandiseId,
-            quantity: params.quantity,
-            price: params.price,
-            image: params.image,
-            variantTitle: params.variantTitle,
-          },
-        ])
-      );
-      setCart([
-        {
-          title: params.title,
-          merchandiseId: params.merchandiseId,
-          quantity: params.quantity,
-          price: params.price,
-          image: params.image,
-          variantTitle: params.variantTitle,
-        },
-      ]);
+      localStorage.setItem("items", JSON.stringify([params]));
+      setCart([params]);
     } else return;
   } else {
     items = JSON.parse(items);
@@ -103,14 +82,7 @@ let cartAdd = async (params, setCart) => {
     } else {
       // Make sure quantity not negative
       if (params.quantity > 0) {
-        items.push({
-          title: params.title,
-          merchandiseId: params.merchandiseId,
-          quantity: params.quantity,
-          price: params.price,
-          image: params.image,
-          variantTitle: params.variantTitle,
-        });
+        items.push(params);
       }
     }
     // Update the storage

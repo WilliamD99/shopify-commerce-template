@@ -27,8 +27,6 @@ export default function Gallery({ images, tag, id }) {
     slidesToScroll: 1,
     swipeToSlide: true,
     dots: isMobile ? true : false,
-    vertical: isMobile ? true : false,
-    verticalSwiping: isMobile ? true : false,
   };
   return (
     <>
@@ -54,18 +52,7 @@ export default function Gallery({ images, tag, id }) {
               </div>
             ))
           ) : (
-            <div
-              onClick={() => handleImageClick(0, 0)}
-              className="hover:opacity-70 ease-in-out relative cursor-pointer w-full h-20 md:h-24"
-            >
-              <Image
-                alt={images[0].node.altText}
-                layout="fill"
-                src={images[0].node.src}
-                placeholder="blur"
-                blurDataURL="/placeholder.webp"
-              />
-            </div>
+            <></>
           )}
         </div>
         <div className="relative image-container w-full lg:w-10/12">
