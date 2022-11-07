@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import dynamic from "next/dynamic";
+import deviceContext from "../../../utils/deviceContext";
 import userContext from "../../../utils/userContext";
 
 import Tabs from "@mui/material/Tabs";
@@ -12,7 +13,7 @@ const Wishlist = dynamic(() => import("../../../components/User/wishlist"), {
   loading: () => <p>Loading ...</p>,
 });
 const ShippingForm = dynamic(
-  () => import("../../../components/User/shipping-update"),
+  () => import("../../../components/User/address/shipping-update"),
   { loading: () => <p>Loading...</p> }
 );
 const UpdateForm = dynamic(() => import("../../../components/User/user-update"), {
@@ -25,6 +26,7 @@ import { NextSeo } from "next-seo";
 
 export default function Account() {
   const { user } = useContext(userContext);
+  const { isMobile } = useContext(deviceContext)
   const [tab, setTab] = useState(0);
 
   const handleChangeTab = (e, newValue) => {
@@ -45,8 +47,11 @@ export default function Account() {
   return (
     <>
       <NextSeo title="My Account" description="" />
-      <div className="flex flex-col ml-20 mt-10">
-        <Tabs className="mb-12" value={tab} onChange={handleChangeTab}>
+      <div className="flex flex-col lg:ml-20 mt-10">
+        <Tabs
+          id="dashboard-tabs"
+          variant="scrollable" allowScrollButtonsMobile={isMobile ? true : false} scrollButtons={isMobile ? true : false} className="mb-12" value={tab} onChange={handleChangeTab}
+        >
           <Tab label="Dashboard" />
           <Tab label="Personal Info" />
           <Tab label="Shipping" />

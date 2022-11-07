@@ -129,11 +129,11 @@ let cartRemoveItem = async (params, setCart) => {
 // Get access token
 let accessTokenExist = () => {
   let token = localStorage.getItem("tn");
-  let tn = getCookie("tn");
+  let tn = getCookie("tn").slice(1, -1);
   if (!tn) tn = false;
-  else {
-    tn = decryptText(JSON.parse(tn).value);
-  }
+  // else {
+  //   tn = decryptText(tn);
+  // }
   // if (!token) token = false;
   // else {
   //   token = decryptText(JSON.parse(token).value);

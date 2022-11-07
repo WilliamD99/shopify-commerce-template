@@ -6,12 +6,12 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
-import userContext from "../../utils/userContext";
-import { accessTokenExist, provinces, gsap } from "../../utils/utils";
-import useCustomerCreateShipping from "../../utils/hooks/useCustomerCreateShipping";
-import useCustomerUpdateShipping from "../../utils/hooks/useCustomerUpdateShipping";
-import useCustomerGet from "../../utils/hooks/useCustomerGet";
-import useDefaultAddressUpdate from "../../utils/hooks/useDefaultAddressUpdate";
+import userContext from "../../../utils/userContext";
+import { accessTokenExist, provinces } from "../../../utils/utils";
+import useCustomerCreateShipping from "../../../utils/hooks/useCustomerCreateShipping";
+import useCustomerUpdateShipping from "../../../utils/hooks/useCustomerUpdateShipping";
+import useCustomerGet from "../../../utils/hooks/useCustomerGet";
+import useDefaultAddressUpdate from "../../../utils/hooks/useDefaultAddressUpdate";
 
 import { toast } from "react-toastify";
 
@@ -85,7 +85,7 @@ export default function ShippingForm() {
       let token = accessTokenExist();
       customer.mutate({ accessToken: token });
     }
-    if (updateShipping.isSuccess) console.log(updateShipping);
+    if (updateShipping.isSuccess && updateShipping.data.customerAddressUpdate.customerUserErrors.length === 0) toast.success("Updated successfully!");
   }, [updateShipping.isLoading]);
 
   // Creating Address
@@ -107,12 +107,12 @@ export default function ShippingForm() {
   if (user.addresses.edges.length === 0)
     return (
       <>
-        <div className="flex flex-col space-y-10">
+        <div className="flex flex-col space-y-10 px-5">
           <p className="text-lg">
             Add a new shipping address for faster checkout
           </p>
           <form
-            className="grid grid-cols-2 w-2/3 gap-x-5 gap-y-2"
+            className="grid grid-cols-2 lg:w-2/3 gap-x-5 gap-y-2"
             onSubmit={handleCreate}
           >
             <TextField
@@ -142,8 +142,8 @@ export default function ShippingForm() {
             </TextField>
             <TextField required id={`postal`} label="Postal Code" type="text" />
             <TextField label="Canada" disabled id={`country`} type="text" />
-            <Button variant="outlined" type="submit">
-              Submit
+            <Button className="col-span-2 h-10 rounded-full text-white bg-black mt-5 hover:text-black hover:bg-white hover:border-black" variant="outlined" type="submit">
+              Create
             </Button>
           </form>
         </div>
@@ -152,10 +152,12 @@ export default function ShippingForm() {
 
   return (
     <>
-      <p className="ml-3 mb-5 text-lg">Shipping Details</p>
-      <div className="flex flex-col space-y-10 w-2/3">
+      <div className="px-5 mb-5 text-lg">Shipping Details
+        <Button variant="outlined" size="small" className="ml-3 normal-case text-white bg-black  border-black rounded-full hover:text-black hover:bg-white hover:border-black text-sm font-semibold">Create</Button>
+      </div>
+      <div className="flex flex-col space-y-10 px-5 lg:w-2/3">
         {addressArr.map((e, i) => (
-          <div className="ml-8" key={i}>
+          <div className="lg:ml-8" key={i}>
             <p className="text-base mb-5">
               Address {parseInt(i) + 1}
               {user.defaultAddress.id === e.node.id ? (
@@ -216,11 +218,11 @@ export default function ShippingForm() {
             <div className="flex flex-row items-center space-x-5">
               <Button
                 onClick={(x) => handleUpdate(x, e.node.id, i)}
-                className="text-black border-black normal-case"
+                className="text-white bg-black w-24 border-black normal-case rounded-full"
                 type="submit"
                 variant="outlined"
               >
-                Edit
+                Update
               </Button>
               <FormControlLabel
                 control={

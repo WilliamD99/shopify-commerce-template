@@ -17,8 +17,8 @@ export default function Dashboard() {
   let router = useRouter();
 
   return (
-    <div className="flex flex-col space-y-10 justify-start">
-      <div>
+    <div className="flex flex-col space-y-10 justify-start px-5">
+      <div className="">
         <p className="text-lg">
           Hello,{" "}
           <span className="font-medium">
@@ -68,7 +68,7 @@ export default function Dashboard() {
                   </TableCell>
                   <TableCell className="xl:text-lg">
                     <Button
-                      className="normal-case text-black border-black"
+                      className="normal-case text-white bg-black rounded-full hover:text-black hover:bg-white hover:border-black"
                       variant="outlined"
                       size="medium"
                       onClick={() => {

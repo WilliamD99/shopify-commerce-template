@@ -1,0 +1,12 @@
+#dashboard-tabs {
+    .MuiTabs-scroller {
+        .MuiButtonBase-root.Mui-selected {
+            font-weight: bold;
+            color: black;
+        }
+
+        .MuiTabs-indicator {
+            background-color: black;
+        }
+    }
+}

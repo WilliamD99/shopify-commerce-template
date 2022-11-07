@@ -13,6 +13,7 @@ const request = async (req, res) => {
       "x-guid": process.env.NEXT_PUBLIC_YOTPO_GUID,
       "x-api-key": process.env.NEXT_PUBLIC_YOTPO_KEY,
     };
+    console.log(url)
 
     const data = await axios.get(url, {
       headers: headers,
@@ -20,6 +21,7 @@ const request = async (req, res) => {
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
     res.json(data.data);
   } catch (e) {
+    // console.log(e)
     res.json(e);
   }
 };
