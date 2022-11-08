@@ -16,7 +16,7 @@ export default function Wishlist() {
   return (
     <>
       <p className="text-2xl font-bold mb-10">Wishlist</p>
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 gap-5">
         {list.map((e, i) => (
           <WishlistItem key={i} id={e} />
         ))}
