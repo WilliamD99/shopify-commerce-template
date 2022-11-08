@@ -18,6 +18,7 @@ export default function Header({ sticky }) {
 
   useEffect(() => {
     if (customer.data) {
+      console.log(customer)
       setUser(customer.data.customer);
     }
   }, [customer.isLoading]);

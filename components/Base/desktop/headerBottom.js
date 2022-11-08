@@ -16,7 +16,7 @@ export default function HeaderBottom() {
 
   //   Wishlish animation
   useEffect(() => {
-    if (user.state !== "loading" && user.state !== "none") {
+    if (user.id) {
       wlRef.current
         .to("#wlBadge", { scale: 1.2, duration: 0.3 })
         .to("#wlBadge", { scale: 1, duration: 0.3 });

@@ -10,6 +10,8 @@ import {
 } from "../lib/serverRequest";
 import dynamic from "next/dynamic";
 import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import { gsap } from '../utils/utils'
+import { Flip } from 'gsap/dist/Flip'
 
 // Components
 import Breadcrumbs from "../components/common/Breadcrumbs";
@@ -114,9 +116,23 @@ export default function Shop() {
           {!isMobile ? <FilterMenu /> : <></>}
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
+            <p onClick={() => {
+              const group = document.querySelector("#shop-grid")
+              const state = Flip.getState("#shop-grid, .single-product")
+
+              group.classList.toggle("grid-cols-2")
+              group.classList.toggle("grid-cols-1")
+
+              Flip.from(state, {
+                absolute: true,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: "Sine.easeInOut"
+              })
+            }}>Test</p>
             <div
               id="shop-grid"
-              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
+              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-5 gap-y-5 overflow-hidden"
             >
               {dataArr.map((e, i) => (
                 <SingeProduct key={i} index={i} e={e} />

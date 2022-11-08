@@ -11,7 +11,6 @@ export default function WishlistItem({ id }) {
   const { data, isLoading, isFetching } = useQuery(["product", id], () =>
     productById({ id: id })
   );
-  console.log(data?.data);
 
   if (isLoading && isFetching)
     return (
