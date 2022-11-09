@@ -10,7 +10,7 @@ export function middleware(req) {
   if (req.nextUrl.pathname.startsWith("/my-account")) {
     if (isLogin) {
       if (req.nextUrl.pathname === "/my-account") {
-        req.nextUrl.pathname = `/my-account/dashboard`;
+        req.nextUrl.pathname = `/my-account/dashboard/0`;
       }
     } else {
       req.nextUrl.pathname = `/no-user`;

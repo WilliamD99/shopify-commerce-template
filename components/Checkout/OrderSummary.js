@@ -17,10 +17,9 @@ import useCreatePaymentIntent from "../../utils/hooks/useCreatePaymentIntent";
 import useCheckoutGet from "../../utils/hooks/useCheckoutGet";
 import useCheckoutDiscount from "../../utils/hooks/useCheckoutDiscount";
 import useCheckoutDiscountRemove from "../../utils/hooks/useCheckoutDiscountRemove";
+import { useRouter } from "next/router";
 
-// import { useRouter } from "next/router";
 import { decryptText, encryptText, formatter } from "../../utils/utils";
-// import axios from "axios";
 
 export default function OrderSummary({ shippingOptions, checkoutId }) {
   const { cart } = useContext(cartContext);
@@ -33,7 +32,7 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
   const [ready, setReady] = useState(false); // Detect if user has finish confirm all the info
   const checkoutShippingLineUpdate = useCheckoutShippingLineUpdate();
   const pi = useCreatePaymentIntent();
-  // const router = useRouter();
+  const router = useRouter();
 
   let checkout = useCheckoutGet();
   let checkoutDiscount = useCheckoutDiscount();
@@ -85,20 +84,21 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
     }
   };
   const handleComplete = async () => {
+    router.push(checkout.data.node.webUrl)
     // let data = await axios.post("/api/storefront/mutation/checkout-complete-stripe", {
     //     data: {
     //         checkoutId: decryptText(sessionStorage.getItem('checkoutId'))
     //     }
     // })
     // console.log(data.data)
-    if (!sessionStorage.getItem("client")) {
-      pi.mutate({
-        amount: Math.ceil(total.toFixed(2) * 100),
-        currency: "cad",
-        method: ["card"],
-      });
-    }
-    setReady(true);
+    // if (!sessionStorage.getItem("client")) {
+    //   pi.mutate({
+    //     amount: Math.ceil(total.toFixed(2) * 100),
+    //     currency: "cad",
+    //     method: ["card"],
+    //   });
+    // }
+    // setReady(true);
   };
 
   // If created pi succeed, log it to sessionStorage
@@ -107,7 +107,6 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
       sessionStorage.setItem("client", encryptText(pi.data.data));
     }
   }, [pi.isLoading]);
-  console.log(checkout);
 
   // If ready is true is done creating pi, re-route
   // useEffect(() => {
@@ -126,8 +125,8 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
   return (
     <div className="md:mr-10 px-4 md:px-8 py-5 flex flex-col md:w-1/3 relative bg-slate-100">
       {!checkoutShippingLineUpdate.isLoading &&
-      !checkout.isLoading &&
-      !pi.isLoading ? (
+        !checkout.isLoading &&
+        !pi.isLoading ? (
         <></>
       ) : (
         <>
