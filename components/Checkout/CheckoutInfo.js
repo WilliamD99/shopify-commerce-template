@@ -9,16 +9,16 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { provinces, accessTokenExist, decryptText } from "../../utils/utils";
 
-export default function ShippingUpdate({ setShippingOptions }) {
+export default function ShippingUpdate({ refetch, data }) {
   let { user } = useContext(userContext);
   let [field, setField] = useState({
     lastName: "",
     firstName: "",
-    address1: "",
-    province: "",
+    address1: data?.shippingAddress ? data.shippingAddress.address1 : "",
+    province: data?.shippingAddress ? data.shippingAddress.province : "",
     country: "Canada",
-    zip: "",
-    city: "",
+    zip: data?.shippingAddress ? data.shippingAddress.zip : "",
+    city: data?.shippingAddress ? data.shippingAddress.city : "",
     email: ""
   })
 
@@ -80,10 +80,7 @@ export default function ShippingUpdate({ setShippingOptions }) {
 
   useEffect(() => {
     if (checkoutShippingUpdate.data && !checkoutShippingUpdate.isLoading) {
-      setShippingOptions(
-        checkoutShippingUpdate.data.data.checkoutShippingAddressUpdateV2
-          .checkout.availableShippingRates?.shippingRates
-      );
+      refetch()
     }
   }, [checkoutShippingUpdate.isLoading]);
 

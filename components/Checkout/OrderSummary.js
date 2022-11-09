@@ -13,15 +13,13 @@ import { FaTags } from "react-icons/fa";
 import Image from "../common/Image";
 // Hooks
 import useCheckoutShippingLineUpdate from "../../utils/hooks/useCheckoutShippingLineUpdate";
-import useCreatePaymentIntent from "../../utils/hooks/useCreatePaymentIntent";
-import useCheckoutGet from "../../utils/hooks/useCheckoutGet";
 import useCheckoutDiscount from "../../utils/hooks/useCheckoutDiscount";
 import useCheckoutDiscountRemove from "../../utils/hooks/useCheckoutDiscountRemove";
 import { useRouter } from "next/router";
 
 import { decryptText, encryptText, formatter } from "../../utils/utils";
 
-export default function OrderSummary({ shippingOptions, checkoutId }) {
+export default function OrderSummary({ data, refetch }) {
   const { cart } = useContext(cartContext);
   const [total, setTotal] = useState(0);
   const [totalLine, setTotalLine] = useState(0);
@@ -29,49 +27,21 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
   const [discountValue, setDiscountValue] = useState(0);
   const [shippingRateHandle, setShippingRateHandle] = useState([]);
   const [selectedRate, setSelectedRate] = useState("");
-  const [ready, setReady] = useState(false); // Detect if user has finish confirm all the info
-  const checkoutShippingLineUpdate = useCheckoutShippingLineUpdate();
-  const pi = useCreatePaymentIntent();
   const router = useRouter();
 
-  let checkout = useCheckoutGet();
+  const checkoutShippingLineUpdate = useCheckoutShippingLineUpdate();
   let checkoutDiscount = useCheckoutDiscount();
   let checkoutDiscountRemove = useCheckoutDiscountRemove();
+
   useEffect(() => {
-    checkout.mutate({ id: checkoutId });
-  }, [
-    shippingOptions,
-    checkoutShippingLineUpdate.data,
-    cart,
-    checkoutDiscount.data,
-    checkoutDiscountRemove.data,
-  ]);
-  useEffect(() => {
-    if (checkout.data) {
-      let discount = 0;
-      checkout.data.node.lineItems.edges.forEach((item) => {
-        if (item.node.discountAllocations.length > 0) {
-          discount += parseFloat(
-            item.node.discountAllocations[0].allocatedAmount.amount
-          );
-        }
-      });
-      setDiscountValue(discount);
-      setTotalLine(
-        parseFloat(checkout.data.node.lineItemsSubtotalPrice.amount)
-      );
-      setTax(parseFloat(checkout.data.node.totalTaxV2.amount));
-      setTotal(parseFloat(checkout.data.node.totalPriceV2.amount));
-      if (checkout.data.node.availableShippingRates) {
-        setShippingRateHandle(
-          checkout.data.node.availableShippingRates.shippingRates
-        );
-      }
-      if (checkout.data.node.shippingLine) {
-        setSelectedRate(checkout.data.node.shippingLine.handle);
-      }
+    setTotal(data?.totalPriceV2.amount)
+    setTax(data?.totalTaxV2.amount)
+    setTotalLine(data?.lineItemsSubtotalPrice.amount)
+    if (data?.availableShippingRates.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle) {
+      setSelectedRate(data.availableShippingRates.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle)
     }
-  }, [checkout.data, checkoutShippingLineUpdate.data]);
+    setShippingRateHandle(data?.availableShippingRates ? data.availableShippingRates.shippingRates : [])
+  }, [data])
 
   const handleShippingRadio = (e) => {
     let id = sessionStorage.getItem("checkoutId");
@@ -84,49 +54,20 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
     }
   };
   const handleComplete = async () => {
-    router.push(checkout.data.node.webUrl)
-    // let data = await axios.post("/api/storefront/mutation/checkout-complete-stripe", {
-    //     data: {
-    //         checkoutId: decryptText(sessionStorage.getItem('checkoutId'))
-    //     }
-    // })
-    // console.log(data.data)
-    // if (!sessionStorage.getItem("client")) {
-    //   pi.mutate({
-    //     amount: Math.ceil(total.toFixed(2) * 100),
-    //     currency: "cad",
-    //     method: ["card"],
-    //   });
-    // }
-    // setReady(true);
+    router.push(data.webUrl)
   };
 
-  // If created pi succeed, log it to sessionStorage
   useEffect(() => {
-    if (pi.data && !pi.isLoading) {
-      sessionStorage.setItem("client", encryptText(pi.data.data));
+    if (checkoutShippingLineUpdate.data?.data.checkoutShippingLineUpdate.checkout.id) {
+      refetch()
     }
-  }, [pi.isLoading]);
+  }, [checkoutShippingLineUpdate.data])
 
-  // If ready is true is done creating pi, re-route
-  // useEffect(() => {
-  //     if (ready && !pi.isLoading && pi.data) {
-  //         router.push('/checkout/payment')
-  //     }
-  //     if (ready && !pi.isLoading && !pi.data) {
-  //         console.log(ready)
-  //         console.log(!pi.isLoading)
-  //         console.log(!pi.data)
-  //     }
-  // }, [ready, pi.isLoading])
-
-  if (!cart) return <div className="w-1/3 bg-slate-100"></div>;
+  if (!data) return <div className="w-1/3 bg-slate-100"></div>;
 
   return (
     <div className="md:mr-10 px-4 md:px-8 py-5 flex flex-col md:w-1/3 relative bg-slate-100">
-      {!checkoutShippingLineUpdate.isLoading &&
-        !checkout.isLoading &&
-        !pi.isLoading ? (
+      {!checkoutShippingLineUpdate.isLoading ? (
         <></>
       ) : (
         <>
@@ -140,42 +81,42 @@ export default function OrderSummary({ shippingOptions, checkoutId }) {
 
       <div className="flex flex-col space-y-3 my-5">
         <div className="flex flex-col space-y-3">
-          {checkout.data ? (
-            checkout.data.node.lineItems.edges.map((e, i) => (
-              <div className="flex flex-row justify-between" key={i}>
-                <div className="flex flex-row items-center space-x-5">
-                  <div className="relative h-10 w-10 xl:h-16 xl:w-16">
-                    <Image
-                      src={e.node.variant.image.url}
-                      layout="fill"
-                      alt={e.node.title + i}
-                    />
-                  </div>
+          {
+            (
+              data.lineItems.edges.map((e, i) => (
+                <div className="flex flex-row justify-between" key={i}>
+                  <div className="flex flex-row items-center space-x-5">
+                    <div className="relative h-10 w-10 xl:h-16 xl:w-16">
+                      <Image
+                        src={e.node.variant.image.url}
+                        layout="fill"
+                        alt={e.node.title + i}
+                      />
+                    </div>
 
-                  <div className="flex flex-col">
-                    <p className="text-xs xl:text-base font-medium overflow-hidden whitespace-nowrap text-ellipsis">
-                      {e.node.title}{" "}
-                      <span>
-                        {e.node.variant.title !== "Default Title"
-                          ? `(${e.node.variant.title})`
-                          : ""}
-                      </span>
-                    </p>
-                    <p className="text-xs xl:text-base">
-                      Quantity: <span>{e.node.quantity}</span>
+                    <div className="flex flex-col">
+                      <p className="text-xs xl:text-base font-medium overflow-hidden whitespace-nowrap text-ellipsis">
+                        {e.node.title}{" "}
+                        <span>
+                          {e.node.variant.title !== "Default Title"
+                            ? `(${e.node.variant.title})`
+                            : ""}
+                        </span>
+                      </p>
+                      <p className="text-xs xl:text-base">
+                        Quantity: <span>{e.node.quantity}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="ml-5">
+                    <p className="text-sm xl:text-base">
+                      {formatter.format(e.node.variant.price)}
                     </p>
                   </div>
                 </div>
-                <div className="ml-5">
-                  <p className="text-sm xl:text-base">
-                    {formatter.format(e.node.variant.price)}
-                  </p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <></>
-          )}
+              ))
+            )
+          }
         </div>
 
         <Divider />

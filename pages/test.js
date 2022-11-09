@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from 'react-transition-group'
-import { gsap } from '../utils/utils'
+import { gsap, encryptText } from '../utils/utils'
+import useCheckoutCreate from '../utils/hooks/useCheckoutCreate'
 import { Flip } from 'gsap/dist/Flip'
 import TextField from '@mui/material/TextField'
 import SingleProduct from '../components/Shop/single-product'
@@ -453,7 +454,18 @@ export default function Test() {
                 }
             }
         ]
+    let checkout = useCheckoutCreate();
 
+    // Create checkout when first enter only
+    useEffect(() => {
+        if (!checkout.isLoading && checkout.data !== undefined) {
+            sessionStorage.setItem(
+                "checkoutId",
+                encryptText(checkout.data.checkoutCreate.checkout.id)
+            );
+        }
+
+    }, [checkout.isLoading]);
 
     return (
         <>
