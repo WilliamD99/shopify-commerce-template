@@ -15,7 +15,6 @@ export default function Index({ id }) {
 
     return (
         <>
-            <p onClick={refetch}>Test</p>
             <div className="px-5 mt-10 md:px-16 xl:px-44">
                 <div className="flex flex-col md:flex-row space-y-5 justify-between">
                     <CheckoutInfo

@@ -5,6 +5,7 @@ import useCheckoutCreate from '../utils/hooks/useCheckoutCreate'
 import { Flip } from 'gsap/dist/Flip'
 import TextField from '@mui/material/TextField'
 import SingleProduct from '../components/Shop/single-product'
+import Accordion from '../components/ProductDetails/accordion'
 
 export default function Test() {
     const [open, setOpen] = useState(false)
@@ -454,46 +455,11 @@ export default function Test() {
                 }
             }
         ]
-    let checkout = useCheckoutCreate();
-
-    // Create checkout when first enter only
-    useEffect(() => {
-        if (!checkout.isLoading && checkout.data !== undefined) {
-            sessionStorage.setItem(
-                "checkoutId",
-                encryptText(checkout.data.checkoutCreate.checkout.id)
-            );
-        }
-
-    }, [checkout.isLoading]);
 
     return (
         <>
-            <p onClick={() => {
-                const group = document.querySelector("#test")
-                const test2 = document.querySelector("#test2")
-                const state = Flip.getState("#group, .box")
 
-                group.classList.toggle("col-span-2")
-                test2.classList.toggle("col-span-5")
-                test2.classList.toggle("col-span-4")
-
-                Flip.from(state, {
-                    absolute: true,
-                    duration: 0.5,
-                    stagger: 0.1,
-                    ease: "power1.inOut",
-                    nested: true
-                })
-            }}>Test</p>
-            <div id="group" className='grid grid-cols-6 gap-10 px-10'>
-                <div id="test" className='h-96 border-2 box '>
-                    <p className='text-center'>Test</p>
-                </div>
-                <div id="test2" className='bg-slate-100 h-96 col-span-5 border-2 box'>
-                    <p>Test</p>
-                </div>
-            </div>
+            <Accordion id={7278769995956} description="test" title="Test Product" />
 
         </>
     )

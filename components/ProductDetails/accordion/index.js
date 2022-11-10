@@ -4,16 +4,58 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { MdExpandMore } from "react-icons/md";
 import Rating from "@mui/material/Rating";
-import TextField from "@mui/material/TextField";
+import { AiFillDislike, AiFillLike, AiOutlineDislike, AiOutlineLike } from 'react-icons/ai'
 
-import useProductReviewBottom from "../../../utils/hooks/useProductReviewBottom";
+import { useQuery } from "@tanstack/react-query";
+import { productReviews } from "../../../utils/api/requests";
+
 import ReviewForm from "./reviewForm";
+import he from "he";
+
 
 export default function ProductAccordion({ id, description, title }) {
-  const reviewBottom = useProductReviewBottom();
-  useEffect(() => {
-    reviewBottom.mutate({ id: id });
-  }, []);
+  const { data } = useQuery(["product_review", id], () => productReviews({ id: id }), { staleTime: 24 * 60 * 60 * 1000 })
+  console.log(data)
+  const handleDisplayReviews = () => {
+    if (data) {
+      if (data.status.code === 200) {
+        if (data.response.reviews.length === 0) {
+          return <>
+            <p>Be the first one to write the review</p>
+            <p className="mt-5 text-lg">Write a review for this product</p>
+            <ReviewForm productTitle={title} id={id} />
+          </>
+        } else {
+          return (
+            <>
+              {data.response.reviews.map((e, i) => (
+                <div className="flex flex-col space-y-2 border-b-2 py-2" key={`review-${i}`}>
+                  <div className="flex flex-row justify-between">
+                    <Rating value={e.score} precision={0.1} />
+                    <div className="flex flex-row items-end space-x-2">
+                      <AiOutlineLike />
+                      <AiOutlineDislike />
+                    </div>
+                  </div>
+                  <p className="font-medium">{e.user.display_name} - <span className="font-normal">{new Date(e.created_at).toLocaleDateString()}</span></p>
+                  <p>{he.decode(e.content)}</p>
+                </div>
+              ))}
+              <div className="flex flex-col space-y-2 mt-5">
+                <p className="mt-5 text-lg">Write a review for this product</p>
+                <ReviewForm productTitle={title} id={id} />
+              </div>
+            </>
+          )
+        }
+      } else {
+        return <></>
+      }
+    } else {
+      return <></>
+    }
+  }
+
 
   return (
     <>
@@ -60,19 +102,19 @@ export default function ProductAccordion({ id, description, title }) {
             <div className="flex flex-row justify-between items-center w-full">
               <p className="text-base uppercase md:text-xl font-semibold">
                 Reviews
-                {reviewBottom.data ? (
+                {data ? (
                   <span className="ml-1">
-                    ({reviewBottom.data.response.bottomline.total_reviews})
+                    {`(${data.response.bottomline.total_review})`}
                   </span>
                 ) : (
                   <></>
                 )}
               </p>
-              {reviewBottom.data ? (
-                reviewBottom.data.response.bottomline.average_score > 0 ? (
+              {data ? (
+                data.response.bottomline.average_score > 0 ? (
                   <Rating
                     readOnly
-                    value={reviewBottom.data.response.bottomline.average_score}
+                    value={data.response.bottomline.average_score}
                     precision={0.1}
                   />
                 ) : (
@@ -83,9 +125,10 @@ export default function ProductAccordion({ id, description, title }) {
               )}
             </div>
           </AccordionSummary>
-          <AccordionDetails className="flex flex-col space-y-8">
-            <p className="mt-5 text-lg">Write a review for this product</p>
-            <ReviewForm productTitle={title} id={id} />
+          <AccordionDetails className="flex flex-col space-y-3">
+            {
+              handleDisplayReviews()
+            }
           </AccordionDetails>
         </Accordion>
       </div>
