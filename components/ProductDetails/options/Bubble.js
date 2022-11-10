@@ -26,7 +26,7 @@ export default function Bubble({ options, handleFunc }) {
 
   let colorChip = (value, index, i, name) => (
     <Chip
-      id={value + "-" + i}
+      id={value.toLowerCase() + "-" + i}
       size="medium"
       key={`value-${index}`}
       className={`py-2 px-2 options options-${i}`}
@@ -47,7 +47,7 @@ export default function Bubble({ options, handleFunc }) {
               <></>
             )}
           </p>
-          <div className="flex flex-row flex-wrap">
+          <div className="flex flex-row space-x-1 flex-wrap">
             {e.values.map((value, index) => {
               if (e.name.toUpperCase() !== "COLOR")
                 return (

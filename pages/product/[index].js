@@ -35,6 +35,7 @@ export default function Products({ data }) {
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
+  const [variantIndex, setVariantIndex] = useState(0)
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
@@ -211,6 +212,7 @@ export default function Products({ data }) {
       let index = product.variants.edges.findIndex(
         (e) => e.node.id === variantId
       );
+      setVariantIndex(index)
       setOriginalPrice(product.variants.edges[index].node.compareAtPrice);
     }
   }, [variantId]);
@@ -231,7 +233,7 @@ export default function Products({ data }) {
           :
           <>
             <div className="product-details py-10 pb-10 flex justify-center">
-              <div className="w-11/12">
+              <div className="w-11/12 relative">
                 <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
                   <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
                     {product ? (
@@ -239,6 +241,7 @@ export default function Products({ data }) {
                         id={product.id}
                         tag={product.tags}
                         images={product.images.edges}
+                        index={variantIndex}
                       />
                     ) : (
                       <></>

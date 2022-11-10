@@ -15,7 +15,6 @@ import he from "he";
 
 export default function ProductAccordion({ id, description, title }) {
   const { data } = useQuery(["product_review", id], () => productReviews({ id: id }), { staleTime: 24 * 60 * 60 * 1000 })
-  console.log(data)
   const handleDisplayReviews = () => {
     if (data) {
       if (data.status.code === 200) {

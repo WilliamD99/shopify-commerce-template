@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import userContext from "../../utils/userContext";
 import deviceContext from "../../utils/deviceContext";
@@ -11,10 +11,11 @@ import Link from "../common/Link";
 
 const WishlistButton = dynamic(() => import("./wishlistButton"));
 
-export default function Gallery({ images, tag, id }) {
+export default function Gallery({ images, tag, id, index }) {
   const { user } = useContext(userContext);
   const { isMobile } = useContext(deviceContext);
   const sliderRef = useRef(null);
+  const length = images.length
 
   const handleImageClick = (e, i) => {
     sliderRef.current.slickGoTo(i);
@@ -28,6 +29,16 @@ export default function Gallery({ images, tag, id }) {
     swipeToSlide: true,
     dots: isMobile ? true : false,
   };
+
+  // Go to variant image
+  useEffect(() => {
+    if (index > length) {
+      sliderRef.current.slickGoTo(0)
+    } else {
+      sliderRef.current.slickGoTo(index)
+    }
+  }, [index])
+
   return (
     <>
       <div
