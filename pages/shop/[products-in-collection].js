@@ -111,7 +111,7 @@ export default function Collection({ col }) {
           {!isMobile ? <FilterMenu /> : <></>}
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-5 gap-y-10">
               {
                 data.data.collection.products.edges.length > 0 ?
                   dataArr.map((e, i) => (

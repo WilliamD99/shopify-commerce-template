@@ -150,7 +150,7 @@ export default function Products({ data }) {
         variantId &&
         product.variants.edges[
           product.variants.edges.findIndex((e) => e.node.id === variantId)
-        ].node.quantityAvailable !== 0
+        ]?.node.quantityAvailable !== 0
       ) {
         return (
           <Button
@@ -349,11 +349,11 @@ export default function Products({ data }) {
               </div>
             </div>
 
-            <div className="flex justify-center mt-10 md:mt-20">
+            {/* <div className="flex justify-center mt-10 md:mt-20">
               <div className="w-11/12 xl:w-3/4">
                 <Reviews id={extractId(product.id)} />
               </div>
-            </div>
+            </div> */}
 
             <div className="flex justify-center mt-10 md:mt-20">
               <div className="w-11/12 xl:w-3/4">

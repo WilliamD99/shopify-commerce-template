@@ -12,6 +12,7 @@ import Loading from "../Loading/dataLoading";
 import userContext from "../../utils/userContext";
 
 export default function SingeProduct({ e, index }) {
+  console.log(e)
   const { setCart } = useContext(cartContext);
   const { user } = useContext(userContext);
   const [onSale, setOnSale] = useState(false);
@@ -74,6 +75,10 @@ export default function SingeProduct({ e, index }) {
     }
   };
 
+  let handleHoverEffect = () => {
+
+  }
+
   useEffect(() => {
     setOnSale(
       e.node.variants.edges.some((variant) => variant.node.compareAtPrice)
@@ -81,9 +86,10 @@ export default function SingeProduct({ e, index }) {
   }, []);
 
   return (
-    <div
+    <Link
+      href={`/product/${e.node.handle}`}
       ref={anim}
-      className="single-product relative flex flex-col md:bg-slate-100 product md:rounded-tr-md md:shadow-sm"
+      className="single-product relative flex flex-col product md:rounded-tr-md md:shadow-sm"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -129,25 +135,27 @@ export default function SingeProduct({ e, index }) {
           blurDataURL="/placeholder.webp"
         />
       </div>
-      <div className="flex flex-col md:justify-between space-y-3 md:px-5 py-2 md:py-5">
-        <Link
-          className="md:text-center text-base md:text-xl font-semibold"
-          href={`/product/${e.node.handle}`}
-        >
-          {e.node.title}
-        </Link>
-        <p className="text-sm md:text-base md:text-center">
+      <div className="flex flex-col md:justify-between space-y-4 py-2 md:py-5">
+        <div className="flex flex-col space-y-1">
+          <div
+            className=" text-base md:text-xl font-semibold"
+          >
+            {e.node.title}
+          </div>
+          <p className="text-sm invisible md:visible text-slate-400 italic">
+            By {e.node.vendor}
+          </p>
+        </div>
+        <p className="text-sm md:text-base">
           {parseFloat(minPrice) === parseFloat(maxPrice)
             ? `${formatter.format(minPrice)}`
             : `${formatter.format(minPrice)} - ${formatter.format(maxPrice)}`}
         </p>
-        <p className="text-sm invisible md:visible text-slate-400 italic text-center">
-          By {e.node.vendor}
-        </p>
 
-        <div className="h-2 md:h-12 w-full">{handleDisplayButton()}</div>
+
+        {/* <div className="h-2 md:h-12 w-full">{handleDisplayButton()}</div> */}
       </div>
-    </div>
+    </Link>
   );
 }
 

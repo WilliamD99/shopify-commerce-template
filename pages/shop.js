@@ -120,8 +120,8 @@ export default function Shop() {
               const group = document.querySelector("#shop-grid")
               const state = Flip.getState("#shop-grid, .single-product")
 
-              group.classList.toggle("grid-cols-2")
-              group.classList.toggle("grid-cols-1")
+              group.classList.toggle("md:grid-cols-3")
+              group.classList.toggle("md:grid-cols-4")
 
               Flip.from(state, {
                 absolute: true,
@@ -132,7 +132,7 @@ export default function Shop() {
             }}>Test</p>
             <div
               id="shop-grid"
-              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-5 gap-y-5 overflow-hidden"
+              className="grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-5 overflow-hidden"
             >
               {dataArr.map((e, i) => (
                 <SingeProduct key={i} index={i} e={e} />

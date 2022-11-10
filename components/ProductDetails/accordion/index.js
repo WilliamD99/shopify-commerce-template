@@ -64,7 +64,7 @@ export default function ProductAccordion({ id, description, title }) {
             expandIcon={<MdExpandMore className="text-2xl" />}
             aria-controls="panel1a-content"
             id="panel1a-header"
-            className="bg-slate-100 shadow-none pl-0"
+            className="bg-slate-100 shadow-none px-2"
           >
             <p className="text-base uppercase md:text-xl font-semibold">
               Details
@@ -82,7 +82,7 @@ export default function ProductAccordion({ id, description, title }) {
             expandIcon={<MdExpandMore className="text-2xl" />}
             aria-controls="panel1a-content"
             id="panel1a-header"
-            className="bg-slate-100 shadow-none pl-0"
+            className="bg-slate-100 shadow-none px-2"
           >
             <p className="text-base uppercase md:text-xl font-semibold">
               Return Policy
@@ -97,7 +97,7 @@ export default function ProductAccordion({ id, description, title }) {
           </AccordionDetails>
         </Accordion>
         <Accordion disableGutters={true} className="shadow-none">
-          <AccordionSummary className="bg-slate-100 shadow-none pl-0">
+          <AccordionSummary className="bg-slate-100 shadow-none px-2">
             <div className="flex flex-row justify-between items-center w-full">
               <p className="text-base uppercase md:text-xl font-semibold">
                 Reviews
