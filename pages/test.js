@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Transition } from 'react-transition-group'
-import { gsap, encryptText } from '../utils/utils'
+import { gsap, encryptText, checkoutPathGenerator } from '../utils/utils'
 import useCheckoutCreate from '../utils/hooks/useCheckoutCreate'
 import { Flip } from 'gsap/dist/Flip'
 import TextField from '@mui/material/TextField'
 import SingleProduct from '../components/Shop/single-product'
 import Accordion from '../components/ProductDetails/accordion'
+import { useRouter } from 'next/router'
 
 export default function Test() {
     const [open, setOpen] = useState(false)
+    const router = useRouter()
     const data =
         [
             {
@@ -456,10 +458,29 @@ export default function Test() {
             }
         ]
 
+    // let checkout = useCheckoutCreate();
+    // // Update the line incase user comeback and add more to cart
+
+    // // Create checkout when first enter only
+    // useEffect(() => {
+    //     if (!checkout.isLoading && checkout.data !== undefined) {
+    //         sessionStorage.setItem(
+    //             "checkoutId",
+    //             encryptText(checkout.data.checkoutCreate.checkout.id)
+    //         );
+    //     }
+
+    // }, [checkout.isLoading]);
+
     return (
         <>
-
-            <Accordion id={7278769995956} description="test" title="Test Product" />
+            <p onClick={() => {
+                let path = checkoutPathGenerator()
+                if (path) {
+                    router.push(path)
+                }
+            }}>Test</p>
+            {/* <Accordion id={7278769995956} description="test" title="Test Product" /> */}
 
         </>
     )

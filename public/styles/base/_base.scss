@@ -3,6 +3,10 @@
 
 #nprogress {
   z-index: 999999 !important;
+
+  .bar {
+    background: black !important;
+  }
 }
 
 /* Chrome, Safari, Edge, Opera */

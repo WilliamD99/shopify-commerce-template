@@ -15,11 +15,13 @@ export default function ShippingUpdate({ refetch, data }) {
     lastName: "",
     firstName: "",
     address1: data?.shippingAddress ? data.shippingAddress.address1 : "",
+    address2: data?.shippingAddress ? data.shippingAddress.address2 : "",
     province: data?.shippingAddress ? data.shippingAddress.province : "",
     country: "Canada",
     zip: data?.shippingAddress ? data.shippingAddress.zip : "",
     city: data?.shippingAddress ? data.shippingAddress.city : "",
-    email: ""
+    email: data?.email ? data.email : "",
+    phone: ""
   })
 
   useEffect(() => {
@@ -29,10 +31,12 @@ export default function ShippingUpdate({ refetch, data }) {
         lastName: user.lastName,
         firstName: user.firstName,
         address1: user.defaultAddress?.address1,
+        address2: user.defaultAddress?.address2 ? user.defaultAddress.address2 : "",
         province: user.defaultAddress ? user.defaultAddress.province : "",
         zip: user.defaultAddress?.zip,
         city: user.defaultAddress?.city,
-        email: user.email
+        email: user.email,
+        phone: user.phone ? user.phone : ""
       }))
     }
   }, [user])
@@ -57,25 +61,31 @@ export default function ShippingUpdate({ refetch, data }) {
       lastName = document.getElementById("lastName").value,
       email = document.getElementById("email").value,
       address = document.getElementById("address1").value,
+      address2 = document.getElementById("address2").value,
       city = document.getElementById("city").value,
       province = document.getElementById("province").value,
       country = document.getElementById("country").value,
-      zip = document.getElementById("zip").value;
+      zip = document.getElementById("zip").value,
+      phone = document.getElementById("phone").value
 
     checkoutShippingUpdate.mutate({
       address: {
         lastName: lastName,
         firstName: firstName,
         address1: address,
+        address2: address2,
         province: province,
         country: country,
         zip: zip,
         city: city,
+        phone: phone
       },
     });
-    checkoutEmailUpdate.mutate({
-      email: email,
-    });
+    if (email !== data.email) {
+      checkoutEmailUpdate.mutate({
+        email: email,
+      });
+    }
   };
 
   useEffect(() => {
@@ -123,6 +133,7 @@ export default function ShippingUpdate({ refetch, data }) {
               id="lastName"
               name="lastName"
               required
+              type="text"
               label="Last Name"
               value={field.lastName}
               onChange={handleFieldChange}
@@ -134,9 +145,20 @@ export default function ShippingUpdate({ refetch, data }) {
               id="email"
               name="email"
               required
+              type="email"
               label="Email"
               onChange={handleFieldChange}
               value={field.email}
+            />
+            <TextField
+              className="w-full"
+              id="phone"
+              name="phone"
+              required
+              type="number"
+              label="Phone"
+              onChange={handleFieldChange}
+              value={field.phone}
             />
           </div>
         </div>
@@ -151,6 +173,17 @@ export default function ShippingUpdate({ refetch, data }) {
               required
               onChange={handleFieldChange}
               value={field.address1}
+            />
+          </div>
+          <div>
+            <TextField
+              className="w-full"
+              id="address2"
+              name="address2"
+              label="Apartment, suite, unit, etc, (Optional)"
+              required
+              onChange={handleFieldChange}
+              value={field.address2}
             />
           </div>
           <div className="flex flex-row space-x-5">
@@ -205,11 +238,11 @@ export default function ShippingUpdate({ refetch, data }) {
             className="w-full rounded-full mt-5 lg:mt-0 xl:w-56 text-center text-white bg-black border-black hover:text-black hover:bg-white hover:border-black"
             type="submit"
             variant="outlined"
+            disabled={checkoutShippingUpdate.isLoading}
           >
             Confirm
           </Button>
         </div>
-        {checkoutShippingUpdate.isLoading ? <p>Loading...</p> : <></>}
       </form>
     </>
   );

@@ -211,6 +211,13 @@ function eraseCookie(name) {
 let idGenerator = (str) => {
   return str.replace(/\s/g, "-").toLowerCase();
 };
+let checkoutPathGenerator = () => {
+  let checkoutId
+  if (typeof window !== "undefined") {
+    checkoutId = encodeURIComponent(sessionStorage.getItem("checkoutId"))
+  }
+  return `/checkout/${checkoutId}`
+}
 
 export {
   updateSessionStorage,
@@ -231,4 +238,5 @@ export {
   setCookie,
   eraseCookie,
   idGenerator,
+  checkoutPathGenerator
 };

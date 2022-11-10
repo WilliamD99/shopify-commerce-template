@@ -62,7 +62,7 @@ export default function CartDrawer({ open, setDrawer }) {
               View Cart
             </Button>
           </Link>
-          <Link className="w-full" href="/checkout/review">
+          <div className="w-full cursor-pointer" href="/checkout/review">
             <Button
               disabled={cart.length > 0 ? false : true}
               className="rounded-xl w-full bg-black text-white border-white hover:bg-white hover:text-black hover:border-black"
@@ -70,7 +70,7 @@ export default function CartDrawer({ open, setDrawer }) {
             >
               Checkout
             </Button>
-          </Link>
+          </div>
         </div>
       </Box>
     </Drawer>

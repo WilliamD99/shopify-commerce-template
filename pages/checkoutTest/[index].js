@@ -4,15 +4,22 @@ import { checkoutGet } from '../../lib/serverRequest';
 import { decryptText } from '../../utils/utils';
 import CheckoutInfo from '../../components/Checkout/CheckoutInfo'
 import OrderSummary from '../../components/Checkout/OrderSummary';
+import { useRouter } from 'next/router';
 
 export default function Index({ id }) {
-    const { data, refetch } = useQuery(
+    const router = useRouter()
+    const { data, refetch, isFetching } = useQuery(
         ["checkout", id],
         () => checkoutGet({ id: decryptText(id) }),
         { onSuccess: data => setCheckoutData(data.data.node) }
     )
     const [checkoutData, setCheckoutData] = useState(data.data.node)
-
+    console.log(data)
+    if (!data) return <p>Something went wrong, please go back to the previous page</p>
+    else if (data.data.node?.completedAt) {
+        sessionStorage.removeItem("checkoutId")
+        router.push(`/checkout/complete/${id}`)
+    }
     return (
         <>
             <div className="px-5 mt-10 md:px-16 xl:px-44">
@@ -22,6 +29,7 @@ export default function Index({ id }) {
                         refetch={refetch}
                     />
                     <OrderSummary
+                        isFetching={isFetching}
                         data={checkoutData}
                         refetch={refetch}
                         checkoutId={decryptText(id)}

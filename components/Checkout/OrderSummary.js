@@ -18,8 +18,9 @@ import useCheckoutDiscountRemove from "../../utils/hooks/useCheckoutDiscountRemo
 import { useRouter } from "next/router";
 
 import { decryptText, encryptText, formatter } from "../../utils/utils";
+import { toast } from "react-toastify";
 
-export default function OrderSummary({ data, refetch }) {
+export default function OrderSummary({ data, refetch, isFetching }) {
   const { cart } = useContext(cartContext);
   const [total, setTotal] = useState(0);
   const [totalLine, setTotalLine] = useState(0);
@@ -37,7 +38,7 @@ export default function OrderSummary({ data, refetch }) {
     setTotal(data?.totalPriceV2.amount)
     setTax(data?.totalTaxV2.amount)
     setTotalLine(data?.lineItemsSubtotalPrice.amount)
-    if (data?.availableShippingRates.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle) {
+    if (data?.availableShippingRates?.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle) {
       setSelectedRate(data.availableShippingRates.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle)
     }
     setShippingRateHandle(data?.availableShippingRates ? data.availableShippingRates.shippingRates : [])
@@ -54,7 +55,12 @@ export default function OrderSummary({ data, refetch }) {
     }
   };
   const handleComplete = async () => {
-    router.push(data.webUrl)
+    console.log(selectedRate)
+    if (selectedRate === "" || !selectedRate) {
+      toast.warning("Please select a delivery method first")
+    } else {
+      router.push(data.webUrl)
+    }
   };
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export default function OrderSummary({ data, refetch }) {
 
   return (
     <div className="md:mr-10 px-4 md:px-8 py-5 flex flex-col md:w-1/3 relative bg-slate-100">
-      {!checkoutShippingLineUpdate.isLoading ? (
+      {!isFetching ? (
         <></>
       ) : (
         <>
@@ -84,7 +90,7 @@ export default function OrderSummary({ data, refetch }) {
           {
             (
               data.lineItems.edges.map((e, i) => (
-                <div className="flex flex-row justify-between" key={i}>
+                <div className="flex flex-row justify-between items-center" key={i}>
                   <div className="flex flex-row items-center space-x-5">
                     <div className="relative h-10 w-10 xl:h-16 xl:w-16">
                       <Image

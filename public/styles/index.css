@@ -24,6 +24,9 @@ span {
 #nprogress {
   z-index: 999999 !important;
 }
+#nprogress .bar {
+  background: black !important;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -291,4 +294,8 @@ input[type=number] {
 }
 #dashboard-tabs .MuiTabs-scroller .MuiTabs-indicator {
   background-color: black;
+}
+
+#loginForm:focus-visible {
+  outline: none !important;
 }/*# sourceMappingURL=index.css.map */
