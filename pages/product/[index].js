@@ -12,6 +12,7 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
+import ProductSkeleton from '../../components/ProductDetails/product-skeleton'
 import {
   productByHandle,
   productHandleGenerate,
@@ -60,10 +61,9 @@ export default function Products({ data }) {
     } else {
       setQuantity(0);
       toast.warning(
-        `There is only ${
-          product.variants.edges[
-            product.variants.edges.findIndex((e) => e.node.id === variantId)
-          ].node.quantityAvailable
+        `There is only ${product.variants.edges[
+          product.variants.edges.findIndex((e) => e.node.id === variantId)
+        ].node.quantityAvailable
         } items of this product instock now`
       );
     }
@@ -135,7 +135,7 @@ export default function Products({ data }) {
         variantId &&
         product.variants.edges[
           product.variants.edges.findIndex((e) => e.node.id === variantId)
-        ].node.quantityAvailable === 0
+        ]?.node.quantityAvailable === 0
       ) {
         return (
           <Button
@@ -215,7 +215,6 @@ export default function Products({ data }) {
     }
   }, [variantId]);
 
-  if (!product) return <p>Something went wrong</p>;
 
   return (
     <>
@@ -223,152 +222,159 @@ export default function Products({ data }) {
         path={[
           { name: "Home", path: "/" },
           { name: "Shop", path: "/shop" },
-          { name: `Product: ${product.title}`, path: "#" },
+          { name: `Product: ${product?.title ? product.title : ""}`, path: "#" },
         ]}
       />
+      {
+        !product ?
+          <ProductSkeleton />
+          :
+          <>
+            <div className="product-details py-10 pb-10 flex justify-center">
+              <div className="w-11/12">
+                <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
+                  <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
+                    {product ? (
+                      <ImageGallery
+                        id={product.id}
+                        tag={product.tags}
+                        images={product.images.edges}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
+                    {/* Title */}
+                    <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-5">
+                      <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
+                        {product.title}
+                      </p>
+                      <p
+                        className={`text-lg xl:text-xl font-semibold ${originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
+                          }`}
+                      >
+                        {handlePriceDisplay()}
+                        {originalPrice > parseInt(displayPrice) ? (
+                          <span className="text-lg ml-2 text-black font-semibold line-through">
+                            {formatter.format(originalPrice)}
+                          </span>
+                        ) : (
+                          <></>
+                        )}
+                      </p>
+                    </div>
+                    {/* Description */}
+                    {/* <p className="text-xs xl:text-xl">{product.description}</p> */}
 
-      <div className="product-details py-10 pb-10 bg-slate-100 flex justify-center">
-        <div className="w-11/12">
-          <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
-            <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
-              {product ? (
-                <ImageGallery
-                  id={product.id}
-                  tag={product.tags}
-                  images={product.images.edges}
-                />
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
-              {/* Title */}
-              <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-5">
-                <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
-                  {product.title}
-                </p>
-                <p
-                  className={`text-lg xl:text-xl font-semibold ${
-                    originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
-                  }`}
-                >
-                  {handlePriceDisplay()}
-                  {originalPrice > parseInt(displayPrice) ? (
-                    <span className="text-lg ml-2 text-black font-semibold line-through">
-                      {formatter.format(originalPrice)}
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </p>
-              </div>
-              {/* Description */}
-              {/* <p className="text-xs xl:text-xl">{product.description}</p> */}
-
-              {/* Options */}
-              <Options
-                handleFunc={handleVariantClick}
-                options={product.options}
-                type={
-                  product.metafields[
-                    product.metafields.findIndex(
-                      (e) => e && e.key === "selection_type"
-                    )
-                  ]
-                    ? product.metafields[
-                        product.metafields.findIndex(
-                          (e) => e && e.key === "selection_type"
-                        )
-                      ].value
-                    : "Default"
-                }
-              />
-              <div className="cta">
-                {/* Quantity Input */}
-                <div className="flex flex-row justify-center w-full">
-                  <button
-                    className="text-base"
-                    onClick={() => {
-                      if (parseInt(inputRef.current.value) > 0) {
-                        inputRef.current.value =
-                          parseInt(inputRef.current.value) - 1;
-                        setQuantity(parseInt(inputRef.current.value));
-                      }
-                    }}
-                    disabled={variantId ? false : true}
-                  >
-                    <AiOutlineMinus />
-                  </button>
-                  <input
-                    className="text-center bg-transparent w-24 text-2xl focus:outline-none"
-                    type="number"
-                    ref={inputRef}
-                    defaultValue={0}
-                    onChange={debounceInput}
-                    disabled={variantId ? false : true}
-                  />
-                  <button
-                    className="text-base"
-                    onClick={() => {
-                      if (
-                        parseInt(inputRef.current.value) <
-                        product.variants.edges[
-                          product.variants.edges.findIndex(
-                            (e) => e.node.id === variantId
+                    {/* Options */}
+                    <Options
+                      handleFunc={handleVariantClick}
+                      options={product.options}
+                      type={
+                        product.metafields[
+                          product.metafields.findIndex(
+                            (e) => e && e.key === "selection_type"
                           )
-                        ].node.quantityAvailable
-                      )
-                        inputRef.current.value =
-                          parseInt(inputRef.current.value) + 1;
-                      setQuantity(parseInt(inputRef.current.value));
-                    }}
-                    disabled={variantId ? false : true}
-                  >
-                    <AiOutlinePlus />
-                  </button>
-                </div>
+                        ]
+                          ? product.metafields[
+                            product.metafields.findIndex(
+                              (e) => e && e.key === "selection_type"
+                            )
+                          ].value
+                          : "Default"
+                      }
+                    />
+                    <div className="cta">
+                      {/* Quantity Input */}
+                      <div className="flex flex-row justify-center w-full">
+                        <button
+                          className="text-base"
+                          onClick={() => {
+                            if (parseInt(inputRef.current.value) > 0) {
+                              inputRef.current.value =
+                                parseInt(inputRef.current.value) - 1;
+                              setQuantity(parseInt(inputRef.current.value));
+                            }
+                          }}
+                          disabled={variantId ? false : true}
+                        >
+                          <AiOutlineMinus />
+                        </button>
+                        <input
+                          className="text-center bg-transparent w-24 text-2xl focus:outline-none"
+                          type="number"
+                          ref={inputRef}
+                          defaultValue={0}
+                          onChange={debounceInput}
+                          disabled={variantId ? false : true}
+                        />
+                        <button
+                          className="text-base"
+                          onClick={() => {
+                            if (
+                              parseInt(inputRef.current.value) <
+                              product.variants.edges[
+                                product.variants.edges.findIndex(
+                                  (e) => e.node.id === variantId
+                                )
+                              ].node.quantityAvailable
+                            )
+                              inputRef.current.value =
+                                parseInt(inputRef.current.value) + 1;
+                            setQuantity(parseInt(inputRef.current.value));
+                          }}
+                          disabled={variantId ? false : true}
+                        >
+                          <AiOutlinePlus />
+                        </button>
+                      </div>
 
-                {/* Add to cart */}
-                <div className="mt-4 flex flex-row justify-between items-center">
-                  {handleDisplayButton()}
+                      {/* Add to cart */}
+                      <div className="mt-4 flex flex-row justify-between items-center">
+                        {handleDisplayButton()}
+                      </div>
+                    </div>
+
+                    <Accordion
+                      id={extractId(product.id)}
+                      description={product.descriptionHtml}
+                      title={product.title}
+                    />
+                  </div>
                 </div>
               </div>
-
-              <Accordion
-                id={extractId(product.id)}
-                description={product.descriptionHtml}
-                title={product.title}
-              />
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="flex justify-center mt-10 md:mt-20">
-        <div className="w-11/12 xl:w-3/4">
-          <Reviews id={extractId(product.id)} />
-        </div>
-      </div>
+            <div className="flex justify-center mt-10 md:mt-20">
+              <div className="w-11/12 xl:w-3/4">
+                <Reviews id={extractId(product.id)} />
+              </div>
+            </div>
 
-      <div className="flex justify-center mt-10 md:mt-20">
-        <div className="w-11/12 xl:w-3/4">
-          {product.metafields.some((e) => {
-            if (e) return e.key === "related_products";
-          }) ? (
-            <Related
-              data={
-                product.metafields[
-                  product.metafields.findIndex(
-                    (e) => e.key === "related_products"
-                  )
-                ]
-              }
-            />
-          ) : (
-            <></>
-          )}
-        </div>
-      </div>
+            <div className="flex justify-center mt-10 md:mt-20">
+              <div className="w-11/12 xl:w-3/4">
+                {product.metafields.some((e) => {
+                  if (e) return e.key === "related_products";
+                }) ? (
+                  <Related
+                    data={
+                      product.metafields[
+                      product.metafields.findIndex(
+                        (e) => e.key === "related_products"
+                      )
+                      ]
+                    }
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          </>
+      }
+
+
     </>
   );
 }

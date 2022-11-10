@@ -474,8 +474,8 @@ export default function Test() {
 
     return (
         <>
-            <p onClick={() => {
-                let path = checkoutPathGenerator()
+            <p onClick={async () => {
+                let path = await checkoutPathGenerator()
                 if (path) {
                     router.push(path)
                 }
