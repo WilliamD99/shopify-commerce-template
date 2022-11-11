@@ -6,7 +6,7 @@ import { idGenerator } from "../../../utils/utils";
 
 export default function Bubble({ options, handleFunc }) {
   let handleClick = (index, value, name) => {
-    let element = document.querySelector(`#${idGenerator(value)}-${index}`);
+    let element = document.querySelector(`#${"variant" + "_" + idGenerator(value)}_${index}`);
     let others = document.querySelectorAll(`.options.options-${index}`);
     if (name.toUpperCase() !== "COLOR") {
       for (let other of others) {
@@ -26,7 +26,7 @@ export default function Bubble({ options, handleFunc }) {
 
   let colorChip = (value, index, i, name) => (
     <Chip
-      id={value.toLowerCase() + "-" + i}
+      id={"variant" + "_" + value.toLowerCase() + "_" + i}
       size="medium"
       key={`value-${index}`}
       className={`py-2 px-2 options options-${i}`}
@@ -52,7 +52,7 @@ export default function Bubble({ options, handleFunc }) {
               if (e.name.toUpperCase() !== "COLOR")
                 return (
                   <Chip
-                    id={idGenerator(value) + "-" + i}
+                    id={"variant" + "_" + idGenerator(value) + "_" + i}
                     size="medium"
                     key={`value-${index}`}
                     className={`py-2 px-2 mb-4 mr-3 options options-${i}`}

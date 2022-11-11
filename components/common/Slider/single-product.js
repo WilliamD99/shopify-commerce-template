@@ -21,7 +21,7 @@ export default function SingleProduct({ data, type }) {
         <div className="flex flex-col">
           <p>{data.title}</p>
           <p className="text-gray-400">
-            {data.collections?.edges[0].node?.title}
+            {data.collections?.edges[0]?.node?.title}
           </p>
         </div>
       </Link>
