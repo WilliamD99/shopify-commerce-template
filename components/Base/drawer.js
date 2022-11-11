@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Link from "../common/Link";
 import DrawerList from "./drawerList";
-import { checkoutPathGenerator } from "../../utils/utils";
+import { checkoutPathGenerator, gsap } from "../../utils/utils";
 
 export default function CartDrawer({ open, setDrawer }) {
   const [drawerData, setDrawerData] = useState([]);
