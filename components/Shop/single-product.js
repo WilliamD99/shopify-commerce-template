@@ -18,6 +18,8 @@ export default function SingeProduct({ e, index }) {
   const [isLoading, setLoading] = useState(false);
   const anim = useRef(null);
 
+  console.log(e);
+
   let minPrice = e.node.priceRangeV2
     ? e.node.priceRangeV2.minVariantPrice.amount
     : e.node.priceRange.minVariantPrice.amount;
@@ -30,7 +32,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-full normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           <Link href={`/product/${e.node.handle}`}>Select</Link>
         </Button>
@@ -39,7 +41,7 @@ export default function SingeProduct({ e, index }) {
       return (
         <Button
           variant="outlined"
-          className="rounded-md normal-case text-xs md:text-base bg-gray-300 border-gray-300 absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-full normal-case text-xs md:text-base bg-gray-300 border-gray-300 absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
           disabled={true}
         >
           Sold out
@@ -66,7 +68,7 @@ export default function SingeProduct({ e, index }) {
             setLoading(false);
           }}
           variant="outlined"
-          className="rounded-md normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
+          className="rounded-full normal-case text-xs md:text-base bg-black text-white hover:border-black hover:bg-white hover:text-black absolute bottom-5 w-full md:w-40 md:left-1/2 md:-translate-x-1/2"
         >
           Add to cart
         </Button>
@@ -81,9 +83,10 @@ export default function SingeProduct({ e, index }) {
   }, []);
 
   return (
-    <div
+    <Link
       ref={anim}
-      className="single-product relative flex flex-col md:bg-slate-100 product md:rounded-tr-md md:shadow-sm"
+      href={`/product/${e.node.handle}`}
+      className="single-product relative flex flex-col  product md:rounded-tr-md "
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -119,7 +122,7 @@ export default function SingeProduct({ e, index }) {
       ) : (
         <></>
       )}
-      <div className="image-container relative w-full h-56 xl:h-64 rounded-tr-md">
+      <div className="image-container relative w-full h-56 xl:h-96 rounded-tr-md">
         <Image
           alt={e.node.title}
           src={e.node.featuredImage.url}
@@ -129,25 +132,22 @@ export default function SingeProduct({ e, index }) {
           blurDataURL="/placeholder.webp"
         />
       </div>
-      <div className="flex flex-col md:justify-between space-y-3 md:px-5 py-2 md:py-5">
-        <Link
-          className="md:text-center text-base md:text-xl font-semibold"
-          href={`/product/${e.node.handle}`}
-        >
-          {e.node.title}
-        </Link>
-        <p className="text-sm md:text-base md:text-center">
+      <div className="flex flex-col md:justify-between space-y-4 py-2 md:py-5">
+        <div>
+          <p className=" text-base md:text-lg font-semibold">{e.node.title}</p>
+          <p className="text-base invisible md:visible text-slate-400 italic">
+            {e.node.vendor}
+          </p>
+        </div>
+        <p className="text-sm md:text-base">
           {parseFloat(minPrice) === parseFloat(maxPrice)
             ? `${formatter.format(minPrice)}`
             : `${formatter.format(minPrice)} - ${formatter.format(maxPrice)}`}
         </p>
-        <p className="text-sm invisible md:visible text-slate-400 italic text-center">
-          By {e.node.vendor}
-        </p>
 
-        <div className="h-2 md:h-12 w-full">{handleDisplayButton()}</div>
+        {/* <div className="h-2 md:h-12 w-full">{handleDisplayButton()}</div> */}
       </div>
-    </div>
+    </Link>
   );
 }
 

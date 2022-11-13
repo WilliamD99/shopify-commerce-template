@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import deviceContext from "../../../utils/deviceContext";
 import cartContext from "../../../utils/cartContext";
+import dynamic from "next/dynamic";
 
-import Mobile from "./mobile";
-import Desktop from "./desktop";
+const Mobile = dynamic(() => import("./mobile"))
+const Desktop = dynamic(() => import("./desktop"))
 
 export default function ProductSummary() {
   const { isMobile } = useContext(deviceContext);

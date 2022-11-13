@@ -69,7 +69,7 @@ export default function Shop() {
       }),
     { staleTime: 10000 }
   );
-  console.log(data)
+  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -116,7 +116,7 @@ export default function Shop() {
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
               id="shop-grid"
-              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 gap-y-10"
+              className="grid grid-cols-2 md:grid-cols-3 gap-5 gap-y-20"
             >
               {dataArr.map((e, i) => (
                 <SingeProduct key={i} index={i} e={e} />

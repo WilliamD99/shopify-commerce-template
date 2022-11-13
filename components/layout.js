@@ -4,6 +4,7 @@ import Header from "./Base/header";
 
 import { ToastContainer } from "react-toastify";
 import { gsap } from "../utils/utils";
+import { Zoom } from "react-toastify";
 
 export default function Layout({ children }) {
   const [stickyClass, setStickyClass] = useState("");
@@ -42,13 +43,14 @@ export default function Layout({ children }) {
       <div className="min-h-screen" style={{ marginTop: marginTop }}>
         {children}
       </div>
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
         hideProgressBar={true}
         closeOnClick
-        theme="light"
+        theme="dark"
+        transition={Zoom}
       />
     </div>
   );

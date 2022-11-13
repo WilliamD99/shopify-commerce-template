@@ -17,7 +17,6 @@ export default function Order() {
   const routerQuery = router.query;
 
   const { data } = useQuery(["order", routerQuery.order], () => orderGetById({ id: routerQuery.order }), { staleTime: 1000 * 60 * 60 * 24 })
-
   if (!data) return <div>No order found</div>;
   if (data.errors) return (
     <>
@@ -28,7 +27,7 @@ export default function Order() {
   return (
     <>
       <NextSeo title={`My Order || Order ${data.data.order.name}`} description="" />
-      <div className="flex relative flex-col w-2/3 ml-20 space-y-5">
+      <div className="flex relative flex-col px-5 lg:w-2/3 lg:ml-20 space-y-5">
         <div className="flex flex-row items-center">
           <span className="text-xl font-medium flex flex-row items-center">
             Order {data.data.order.name}
@@ -42,8 +41,8 @@ export default function Order() {
             ) : null}
           </span>
         </div>
-        <div className="flex flex-row space-x-10">
-          <div className="w-2/3 flex flex-col space-y-5">
+        <div className="flex flex-col space-y-5 lg:space-y-0 lg:flex-row lg:space-x-10">
+          <div className="w-full lg:w-2/3 flex flex-col space-y-5">
             <div className="px-5 py-5 flex flex-col space-y-2 bg-slate-100 w-full shadow-md rounded-md">
               <p className="text-xl">
                 Created at:
@@ -55,8 +54,8 @@ export default function Order() {
                 {data.data.order.lineItems.edges.map((e, i) => (
                   <div key={i}>
                     <Divider className="my-5" />
-                    <div className="flex flex-row justify-between items-center">
-                      <div className="flex flex-row items-center space-x-2">
+                    <div className="grid grid-cols-2 gap-3 justify-between items-center">
+                      <div className="grid grid-cols-2 gap-3 items-center space-x-2">
                         <div className="relative h-10 w-10">
                           {e.node.image ? (
                             <Image
@@ -70,7 +69,7 @@ export default function Order() {
                         </div>
                         <Link
                           href={`/product/${e.node.product.handle}`}
-                          className="col-span-2 hover:underline"
+                          className="col-span-2 font-semibold hover:underline"
                         >
                           {e.node.name}
                         </Link>
@@ -147,7 +146,7 @@ export default function Order() {
               </div>
             </div>
           </div>
-          <div className="w-1/3 flex flex-col space-y-5">
+          <div className="w-full lg:w-1/3 flex flex-col space-y-5">
             <div className="px-5 py-5 flex flex-col space-y-3 bg-slate-100 w-full shadow-md rounded-md">
               <p className="font-bold text-xl">Note</p>
               {data.data.order.note ? (

@@ -112,6 +112,9 @@ const requests = async (req, res) => {
                                 id
                                 compareAtPrice
                                 price
+                                image {
+                                  url
+                                }
                               }
                             }
                         }

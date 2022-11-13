@@ -24,7 +24,6 @@ export default function Search() {
     { enabled: Boolean(searchQuery) }
   );
 
-  console.log(data);
   let search = useCallback((criteria) => {
     if (criteria === "") {
       setSearchQuery(null);

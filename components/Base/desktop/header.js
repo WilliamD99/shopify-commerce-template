@@ -6,9 +6,10 @@ export default function Header({ setModalOpen }) {
   const { user } = useContext(userContext);
 
   let headerConditionalDisplay = () => {
-    if (user.state === "loading") {
+    console.log(user);
+    if (user?.state === "loading") {
       return <p>Loading</p>;
-    } else if (user.state === "none")
+    } else if (user?.state === "none")
       return (
         <>
           <p
@@ -19,7 +20,9 @@ export default function Header({ setModalOpen }) {
           </p>
         </>
       );
-    return <LoginButton />;
+    else {
+      return <LoginButton />;
+    }
   };
 
   return (

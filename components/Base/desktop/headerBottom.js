@@ -16,7 +16,7 @@ export default function HeaderBottom() {
 
   //   Wishlish animation
   useEffect(() => {
-    if (user.state !== "loading" && user.state !== "none") {
+    if (user?.state !== "loading" && user?.state !== "none") {
       wlRef.current
         .to("#wlBadge", { scale: 1.2, duration: 0.3 })
         .to("#wlBadge", { scale: 1, duration: 0.3 });
@@ -42,7 +42,7 @@ export default function HeaderBottom() {
         <div className="flex flex-row space-x-5 items-center">
           <Search />
           {/* Wishlish Button */}
-          {!user.state ? (
+          {!user?.state ? (
             <Link href="/my-account">
               <Badge id="wlBadge" badgeContent={wlCount}>
                 <AiOutlineHeart className="text-2xl" />

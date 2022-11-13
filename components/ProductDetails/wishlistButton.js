@@ -28,23 +28,23 @@ export default function WishlistButton({ list, id, userId }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (getCustomer.data) {
-  //     setUser(getCustomer.data.customer);
-  //   }
-  // }, [getCustomer.isLoading]);
+  useEffect(() => {
+    if (getCustomer.data) {
+      setUser(getCustomer.data.customer);
+    }
+  }, [getCustomer.isLoading]);
 
-  // useEffect(() => {
-  //   if (
-  //     !updateWishlist.isLoading &&
-  //     updateWishlist.isSuccess &&
-  //     updateWishlist.data
-  //   ) {
-  //     getCustomer.mutate({
-  //       accessToken: accessTokenExist(),
-  //     });
-  //   }
-  // }, [updateWishlist.isLoading]);
+  useEffect(() => {
+    if (
+      !updateWishlist.isLoading &&
+      updateWishlist.isSuccess &&
+      updateWishlist.data
+    ) {
+      getCustomer.mutate({
+        accessToken: accessTokenExist(),
+      });
+    }
+  }, [updateWishlist.isLoading]);
 
   return (
     <>

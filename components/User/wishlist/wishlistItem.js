@@ -25,7 +25,7 @@ export default function WishlistItem({ id }) {
     return (
       <>
         <div className="flex flex-col space-y-5">
-          <div className="relative h-80 w-80">
+          <div className="relative h-40 w-40 lg:h-80 lg:w-80">
             <Image
               layout="fill"
               src={data.data.product.featuredImage.url}

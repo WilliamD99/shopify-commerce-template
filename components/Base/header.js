@@ -5,6 +5,7 @@ import deviceContext from "../../utils/deviceContext";
 import dynamic from "next/dynamic";
 
 import Account from "../User/account";
+import { accessTokenExist } from "../../utils/utils";
 // Mobile Components
 const HeaderMobile = dynamic(() => import("./mobile/header"));
 // Desktop Components
@@ -16,11 +17,15 @@ export default function Header({ sticky }) {
   let { isMobile } = useContext(deviceContext);
   let [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (customer.data) {
-      setUser(customer.data.customer);
-    }
-  }, [customer.isLoading]);
+  // useEffect(() => {
+  //   customer.mutate({ accessToken: accessTokenExist() });
+  // }, []);
+
+  // useEffect(() => {
+  //   if (customer.data) {
+  //     setUser(customer.data.customer);
+  //   }
+  // }, [customer.isLoading]);
 
   return (
     <>
