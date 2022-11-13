@@ -19,10 +19,8 @@ import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
 import ProductSkeleton from "../../components/ProductDetails/product-skeleton";
-import {
-  productByHandle,
-  productHandleGenerate,
-} from "../../lib/serverRequest";
+import { productByHandle } from "../../lib/serverRequest";
+import { QueryClient, useQuery, dehydrate } from "@tanstack/react-query";
 
 const Reviews = dynamic(
   () => import("../../components/ProductDetails/reviews"),
@@ -37,7 +35,10 @@ const Related = dynamic(
   }
 );
 
-export default function Products({ data }) {
+export default function Product({ index }) {
+  const { data } = useQuery(["product", index], () => productByHandle(index), {
+    staleTime: 1000 * 60 * 60 * 24,
+  });
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
@@ -219,8 +220,7 @@ export default function Products({ data }) {
           let selectedIndex = product.variants.edges.findIndex(
             (e) => e.node.title === combined
           );
-          console.log(product.variants.edges[selectedIndex].node.id);
-          // setVariantId(product.variants.edges[selectedIndex].node.id);
+          setVariantId(product.variants.edges[selectedIndex].node.id);
           setDisplayPrice(product.variants.edges[selectedIndex].node.price);
         }
       }
@@ -404,24 +404,26 @@ export default function Products({ data }) {
   );
 }
 
-export async function getStaticProps({ params }) {
-  let data = await productByHandle(params.index);
+const queryClient = new QueryClient();
+export async function getServerSideProps({ query, res }) {
+  let { index } = query;
+  await queryClient.prefetchQuery(
+    ["product", index],
+    () => productByHandle(index),
+    {
+      staleTime: 1000 * 60 * 60 * 24,
+    }
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=30, stale-while-revalidate=59"
+  );
+
   return {
     props: {
-      data: data,
+      dehydratedState: dehydrate(queryClient),
+      index: index,
     },
-    revalidate: 59,
-  };
-}
-
-export async function getStaticPaths() {
-  const data = await productHandleGenerate();
-  let paths = data.data.products.edges.map((handle) => ({
-    params: { index: handle.node.handle },
-  }));
-
-  return {
-    paths,
-    fallback: false,
   };
 }
