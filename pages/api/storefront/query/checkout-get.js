@@ -36,6 +36,11 @@ const requests = async (req, res) => {
                     }
                   }
                 }
+                shippingAddress {
+                  address1
+                }
+                completedAt
+                orderStatusUrl
                 lineItems(first: 20) {
                   edges {
                     node {

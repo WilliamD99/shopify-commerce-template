@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
 
-import { cartAdd, extractId, formatter } from "../../utils/utils";
+import { cartAdd, extractId, formatter, gsap } from "../../utils/utils";
 import cartContext from "../../utils/cartContext";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
 import ImageGallery from "../../components/ProductDetails/imageGallery";
@@ -12,6 +18,7 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import Accordion from "../../components/ProductDetails/accordion";
 import { toast } from "react-toastify";
 import Options from "../../components/ProductDetails/options";
+import ProductSkeleton from "../../components/ProductDetails/product-skeleton";
 import {
   productByHandle,
   productHandleGenerate,
@@ -34,6 +41,7 @@ export default function Products({ data }) {
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const [variantId, setVariantId] = useState();
+  const [variantIndex, setVariantIndex] = useState(0);
   const { setCart } = useContext(cartContext);
   const [displayPrice, setDisplayPrice] = useState(0);
   const [originalPrice, setOriginalPrice] = useState(0);
@@ -41,7 +49,20 @@ export default function Products({ data }) {
   const [isInStock, setIsInStock] = useState(false);
   const inputRef = useRef(0);
   const router = useRouter();
+  const anim = useRef();
   let routerQuery = router.query;
+
+  // useLayoutEffect(() => {
+  //   anim.current = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: ".product-details",
+  //       start: "top+=500 bottom",
+  //       end: "bottom bottom",
+  //       markers: true,
+  //       pin: "#image-gallery",
+  //     },
+  //   });
+  // }, []);
 
   let debounceInput = debounce((criteria) => {
     onChangeInput(criteria);
@@ -135,7 +156,7 @@ export default function Products({ data }) {
         variantId &&
         product.variants.edges[
           product.variants.edges.findIndex((e) => e.node.id === variantId)
-        ].node.quantityAvailable === 0
+        ]?.node.quantityAvailable === 0
       ) {
         return (
           <Button
@@ -149,7 +170,7 @@ export default function Products({ data }) {
         variantId &&
         product.variants.edges[
           product.variants.edges.findIndex((e) => e.node.id === variantId)
-        ].node.quantityAvailable !== 0
+        ]?.node.quantityAvailable !== 0
       ) {
         return (
           <Button
@@ -186,7 +207,6 @@ export default function Products({ data }) {
   useEffect(() => {
     setQuantity(parseInt(inputRef.current.value));
   }, [inputRef.current]);
-
   // Handle variants
   useEffect(() => {
     if (product) {
@@ -199,7 +219,8 @@ export default function Products({ data }) {
           let selectedIndex = product.variants.edges.findIndex(
             (e) => e.node.title === combined
           );
-          setVariantId(product.variants.edges[selectedIndex].node.id);
+          console.log(product.variants.edges[selectedIndex].node.id);
+          // setVariantId(product.variants.edges[selectedIndex].node.id);
           setDisplayPrice(product.variants.edges[selectedIndex].node.price);
         }
       }
@@ -211,11 +232,10 @@ export default function Products({ data }) {
       let index = product.variants.edges.findIndex(
         (e) => e.node.id === variantId
       );
+      setVariantIndex(index);
       setOriginalPrice(product.variants.edges[index].node.compareAtPrice);
     }
   }, [variantId]);
-
-  if (!product) return <p>Something went wrong</p>;
 
   return (
     <>
@@ -223,152 +243,163 @@ export default function Products({ data }) {
         path={[
           { name: "Home", path: "/" },
           { name: "Shop", path: "/shop" },
-          { name: `Product: ${product.title}`, path: "#" },
+          {
+            name: `Product: ${product?.title ? product.title : ""}`,
+            path: "#",
+          },
         ]}
       />
+      {!product ? (
+        <ProductSkeleton />
+      ) : (
+        <>
+          <div className="product-details pb-10 flex justify-center">
+            <div className="w-11/12 relative">
+              <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-10">
+                <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
+                  {product ? (
+                    <ImageGallery
+                      id={product.id}
+                      tag={product.tags}
+                      images={product.images.edges}
+                      index={variantIndex}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
+                  {/* Title */}
+                  <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-5">
+                    <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
+                      {product.title}
+                    </p>
+                    <p
+                      className={`text-lg xl:text-xl font-semibold ${
+                        originalPrice > parseInt(displayPrice)
+                          ? "text-red-500"
+                          : ""
+                      }`}
+                    >
+                      {handlePriceDisplay()}
+                      {originalPrice > parseInt(displayPrice) ? (
+                        <span className="text-lg ml-2 text-black font-semibold line-through">
+                          {formatter.format(originalPrice)}
+                        </span>
+                      ) : (
+                        <></>
+                      )}
+                    </p>
+                  </div>
+                  {/* Description */}
+                  {/* <p className="text-xs xl:text-xl">{product.description}</p> */}
 
-      <div className="product-details py-10 pb-10 bg-slate-100 flex justify-center">
-        <div className="w-11/12">
-          <div className="flex flex-col md:flex-row space-y-10 md:space-x-5 xl:mt-16">
-            <div className="w-full md:w-1/2 xl:w-8/12 flex flex-col justify-center md:justify-start md:mt-10 space-y-5">
-              {product ? (
-                <ImageGallery
-                  id={product.id}
-                  tag={product.tags}
-                  images={product.images.edges}
+                  {/* Options */}
+                  <Options
+                    handleFunc={handleVariantClick}
+                    options={product.options}
+                    type={
+                      product.metafields[
+                        product.metafields.findIndex(
+                          (e) => e && e.key === "selection_type"
+                        )
+                      ]
+                        ? product.metafields[
+                            product.metafields.findIndex(
+                              (e) => e && e.key === "selection_type"
+                            )
+                          ].value
+                        : "Default"
+                    }
+                  />
+                  <div className="cta">
+                    {/* Quantity Input */}
+                    <div className="flex flex-row justify-center w-full">
+                      <button
+                        className="text-base"
+                        onClick={() => {
+                          if (parseInt(inputRef.current.value) > 0) {
+                            inputRef.current.value =
+                              parseInt(inputRef.current.value) - 1;
+                            setQuantity(parseInt(inputRef.current.value));
+                          }
+                        }}
+                        disabled={variantId ? false : true}
+                      >
+                        <AiOutlineMinus />
+                      </button>
+                      <input
+                        className="text-center bg-transparent w-24 text-2xl focus:outline-none"
+                        type="number"
+                        ref={inputRef}
+                        defaultValue={0}
+                        onChange={debounceInput}
+                        disabled={variantId ? false : true}
+                      />
+                      <button
+                        className="text-base"
+                        onClick={() => {
+                          if (
+                            parseInt(inputRef.current.value) <
+                            product.variants.edges[
+                              product.variants.edges.findIndex(
+                                (e) => e.node.id === variantId
+                              )
+                            ].node.quantityAvailable
+                          )
+                            inputRef.current.value =
+                              parseInt(inputRef.current.value) + 1;
+                          setQuantity(parseInt(inputRef.current.value));
+                        }}
+                        disabled={variantId ? false : true}
+                      >
+                        <AiOutlinePlus />
+                      </button>
+                    </div>
+
+                    {/* Add to cart */}
+                    <div className="mt-4 flex flex-row justify-between items-center">
+                      {handleDisplayButton()}
+                    </div>
+                  </div>
+
+                  <Accordion
+                    id={extractId(product.id)}
+                    description={product.descriptionHtml}
+                    title={product.title}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="flex justify-center mt-10 md:mt-20">
+              <div className="w-11/12 xl:w-3/4">
+                <Reviews id={extractId(product.id)} />
+              </div>
+            </div> */}
+
+          <div className="flex justify-center mt-10 md:mt-20">
+            <div className="w-11/12 xl:w-3/4">
+              {product.metafields.some((e) => {
+                if (e) return e.key === "related_products";
+              }) ? (
+                <Related
+                  data={
+                    product.metafields[
+                      product.metafields.findIndex(
+                        (e) => e.key === "related_products"
+                      )
+                    ]
+                  }
                 />
               ) : (
                 <></>
               )}
             </div>
-            <div className="flex flex-col space-y-2 md:space-y-5 w-full md:w-1/2 xl:w-4/12">
-              {/* Title */}
-              <div className="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-5">
-                <p className="text-xl md:text-2xl xl:text-3xl font-semibold">
-                  {product.title}
-                </p>
-                <p
-                  className={`text-lg xl:text-xl font-semibold ${
-                    originalPrice > parseInt(displayPrice) ? "text-red-500" : ""
-                  }`}
-                >
-                  {handlePriceDisplay()}
-                  {originalPrice > parseInt(displayPrice) ? (
-                    <span className="text-lg ml-2 text-black font-semibold line-through">
-                      {formatter.format(originalPrice)}
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </p>
-              </div>
-              {/* Description */}
-              {/* <p className="text-xs xl:text-xl">{product.description}</p> */}
-
-              {/* Options */}
-              <Options
-                handleFunc={handleVariantClick}
-                options={product.options}
-                type={
-                  product.metafields[
-                    product.metafields.findIndex(
-                      (e) => e && e.key === "selection_type"
-                    )
-                  ]
-                    ? product.metafields[
-                        product.metafields.findIndex(
-                          (e) => e && e.key === "selection_type"
-                        )
-                      ].value
-                    : "Default"
-                }
-              />
-              <div className="cta">
-                {/* Quantity Input */}
-                <div className="flex flex-row justify-center w-full">
-                  <button
-                    className="text-base"
-                    onClick={() => {
-                      if (parseInt(inputRef.current.value) > 0) {
-                        inputRef.current.value =
-                          parseInt(inputRef.current.value) - 1;
-                        setQuantity(parseInt(inputRef.current.value));
-                      }
-                    }}
-                    disabled={variantId ? false : true}
-                  >
-                    <AiOutlineMinus />
-                  </button>
-                  <input
-                    className="text-center bg-transparent w-24 text-2xl focus:outline-none"
-                    type="number"
-                    ref={inputRef}
-                    defaultValue={0}
-                    onChange={debounceInput}
-                    disabled={variantId ? false : true}
-                  />
-                  <button
-                    className="text-base"
-                    onClick={() => {
-                      if (
-                        parseInt(inputRef.current.value) <
-                        product.variants.edges[
-                          product.variants.edges.findIndex(
-                            (e) => e.node.id === variantId
-                          )
-                        ].node.quantityAvailable
-                      )
-                        inputRef.current.value =
-                          parseInt(inputRef.current.value) + 1;
-                      setQuantity(parseInt(inputRef.current.value));
-                    }}
-                    disabled={variantId ? false : true}
-                  >
-                    <AiOutlinePlus />
-                  </button>
-                </div>
-
-                {/* Add to cart */}
-                <div className="mt-4 flex flex-row justify-between items-center">
-                  {handleDisplayButton()}
-                </div>
-              </div>
-
-              <Accordion
-                id={extractId(product.id)}
-                description={product.descriptionHtml}
-                title={product.title}
-              />
-            </div>
           </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-10 md:mt-20">
-        <div className="w-11/12 xl:w-3/4">
-          <Reviews id={extractId(product.id)} />
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-10 md:mt-20">
-        <div className="w-11/12 xl:w-3/4">
-          {product.metafields.some((e) => {
-            if (e) return e.key === "related_products";
-          }) ? (
-            <Related
-              data={
-                product.metafields[
-                  product.metafields.findIndex(
-                    (e) => e.key === "related_products"
-                  )
-                ]
-              }
-            />
-          ) : (
-            <></>
-          )}
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }

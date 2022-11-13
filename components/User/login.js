@@ -72,10 +72,10 @@ export default function Login({ open, setOpen }) {
       >
         <form
           id="loginForm"
-          className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-between space-y-3 bg-slate-200 rounded-xl z-50"
+          className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-between space-y-3 bg-slate-100 rounded-xl z-50"
           onSubmit={handleLogin}
         >
-          <p className="text-black text-3xl font-bold text-center">Login</p>
+          <p className="text-black text-2xl font-bold text-center">Login</p>
           <div className="flex flex-col space-y-5">
             <TextField
               className="rounded-md"

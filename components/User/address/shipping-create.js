@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import useCustomerCreateShipping from "../../../utils/hooks/useCustomerCreateShipping";
 import { accessTokenExist, provinces } from "../../../utils/utils";
+import { toast } from 'react-toastify';
 
-export default function ShippingCreate() {
+export default function ShippingCreate({ setOpen }) {
     const createShipping = useCustomerCreateShipping();
+    const [state, setState] = useState("");
 
     const handleCreate = async (e) => {
         e.preventDefault();
@@ -27,14 +29,28 @@ export default function ShippingCreate() {
             },
         });
     };
+
+    useEffect(() => {
+        if (createShipping.data) {
+            if (createShipping.data.customerAddressCreate?.customerUserErrors?.length === 0) {
+                toast.success("Created new address successfully!, please reload the page to see the update")
+                if (setOpen) {
+                    setOpen(false)
+                }
+            } else {
+                toast.error("Something went wrong, please try again")
+            }
+        }
+    }, [createShipping.data])
+
     return (
         <>
-            <div className="flex flex-col space-y-10 px-5">
-                <p className="text-lg">
-                    Add a new shipping address for faster checkout
+            <div className="flex flex-col w-80 lg:w-full space-y-8 px-5">
+                <p className="text-xl font-medium">
+                    Create an address
                 </p>
                 <form
-                    className="grid grid-cols-2 lg:w-2/3 gap-x-5 gap-y-2"
+                    className="grid grid-cols-2 gap-x-5 gap-y-2"
                     onSubmit={handleCreate}
                 >
                     <TextField

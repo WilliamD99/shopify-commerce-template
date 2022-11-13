@@ -44,31 +44,29 @@ export default function Footer() {
           />
           <Button
             variant="outlined"
-            className="w-32 xl:w-44 normal-case text-white border-white bg-black hover:text-black hover:border-black hover:bg-white"
+            className="w-32 xl:w-44 normal-case rounded-full text-white border-white bg-black hover:text-black hover:border-black hover:bg-white"
             type="submit"
             onClick={subscribeUser}
           >
             Sign Up {isLoading ? <Loading /> : ""}
           </Button>
+          <p className="text-sm italic">You may unsubscribe anytime</p>
         </form>
       </div>
       <div
         id="footer_bottom"
-        className="w-full flex flex-row justify-between items-center px-10 py-3 bg-white"
+        className="w-full flex flex-col-reverse lg:flex-row justify-between items-center lg:px-10 py-3 bg-white"
       >
-        <p className="text-black text-center"> &copy; 2022 Ecommerce. All Rights Reserved</p>
+        <p className="text-black text-center">
+          {" "}
+          &copy; 2022 Ecommerce. All Rights Reserved
+        </p>
 
-        <div className="flex flex-row justify-center space-x-10 footer_links">
-          <Link
-            className="text-sm xl:text-base hover:underline"
-            href="/terms"
-          >
+        <div className="flex flex-row mb-2 lg:mb-0 justify-center space-x-5 lg:space-x-10 footer_links">
+          <Link className="text-sm xl:text-base hover:underline" href="/terms">
             Term of Use
           </Link>
-          <Link
-            className="text-sm xl:text-base hover:underline"
-            href="/policy"
-          >
+          <Link className="text-sm xl:text-base hover:underline" href="/policy">
             Privacy Policy
           </Link>
         </div>

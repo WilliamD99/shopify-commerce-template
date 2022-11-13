@@ -24,7 +24,6 @@ const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 export default function Shop() {
   const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
-  const [count, setCount] = useState(0);
   const [isNext, setNext] = useState(false);
   const [isPrevious, setPrevious] = useState(false);
   // State for query
@@ -69,7 +68,6 @@ export default function Shop() {
       }),
     { staleTime: 10000 }
   );
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -96,7 +94,7 @@ export default function Shop() {
         {isMobile ? <FilterDrawer /> : <></>}
       </div>
 
-      <div id="shop-container" className="px-3 md:px-10">
+      <div id="shop-container" className="px-3 md:px-10 overflow-hidden">
         {!isMobile ? (
           <FilterBar
             length={dataArr.length}
@@ -116,7 +114,7 @@ export default function Shop() {
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
               id="shop-grid"
-              className="grid grid-cols-2 md:grid-cols-3 gap-5 gap-y-20"
+              className={`grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-5 overflow-hidden`}
             >
               {dataArr.map((e, i) => (
                 <SingeProduct key={i} index={i} e={e} />

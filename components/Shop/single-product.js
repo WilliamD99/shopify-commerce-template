@@ -16,7 +16,6 @@ export default function SingeProduct({ e, index }) {
   const { user } = useContext(userContext);
   const [onSale, setOnSale] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const anim = useRef(null);
 
   console.log(e);
 
@@ -76,6 +75,8 @@ export default function SingeProduct({ e, index }) {
     }
   };
 
+  let handleHoverEffect = () => {};
+
   useEffect(() => {
     setOnSale(
       e.node.variants.edges.some((variant) => variant.node.compareAtPrice)
@@ -84,9 +85,8 @@ export default function SingeProduct({ e, index }) {
 
   return (
     <Link
-      ref={anim}
       href={`/product/${e.node.handle}`}
-      className="single-product relative flex flex-col  product md:rounded-tr-md "
+      className="single-product relative flex flex-col product md:rounded-tr-md"
     >
       {/* If product is loading */}
       {isLoading ? (
@@ -122,7 +122,7 @@ export default function SingeProduct({ e, index }) {
       ) : (
         <></>
       )}
-      <div className="image-container relative w-full h-56 xl:h-96 rounded-tr-md">
+      <div className="image-container relative w-full h-56 xl:h-112 rounded-tr-md">
         <Image
           alt={e.node.title}
           src={e.node.featuredImage.url}
@@ -133,11 +133,11 @@ export default function SingeProduct({ e, index }) {
         />
       </div>
       <div className="flex flex-col md:justify-between space-y-4 py-2 md:py-5">
-        <div>
-          <p className=" text-base md:text-lg font-semibold">{e.node.title}</p>
-          <p className="text-base invisible md:visible text-slate-400 italic">
-            {e.node.vendor}
-          </p>
+        <div className="flex flex-col space-y-1">
+          <div className=" text-base md:text-xl font-semibold">
+            {e.node.title}
+          </div>
+          <p className="text-sm text-slate-400 italic">By {e.node.vendor}</p>
         </div>
         <p className="text-sm md:text-base">
           {parseFloat(minPrice) === parseFloat(maxPrice)
@@ -150,25 +150,3 @@ export default function SingeProduct({ e, index }) {
     </Link>
   );
 }
-
-// useLayoutEffect(() => {
-//   let from = gsap.fromTo(
-//     anim.current,
-//     {
-//       autoAlpha: 0.1,
-//       y: 30,
-//     },
-//     {
-//       autoAlpha: 1,
-//       y: 0,
-//       delay: index * 0.15,
-//       duration: 0.3,
-//       immediateRender: false,
-//       ease: "Sine.easeInOut",
-//       onStart: () => anim.current.classList.remove("invisible"),
-//     }
-//   );
-//   return () => {
-//     from.kill();
-//   };
-// }, []);

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import { NextSeo } from "next-seo";
 import ProductSummary from "../components/Cart/product-summary";
+import { checkoutPathGenerator } from "../utils/utils";
 
 export default function Cart() {
   const { user } = useContext(userContext);
@@ -22,11 +23,11 @@ export default function Cart() {
         <Button
           variant="outlined"
           disabled={!user?.id ? true : false}
-          className={`text-center w-11/12 h-12 rounded-full ${
-            !user?.id ? "bg-gray-200" : "text-white bg-black border-black"
-          }  normal-case text-lg`}
-          onClick={() => {
-            router.push("/checkout");
+          className={`text-center w-11/12 h-12 rounded-full ${!user?.id ? "bg-gray-200" : "text-white bg-black border-black"
+            }  normal-case text-lg`}
+          onClick={async () => {
+            let path = await checkoutPathGenerator()
+            if (path) router.push(path)
           }}
         >
           Checkout

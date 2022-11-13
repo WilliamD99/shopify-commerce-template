@@ -7,7 +7,7 @@ import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import Link from "../../common/Link";
 import { formatter } from "../../../utils/utils";
 
-export default function HomeSlider({ data, title }) {
+export default function HomeSlider({ data }) {
   const { isMobile } = useContext(deviceContext);
   const NUMBER_OF_SLIDE = isMobile ? 1 : 4;
   const sliderRef = useRef(null);
@@ -33,7 +33,9 @@ export default function HomeSlider({ data, title }) {
     return (
       <div className="px-5 lg:px-20 mt-10">
         <div className="flex flex-row items-center justify-between pr-5 mb-5">
-          <p className="text-2xl font-medium">{title}</p>
+          <Link href="#" className="text-2xl font-medium hover:opacity-80">
+            {data?.data?.data.collection.title}
+          </Link>
         </div>
         <div className={`grid grid-cols-${NUMBER_OF_SLIDE + 1} gap-x-2 `}>
           {(isMobile ? [0, 1] : [0, 1, 2, 3, 4]).map((e) => (
@@ -52,7 +54,12 @@ export default function HomeSlider({ data, title }) {
     return (
       <div className="home-slider px-5 lg:px-20 mt-10">
         <div className="flex flex-row items-center justify-between pr-5 mb-5">
-          <p className="text-2xl font-medium">{title}</p>
+          <Link
+            href={`/shop/${data.data.data.collection.handle}`}
+            className="text-2xl font-medium hover:opacity-80"
+          >
+            {data.data.data.collection.title}
+          </Link>
           <div className="flex flex-row items-center space-x-2 my-3">
             {data.data.data?.collection.products.edges.length >
             NUMBER_OF_SLIDE ? (

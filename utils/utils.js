@@ -3,6 +3,7 @@ import CryptoJS from "crypto-js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Flip } from "gsap/dist/Flip";
+import { checkoutCreate } from "./api/requests";
 
 gsap.registerPlugin(ScrollTrigger, Flip);
 
@@ -212,6 +213,28 @@ let idGenerator = (str) => {
   return str.replace(/\s/g, "-").toLowerCase();
 };
 
+let checkoutCreateId = async () => {
+  let checkoutId = sessionStorage.getItem('checkoutId')
+  let items = localStorage.getItem('items')
+  if (!checkoutId) {
+    let data = await checkoutCreate({ edges: JSON.parse(items) })
+    sessionStorage.setItem("checkoutId", encryptText(data.data.checkoutCreate.checkout.id))
+    return encryptText(data.data.checkoutCreate.checkout.id)
+  } else {
+    return checkoutId
+  }
+}
+
+let checkoutPathGenerator = async () => {
+  let checkoutId = await checkoutCreateId()
+  if (typeof window !== "undefined") {
+    checkoutId = encodeURIComponent(sessionStorage.getItem("checkoutId"))
+    if (checkoutId !== "null" && checkoutId !== "undefined") {
+      return `/checkout/${checkoutId}`
+    }
+  }
+}
+
 export {
   updateSessionStorage,
   encryptObject,
@@ -231,4 +254,5 @@ export {
   setCookie,
   eraseCookie,
   idGenerator,
+  checkoutPathGenerator,
 };

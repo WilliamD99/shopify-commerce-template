@@ -7,7 +7,6 @@ import Skeleton from '@mui/material/Skeleton'
 const NUMBER_OF_SLIDE = 1.;
 
 export default function SliderMobile({ data, title, type }) {
-  console.log(data)
   const sliderRef = useRef(null);
   // const [slideIndex, setSlideIndex] = useState(0);
   // const totalSlide = parseInt(data.length / NUMBER_OF_SLIDE) + 1;

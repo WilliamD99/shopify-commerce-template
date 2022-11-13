@@ -1,6 +1,14 @@
+// Font here
+
+
 #nprogress {
   z-index: 999999 !important;
+
+  .bar {
+    background: black !important;
+  }
 }
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -30,19 +38,23 @@ input[type=number] {
 }
 
 // Custom scrollbar
-.sb-custom::-webkit-scrollbar, .sb-custom::-webkit-scrollbar-thumb {
+.sb-custom::-webkit-scrollbar,
+.sb-custom::-webkit-scrollbar-thumb {
   width: 26px;
   border-radius: 13px;
   background-clip: padding-box;
   border: 10px solid transparent;
 }
+
 .sb-custom::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 0 10px;
 }
+
 .sb-custom {
   -webkit-text-fill-color: black;
   color: rgba(0, 0, 0, 0);
   transition: color .3s ease;
+
   &:hover {
     color: rgba(0, 0, 0, 0.5)
   }
@@ -55,26 +67,33 @@ input[type=number] {
       color: white
     }
   }
+
   .MuiFormControl-root {
     width: 100%;
+
     .MuiFormLabel-root {
       color: black
     }
+
     .MuiInputBase-root {
       border-radius: 10rem;
+
       #search {
         color: black;
-        padding-left:2rem
+        padding-left: 2rem
       }
+
       &::before {
         border-color: black
       }
+
       &::after {
         border-color: black
       }
     }
   }
 }
+
 .nav-menu {
   width: 10rem;
 }

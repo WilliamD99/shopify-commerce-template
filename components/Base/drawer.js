@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import cartContext from "../../utils/cartContext";
+import { useRouter } from "next/router";
 
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
@@ -7,11 +8,13 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Link from "../common/Link";
 import DrawerList from "./drawerList";
+import { checkoutPathGenerator, gsap } from "../../utils/utils";
 
 export default function CartDrawer({ open, setDrawer }) {
   const [drawerData, setDrawerData] = useState([]);
   const [drawerTotal, setDrawerTotal] = useState(0);
   const { cart } = useContext(cartContext);
+  const router = useRouter()
 
   const toggleDrawer = (e, open) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
@@ -62,7 +65,10 @@ export default function CartDrawer({ open, setDrawer }) {
               View Cart
             </Button>
           </Link>
-          <Link className="w-full" href="/checkout/review">
+          <div className="w-full cursor-pointer" onClick={async () => {
+            let path = await checkoutPathGenerator()
+            if (path) router.push(path)
+          }}>
             <Button
               disabled={cart.length > 0 ? false : true}
               className="rounded-xl w-full bg-black text-white border-white hover:bg-white hover:text-black hover:border-black"
@@ -70,7 +76,7 @@ export default function CartDrawer({ open, setDrawer }) {
             >
               Checkout
             </Button>
-          </Link>
+          </div>
         </div>
       </Box>
     </Drawer>

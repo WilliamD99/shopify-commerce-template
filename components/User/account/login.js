@@ -51,7 +51,7 @@ export default function Login({ setIndex }) {
   useEffect(() => {
     if (getAccessToken.data !== undefined && !getAccessToken.isError) {
       let token =
-        getAccessToken.data.customerAccessTokenCreate.customerAccessToken;
+        getAccessToken.data?.customerAccessTokenCreate.customerAccessToken;
       if (token) {
         customer.mutate({ accessToken: token.accessToken });
         setCookie("tn", JSON.stringify(token.accessToken), 30);

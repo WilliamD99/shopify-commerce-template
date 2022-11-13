@@ -24,12 +24,12 @@ export default function Complete() {
         <>
             <p className='text-2xl font-semibold'>Your order was placed successfully!</p>
 
-            <div className='flex flex-row justify-between mt-10 px-10'>
-                <div className='w-2/3'>
+            <div className='flex flex-col lg:flex-row justify-between mt-10 px-5 lg:px-10'>
+                <div className='lg:w-2/3'>
                     <p>Order Info</p>
                 </div>
 
-                <div className='mr-10 px-8 py-5 flex flex-col w-1/3 bg-slate-100'>
+                <div className='mr-10 px-8 py-5 flex flex-col lg:w-1/3 bg-slate-100'>
                     <p className='text-xl font-semibold'>Order Summary</p>
                     <div className='flex flex-col space-y-3 my-8'>
                         <div className='flex flex-row justify-between'>
@@ -37,7 +37,7 @@ export default function Complete() {
                             <p className='text-base'>$300</p>
                         </div>
 
-                        <Divider /> 
+                        <Divider />
 
                         <div className='flex flex-col'>
                             <p className='text-base font-medium'>Delivery</p>

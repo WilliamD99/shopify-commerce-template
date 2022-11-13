@@ -25,9 +25,6 @@ function Navigation() {
         <Link href="/shop" className={`text-lg`}>
           Price Drop
         </Link>
-        <Link href="/faq" className={`text-lg`}>
-          FAQ
-        </Link>
         {/* <NavItem
           name="Vendor"
           link={false}

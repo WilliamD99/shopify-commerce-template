@@ -5,6 +5,8 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import ShippingCreate from './shipping-create'
+import Modal from '@mui/material/Modal'
 
 import userContext from "../../../utils/userContext";
 import { accessTokenExist, provinces } from "../../../utils/utils";
@@ -23,7 +25,7 @@ export default function ShippingForm() {
   const [addressArr, setAddressArr] = useState(
     user.addresses ? user.addresses.edges : ""
   );
-  const [state, setState] = useState("");
+  const [modalForm, setModalForm] = useState(false)
   const createShipping = useCustomerCreateShipping();
   const updateShipping = useCustomerUpdateShipping();
   const customer = useCustomerGet();
@@ -50,26 +52,6 @@ export default function ShippingForm() {
     });
   };
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
-
-    let address = document.getElementById(`address`).value,
-      city = document.getElementById(`city`).value,
-      country = document.getElementById(`country`).value,
-      province = document.getElementById(`province`).innerHTML,
-      postal = document.getElementById(`postal`).value;
-
-    await createShipping.mutate({
-      accessToken: accessTokenExist(),
-      updateFields: {
-        address1: address,
-        city: city,
-        country: "Canada",
-        province: province,
-        zip: postal,
-      },
-    });
-  };
 
   // Checkbox default address
   let updateDefault = useDefaultAddressUpdate();
@@ -104,56 +86,28 @@ export default function ShippingForm() {
     }
   }, [createShipping.isLoading]);
 
+  // Update default message
+  useEffect(() => {
+    if (updateDefault.data) {
+      if (updateDefault.data.customerDefaultAddressUpdate?.customer?.id) {
+        toast.success("Update successfully!")
+      } else {
+        toast.error("Something went wrong, please try again")
+      }
+    }
+  }, [updateDefault.data])
+
   if (user.addresses.edges.length === 0)
     return (
       <>
-        <div className="flex flex-col space-y-10 px-5">
-          <p className="text-lg">
-            Add a new shipping address for faster checkout
-          </p>
-          <form
-            className="grid grid-cols-2 lg:w-2/3 gap-x-5 gap-y-2"
-            onSubmit={handleCreate}
-          >
-            <TextField
-              className="col-span-2"
-              required
-              id={`address`}
-              label="Address"
-              type="text"
-            />
-            <TextField required id={`city`} label="City" type="text" />
-            <TextField
-              id="province"
-              select
-              required
-              label="Province"
-              value={state}
-            >
-              {provinces.map((e, i) => (
-                <MenuItem
-                  key={i}
-                  value={e.label}
-                  onClick={() => setState(e.label)}
-                >
-                  {e.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField required id={`postal`} label="Postal Code" type="text" />
-            <TextField label="Canada" disabled id={`country`} type="text" />
-            <Button className="col-span-2 h-10 rounded-full text-white bg-black mt-5 hover:text-black hover:bg-white hover:border-black" variant="outlined" type="submit">
-              Create
-            </Button>
-          </form>
-        </div>
+        <ShippingCreate />
       </>
     );
 
   return (
     <>
       <div className="px-5 mb-5 text-lg">Shipping Details
-        <Button variant="outlined" size="small" className="ml-3 normal-case text-white bg-black  border-black rounded-full hover:text-black hover:bg-white hover:border-black text-sm font-semibold">Create</Button>
+        <Button onClick={() => setModalForm(!modalForm)} variant="outlined" size="small" className="ml-3 normal-case text-white bg-black  border-black rounded-full hover:text-black hover:bg-white hover:border-black text-sm font-semibold">Create</Button>
       </div>
       <div className="flex flex-col space-y-10 px-5 lg:w-2/3">
         {addressArr.map((e, i) => (
@@ -232,12 +186,20 @@ export default function ShippingForm() {
                     onClick={() => handleCheckDefault(e.node.id)}
                   />
                 }
-                label="Make this default address"
+                label="Make this default"
               />
             </div>
           </div>
         ))}
       </div>
+      <Modal
+        open={modalForm}
+        onClose={() => setModalForm(false)}
+      >
+        <div className="bg-white px-5 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <ShippingCreate setOpen={setModalForm} />
+        </div>
+      </Modal>
     </>
   );
 }

@@ -114,7 +114,12 @@ export default function Search() {
           ))}
         </div>
       );
-    else return <></>;
+    else
+      return (
+        <>
+          <p>No data found</p>
+        </>
+      );
   };
 
   useEffect(() => {

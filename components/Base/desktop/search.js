@@ -149,15 +149,15 @@ export default function Search() {
                       <div className="">
                         <p className="text-xs">
                           {e.node.priceRangeV2.maxVariantPrice.amount ===
-                          e.node.priceRangeV2.minVariantPrice.amount
+                            e.node.priceRangeV2.minVariantPrice.amount
                             ? formatter.format(
-                                e.node.priceRangeV2.maxVariantPrice.amount
-                              )
+                              e.node.priceRangeV2.maxVariantPrice.amount
+                            )
                             : `${formatter.format(
-                                e.node.priceRangeV2.minVariantPrice.amount
-                              )} - ${formatter.format(
-                                e.node.priceRangeV2.maxVariantPrice.amount
-                              )}`}
+                              e.node.priceRangeV2.minVariantPrice.amount
+                            )} - ${formatter.format(
+                              e.node.priceRangeV2.maxVariantPrice.amount
+                            )}`}
                         </p>
                       </div>
                     </div>

@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import dynamic from "next/dynamic";
 import deviceContext from "../../../utils/deviceContext";
 import userContext from "../../../utils/userContext";
+import { useRouter } from "next/router";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -28,10 +29,21 @@ export default function Account() {
   const { user } = useContext(userContext);
   const { isMobile } = useContext(deviceContext)
   const [tab, setTab] = useState(0);
+  const router = useRouter()
+  let routerQuery = router.query
 
   const handleChangeTab = (e, newValue) => {
-    setTab(newValue);
+    routerQuery.index = newValue
+    router.push({
+      query: routerQuery,
+    }, null, { shallow: false })
   };
+
+  useEffect(() => {
+    if (routerQuery.index) {
+      setTab(parseInt(routerQuery.index))
+    }
+  }, [router])
 
   // Maybe deleted due to redirect by middleware
   if (user?.state === "loading") return <Loading />;

@@ -7,6 +7,12 @@ body {
   width: 100%;
   position: relative;
   min-height: 100vh;
+  font-family: "Rubik", sans-serif;
+}
+
+p,
+span {
+  font-family: "Rubik", sans-serif;
 }
 
 *,
@@ -17,6 +23,9 @@ body {
 
 #nprogress {
   z-index: 999999 !important;
+}
+#nprogress .bar {
+  background: black !important;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -53,7 +62,8 @@ input[type=number] {
     transform: rotate(360deg);
   }
 }
-.sb-custom::-webkit-scrollbar, .sb-custom::-webkit-scrollbar-thumb {
+.sb-custom::-webkit-scrollbar,
+.sb-custom::-webkit-scrollbar-thumb {
   width: 26px;
   border-radius: 13px;
   background-clip: padding-box;
@@ -111,6 +121,21 @@ input[type=number] {
 
 #header-drawer__mobile .MuiFormControl-root .MuiInputBase-root {
   border-radius: 10rem;
+}
+
+.hvr-grow {
+  display: inline-block;
+  vertical-align: middle;
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+
+.hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
+  transform: scale(1.1);
 }
 
 #footer_bottom .footer_links .footer-link {
@@ -284,4 +309,8 @@ input[type=number] {
 }
 #dashboard-tabs .MuiTabs-scroller .MuiTabs-indicator {
   background-color: black;
+}
+
+#loginForm:focus-visible {
+  outline: none !important;
 }/*# sourceMappingURL=index.css.map */

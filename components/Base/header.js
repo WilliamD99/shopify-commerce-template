@@ -17,15 +17,12 @@ export default function Header({ sticky }) {
   let { isMobile } = useContext(deviceContext);
   let [modalOpen, setModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   customer.mutate({ accessToken: accessTokenExist() });
-  // }, []);
-
-  // useEffect(() => {
-  //   if (customer.data) {
-  //     setUser(customer.data.customer);
-  //   }
-  // }, [customer.isLoading]);
+  useEffect(() => {
+    if (customer.data) {
+      console.log(customer);
+      setUser(customer.data.customer);
+    }
+  }, [customer.isLoading]);
 
   return (
     <>
