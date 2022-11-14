@@ -33,19 +33,31 @@ export default function Index() {
         className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-3 lg:px-20"
       >
         <div className="flex flex-col space-y-5">
-          <Banner image="/placeholder.webp" link="#" />
-          <Banner image="/placeholder.webp" link="#" />
+          <Banner
+            image="/images/banner/banner1.webp"
+            link="/shop?vendors=MR%2520FOG"
+            title={"New Mr.Fog"}
+          />
+          <Banner image="/images/banner/banner2.webp" link="#" />
         </div>
         <Banner
           className="col-span-2"
           height={isMobile ? "64" : "full"}
-          image="/placeholder.webp"
+          image="/images/banner/banner3.webp"
           link="#"
-          title="Disposable3"
+          title="Disposable"
         />
         <div className="flex flex-col space-y-5">
-          <Banner image="/placeholder.webp" link="#" title="Disposable4" />
-          <Banner image="/placeholder.webp" link="#" title="Disposable5" />
+          <Banner
+            image="/images/banner/banner4.webp"
+            link="#"
+            title="New Arrival"
+          />
+          <Banner
+            image="/images/banner/banner5.webp"
+            link="#"
+            title="Starter Kit"
+          />
         </div>
       </div>
 
