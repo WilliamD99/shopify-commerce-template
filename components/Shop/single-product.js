@@ -17,8 +17,6 @@ export default function SingeProduct({ e, index }) {
   const [onSale, setOnSale] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  console.log(e);
-
   let minPrice = e.node.priceRangeV2
     ? e.node.priceRangeV2.minVariantPrice.amount
     : e.node.priceRange.minVariantPrice.amount;

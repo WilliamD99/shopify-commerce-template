@@ -13,7 +13,8 @@ import {
 
 import SingleProduct from "../../components/Shop/single-product";
 import Breadcrumbs from "../../components/common/Breadcrumbs";
-import Loading from "../../components/Loading/dataLoading";
+import Image from "../../components/common/Image";
+import Button from "@mui/material/Button";
 
 const FilterMenu = dynamic(() => import("../../components/Shop/filterMenu"));
 const FilterBar = dynamic(() => import("../../components/Shop/filterBar"));
@@ -73,7 +74,7 @@ export default function Collection({ col }) {
   const [cursorNext, setCursorNext] = useState();
   const [cursorLast, setCursorLast] = useState();
   const [direction, setDirection] = useState(true);
-  console.log(data)
+  console.log(data);
   useEffect(() => {
     setDataArr(data?.data.collection.products.edges);
     setNext(data ? data.data.collection.products.pageInfo.hasNextPage : false);
@@ -91,6 +92,26 @@ export default function Collection({ col }) {
   return (
     <>
       <NextSeo title="Shop" description="" />
+      {data?.data.collection.image?.url ? (
+        <>
+          <div className="relative">
+            <p className="text-white text-xl lg:text-3xl absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              {data?.data.collection.title}
+            </p>
+            <div className="relative h-28 lg:h-36 w-full">
+              <Image
+                src={data?.data.collection.image?.url}
+                layout="fill"
+                objectFit="cover"
+                priority
+                className="grayscale"
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
       <div className="flex flex-row items-center justify-between">
         <Breadcrumbs
           path={[
@@ -112,14 +133,13 @@ export default function Collection({ col }) {
 
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-5 gap-y-10">
-              {
-                data.data.collection.products.edges.length > 0 ?
-                  dataArr.map((e, i) => (
-                    <SingleProduct index={i} e={e} key={e.node.title} />
-                  ))
-                  :
-                  <p>No product found</p>
-              }
+              {data.data.collection.products.edges.length > 0 ? (
+                dataArr.map((e, i) => (
+                  <SingleProduct index={i} e={e} key={e.node.title} />
+                ))
+              ) : (
+                <p>No product found</p>
+              )}
             </div>
             {products.isLoading ? (
               <></>
@@ -133,6 +153,29 @@ export default function Collection({ col }) {
               />
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="lg:px-44 my-20 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col items-center space-y-5">
+          <p className="text-white text-lg lg:text-2xl">
+            Not sure what you're looking for?
+          </p>
+          <Button
+            variant="outlined"
+            className="text-white w-72 bg-black border-black hover:text-black hover:bg-white hover:border-white"
+            onClick={() => router.push("/")}
+          >
+            Use our shopping guide
+          </Button>
+        </div>
+        <div className="relative h-44">
+          <Image
+            src="/images/banner/shop-banner.jpg"
+            layout="fill"
+            objectFit="cover"
+            className="grayscale"
+          />
         </div>
       </div>
     </>

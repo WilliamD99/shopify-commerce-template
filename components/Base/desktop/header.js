@@ -6,7 +6,6 @@ export default function Header({ setModalOpen }) {
   const { user } = useContext(userContext);
 
   let headerConditionalDisplay = () => {
-    console.log(user);
     if (user?.state === "loading") {
       return <p>Loading</p>;
     } else if (user?.state === "none")
@@ -28,7 +27,7 @@ export default function Header({ setModalOpen }) {
   return (
     <>
       <div className="hidden md:flex md:flex-row space-x-8 items-center">
-        <p className="text-sm font-medium">FAQ</p>
+        <p className="text-sm text-black">FAQ</p>
         {headerConditionalDisplay()}
       </div>{" "}
     </>

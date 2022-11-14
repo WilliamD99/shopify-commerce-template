@@ -4,6 +4,7 @@ import Image from "../Image";
 import Link from "../Link";
 
 export default function SingleProduct({ data, type }) {
+  if (!data) return <></>;
   return (
     <>
       <Link
@@ -13,7 +14,7 @@ export default function SingleProduct({ data, type }) {
         <div className="relative h-64 w-full bg-slate-100">
           <Image
             src={
-              type === "id" ? data.featuredImage.url : data.featuredImage.src
+              type === "id" ? data?.featuredImage?.url : data?.featuredImage.src
             }
             layout="fill"
             placeholder="blur"

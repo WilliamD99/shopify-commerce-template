@@ -34,7 +34,7 @@ export default function HeaderBottom() {
     <>
       <div className="bg-white flex flex-row justify-between items-center py-6 px-16">
         <Link className="text-lg text-black " href="/">
-          Test
+          Ecommerce Template
         </Link>
 
         <Navigation />

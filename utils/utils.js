@@ -214,26 +214,29 @@ let idGenerator = (str) => {
 };
 
 let checkoutCreateId = async () => {
-  let checkoutId = sessionStorage.getItem('checkoutId')
-  let items = localStorage.getItem('items')
+  let checkoutId = sessionStorage.getItem("checkoutId");
+  let items = localStorage.getItem("items");
   if (!checkoutId) {
-    let data = await checkoutCreate({ edges: JSON.parse(items) })
-    sessionStorage.setItem("checkoutId", encryptText(data.data.checkoutCreate.checkout.id))
-    return encryptText(data.data.checkoutCreate.checkout.id)
+    let data = await checkoutCreate({ edges: JSON.parse(items) });
+    sessionStorage.setItem(
+      "checkoutId",
+      encryptText(data.data.checkoutCreate.checkout.id)
+    );
+    return encryptText(data.data.checkoutCreate.checkout.id);
   } else {
-    return checkoutId
+    return checkoutId;
   }
-}
+};
 
 let checkoutPathGenerator = async () => {
-  let checkoutId = await checkoutCreateId()
+  let checkoutId = await checkoutCreateId();
   if (typeof window !== "undefined") {
-    checkoutId = encodeURIComponent(sessionStorage.getItem("checkoutId"))
+    checkoutId = encodeURIComponent(sessionStorage.getItem("checkoutId"));
     if (checkoutId !== "null" && checkoutId !== "undefined") {
-      return `/checkout/${checkoutId}`
+      return `/checkout/${checkoutId}`;
     }
   }
-}
+};
 
 export {
   updateSessionStorage,

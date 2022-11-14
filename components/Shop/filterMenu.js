@@ -26,12 +26,12 @@ export default function FilterMenu() {
     <>
       <div
         id="filter"
-        className="filter-menu overflow-scroll pl-2 overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-slate-50 py-5"
+        className="filter-menu overflow-scroll pl-2 overflow-x-hidden sb-custom w-3/12 xl:w-2/12 bg-white py-5 shadow-md border-t-2"
       >
         <Accordion
           defaultExpanded={true}
           disableGutters={true}
-          className="shadow-none bg-slate-50"
+          className="shadow-none"
         >
           <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
             <p className="text-lg font-semibold">Category</p>
@@ -44,12 +44,13 @@ export default function FilterMenu() {
                   className="flex flex-row justify-between items-center"
                 >
                   <Link
-                    className={`${decodeURIComponent(
-                      routerQuery["products-in-collection"]
-                    ) === e.node.handle
+                    className={`${
+                      decodeURIComponent(
+                        routerQuery["products-in-collection"]
+                      ) === e.node.handle
                         ? "font-semibold"
                         : ""
-                      }`}
+                    }`}
                     href={{
                       pathname: `/shop/${e.node.handle}`,
                       // query: { col: encodeURIComponent(e.node.handle) },
@@ -70,7 +71,7 @@ export default function FilterMenu() {
           id="price-filter"
           disableGutters={true}
           defaultExpanded={true}
-          className="shadow-none bg-slate-50"
+          className="shadow-none "
         >
           <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
             <p className="text-lg font-semibold">
@@ -94,7 +95,7 @@ export default function FilterMenu() {
           defaultExpanded={true}
           disableGutters={true}
           id="vendor-filter"
-          className="shadow-none bg-slate-50"
+          className="shadow-none "
         >
           <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
             <p className="text-lg font-semibold">Vendor</p>
@@ -108,7 +109,7 @@ export default function FilterMenu() {
           disableGutters={true}
           defaultExpanded={true}
           id="product-type-filter"
-          className="shadow-none bg-slate-50"
+          className="shadow-none "
         >
           <AccordionSummary expandIcon={<MdExpandMore className="text-2xl" />}>
             <p className="text-lg font-semibold">Type</p>

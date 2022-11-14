@@ -37,8 +37,8 @@ export default function HomeSlider({ data }) {
             {data?.data?.data.collection.title}
           </Link>
         </div>
-        <div className={`grid grid-cols-${NUMBER_OF_SLIDE + 1} gap-x-2 `}>
-          {(isMobile ? [0, 1] : [0, 1, 2, 3, 4]).map((e) => (
+        <div className={`grid grid-cols-${NUMBER_OF_SLIDE} gap-x-2 `}>
+          {(isMobile ? [0, 1] : [0, 1, 2, 3]).map((e) => (
             <div key={e} className="flex flex-col space-y-2">
               <Skeleton variant="rectangular" className="h-64 lg:h-80" />
               <div className="flex flex-col">

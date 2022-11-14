@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import deviceContext from "../utils/deviceContext";
 // Hooks
 import { useRouter } from "next/router";
@@ -17,6 +17,8 @@ import SingeProduct from "../components/Shop/single-product";
 import Pagination from "../components/Shop/pagination";
 import { NextSeo } from "next-seo";
 import FilterDrawer from "../components/Shop/filterDrawer";
+import Button from "@mui/material/Button";
+import Image from "../components/common/Image";
 
 const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
 const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
@@ -104,7 +106,6 @@ export default function Shop() {
         ) : (
           <></>
         )}
-
         <div
           id="shop"
           className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50"
@@ -128,6 +129,29 @@ export default function Shop() {
               cursorLast={cursorLast}
             />
           </div>
+        </div>
+      </div>
+
+      <div className="lg:px-44 my-20 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col items-center space-y-5">
+          <p className="text-white text-lg lg:text-2xl">
+            Not sure what you're looking for?
+          </p>
+          <Button
+            variant="outlined"
+            className="text-white w-72 bg-black border-black hover:text-black hover:bg-white hover:border-white"
+            onClick={() => router.push("/")}
+          >
+            Use our shopping guide
+          </Button>
+        </div>
+        <div className="relative h-44">
+          <Image
+            src="/images/banner/shop-banner.jpg"
+            layout="fill"
+            objectFit="cover"
+            className="grayscale"
+          />
         </div>
       </div>
     </>

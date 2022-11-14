@@ -14,7 +14,8 @@ export default function CartDrawer({ open, setDrawer }) {
   const [drawerData, setDrawerData] = useState([]);
   const [drawerTotal, setDrawerTotal] = useState(0);
   const { cart } = useContext(cartContext);
-  const router = useRouter()
+  const router = useRouter();
+  console.log(cart);
 
   const toggleDrawer = (e, open) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
@@ -43,7 +44,7 @@ export default function CartDrawer({ open, setDrawer }) {
           <Divider className="mb-2" />
           <div>
             {cart.length > 0 ? (
-              cart.map((e, i) => <DrawerList key={i} e={e} />)
+              drawerData.map((e, i) => <DrawerList key={i} e={e} />)
             ) : (
               <div className="mt-5">
                 <p className="text-center">No products in the cart</p>
@@ -65,10 +66,13 @@ export default function CartDrawer({ open, setDrawer }) {
               View Cart
             </Button>
           </Link>
-          <div className="w-full cursor-pointer" onClick={async () => {
-            let path = await checkoutPathGenerator()
-            if (path) router.push(path)
-          }}>
+          <div
+            className="w-full cursor-pointer"
+            onClick={async () => {
+              let path = await checkoutPathGenerator();
+              if (path) router.push(path);
+            }}
+          >
             <Button
               disabled={cart.length > 0 ? false : true}
               className="rounded-xl w-full bg-black text-white border-white hover:bg-white hover:text-black hover:border-black"

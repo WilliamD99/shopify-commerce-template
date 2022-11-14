@@ -6,7 +6,9 @@ import { idGenerator } from "../../../utils/utils";
 
 export default function Bubble({ options, handleFunc }) {
   let handleClick = (index, value, name) => {
-    let element = document.querySelector(`#${"variant" + "_" + idGenerator(value)}_${index}`);
+    let element = document.getElementById(
+      `${"variant" + "_" + idGenerator(value)}_${index}`
+    );
     let others = document.querySelectorAll(`.options.options-${index}`);
     if (name.toUpperCase() !== "COLOR") {
       for (let other of others) {
