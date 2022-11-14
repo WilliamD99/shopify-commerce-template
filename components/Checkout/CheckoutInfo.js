@@ -21,33 +21,35 @@ export default function ShippingUpdate({ refetch, data }) {
     zip: data?.shippingAddress ? data.shippingAddress.zip : "",
     city: data?.shippingAddress ? data.shippingAddress.city : "",
     email: data?.email ? data.email : "",
-    phone: ""
-  })
+    phone: "",
+  });
 
   useEffect(() => {
     if (user.id) {
-      setField(prev => ({
+      setField((prev) => ({
         ...prev,
         lastName: user.lastName,
         firstName: user.firstName,
         address1: user.defaultAddress?.address1,
-        address2: user.defaultAddress?.address2 ? user.defaultAddress.address2 : "",
+        address2: user.defaultAddress?.address2
+          ? user.defaultAddress.address2
+          : "",
         province: user.defaultAddress ? user.defaultAddress.province : "",
         zip: user.defaultAddress?.zip,
         city: user.defaultAddress?.city,
         email: user.email,
-        phone: user.phone ? user.phone : ""
-      }))
+        phone: user.phone ? user.phone : "",
+      }));
     }
-  }, [user])
+  }, [user]);
 
   let handleFieldChange = (e) => {
-    const { name, value } = e.target
-    setField(prev => ({
+    const { name, value } = e.target;
+    setField((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   // Update shipping
   let checkoutShippingUpdate = useCheckoutShippingUpdate();
@@ -66,7 +68,7 @@ export default function ShippingUpdate({ refetch, data }) {
       province = document.getElementById("province").value,
       country = document.getElementById("country").value,
       zip = document.getElementById("zip").value,
-      phone = document.getElementById("phone").value
+      phone = document.getElementById("phone").value;
 
     checkoutShippingUpdate.mutate({
       address: {
@@ -78,7 +80,7 @@ export default function ShippingUpdate({ refetch, data }) {
         country: country,
         zip: zip,
         city: city,
-        phone: phone
+        phone: phone,
       },
     });
     if (email !== data.email) {
@@ -90,7 +92,7 @@ export default function ShippingUpdate({ refetch, data }) {
 
   useEffect(() => {
     if (checkoutShippingUpdate.data && !checkoutShippingUpdate.isLoading) {
-      refetch()
+      refetch();
     }
   }, [checkoutShippingUpdate.isLoading]);
 
@@ -181,7 +183,6 @@ export default function ShippingUpdate({ refetch, data }) {
               id="address2"
               name="address2"
               label="Apartment, suite, unit, etc, (Optional)"
-              required
               onChange={handleFieldChange}
               value={field.address2}
             />
@@ -235,7 +236,7 @@ export default function ShippingUpdate({ refetch, data }) {
         </div>
         <div className="flex flex-col-reverse lg:flex-row lg:space-x-5">
           <Button
-            className="w-full rounded-full mt-5 lg:mt-0 xl:w-56 text-center text-white bg-black border-black hover:text-black hover:bg-white hover:border-black"
+            className="w-full h-12 rounded-full mt-5 lg:mt-0 xl:w-56 text-center text-white bg-black border-black hover:text-black hover:bg-white hover:border-black"
             type="submit"
             variant="outlined"
             disabled={checkoutShippingUpdate.isLoading}

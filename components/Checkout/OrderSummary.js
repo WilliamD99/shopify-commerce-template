@@ -35,14 +35,30 @@ export default function OrderSummary({ data, refetch, isFetching }) {
   let checkoutDiscountRemove = useCheckoutDiscountRemove();
 
   useEffect(() => {
-    setTotal(data?.totalPriceV2.amount)
-    setTax(data?.totalTaxV2.amount)
-    setTotalLine(data?.lineItemsSubtotalPrice.amount)
-    if (data?.availableShippingRates?.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle) {
-      setSelectedRate(data.availableShippingRates.shippingRates[data.availableShippingRates.shippingRates.findIndex(e => e.handle === data.shippingLine?.handle)]?.handle)
+    setTotal(data?.totalPriceV2.amount);
+    setTax(data?.totalTaxV2.amount);
+    setTotalLine(data?.lineItemsSubtotalPrice.amount);
+    if (
+      data?.availableShippingRates?.shippingRates[
+        data.availableShippingRates.shippingRates.findIndex(
+          (e) => e.handle === data.shippingLine?.handle
+        )
+      ]?.handle
+    ) {
+      setSelectedRate(
+        data.availableShippingRates.shippingRates[
+          data.availableShippingRates.shippingRates.findIndex(
+            (e) => e.handle === data.shippingLine?.handle
+          )
+        ]?.handle
+      );
     }
-    setShippingRateHandle(data?.availableShippingRates ? data.availableShippingRates.shippingRates : [])
-  }, [data])
+    setShippingRateHandle(
+      data?.availableShippingRates
+        ? data.availableShippingRates.shippingRates
+        : []
+    );
+  }, [data]);
 
   const handleShippingRadio = (e) => {
     let id = sessionStorage.getItem("checkoutId");
@@ -55,19 +71,22 @@ export default function OrderSummary({ data, refetch, isFetching }) {
     }
   };
   const handleComplete = async () => {
-    console.log(selectedRate)
+    console.log(selectedRate);
     if (selectedRate === "" || !selectedRate) {
-      toast.warning("Please select a delivery method first")
+      toast.warning("Please select a delivery method first");
     } else {
-      router.push(data.webUrl)
+      router.push(data.webUrl);
     }
   };
 
   useEffect(() => {
-    if (checkoutShippingLineUpdate.data?.data.checkoutShippingLineUpdate.checkout.id) {
-      refetch()
+    if (
+      checkoutShippingLineUpdate.data?.data.checkoutShippingLineUpdate.checkout
+        .id
+    ) {
+      refetch();
     }
-  }, [checkoutShippingLineUpdate.data])
+  }, [checkoutShippingLineUpdate.data]);
 
   if (!data) return <div className="w-1/3 bg-slate-100"></div>;
 
@@ -87,42 +106,39 @@ export default function OrderSummary({ data, refetch, isFetching }) {
 
       <div className="flex flex-col space-y-3 my-5">
         <div className="flex flex-col space-y-3">
-          {
-            (
-              data.lineItems.edges.map((e, i) => (
-                <div className="flex flex-row justify-between items-center" key={i}>
-                  <div className="flex flex-row items-center space-x-5">
-                    <div className="relative h-10 w-10 xl:h-16 xl:w-16">
-                      <Image
-                        src={e.node.variant.image.url}
-                        layout="fill"
-                        alt={e.node.title + i}
-                      />
-                    </div>
-
-                    <div className="flex flex-col">
-                      <p className="text-xs xl:text-base font-medium overflow-hidden whitespace-nowrap text-ellipsis">
-                        {e.node.title}{" "}
-                        <span>
-                          {e.node.variant.title !== "Default Title"
-                            ? `(${e.node.variant.title})`
-                            : ""}
-                        </span>
-                      </p>
-                      <p className="text-xs xl:text-base">
-                        Quantity: <span>{e.node.quantity}</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="ml-5">
-                    <p className="text-sm xl:text-base">
-                      {formatter.format(e.node.variant.price)}
-                    </p>
-                  </div>
+          {data.lineItems.edges.map((e, i) => (
+            <div className="flex flex-row justify-between items-center" key={i}>
+              <div className="flex flex-row items-center space-x-5">
+                <div className="relative h-10 w-10 xl:h-16 xl:w-16">
+                  <Image
+                    src={e.node.variant.image.url}
+                    layout="fill"
+                    alt={e.node.title + i}
+                  />
                 </div>
-              ))
-            )
-          }
+
+                <div className="flex flex-col w-full">
+                  <p className="text-xs xl:text-base break-words font-medium overflow-hidden text-ellipsis">
+                    {e.node.title}{" "}
+                    <span>
+                      {e.node.variant.title !== "Default Title"
+                        ? `(${e.node.variant.title})`
+                        : ""}
+                    </span>
+                  </p>
+                  <p className="text-xs xl:text-base">
+                    Quantity:{" "}
+                    <span className="font-bold">{e.node.quantity}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="ml-5">
+                <p className="text-sm xl:text-base">
+                  {formatter.format(e.node.variant.price)}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
         <Divider />
