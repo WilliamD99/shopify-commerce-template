@@ -11,7 +11,7 @@ export default function UpdateForm() {
   let { user, setUser } = useContext(userContext);
 
   const handleUpdate = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let token = { accessToken: accessTokenExist() };
 
     let fields = {
@@ -41,7 +41,10 @@ export default function UpdateForm() {
   return (
     <>
       <p className="px-5 lg:pl-3 mb-5 text-lg">Account Details</p>
-      <form onSubmit={handleUpdate} className="relative justify-center flex flex-col space-y-5 lg:space-y-3 px-5 lg:pl-3">
+      <form
+        onSubmit={handleUpdate}
+        className="relative justify-center flex flex-col space-y-5 px-5 lg:pl-3"
+      >
         <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-10">
           <TextField
             className="w-full lg:w-80"
@@ -49,7 +52,7 @@ export default function UpdateForm() {
             label="First Name"
             required
             defaultValue={user ? user.firstName : ""}
-          // onChange={onFieldChange}
+            // onChange={onFieldChange}
           />
           <TextField
             className="w-full lg:w-80"
@@ -57,7 +60,7 @@ export default function UpdateForm() {
             label="Last Name"
             required
             defaultValue={user ? user.lastName : ""}
-          // onChange={onFieldChange}
+            // onChange={onFieldChange}
           />
         </div>
         <div className="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-10">
@@ -68,7 +71,7 @@ export default function UpdateForm() {
             required
             defaultValue={user ? user.email : ""}
             disabled
-          // onChange={onFieldChange}
+            // onChange={onFieldChange}
           />
           <TextField
             className="w-full lg:w-80"
@@ -79,11 +82,11 @@ export default function UpdateForm() {
             defaultValue={
               user ? (user.phone ? user.phone.split("+1")[1] : "") : ""
             }
-          // onChange={onFieldChange}
+            // onChange={onFieldChange}
           />
         </div>
 
-        <div className="relative flex justify-center backdrop-blur-sm flex-row space-x-2 w-full">
+        <div className="relative flex backdrop-blur-sm flex-row space-x-2 w-full">
           <Button
             className="w-44 h-10 rounded-full text-white bg-black hover:text-black hover:bg-white hover:border-black"
             variant="outlined"

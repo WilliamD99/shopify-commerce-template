@@ -5,11 +5,12 @@ import deviceContext from "../../utils/deviceContext";
 import dynamic from "next/dynamic";
 
 import Account from "../User/account";
-import { accessTokenExist } from "../../utils/utils";
 // Mobile Components
-const HeaderMobile = dynamic(() => import("./mobile/header"));
+// const HeaderMobile = dynamic(() => import("./mobile/header"));
+import HeaderMobile from "./mobile/header";
 // Desktop Components
-const HeaderDesktopIndex = dynamic(() => import("./desktop"), { ssr: false });
+// const HeaderDesktopIndex = dynamic(() => import("./desktop"), { ssr: false });
+import HeaderDesktopIndex from "./desktop";
 
 export default function Header({ sticky }) {
   let customer = useCustomerGet();

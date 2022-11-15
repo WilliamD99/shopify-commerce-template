@@ -21,6 +21,7 @@ export default function HomeSlider({ data }) {
     swipeToSlide: true,
     swipe: true,
     centerMode: true,
+    draggable: true,
   };
   const handlePriceDisplay = useCallback((max, min) => {
     if (max === min) return formatter.format(max);
@@ -32,6 +33,7 @@ export default function HomeSlider({ data }) {
   if (data.isLoading) {
     return (
       <div className="px-5 lg:px-20 mt-10">
+        <Skeleton className="w-44" />
         <div className="flex flex-row items-center justify-between pr-5 mb-5">
           <Link href="#" className="text-2xl font-medium hover:opacity-80">
             {data?.data?.data.collection.title}

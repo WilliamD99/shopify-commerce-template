@@ -11,6 +11,7 @@ import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 import { productByHandle } from "../lib/serverRequest";
 
 export default function Test() {
+  const [show, setShow] = useState(false);
   const { data } = useQuery(
     ["product", "allo-ultra-2500-disposable"],
     () => productByHandle("allo-ultra-2500-disposable"),
@@ -20,7 +21,37 @@ export default function Test() {
   );
   console.log(data);
 
-  return <></>;
+  useEffect(() => {
+    setShow(!show);
+  }, []);
+
+  return (
+    <>
+      <p onClick={() => setShow(!show)}>Test</p>
+      <Transition
+        timeout={1000}
+        mountOnEnter
+        unmountOnExit
+        in={show}
+        addEndListener={(node, done) => {
+          gsap.fromTo(
+            node,
+            {
+              x: show ? 0 : 100,
+              autoAlpha: show ? 0 : 1,
+            },
+            {
+              x: show ? 100 : 0,
+              autoAlpha: show ? 1 : 0,
+              onComplete: done,
+            }
+          );
+        }}
+      >
+        <p>Test</p>
+      </Transition>
+    </>
+  );
 }
 
 const queryClient = new QueryClient();

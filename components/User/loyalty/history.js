@@ -28,7 +28,7 @@ export default function History({ data }) {
 
   return (
     <>
-      <div className="col-span-3 row-span-2 shadow-2xl border-2 rounded-md">
+      <div className="col-span-2 row-span-2 shadow-2xl border-2 rounded-md">
         <TableContainer className="">
           <Table sx={{ minWidth: 650 }} aria-label="Points history">
             <TableHead>
@@ -67,10 +67,11 @@ export default function History({ data }) {
                   <TableCell align="right">{row.status}</TableCell>
                   <TableCell
                     align="right"
-                    className={`${parseInt(row.points) > 0
+                    className={`${
+                      parseInt(row.points) > 0
                         ? "text-green-500"
                         : "text-red-500"
-                      }`}
+                    }`}
                   >
                     {row.points > 0 ? `+${row.points}` : `-${row.points}`}
                   </TableCell>
@@ -101,7 +102,7 @@ export default function History({ data }) {
             }}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          // ActionsComponent={TablePaginationActions}
+            // ActionsComponent={TablePaginationActions}
           />
         </TableContainer>
       </div>

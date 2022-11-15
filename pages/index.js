@@ -30,7 +30,7 @@ export default function Index() {
     <>
       <div
         id="banners"
-        className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-3 lg:px-20"
+        className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"
       >
         <div className="flex flex-col space-y-5">
           <Banner

@@ -1,31 +1,37 @@
-import React, { useLayoutEffect, forwardRef, useEffect, useRef } from "react";
-import { gsap } from "../../utils/utils";
+import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
+import { gsap } from "gsap";
+import { Transition } from "react-transition-group";
 
-const FadeIn = forwardRef(({ children, stagger = 0, x = 0 }, ref) => {
-  const el = useRef();
-  const animation = useRef();
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      animation.current = gsap.from(el.current.children, {
-        opacity: 0,
-        stagger,
-        x,
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+const FadeInAnimation = ({ children }) => {
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // forward the animation instance
-    if (typeof ref === "function") {
-      ref(animation.current);
-    } else if (ref) {
-      ref.current = animation.current;
-    }
-  }, [ref]);
+    setShow(!show);
+  }, []);
 
-  return <span ref={el}>{children}</span>;
-});
+  return (
+    <Transition
+      timeout={1000}
+      in={show}
+      onEnter={(e) => {
+        gsap.fromTo(
+          e,
+          {
+            autoAlpha: 0,
+            y: 100,
+          },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 1,
+            ease: "Sine.easeInOut",
+          }
+        );
+      }}
+    >
+      {children}
+    </Transition>
+  );
+};
 
-export default FadeIn;
+export default FadeInAnimation;

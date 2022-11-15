@@ -8,7 +8,12 @@ import Button from "@mui/material/Button";
 import { BsTrash } from "react-icons/bs";
 import WishlishButton from "../../ProductDetails/wishlistButton";
 
-import { formatter, cartAdd, cartRemoveItem } from "../../../utils/utils";
+import {
+  formatter,
+  cartAdd,
+  cartRemoveItem,
+  checkoutPathGenerator,
+} from "../../../utils/utils";
 
 export default function ProductSummaryDesktop({ data, setCart }) {
   const { user } = useContext(userContext);
@@ -139,7 +144,10 @@ export default function ProductSummaryDesktop({ data, setCart }) {
               className={`w-full rounded-full h-12 ${
                 user.id ? "text-white bg-black border-black" : "bg-gray-200"
               } hover:bg-white hover:text-black hover:border-black`}
-              onClick={() => router.push("/checkout")}
+              onClick={async () => {
+                let path = await checkoutPathGenerator();
+                if (path) router.push(path);
+              }}
             >
               Checkout
             </Button>

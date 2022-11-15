@@ -15,7 +15,6 @@ export default function CartDrawer({ open, setDrawer }) {
   const [drawerTotal, setDrawerTotal] = useState(0);
   const { cart } = useContext(cartContext);
   const router = useRouter();
-  console.log(cart);
 
   const toggleDrawer = (e, open) => {
     if ((e.type === "keydown" && e.key === "Tab") || e.key === "Shift") {
