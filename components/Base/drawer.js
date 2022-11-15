@@ -36,7 +36,12 @@ export default function CartDrawer({ open, setDrawer }) {
   }, [cart]);
 
   return (
-    <Drawer anchor="right" open={open} onClose={() => toggleDrawer(false)}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={() => toggleDrawer(false)}
+      disableScrollLock={true}
+    >
       <Box className="flex flex-col justify-between w-80 md:w-96 px-8 py-5 h-screen relative">
         <div>
           <p className="text-center text-xl font-medium mb-2">Cart</p>
