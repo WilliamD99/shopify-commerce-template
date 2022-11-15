@@ -7,7 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 
 import { accessTokenExist } from "../../../utils/utils";
-import useCustomerDeleteAccessToken from '../../../utils/hooks/useCustomerDeleteAccessToken'
+import useCustomerDeleteAccessToken from "../../../utils/hooks/useCustomerDeleteAccessToken";
 
 export default function Drawer({
   open,
@@ -16,7 +16,7 @@ export default function Drawer({
   setOpenLoginModal,
 }) {
   const { user, setUser } = useContext(userContext);
-  const deleteAccessToken = useCustomerDeleteAccessToken()
+  const deleteAccessToken = useCustomerDeleteAccessToken();
 
   const handleLogout = () => {
     setUser({ state: "none" });
@@ -25,11 +25,11 @@ export default function Drawer({
   };
 
   useEffect(() => {
-    if (deleteAccessToken.isLoading) console.log('loading...')
+    if (deleteAccessToken.isLoading) console.log("loading...");
     else if (deleteAccessToken.data?.data.customerAccessTokenDelete) {
-      setOpen(false)
+      setOpen(false);
     }
-  }, [deleteAccessToken.data])
+  }, [deleteAccessToken.data]);
 
   return (
     <>
@@ -65,7 +65,7 @@ export default function Drawer({
               href="/shop"
               className="flex flex-row space-x-4 justify-between items-center"
             >
-              <div className="text-xl font-medium" href="/shop">
+              <div className="text-xl font-medium" href="/shop/price-drop">
                 Price Drops
               </div>
               <MdOutlineArrowForwardIos className="text-xl" />
@@ -78,7 +78,7 @@ export default function Drawer({
               href="/shop"
               className="flex flex-row space-x-4 justify-between items-center"
             >
-              <div className="text-xl font-medium" href="/shop">
+              <div className="text-xl font-medium" href="/shop/newest-release">
                 New Release
               </div>
               <MdOutlineArrowForwardIos className="text-xl" />
@@ -86,37 +86,40 @@ export default function Drawer({
           </div>
           <Divider className="opacity-80 " />
 
-          {
-            user?.id ?
-              <>
-                <div className="pl-8 pr-5">
+          {user?.id ? (
+            <>
+              <div className="pl-8 pr-5">
+                <div className="flex flex-row space-x-4 justify-between items-center">
                   <div
-                    className="flex flex-row space-x-4 justify-between items-center"
+                    onClick={handleLogout}
+                    className="text-xl font-medium"
+                    href="/shop"
                   >
-                    <div onClick={handleLogout} className="text-xl font-medium" href="/shop">
-                      Logout
-                    </div>
+                    Logout
                   </div>
                 </div>
-                <Divider className="opacity-80 " />
-              </>
-              :
-              <>
-                <div className="pl-8 pr-5">
+              </div>
+              <Divider className="opacity-80 " />
+            </>
+          ) : (
+            <>
+              <div className="pl-8 pr-5">
+                <div className="flex flex-row space-x-4 justify-between items-center">
                   <div
-                    className="flex flex-row space-x-4 justify-between items-center"
+                    onClick={() => {
+                      setOpen(false);
+                      setOpenLoginModal(true);
+                    }}
+                    className="text-xl font-medium"
+                    href="/shop"
                   >
-                    <div onClick={() => {
-                      setOpen(false)
-                      setOpenLoginModal(true)
-                    }} className="text-xl font-medium" href="/shop">
-                      Sign in
-                    </div>
+                    Sign in
                   </div>
                 </div>
-                <Divider className="opacity-80 " />
-              </>
-          }
+              </div>
+              <Divider className="opacity-80 " />
+            </>
+          )}
         </div>
       </SwipeableDrawer>
     </>
