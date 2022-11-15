@@ -77,7 +77,7 @@ export default function Signup({ setIndex }) {
     <>
       <form
         id="loginForm"
-        className="absolute w-80 md:w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-10 py-5 md:py-8 flex flex-col justify-between space-y-3 bg-slate-200 rounded-xl z-50"
+        className="w-80 md:w-96 h-112 px-10 py-5 md:py-8 flex flex-col justify-between space-y-3 rounded-xl z-50"
         onSubmit={handleSubmit}
       >
         {customerCreate.isLoading ? <Loading /> : ""}
@@ -147,7 +147,7 @@ export default function Signup({ setIndex }) {
 
           <Button
             variant="outlined"
-            className="h-10 normal-case bg-black border-none shadow-2xl text-white font-semibold rounded-md  hover:text-black hover:bg-white hover:border-none"
+            className="h-10 normal-case bg-black border-none shadow-2xl text-white font-semibold rounded-md  hover:text-black hover:bg-white hover:shadow-xl"
             onClick={handleSubmit}
             type="submit"
           >
@@ -161,7 +161,7 @@ export default function Signup({ setIndex }) {
         </div>
         <Button
           variant="outlined"
-          className="h-10 normal-case bg-white border-none text-black font-semibold rounded-md shadow-2xl hover:text-white hover:bg-black hover:border-none"
+          className="h-10 normal-case bg-black border-none text-white font-semibold rounded-md shadow-2xl hover:text-black hover:bg-white hover:shadow-xl"
           onClick={() => setIndex(0)}
         >
           Login

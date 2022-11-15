@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useCallback, useState } from "react";
 import useCustomerGetAccessToken from "../../utils/hooks/useCustomerGetAccessToken";
-import { encryptText } from "../../utils/utils";
+import { encryptText, gsap } from "../../utils/utils";
 import useCustomerGet from "../../utils/hooks/useCustomerGet";
 import userContext from "../../utils/userContext";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Loading from "../Loading/dataLoading";
 import Divider from "@mui/material/Divider";
 import Link from "../common/Link";
+import { Transition } from "react-transition-group";
 
 export default function Login({ open, setOpen }) {
   const { user, setUser } = useContext(userContext);
@@ -70,53 +71,72 @@ export default function Login({ open, setOpen }) {
         open={open}
         onClose={() => setOpen(false)}
       >
-        <form
-          id="loginForm"
-          className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-between space-y-3 bg-slate-100 rounded-xl z-50"
-          onSubmit={handleLogin}
+        <Transition
+          in={open}
+          timeout={1000}
+          onEnter={(e) => {
+            console.log(e);
+            gsap.fromTo(
+              e,
+              {
+                scale: 0,
+              },
+              {
+                scale: 1,
+                duration: 1,
+                ease: "Sine.easeInOut",
+              }
+            );
+          }}
         >
-          <p className="text-black text-2xl font-bold text-center">Login</p>
-          <div className="flex flex-col space-y-5">
-            <TextField
-              className="rounded-md"
-              label="Email"
-              type="email"
-              id="email"
-              required
-            />
-            <TextField
-              className="rounded-md"
-              label="Password"
-              type="password"
-              id="password"
-              required
-            />
-            <div className="flex flex-row justify-between">
-              <Link href="#" className="text-sm">
-                Forgot password?
-              </Link>
+          <form
+            id="loginForm"
+            className="absolute w-96 h-112 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-5 flex flex-col justify-between space-y-3 bg-slate-100 rounded-xl z-50"
+            onSubmit={handleLogin}
+          >
+            <p className="text-black text-2xl font-bold text-center">Login</p>
+            <div className="flex flex-col space-y-5">
+              <TextField
+                className="rounded-md"
+                label="Email"
+                type="email"
+                id="email"
+                required
+              />
+              <TextField
+                className="rounded-md"
+                label="Password"
+                type="password"
+                id="password"
+                required
+              />
+              <div className="flex flex-row justify-between">
+                <Link href="#" className="text-sm">
+                  Forgot password?
+                </Link>
+              </div>
+              <Button
+                variant="outlined"
+                className="h-10 normal-case bg-black border-none shadow-2xl text-white font-semibold rounded-md  hover:text-black hover:bg-white hover:border-none"
+                onClick={handleLogin}
+                type="submit"
+              >
+                {getAccessToken.isLoading ? <Loading /> : "Login"}
+              </Button>
+            </div>
+            <div className="flex flex-row justify-center items-center space-x-5">
+              <Divider className="w-1/3" />
+              <p>Or</p>
+              <Divider className="w-1/3" />
             </div>
             <Button
               variant="outlined"
-              className="h-10 normal-case bg-black border-none shadow-2xl text-white font-semibold rounded-md  hover:text-black hover:bg-white hover:border-none"
-              onClick={handleLogin}
-              type="submit"
+              className="h-10 normal-case bg-white border-none text-black font-semibold rounded-md shadow-2xl hover:text-white hover:bg-black hover:border-none"
             >
-              {getAccessToken.isLoading ? <Loading /> : "Login"}
+              Sign Up
             </Button>
-          </div>
-          <div className="flex flex-row justify-center items-center space-x-5">
-            <Divider className="w-1/3" />
-            <p>Or</p>
-            <Divider className="w-1/3" />
-          </div>
-          <Button
-            variant="outlined"
-            className="h-10 normal-case bg-white border-none text-black font-semibold rounded-md shadow-2xl hover:text-white hover:bg-black hover:border-none"
-          >
-            Sign Up
-          </Button>
-        </form>
+          </form>
+        </Transition>
       </Modal>
     </>
   );

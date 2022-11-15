@@ -1,9 +1,11 @@
 import React, { useEffect, useContext, useRef, useState } from "react";
 import userContext from "../../../utils/userContext";
 
-import Modal from "@mui/material/Modal";
 import Login from "./login";
 import Signup from "./signup";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Transition from "../../Animation/Mui-Transition-Slide";
 
 export default function Index({ open, setOpen }) {
   const [index, setIndex] = useState(0);
@@ -16,19 +18,21 @@ export default function Index({ open, setOpen }) {
 
   return (
     <>
-      <Modal
+      <Dialog
         aria-labelledby="Login Modal"
         open={open}
         onClose={() => setOpen(false)}
+        TransitionComponent={Transition}
+        disableScrollLock={true}
       >
-        <div>
+        <DialogContent>
           {index === 0 ? (
-            <Login setIndex={setIndex} />
+            <Login setIndex={setIndex} open={open} />
           ) : (
             <Signup setIndex={setIndex} />
           )}
-        </div>
-      </Modal>{" "}
+        </DialogContent>
+      </Dialog>{" "}
     </>
   );
 }
