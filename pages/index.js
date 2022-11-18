@@ -7,10 +7,12 @@ import Image from "../components/common/Image";
 import Banner from "../components/Home/Banner";
 import Slider from "../components/Home/Slider";
 import Button from "@mui/material/Button";
+import { productsGet } from "../lib/serverRequest";
+import AnimatedGallery from "../components/Animation/Gallery";
 
 export default function Index() {
   const { isMobile } = useContext(deviceContext);
-  const sliderData = useQueries({
+  const data = useQueries({
     queries: [
       {
         queryKey: ["collection", "disposable"],
@@ -21,6 +23,11 @@ export default function Index() {
         queryKey: ["collection", "newest-release"],
         queryFn: () =>
           productInCollection({ handle: "newest-release", limit: 7 }),
+        staleTime: 1000 * 60 * 60 * 12,
+      },
+      {
+        queryKey: ["product", "featured"],
+        queryFn: () => productsGet({ limit: 7, tags: "featured" }),
         staleTime: 1000 * 60 * 60 * 12,
       },
     ],
@@ -62,8 +69,15 @@ export default function Index() {
       </div>
 
       {/* <CollectionSlider /> */}
-      <Slider data={sliderData[0]} title="Disposable" />
-      <Slider data={sliderData[1]} title={sliderData[1]} />
+      <Slider data={data[0]} />
+      <Slider data={data[1]} />
+
+      <div className="px-5 lg:px-20 mt-20">
+        <p className="text-2xl font-medium hover:opacity-80">
+          Featured Products Gallery
+        </p>
+        <AnimatedGallery data={data[2]?.data?.data.products.edges} />
+      </div>
 
       <div className="px-5 lg:px-10 2xl:px-20 mt-16 flex flex-col items-center justify-center">
         <div className="flex flex-col justify-center items-center space-y-8 lg:w-1/2">
