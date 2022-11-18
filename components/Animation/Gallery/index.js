@@ -71,8 +71,8 @@ export default function Index({ data }) {
                         :
                         <></>
                 }
-                <div ref={detailsRef} id="gallery_details" className="invisible fixed px-5 py-10 pt-16 grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 lg:overflow-hidden bg-gray-700 w-screen h-screen  border-none">
-                    <div id="gallery_back" className='absolute top-5 left-5 lg:top-10 lg:left-10' onClick={hideGallery}>
+                <div ref={detailsRef} id="gallery_details" className="invisible fixed px-5 py-10 pt-28 grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 lg:overflow-hidden bg-gray-700 w-screen h-screen  border-none">
+                    <div id="gallery_back" className='absolute top-20 left-5 lg:top-10 lg:left-10' onClick={hideGallery}>
                         <p className='text-white flex flex-row items-center cursor-pointer opacity-70 hover:opacity-100 ease-linear'>
                             <BsArrowLeft className='mr-2' /> Go back
                         </p>
@@ -91,7 +91,7 @@ export default function Index({ data }) {
                             <p className='text-white content'>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Nulla porttitor accumsan tincidunt. Cras ultricies ligula sed magna dictum porta. Donec rutrum congue leo eget malesuada. Donec sollicitudin molestie malesuada. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Nulla porttitor accumsan tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Proin eget tortor risus.</p>
                         </div>
                         <div className='content'>
-                            <Button variant="outlined" className='bg-white text-black w-44 rounded-full normal-case ease-linear hover:scale-110'>More Info</Button>
+                            <Button variant="outlined" className='bg-white text-black border-white w-44 rounded-full normal-case ease-linear hover:scale-110'>More Info</Button>
                         </div>
                     </div>
                 </div>
