@@ -32,7 +32,7 @@ export default function HeaderBottom() {
   }, [user]);
   return (
     <>
-      <div className="bg-white flex flex-row justify-between items-center py-6 px-16">
+      <div className="bg-white flex flex-row justify-between items-center py-4 px-16">
         <Link className="text-lg text-black " href="/">
           Ecommerce Template
         </Link>

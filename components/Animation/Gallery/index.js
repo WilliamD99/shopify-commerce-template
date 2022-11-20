@@ -60,7 +60,7 @@ export default function Index({ data }) {
         gsap.set(details, { overflow: "auto" });
       }, // to permit scrolling if necessary
     })
-      .fromTo("#gallery_bg", { autoAlpha: 0.8 }, { autoAlpha: 0 })
+      // .fromTo("#gallery_bg", { autoAlpha: 0.8 }, { autoAlpha: 0 })
       .fromTo(
         detailsImgRef.current,
         { yPercent: -20, autoAlpha: 0 },
@@ -96,19 +96,18 @@ export default function Index({ data }) {
       yPercent: -20,
       autoAlpha: 0,
       duration: 0.2,
-    })
-      .fromTo(
-        "#gallery_details-contents .content",
-        { autoAlpha: 1, y: 0 },
-        {
-          autoAlpha: 0,
-          y: 50,
-          stagger: 0.2,
-          ease: "back.easeOut",
-          duration: 0.5,
-        }
-      )
-      .fromTo("#gallery_bg", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 });
+    }).fromTo(
+      "#gallery_details-contents .content",
+      { autoAlpha: 1, y: 0 },
+      {
+        autoAlpha: 0,
+        y: 50,
+        stagger: 0.2,
+        ease: "back.easeOut",
+        duration: 0.5,
+      }
+    );
+    // .fromTo("#gallery_bg", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 });
 
     Flip.from(state, {
       scale: true,
@@ -151,13 +150,8 @@ export default function Index({ data }) {
         <div
           ref={detailsRef}
           id="gallery_details"
-          className=" fixed px-5 py-28  grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 bg-slate-200 w-screen h-screen  border-none"
+          className="invisible fixed px-5 py-28  grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 bg-white w-screen h-screen  border-none"
         >
-          <Image
-            src={data[activeIndex].node.images.edges[0].node.url}
-            layout="fill"
-            id="gallery_bg"
-          />
           <div
             id="gallery_back"
             className="absolute z-50 top-20 left-5 lg:top-56 lg:left-20"

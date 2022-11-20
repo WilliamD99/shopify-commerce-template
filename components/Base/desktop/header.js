@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import userContext from "../../../utils/userContext";
+import loginContext from "../../../utils/loginContext";
 import LoginButton from "../loginButton";
+import Link from "../../common/Link";
 
-export default function Header({ setModalOpen }) {
+export default function Header() {
   const { user } = useContext(userContext);
+  const { setUserModalShow } = useContext(loginContext);
 
   let headerConditionalDisplay = () => {
     if (user?.state === "loading") {
@@ -13,7 +16,7 @@ export default function Header({ setModalOpen }) {
         <>
           <p
             className="text-black font-medium text-sm cursor-pointer"
-            onClick={() => setModalOpen(true)}
+            onClick={() => setUserModalShow(true)}
           >
             Sign In
           </p>
@@ -27,7 +30,9 @@ export default function Header({ setModalOpen }) {
   return (
     <>
       <div className="hidden md:flex md:flex-row space-x-8 items-center">
-        <p className="text-sm text-black">FAQ</p>
+        <Link href="/faq" className="text-sm text-black">
+          FAQ
+        </Link>
         {headerConditionalDisplay()}
       </div>{" "}
     </>

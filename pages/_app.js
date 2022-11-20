@@ -17,6 +17,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
+import loginContext from "../utils/loginContext";
 import { customerGet } from "../utils/api/requests";
 
 import Layout from "../components/layout";
@@ -45,6 +46,7 @@ function MyApp({ Component, pageProps }) {
         },
       })
   );
+  const [userModalShow, setUserModalShow] = useState(false);
 
   useEffect(() => {
     setMobile(
@@ -112,13 +114,15 @@ function MyApp({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>
-            <userContext.Provider value={{ user, setUser }}>
-              <cartContext.Provider value={{ cart, setCart }}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </cartContext.Provider>
-            </userContext.Provider>
+            <loginContext.Provider value={{ userModalShow, setUserModalShow }}>
+              <userContext.Provider value={{ user, setUser }}>
+                <cartContext.Provider value={{ cart, setCart }}>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </cartContext.Provider>
+              </userContext.Provider>
+            </loginContext.Provider>
           </deviceContext.Provider>
         </Hydrate>
         <ReactQueryDevtools />

@@ -75,7 +75,7 @@ export default function Login({ setIndex }) {
     <>
       <form
         id="loginForm"
-        className=" w-80 md:w-96 h-96 md:h-112 px-10 py-5 md:py-8 flex flex-col justify-between space-y-3 rounded-xl z-50"
+        className=" md:w-96 h-96 md:h-112 px-3 py-5 md:py-8 flex flex-col justify-between space-y-3 rounded-xl z-50"
         onSubmit={handleLogin}
       >
         <p className="text-black text-xl md:text-2xl mb-3 md:mb-5 font-bold text-center">

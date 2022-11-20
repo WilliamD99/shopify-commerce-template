@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import userContext from "../../../utils/userContext";
+import loginContext from "../../../utils/loginContext";
 import { useRouter } from "next/router";
 
 import Image from "../../common/Image";
@@ -17,6 +18,7 @@ import {
 
 export default function ProductSummaryDesktop({ data, setCart }) {
   const { user } = useContext(userContext);
+  const { setUserModalShow } = useContext(loginContext);
   const router = useRouter();
   let displayCartTotal = () => {
     let total = 0;
@@ -158,13 +160,12 @@ export default function ProductSummaryDesktop({ data, setCart }) {
                 You need to sign in in order to checkout
               </p>
               <div className="flex flex-row justify-center space-x-2">
-                <Link className="font-medium underline" href="#">
-                  Join us
-                </Link>{" "}
-                <span>or</span>
-                <Link className="font-medium underline" href="#">
-                  Sign in
-                </Link>
+                <p
+                  className="font-medium underline cursor-pointer"
+                  onClick={() => setUserModalShow(true)}
+                >
+                  Login now
+                </p>
               </div>
             </div>
           ) : (

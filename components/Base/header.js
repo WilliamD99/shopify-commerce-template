@@ -34,7 +34,6 @@ export default function Header({ sticky }) {
           <HeaderDesktopIndex setModalOpen={setModalOpen} />
         )}
       </div>
-      <Account open={modalOpen} setOpen={setModalOpen} />
     </>
   );
 }

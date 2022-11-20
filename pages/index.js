@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import deviceContext from "../utils/deviceContext";
 import { useQueries } from "@tanstack/react-query";
 import { productInCollection } from "../utils/api/requests";
@@ -9,9 +9,15 @@ import Slider from "../components/Home/Slider";
 import Button from "@mui/material/Button";
 import { productsGet } from "../lib/serverRequest";
 import AnimatedGallery from "../components/Animation/Gallery";
+import FluidBackground from "../components/Animation/FluidBackground";
+import { Transition } from "react-transition-group";
+import { gsap } from "../utils/utils";
+import Link from "../components/common/Link";
 
 export default function Index() {
   const { isMobile } = useContext(deviceContext);
+  const [show, setShow] = useState(false);
+
   const data = useQueries({
     queries: [
       {
@@ -33,8 +39,60 @@ export default function Index() {
     ],
   });
 
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   return (
     <>
+      <div className="relative h-128 lg:h-screen w-screen flex flex-col justify-center items-center">
+        <div className="absolute top-0 left-0 h-full w-full">
+          <FluidBackground />
+        </div>
+        <Transition
+          timeout={1000}
+          mountOnEnter
+          unmountOnExit
+          in={show}
+          addEndListener={(node, done) => {
+            gsap.fromTo(
+              ".banner-content",
+              {
+                y: show ? 100 : 0,
+                autoAlpha: show ? 0 : 1,
+              },
+              {
+                y: show ? 0 : 100,
+                autoAlpha: show ? 1 : 0,
+                onComplete: done,
+                delay: 0.5,
+                stagger: 0.1,
+              }
+            );
+          }}
+        >
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-11/12 lg:w-1/2">
+            <p className="text-white text-xl lg:text-3xl text-center font-semibold banner-content">
+              Welcome to Ecommerce Template
+            </p>
+            <p className="text-white text-center banner-content">
+              We offer quality e-cigarettes, e-juice, disposables, nicotine
+              salts and much more for both pickup and shipping. Your order is
+              FREE if over <span className="font-bold">$100</span> (+tax). If
+              your order is below $100 your shipping fee is $15 flat if within
+              British Columbia.
+            </p>
+            <Link href="#banners" className="banner-content">
+              <Button
+                variant="outlined"
+                className="text-white normal-case bg-black border-white hover:text-black hover:bg-white w-36 lg:w-44 rounded-full banner-content"
+              >
+                See More
+              </Button>
+            </Link>
+          </div>
+        </Transition>
+      </div>
       <div
         id="banners"
         className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"

@@ -126,8 +126,8 @@ export default function SingeProduct({ e, index }) {
           src={e.node.featuredImage.url}
           layout="fill"
           className="rounded-tr-md"
-          placeholder="blur"
-          blurDataURL="/placeholder.webp"
+          // placeholder="blur"
+          // blurDataURL="/placeholder.webp"
         />
       </div>
       <div className="flex flex-col md:justify-between space-y-4 py-2 md:py-5">

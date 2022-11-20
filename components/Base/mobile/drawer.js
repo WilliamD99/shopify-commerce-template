@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import loginContext from "../../../utils/loginContext";
 import userContext from "../../../utils/userContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Link from "../../common/Link";
@@ -16,6 +17,7 @@ export default function Drawer({
   setOpenLoginModal,
 }) {
   const { user, setUser } = useContext(userContext);
+  const { setUserModalShow } = useContext(loginContext);
   const deleteAccessToken = useCustomerDeleteAccessToken();
 
   const handleLogout = () => {
@@ -108,10 +110,9 @@ export default function Drawer({
                   <div
                     onClick={() => {
                       setOpen(false);
-                      setOpenLoginModal(true);
+                      setUserModalShow(true);
                     }}
                     className="text-xl font-medium"
-                    href="/shop"
                   >
                     Sign in
                   </div>
