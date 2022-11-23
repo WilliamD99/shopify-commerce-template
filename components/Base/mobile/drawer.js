@@ -10,12 +10,7 @@ import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { accessTokenExist } from "../../../utils/utils";
 import useCustomerDeleteAccessToken from "../../../utils/hooks/useCustomerDeleteAccessToken";
 
-export default function Drawer({
-  open,
-  setOpen,
-  toggleDrawer,
-  setOpenLoginModal,
-}) {
+export default function Drawer({ open, setOpen, toggleDrawer }) {
   const { user, setUser } = useContext(userContext);
   const { setUserModalShow } = useContext(loginContext);
   const deleteAccessToken = useCustomerDeleteAccessToken();

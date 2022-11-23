@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import HeaderDesktop from "./header";
 import HeaderBottom from "./headerBottom";
 
-export default function HeaderDesktopIndex({ setModalOpen }) {
+export default function HeaderDesktopIndex() {
   return (
     <>
       {/* <Toolbar

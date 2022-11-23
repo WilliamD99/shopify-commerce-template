@@ -13,7 +13,7 @@ import FluidBackground from "../components/Animation/FluidBackground";
 import { Transition } from "react-transition-group";
 import { gsap } from "../utils/utils";
 import Link from "../components/common/Link";
-import TextReveal from '../components/Animation/TextReveal'
+import TextReveal from "../components/Animation/TextReveal";
 
 export default function Index() {
   const { isMobile } = useContext(deviceContext);
@@ -48,7 +48,7 @@ export default function Index() {
     <>
       <div className="relative h-128 lg:h-screen w-screen flex flex-col justify-center items-center bg-black">
         <div className="absolute top-0 left-0 h-full w-full">
-          {/* <FluidBackground /> */}
+          <FluidBackground />
         </div>
         <Transition
           timeout={1000}
@@ -72,17 +72,22 @@ export default function Index() {
             );
           }}
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-11/12 lg:w-1/2">
-            <TextReveal className="flex flex-col space-y-5">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-10/12 lg:w-1/2">
+            <TextReveal
+              stagger={0.5}
+              className="flex flex-col justify-center items-center space-y-5"
+            >
               <p className="text-white text-xl lg:text-3xl text-center font-semibold banner-content">
                 Welcome to Ecommerce Template
               </p>
-              <p className="text-white text-center banner-content">
+              <p className="text-white text-sm lg:text-base text-center banner-content">
                 We offer quality e-cigarettes, e-juice, disposables, nicotine
                 salts and much more for both pickup and shipping. Your order is
-                FREE if over <strong>$100</strong> (+tax). If
-                your order is below $100 your shipping fee is $15 flat if within
-                British Columbia.
+                FREE if over <strong>$100</strong> (+tax).
+              </p>
+              <p className="text-white text-sm lg:text-base text-center banner-content">
+                If your order is below $100 your shipping fee is $15 flat if
+                within British Columbia.
               </p>
               <Link href="#banners" className="banner-content text-center">
                 <Button

@@ -37,7 +37,7 @@ export default function CartComponent() {
     <>
       <div className="max-w-max relative">
         <button
-          className="flex items-center"
+          className="flex items-center hover:opacity-70"
           onClick={() => setDrawer(!drawerOpen)}
         >
           <Badge
