@@ -20,14 +20,13 @@ export default function Header({ sticky }) {
 
   useEffect(() => {
     if (customer.data) {
-      console.log(customer);
       setUser(customer.data.customer);
     }
   }, [customer.isLoading]);
 
   return (
     <>
-      <div id="header" className={`border-b-2 w-screen ${sticky}`}>
+      <div id="header" className={`w-screen z-50 relative ${sticky}`}>
         {isMobile ? (
           <HeaderMobile setModalOpen={setModalOpen} />
         ) : (

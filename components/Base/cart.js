@@ -42,10 +42,10 @@ export default function CartComponent() {
         >
           <Badge
             id="cart-badge"
-            className="text-black font-semibold"
+            className="text-white font-semibold"
             badgeContent={total}
           >
-            <BsCart2 className="text-2xl z-5 text-black" />
+            <BsCart2 className="text-2xl z-5 text-white" />
           </Badge>
         </button>
       </div>

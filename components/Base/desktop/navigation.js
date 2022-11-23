@@ -16,13 +16,13 @@ function Navigation() {
   return (
     <>
       <div className="flex flex-row items-center space-x-10">
-        <Link href="/shop" className={`text-lg`}>
+        <Link href="/shop" className={`text-lg text-white`}>
           Shop
         </Link>
-        <Link href="/shop" className={`text-lg`}>
+        <Link href="/shop" className={`text-lg text-white`}>
           New Release
         </Link>
-        <Link href="/shop" className={`text-lg`}>
+        <Link href="/shop" className={`text-lg text-white`}>
           Price Drop
         </Link>
         {/* <NavItem

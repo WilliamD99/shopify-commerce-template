@@ -15,7 +15,7 @@ export default function Header() {
       return (
         <>
           <p
-            className="text-black font-medium text-sm cursor-pointer"
+            className="text-white font-medium text-sm cursor-pointer"
             onClick={() => setUserModalShow(true)}
           >
             Sign In
@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <>
       <div className="hidden md:flex md:flex-row space-x-8 items-center">
-        <Link href="/faq" className="text-sm text-black">
+        <Link href="/faq" className="text-sm text-white">
           FAQ
         </Link>
         {headerConditionalDisplay()}

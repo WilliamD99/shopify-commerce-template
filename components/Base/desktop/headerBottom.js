@@ -3,6 +3,7 @@ import userContext from "../../../utils/userContext";
 import { gsap } from "../../../utils/utils";
 
 import Link from "../../common/Link";
+import Image from '../../common/Image'
 import Search from "./search";
 import Navigation from "./navigation";
 import Cart from "../cart";
@@ -32,8 +33,13 @@ export default function HeaderBottom() {
   }, [user]);
   return (
     <>
-      <div className="bg-white flex flex-row justify-between items-center py-4 px-16">
-        <Link className="text-lg text-black " href="/">
+      <div className="relative flex flex-row justify-between items-center py-4 px-16 bg-white">
+        {/* <div className="h-24 w-24 z-50 invisible">
+        </div> */}
+        {/* <div className="absolute top-1/2 -translate-y-1/2 h-24 w-24 z-50 bg-white rounded-full overflow-visible">
+          <Image src="/images/addiction.png" layout="fill" objectFit="cover" />
+        </div> */}
+        <Link className="text-lg text-white " href="/">
           Ecommerce Template
         </Link>
 
@@ -45,7 +51,7 @@ export default function HeaderBottom() {
           {!user?.state ? (
             <Link href="/my-account">
               <Badge id="wlBadge" badgeContent={wlCount}>
-                <AiOutlineHeart className="text-2xl" />
+                <AiOutlineHeart className="text-2xl text-white" />
               </Badge>
             </Link>
           ) : (
