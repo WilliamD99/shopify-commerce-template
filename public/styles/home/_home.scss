@@ -3,3 +3,15 @@
         padding: 0 20% 0 0 !important;
     }
 }
+
+.test img {}
+
+#banners {
+    .banner-container {
+        &__image {
+            img {
+                transition: .2s ease !important;
+            }
+        }
+    }
+}

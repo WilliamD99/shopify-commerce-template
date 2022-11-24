@@ -14,6 +14,7 @@ import { Transition } from "react-transition-group";
 import { gsap } from "../utils/utils";
 import Link from "../components/common/Link";
 import TextReveal from "../components/Animation/TextReveal";
+import AnimateOnScroll from "../components/Animation/AnimateOnScroll";
 
 export default function Index() {
   const { isMobile } = useContext(deviceContext);
@@ -101,38 +102,40 @@ export default function Index() {
           </div>
         </Transition>
       </div>
-      <div
-        id="banners"
-        className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"
-      >
-        <div className="flex flex-col space-y-5">
+      <AnimateOnScroll selector=".banner-container" direction="up" stagger={0.1}>
+        <div
+          id="banners"
+          className="mt-10 overflow-hidden grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"
+        >
+          <div className="flex flex-col space-y-5">
+            <Banner
+              image="/images/banner/banner1.webp"
+              link="/shop?vendors=MR%2520FOG"
+              title={"New Mr.Fog"}
+            />
+            <Banner image="/images/banner/banner2.webp" link="#" />
+          </div>
           <Banner
-            image="/images/banner/banner1.webp"
-            link="/shop?vendors=MR%2520FOG"
-            title={"New Mr.Fog"}
-          />
-          <Banner image="/images/banner/banner2.webp" link="#" />
-        </div>
-        <Banner
-          className="col-span-2"
-          height={isMobile ? "64" : "full"}
-          image="/images/banner/banner3.webp"
-          link="#"
-          title="Disposable"
-        />
-        <div className="flex flex-col space-y-5">
-          <Banner
-            image="/images/banner/banner4.webp"
+            className="col-span-2"
+            height={isMobile ? "64" : "full"}
+            image="/images/banner/banner3.webp"
             link="#"
-            title="New Arrival"
+            title="Disposable"
           />
-          <Banner
-            image="/images/banner/banner5.webp"
-            link="#"
-            title="Starter Kit"
-          />
+          <div className="flex flex-col space-y-5">
+            <Banner
+              image="/images/banner/banner4.webp"
+              link="#"
+              title="New Arrival"
+            />
+            <Banner
+              image="/images/banner/banner5.webp"
+              link="#"
+              title="Starter Kit"
+            />
+          </div>
         </div>
-      </div>
+      </AnimateOnScroll>
 
       {/* <CollectionSlider /> */}
       <Slider data={data[0]} />

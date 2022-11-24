@@ -21,6 +21,8 @@ import Button from "@mui/material/Button";
 import TextReveal from "../components/Animation/TextReveal";
 import { FiSearch } from "react-icons/fi";
 import Search from '../components/common/Search'
+import StripeElement from "../lib/stripe";
+import axios from "axios";
 
 export default function Test() {
   const [show, setShow] = useState(false);
@@ -28,59 +30,33 @@ export default function Test() {
   const [open, setOpen] = useState(false);
 
   const ele = useRef();
-  // const { data } = useQuery(
-  //   ["product", "allo-ultra-2500-disposable"],
-  //   () => productByHandle("allo-ultra-2500-disposable"),
-  //   {
-  //     staleTime: 1000 * 60 * 60 * 24,
-  //   }
-  // );
-  // console.log(data);
 
   // useEffect(() => {
-  //   // setShow(!show);
-  //   gsap.set(ele.current, { autoAlpha: 0, y: 200 })
-  //   ScrollTrigger.batch(ele.current, {
-  //     interval: 0.25,
-  //     onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, ease: "Sine.easeInOut" })
-  //   })
-  // }, []);
-
-  // useEffect(() => {
-  //   setOpen(!open);
-  // }, []);
-  // useEffect(() => {
-  //   gsap.set('.inner', { autoAlpha: 0 })
-  //   ScrollTrigger.batch(test2.current, {
-  //     interval: 0.2,
-  //     onEnter: (batch) => {
-  //       test2.current.classList.remove("invisible")
-  //       gsap.to(".test2 .inner", { autoAlpha: 1, })
+  //   axios.post("/api/stripe/payment-intent-create", {
+  //     data: {
+  //       amount: 500,
+  //       currency: "cad",
+  //       payment_method_types: "card"
   //     }
-  //   })
+  //   }).then(res => console.log(res))
   // }, [])
-  useEffect(() => {
-    console.log(gsap.utils.splitColor(""))
-  }, [])
+
+
+  // useEffect(() => {
+  //   axios.post("/api/stripe/payment-intent-retrieve", {
+  //     data: {
+  //       id: "pi_3M7RuCJF5iU7SUPZ1MU7y1ds_secret_uc9W1MJerQkXA63qMQvu8SrKH"
+  //     }
+  //   }).then(res => console.log(res))
+  // }, [])
 
   return (
     <>
-      {/* Text reveal */}
-      {/* <div className="relative h-64 w-64">
-        <Image src="/placeholder.webp" layout="fill" />
-      </div> */}
-      <Search />
-      <div className="h-screen"></div>
-      <TextReveal className="flex flex-col space-y-5">
-        <span>Welcome to the nexus of</span>
-        <span><strong>machine learning</strong> and global</span>
-        <span>business process outsourcing</span>
-      </TextReveal>
-      <div className="h-screen"></div>
+      <StripeElement />
     </>
   );
 }
-
+// "pi_3M7RuCJF5iU7SUPZ1MU7y1ds_secret_uc9W1MJerQkXA63qMQvu8SrKH"
 // const queryClient = new QueryClient();
 // export async function getServerSideProps({ query, res }) {
 //   //   let { index } = query;

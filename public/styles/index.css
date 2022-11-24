@@ -320,6 +320,10 @@ input[type=number] {
   padding: 0 20% 0 0 !important;
 }
 
+#banners .banner-container__image img {
+  transition: 0.2s ease !important;
+}
+
 #dashboard-tabs .MuiTabs-scroller .MuiButtonBase-root.Mui-selected {
   font-weight: bold;
   color: black;
