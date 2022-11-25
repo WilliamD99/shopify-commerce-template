@@ -53,14 +53,14 @@ export default function AgeGate() {
     <>
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className="relative w-screen h-screen backdrop-blur-md">
-          <div className="w-1/2 h-1/2 bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md flex flex-row">
-            <div className="h-full w-1/2 relative">
+          <div className="lg:w-1/2 lg:h-1/2 w-80 h-128 bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md flex flex-col lg:flex-row">
+            <div className="lg:h-full h-1/3 lg:w-1/2 relative">
               <Image
                 src="https://cdn.shopify.com/s/files/1/0548/9652/5492/files/age-gate.webp?v=1665696424"
                 layout="fill"
               />
             </div>
-            <div className="w-1/2 h-full px-8 py-8 relative flex flex-col justify-between space-y-5">
+            <div className="lg:w-1/2 px-8 py-8 relative flex flex-col justify-between space-y-5">
               <div className="flex flex-col justify-center items-center">
                 <p className="text-xl font-semibold">Hello there,</p>
                 <p className="text-xl font-semibold">

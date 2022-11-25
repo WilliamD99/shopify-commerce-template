@@ -31,16 +31,22 @@ export default function Footer() {
     <div id="footer" className="mt-5 xl:mt-10 shadow-inner">
       <div
         id="footer_top"
-        className="w-screen bg-slate-100 px-5 py-10 xl:py-20 flex flex-col items-center justify-center space-y-5"
+        className="w-screen bg-black px-5 py-10 xl:py-20 flex flex-col items-center justify-center space-y-5"
       >
-        <p className="text-xl xl:text-2xl">Subscribe to our newsletters</p>
+        <p className="text-xl xl:text-2xl text-white">
+          Subscribe to our newsletters
+        </p>
         <form className="flex flex-col items-center space-y-5">
           <TextField
             id="subscribe-form"
             type="email"
             required
-            label={<span className="text-sm xl:text-lg">Enter your email</span>}
-            className="w-72 xl:w-96"
+            label={
+              <span className="text-sm xl:text-lg text-white">
+                Enter your email
+              </span>
+            }
+            className="w-72 xl:w-96 border-white"
           />
           <Button
             variant="outlined"
@@ -50,7 +56,9 @@ export default function Footer() {
           >
             Sign Up {isLoading ? <Loading /> : ""}
           </Button>
-          <p className="text-sm italic">You may unsubscribe anytime</p>
+          <p className="text-sm italic text-white">
+            You may unsubscribe anytime
+          </p>
         </form>
       </div>
       <div

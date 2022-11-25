@@ -32,7 +32,7 @@ const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
 function MyApp({ Component, pageProps, ...appProps }) {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
-  const [cookie, setCookie] = useState(
+  const [cookie] = useState(
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
   const [isMobile, setMobile] = useState("none");
@@ -116,7 +116,7 @@ function MyApp({ Component, pageProps, ...appProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      {/* <AgeGate /> */}
+      <AgeGate />
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>

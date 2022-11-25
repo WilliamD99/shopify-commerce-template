@@ -73,7 +73,7 @@ export default function Index() {
             );
           }}
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-10/12 lg:w-1/2">
+          <div className="absolute px-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-10/12 lg:w-1/2">
             <TextReveal
               stagger={0.5}
               className="flex flex-col justify-center items-center space-y-5"
@@ -102,7 +102,11 @@ export default function Index() {
           </div>
         </Transition>
       </div>
-      <AnimateOnScroll selector=".banner-container" direction="up" stagger={0.1}>
+      <AnimateOnScroll
+        selector=".banner-container"
+        direction="up"
+        stagger={0.1}
+      >
         <div
           id="banners"
           className="mt-10 overflow-hidden grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"

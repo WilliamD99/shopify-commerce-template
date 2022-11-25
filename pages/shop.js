@@ -27,7 +27,6 @@ const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
 export default function Shop() {
   const { isMobile } = useContext(deviceContext);
   const [dataArr, setDataArr] = useState([]);
-  console.log(dataArr);
   const [isNext, setNext] = useState(false);
   const [isPrevious, setPrevious] = useState(false);
   const [show, setShow] = useState(false);
