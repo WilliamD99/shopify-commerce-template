@@ -163,10 +163,6 @@ export default function Shop() {
     </>
   );
 }
-Shop.getLayout = function getLayout(page) {
-  console.log(page);
-  return <Test>{page}</Test>;
-};
 
 const queryClient = new QueryClient();
 export async function getServerSideProps({ query, res }) {

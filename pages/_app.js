@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -29,7 +29,7 @@ const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
   ssr: false,
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, ...appProps }) {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
   const [cookie, setCookie] = useState(
@@ -80,6 +80,12 @@ function MyApp({ Component, pageProps }) {
 
   const getLayout = Component.getLayout || ((page) => page);
 
+  const isLayoutNeeded = [`/checkout/payment/[index]`].includes(
+    appProps.router.pathname
+  );
+
+  const LayoutComponent = !isLayoutNeeded ? Layout : React.Fragment;
+
   if (isMobile === "none") return <></>;
 
   return getLayout(
@@ -117,9 +123,9 @@ function MyApp({ Component, pageProps }) {
             <loginContext.Provider value={{ userModalShow, setUserModalShow }}>
               <userContext.Provider value={{ user, setUser }}>
                 <cartContext.Provider value={{ cart, setCart }}>
-                  <Layout>
+                  <LayoutComponent>
                     <Component {...pageProps} />
-                  </Layout>
+                  </LayoutComponent>
                 </cartContext.Provider>
               </userContext.Provider>
             </loginContext.Provider>
