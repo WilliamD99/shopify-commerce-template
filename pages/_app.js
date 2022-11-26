@@ -80,9 +80,10 @@ function MyApp({ Component, pageProps, ...appProps }) {
 
   const getLayout = Component.getLayout || ((page) => page);
 
-  const isLayoutNeeded = [`/checkout/payment/[index]`].includes(
-    appProps.router.pathname
-  );
+  const isLayoutNeeded = [
+    `/checkout/payment/[index]`,
+    `/checkout/complete/[complete]`,
+  ].includes(appProps.router.pathname);
 
   const LayoutComponent = !isLayoutNeeded ? Layout : React.Fragment;
 

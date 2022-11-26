@@ -5,7 +5,12 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/router";
 
-import { decryptText, setCookie, getCookie } from "../../../utils/utils";
+import {
+  decryptText,
+  setCookie,
+  getCookie,
+  encryptText,
+} from "../../../utils/utils";
 import { checkoutGet } from "../../../lib/serverRequest";
 import CheckoutForm from "../../../components/Stripe/CheckoutForm";
 import Loading from "../../../components/Loading/dataLoading";
@@ -21,7 +26,7 @@ const stripePromise = loadStripe(
 // This page need checkoutId
 export default function Index({ id }) {
   let [isCreateIntent, setCreateIntent] = useState(false);
-  let [stripeOption, setStripeOption] = useState();
+  // let [stripeOption, setStripeOption] = useState();
   const [isProcess, setIsProcess] = useState(false);
   const router = useRouter();
 
@@ -43,12 +48,16 @@ export default function Index({ id }) {
       },
     });
     setCookie("pi", data.data);
-    setStripeOption(data.data);
+    // setStripeOption(data.data);
     setCreateIntent(true);
     return data;
   };
 
   useEffect(() => {
+    if (data.data.node.completedAt) {
+      router.push(`/checkout/complete/${encodeURIComponent(encryptText(id))}`);
+    }
+
     let pi = getCookie("pi");
     if (!pi) {
       let dataNode = data.data.node;
@@ -159,7 +168,6 @@ const queryClient = new QueryClient();
 export async function getServerSideProps({ query }) {
   let { index } = query;
   index = decodeURIComponent(decryptText(index));
-  console.log(index);
   await queryClient.prefetchQuery(
     ["checkout", index],
     () =>

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import cartContext from "../../utils/cartContext";
 import {
-  CardElement,
   useStripe,
   useElements,
   CardNumberElement,
@@ -11,8 +10,8 @@ import {
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import { getCookie } from "../../utils/utils";
-import Loading from "../Loading/dataLoading";
 import { toast } from "react-toastify";
+import TextField from "@mui/material/TextField";
 
 import { AiFillLock, AiFillQuestionCircle } from "react-icons/ai";
 import Tooltip from "@mui/material/Tooltip";
@@ -28,9 +27,10 @@ const inputStyle = {
 export default function CheckoutForm({ setIsProcess }) {
   const stripe = useStripe();
   const elements = useElements();
-  // const [isProcess, setIsProcess] = useState(false);
   const { setCart } = useContext(cartContext);
   const router = useRouter();
+  const [name, setName] = useState("");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsProcess(true);
@@ -39,13 +39,21 @@ export default function CheckoutForm({ setIsProcess }) {
     if (elements == null) {
       return;
     }
+    if (name === "" || !name) {
+      toast.error("Please enter the name on your card");
+      setIsProcess(false);
+      return;
+    }
 
     const { error } = await stripe.confirmCardPayment(pi, {
       payment_method: {
         card: elements.getElement("cardNumber"),
 
         billing_details: {
-          name: "Nam Doan",
+          name: name,
+          address: "",
+          email: "",
+          phone: "",
         },
       },
     });
@@ -62,7 +70,6 @@ export default function CheckoutForm({ setIsProcess }) {
       }, 200);
 
       setTimeout(() => {
-        console.log(router.query.index);
         router.push(
           `/checkout/complete/${encodeURIComponent(router.query.index)}`
         );
@@ -91,9 +98,23 @@ export default function CheckoutForm({ setIsProcess }) {
               <CardNumberElement
                 options={{
                   style: {
-                    base: inputStyle,
+                    base: {},
+                    empty: {},
                   },
                 }}
+              />
+            </div>
+          </div>
+          <div className="w-full px-5">
+            <div className="text-xs  mb-1 relative flex flex-row space-x-1 items-center text-gray-500">
+              <p className="mb-0">Name on Card</p>
+            </div>
+            <div className="">
+              <TextField
+                size="small"
+                className="bg-white w-full text-sm"
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
           </div>
