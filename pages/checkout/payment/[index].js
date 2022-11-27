@@ -80,7 +80,7 @@ export default function Index({ id }) {
     }
   }, [data]);
 
-  if (data?.errors || !data?.data.node) {
+  if (data?.errors || !data?.data.node || !getCookie("pi")) {
     return <></>;
   }
 
@@ -108,7 +108,7 @@ export default function Index({ id }) {
       )}
       <div className="relative md:w-screen md:h-screen grid grid-cols-1 md:grid-cols-3">
         <div className="md:col-span-2 h-full w-full flex justify-center py-5 md:py-20">
-          <div className="flex flex-col px-5 md:px-0 md:w-1/3 space-y-8 md:fixed">
+          <div className="flex flex-col px-5 md:px-0 md:w-1/3 space-y-8 md">
             <p className="text-2xl font-semibold">Payment Gateway</p>
             <ContactSummary
               email={data.data.node.email}
@@ -124,13 +124,9 @@ export default function Index({ id }) {
             </div>
             <Elements
               stripe={stripePromise}
-              // options={{
-              //   clientSecret: stripeOption,
-              //   appearance: {
-              //     theme: "night",
-              //     labels: "floating",
-              //   },
-              // }}
+              options={{
+                clientSecret: getCookie("pi"),
+              }}
             >
               <CheckoutForm setIsProcess={setIsProcess} />
             </Elements>
