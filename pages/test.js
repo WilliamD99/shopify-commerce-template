@@ -24,6 +24,9 @@ import Search from '../components/common/Search'
 import StripeElement from "../lib/stripe";
 import axios from "axios";
 
+import Head from 'next/head';
+import Script from 'next/script'
+
 export default function Test() {
   const [show, setShow] = useState(false);
   const { isMobile } = useContext(deviceContext);
@@ -31,28 +34,11 @@ export default function Test() {
 
   const ele = useRef();
 
-  // useEffect(() => {
-  //   axios.post("/api/stripe/payment-intent-create", {
-  //     data: {
-  //       amount: 500,
-  //       currency: "cad",
-  //       payment_method_types: "card"
-  //     }
-  //   }).then(res => console.log(res))
-  // }, [])
-
-
-  // useEffect(() => {
-  //   axios.post("/api/stripe/payment-intent-retrieve", {
-  //     data: {
-  //       id: "pi_3M7RuCJF5iU7SUPZ1MU7y1ds_secret_uc9W1MJerQkXA63qMQvu8SrKH"
-  //     }
-  //   }).then(res => console.log(res))
-  // }, [])
-
   return (
     <>
-      <StripeElement />
+      <Head>
+        <Script src="/script/fluid.js" id="test" onLoad={() => console.log('test')} />
+      </Head>
     </>
   );
 }
