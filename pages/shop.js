@@ -19,7 +19,6 @@ import { NextSeo } from "next-seo";
 import FilterDrawer from "../components/Shop/filterDrawer";
 import Button from "@mui/material/Button";
 import Image from "../components/common/Image";
-import Test from "../components/test";
 
 const FilterBar = dynamic(() => import("../components/Shop/filterBar"));
 const FilterMenu = dynamic(() => import("../components/Shop/filterMenu"));
