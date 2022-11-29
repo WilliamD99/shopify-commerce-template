@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import MuiTransitionZoom from '../animation/Mui-Transition-Zoom'
+import MuiTransitionZoom from '../Animation/Mui-Transition-Zoom'
 
 const handleVerifyAge = (date) => {
   let today = new Date();
