@@ -47,7 +47,7 @@ export default function Index() {
 
   return (
     <>
-      <div className="relative h-128 lg:h-screen w-screen flex flex-col justify-center items-center bg-black">
+      <div className="relative h-screen w-screen flex flex-col justify-center items-center bg-black">
         <div className="absolute top-0 left-0 h-full w-full">
           <FluidBackground />
         </div>

@@ -56,7 +56,7 @@ export default function AgeGate() {
 
   return (
     <>
-      <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={MuiTransitionZoom} disableScrollLock={true}>
+      <Dialog open={open} TransitionComponent={MuiTransitionZoom} disableScrollLock={true}>
         <DialogContent>
           <div className="relative w-screen h-screen backdrop-blur-md">
             <div className="lg:w-1/2 lg:h-1/2 w-80 h-128 bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md flex flex-col lg:flex-row">
