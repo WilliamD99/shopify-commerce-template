@@ -5,7 +5,7 @@
   z-index: 999999 !important;
 
   .bar {
-    background: black !important;
+    background: rgb(138, 138, 138) !important;
   }
 }
 
@@ -61,7 +61,8 @@ input[type=number] {
 }
 
 // Search bar
-#search-bar, #footer {
+#search-bar,
+#footer {
   .search-icon {
     svg {
       color: white
@@ -77,6 +78,7 @@ input[type=number] {
 
     .MuiInputBase-root {
       border-radius: 5rem;
+
       #search {
         color: black;
         padding-left: 2rem
