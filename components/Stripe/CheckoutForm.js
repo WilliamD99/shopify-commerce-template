@@ -18,10 +18,12 @@ export default function CheckoutForm({ setIsProcess, checkout }) {
   const { setCart } = useContext(cartContext);
   const router = useRouter();
   const [paymentRequest, setPaymentRequest] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsProcess(true);
+    setIsLoading(true);
 
     if (!elements || !stripe) {
       return;
@@ -34,6 +36,7 @@ export default function CheckoutForm({ setIsProcess, checkout }) {
 
     if (error) {
       toast.error(`${error.message}, please try again or use a different card`);
+      setIsLoading(false);
     } else {
       setCart([]);
       localStorage.setItem("items", "[]");
@@ -45,6 +48,7 @@ export default function CheckoutForm({ setIsProcess, checkout }) {
         router.push(
           `/checkout/complete/${encodeURIComponent(router.query.index)}`
         );
+        setIsLoading(false);
       }, 1500);
     }
     setIsProcess(false);
@@ -143,9 +147,10 @@ export default function CheckoutForm({ setIsProcess, checkout }) {
       </form>
       <Button
         type="submit"
-        className="normal-case text-black border-black mt-5"
+        className="normal-case text-white bg-black h-12 rounded-lg border-black my-5"
         variant="outlined"
         onClick={handleSubmit}
+        disabled={isLoading}
       >
         Pay Now
       </Button>

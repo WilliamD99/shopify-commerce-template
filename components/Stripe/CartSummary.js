@@ -26,6 +26,7 @@ export default function CartSummary({
                   layout="fill"
                   placeholder="blur"
                   blurDataURL="/placeholder.webp"
+                  className="rounded-lg"
                 />
               </Badge>
               <div className="flex flex-col space-y-2 justify-center md:col-span-2">

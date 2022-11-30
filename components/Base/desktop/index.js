@@ -8,9 +8,9 @@ export default function HeaderDesktopIndex() {
     <>
       {/* <Toolbar
         variant="dense"
-        className="w-full flex flex-col md:flex-row justify-center items-center md:justify-end xl:px-16 bg-black"
+        className="w-full flex flex-col md:flex-row justify-center items-center md:justify-end xl:px-16 bg-white"
       >
-        <HeaderDesktop setModalOpen={setModalOpen} />
+        <HeaderDesktop />
       </Toolbar> */}
       <HeaderBottom />
     </>

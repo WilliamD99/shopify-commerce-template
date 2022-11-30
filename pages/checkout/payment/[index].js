@@ -6,12 +6,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/router";
 
-import {
-  decryptText,
-  setCookie,
-  getCookie,
-  encryptText,
-} from "../../../utils/utils";
+import { decryptText, setCookie, getCookie } from "../../../utils/utils";
 import { checkoutGet } from "../../../lib/serverRequest";
 import CheckoutForm from "../../../components/Stripe/CheckoutForm";
 import Loading from "../../../components/Loading/dataLoading";
@@ -68,14 +63,12 @@ export default function Index({ id }) {
       },
     });
     setCookie("pi", data.data);
-    // setStripeOption(data.data);
     setCreateIntent(true);
     return data;
   };
 
   useEffect(() => {
     setCookie("pi", null);
-    console.log(data);
     if (!sessionStorage.getItem("checkoutId")) {
       router.push(`/cart`);
       toast.warning("Oops, something happend unexpectedly");

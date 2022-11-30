@@ -18,7 +18,7 @@ export default function SingleProduct({ data, type }) {
             }
             layout="fill"
             placeholder="blur"
-            blurDataURL="/images/animated-placeholder.mp4"
+            blurDataURL="/placeholder.webp"
           />
         </div>
         <div className="flex flex-col">

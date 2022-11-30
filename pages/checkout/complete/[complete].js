@@ -33,8 +33,8 @@ export default function Complete({ id }) {
       />
 
       <div className="relative md:w-screen md:h-screen grid grid-cols-1 md:grid-cols-3">
-        <div className="col-span-2 h-full w-full flex justify-center py-5 md:py-20">
-          <div className="flex flex-col space-y-5 w-1/2">
+        <div className="col-span-1 md:col-span-2 h-full w-full flex justify-center py-5 md:py-20">
+          <div className="flex flex-col space-y-5 md:w-1/2 mx-5 md:mx-0">
             <p className="text-2xl">Ecommerce Template</p>
             <p className="text-lg flex flex-row items-center">
               Thank you{" "}
@@ -76,9 +76,9 @@ export default function Complete({ id }) {
             <div>
               <div className="border-2 bg-white w-full rounded-tl-md rounded-md py-3 px-3">
                 <p className="text-lg mb-5">Customer Information</p>
-                <div className="grid grid-cols-2">
-                  <div className="flex flex-col space-y-5">
-                    <div className="flex flex-col space-y-3">
+                <div className="grid grid-cols-1 gap-5 md:gap-0 md:grid-cols-2">
+                  <div className="flex flex-col space-y-2 md:space-y-5">
+                    <div className="flex flex-col md:space-y-3">
                       <p className="font-bold text-sm">Contact information</p>
                       <p className="text-sm text-gray-500">
                         {data.data.node.email}
@@ -107,15 +107,15 @@ export default function Complete({ id }) {
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-col space-y-3">
+                    <div className="flex flex-col md:space-y-3">
                       <p className="font-bold text-sm">Shipping method</p>
                       <p className="text-sm text-gray-500">
                         {data.data.node.shippingLine.title}
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col space-y-5">
-                    <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-2 md:space-y-5">
+                    <div className="flex flex-col md:space-y-2">
                       <p className="font-bold text-sm">Payment method</p>
                       <p>dnam310199@gmail.com</p>
                     </div>
