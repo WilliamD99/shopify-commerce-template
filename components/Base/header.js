@@ -22,7 +22,7 @@ export default function Header({ sticky }) {
 
   return (
     <>
-      <div id="header" className={`w-screen z-40 ${sticky}`}>
+      <div id="header" className={`w-screen z-50 ${sticky}`}>
         {isMobile ? <HeaderMobile /> : <HeaderDesktopIndex />}
       </div>
     </>
