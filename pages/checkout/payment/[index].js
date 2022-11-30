@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import userContext from "../../../utils/userContext"
 import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Elements } from "@stripe/react-stripe-js";
@@ -26,6 +27,7 @@ const stripePromise = loadStripe(
 // This page need checkoutId
 export default function Index({ id }) {
   let [isCreateIntent, setCreateIntent] = useState(false);
+  let { user } = useContext(userContext)
   // let [stripeOption, setStripeOption] = useState();
   const [isProcess, setIsProcess] = useState(false);
   const router = useRouter();
@@ -38,15 +40,23 @@ export default function Index({ id }) {
       }),
     { staleTime: 1000 * 60 * 60 * 24 }
   );
+  console.log(data)
 
-  let createPaymentIntent = async (total, currency, method) => {
+  let createPaymentIntent = async (total, currency, checkout) => {
+    let items = []
+    checkout.data.node.lineItems.edges.map(e => {
+      items.push({ variantId: e.node.variant.id, quantity: e.node.quantity })
+    })
+
     let data = await axios.post("/api/stripe/payment-intent-create", {
       data: {
         amount: total * 100,
         currency: currency,
-        payment_method_types: method,
+        customerId: user.id,
+        lineItems: items
       },
     });
+    console.log(data.data)
     setCookie("pi", data.data);
     // setStripeOption(data.data);
     setCreateIntent(true);
@@ -63,13 +73,14 @@ export default function Index({ id }) {
       let dataNode = data.data.node;
       let total = parseFloat(dataNode.totalPriceV2.amount);
       let currency = "cad"; // Default
-      let method = "card"; // Default
 
-      createPaymentIntent(total, currency, method);
+      if (!user.state) {
+        createPaymentIntent(total, currency, data);
+      }
     } else {
       setCreateIntent(true);
     }
-  }, []);
+  }, [user]);
   useEffect(() => {
     if (data?.errors || !data?.data.node) {
       toast.error("Invalid ID, please wait to be redirected");

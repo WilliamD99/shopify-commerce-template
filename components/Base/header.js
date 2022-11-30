@@ -12,9 +12,9 @@ import HeaderDesktopIndex from "./desktop";
 
 export default function Header({ sticky }) {
   let customer = useCustomerGet();
-  let { setUser } = useContext(userContext);
+  let { setUser, user } = useContext(userContext);
   let { isMobile } = useContext(deviceContext);
-
+  console.log(user)
   useEffect(() => {
     if (customer.data) {
       setUser(customer.data.customer);

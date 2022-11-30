@@ -117,7 +117,7 @@ function MyApp({ Component, pageProps, ...appProps }) {
         />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Helmet>
-      <AgeGate />
+      {/* <AgeGate /> */}
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>
