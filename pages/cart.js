@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import userContext from "../utils/userContext";
+import cartContext from "../utils/cartContext";
 import { useRouter } from "next/router";
 
 import Button from "@mui/material/Button";
@@ -9,7 +10,19 @@ import { checkoutPathGenerator } from "../utils/utils";
 
 export default function Cart() {
   const { user } = useContext(userContext);
+  const { cart } = useContext(cartContext);
+  const [isEnabled, setIsEnabled] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!user?.id || cart.length === 0) {
+      console.log("test");
+      setIsEnabled(false);
+    } else {
+      console.log("test12");
+      setIsEnabled(true);
+    }
+  }, [cart, user]);
 
   return (
     <>
@@ -22,9 +35,9 @@ export default function Cart() {
       <div className="fixed bottom-0 flex lg:hidden justify-center bg-white z-50 py-5 w-screen">
         <Button
           variant="outlined"
-          disabled={!user?.id ? true : false}
+          disabled={!isEnabled}
           className={`text-center w-11/12 h-12 rounded-full ${
-            !user?.id ? "bg-gray-200" : "text-white bg-black border-black"
+            !isEnabled ? "bg-gray-200" : "text-white bg-black border-black"
           }  normal-case text-lg`}
           onClick={async () => {
             let path = await checkoutPathGenerator();

@@ -4,9 +4,29 @@ import {
   adminURLGraphql,
   adminHeadersGraphql,
 } from "../../../utils/api/header";
+import stripe from "../../../utils/api/stripe";
+import { buffer } from "micro";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 const request = async (req, res) => {
   try {
+    // Verify request coming from stripe
+    let sig = req.headers["stripe-signature"];
+    const buf = await buffer(req);
+    let event;
+    const endpointSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_PI;
+
+    try {
+      event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
+    } catch (err) {
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
     const webhookResponse = req.body;
     const params = webhookResponse.data.object;
     // Customer ID
@@ -23,6 +43,7 @@ const request = async (req, res) => {
 
     switch (webhookResponse.type) {
       case "payment_intent.created":
+        res.json({ message: "pi created!" });
         break;
       case "payment_intent.succeeded":
         let query = `

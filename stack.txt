@@ -3,3 +3,4 @@ shopify
 yotpo
 mailchimp*
 upstash
+stripe
