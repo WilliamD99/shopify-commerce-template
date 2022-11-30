@@ -28,7 +28,6 @@ const stripePromise = loadStripe(
 export default function Index({ id }) {
   let [isCreateIntent, setCreateIntent] = useState(false);
   let { user } = useContext(userContext);
-  // let [stripeOption, setStripeOption] = useState();
   const [isProcess, setIsProcess] = useState(false);
   const router = useRouter();
 
@@ -204,4 +203,3 @@ export async function getServerSideProps({ query }) {
     },
   };
 }
-// U2FsdGVkX18hUWkOiDfkRKIT7nmAs4u6BbQAi/NVubU6UagHvC4IJlObnKBL8xN7qSN3/ej5OKBGHdJ1/uP5C2aQZe3St/369zdHNoEMTRU9VRvu6c/D1s8kdCZNQ5yffwpMoC3E1dqHsRfQ3Wwf2w==

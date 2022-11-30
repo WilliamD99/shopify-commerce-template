@@ -20,12 +20,11 @@ import FluidBackground from "../components/Animation/FluidBackground";
 import Button from "@mui/material/Button";
 import TextReveal from "../components/Animation/TextReveal";
 import { FiSearch } from "react-icons/fi";
-import Search from '../components/common/Search'
-import StripeElement from "../lib/stripe";
+import Search from "../components/common/Search";
 import axios from "axios";
 
-import Head from 'next/head';
-import Script from 'next/script'
+import Head from "next/head";
+import Script from "next/script";
 
 export default function Test() {
   const [show, setShow] = useState(false);
@@ -37,32 +36,12 @@ export default function Test() {
   return (
     <>
       <Head>
-        <Script src="/script/fluid.js" id="test" onLoad={() => console.log('test')} />
+        <Script
+          src="/script/fluid.js"
+          id="test"
+          onLoad={() => console.log("test")}
+        />
       </Head>
     </>
   );
 }
-// "pi_3M7RuCJF5iU7SUPZ1MU7y1ds_secret_uc9W1MJerQkXA63qMQvu8SrKH"
-// const queryClient = new QueryClient();
-// export async function getServerSideProps({ query, res }) {
-//   //   let { index } = query;
-//   await queryClient.prefetchQuery(
-//     ["product", "allo-ultra-2500-disposable"],
-//     () => productByHandle("allo-ultra-2500-disposable"),
-//     {
-//       staleTime: 1000 * 60 * 60 * 24,
-//     }
-//   );
-
-//   res.setHeader(
-//     "Cache-Control",
-//     "public, s-maxage=30, stale-while-revalidate=59"
-//   );
-
-//   console.log(query);
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
