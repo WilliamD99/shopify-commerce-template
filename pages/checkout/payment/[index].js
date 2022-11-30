@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import userContext from "../../../utils/userContext"
+import userContext from "../../../utils/userContext";
 import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Elements } from "@stripe/react-stripe-js";
@@ -27,7 +27,7 @@ const stripePromise = loadStripe(
 // This page need checkoutId
 export default function Index({ id }) {
   let [isCreateIntent, setCreateIntent] = useState(false);
-  let { user } = useContext(userContext)
+  let { user } = useContext(userContext);
   // let [stripeOption, setStripeOption] = useState();
   const [isProcess, setIsProcess] = useState(false);
   const router = useRouter();
@@ -40,23 +40,34 @@ export default function Index({ id }) {
       }),
     { staleTime: 1000 * 60 * 60 * 24 }
   );
-  console.log(data)
 
   let createPaymentIntent = async (total, currency, checkout) => {
-    let items = []
-    checkout.data.node.lineItems.edges.map(e => {
-      items.push({ variantId: e.node.variant.id, quantity: e.node.quantity })
-    })
+    // Items in cart
+    let items = [];
+    checkout.lineItems.edges.map((e) => {
+      items.push({ variantId: e.node.variant.id, quantity: e.node.quantity });
+    });
+
+    // Select shipping option
+    let shippingLine = {
+      title: checkout.shippingLine.title,
+      price: parseFloat(checkout.shippingLine.priceV2.amount),
+    };
+
+    // Shipping Address
+    let shippingAddress = checkout.shippingAddress;
+    delete shippingAddress.name;
 
     let data = await axios.post("/api/stripe/payment-intent-create", {
       data: {
         amount: total * 100,
         currency: currency,
         customerId: user.id,
-        lineItems: items
+        lineItems: items,
+        shippingLine: shippingLine,
+        shippingAddress: shippingAddress,
       },
     });
-    console.log(data.data)
     setCookie("pi", data.data);
     // setStripeOption(data.data);
     setCreateIntent(true);
@@ -75,7 +86,7 @@ export default function Index({ id }) {
       let currency = "cad"; // Default
 
       if (!user.state) {
-        createPaymentIntent(total, currency, data);
+        createPaymentIntent(total, currency, data.data.node);
       }
     } else {
       setCreateIntent(true);
