@@ -5,7 +5,7 @@
   z-index: 999999 !important;
 
   .bar {
-    background: black !important;
+    background: rgb(138, 138, 138) !important;
   }
 }
 
@@ -61,7 +61,8 @@ input[type=number] {
 }
 
 // Search bar
-#search-bar {
+#search-bar,
+#footer {
   .search-icon {
     svg {
       color: white
@@ -76,7 +77,7 @@ input[type=number] {
     }
 
     .MuiInputBase-root {
-      border-radius: 10rem;
+      border-radius: 5rem;
 
       #search {
         color: black;
@@ -91,6 +92,14 @@ input[type=number] {
         border-color: black
       }
     }
+
+
+  }
+
+  .Mui-focused {
+    border-color: black !important;
+    outline: black !important;
+    color: black !important
   }
 }
 
@@ -112,6 +121,21 @@ input[type=number] {
     .MuiInputBase-root {
       border-radius: 10rem;
 
+    }
+  }
+}
+
+.text-reveal {
+  span {
+    display: block;
+  }
+
+  >span {
+    overflow: hidden;
+
+    >span {
+      position: relative;
+      transition: inherit;
     }
   }
 }

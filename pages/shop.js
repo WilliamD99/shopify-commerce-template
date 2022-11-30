@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import deviceContext from "../utils/deviceContext";
 // Hooks
 import { useRouter } from "next/router";
@@ -28,6 +28,7 @@ export default function Shop() {
   const [dataArr, setDataArr] = useState([]);
   const [isNext, setNext] = useState(false);
   const [isPrevious, setPrevious] = useState(false);
+  const [show, setShow] = useState(false);
   // State for query
   const [sortKey, setSortKey] = useState();
   const [isReverse, setReverse] = useState(false);
@@ -106,6 +107,7 @@ export default function Shop() {
         ) : (
           <></>
         )}
+
         <div
           id="shop"
           className="flex flex-row justify-center xl:justify-between mt-5 md:space-x-8 z-50"
@@ -115,11 +117,13 @@ export default function Shop() {
           <div className="relative w-11/12 md:w-full xl:w-10/12">
             <div
               id="shop-grid"
-              className={`grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-5 overflow-hidden`}
+              className={`grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-5`}
             >
-              {dataArr.map((e, i) => (
-                <SingeProduct key={i} index={i} e={e} />
-              ))}
+              {dataArr.length === 0 ? (
+                <></>
+              ) : (
+                dataArr.map((e, i) => <SingeProduct key={i} index={i} e={e} />)
+              )}
             </div>
 
             <Pagination

@@ -11,7 +11,7 @@ import Link from "../../common/Link";
 import { BsCart2 } from "react-icons/bs";
 import Badge from "@mui/material/Badge";
 
-export default function DrawerMobile({ setModalOpen }) {
+export default function DrawerMobile() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { cart } = useContext(cartContext);
@@ -52,29 +52,29 @@ export default function DrawerMobile({ setModalOpen }) {
   }, [total]);
 
   return (
-    <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-end xl:px-16 bg-slate-100">
+    <Toolbar className="w-full flex flex-col md:flex-row justify-center items-center md:justify-end xl:px-16 bg-black">
       <div className="md:hidden flex flex-row w-full items-center justify-between my-3">
-        <Link href="/">Ecommerce Template</Link>
+        <Link className="text-white" href="/">
+          Ecommerce Template
+        </Link>
         <div className="flex flex-row items-center justify-center space-x-5">
           <Link href="/cart">
             <Badge
               badgeContent={total}
               id="cart-badge"
-              className="text-black font-semibold"
+              className="text-white font-semibold"
             >
-              <BsCart2 className="text-2xl" />
+              <BsCart2 className="text-xl" />
             </Badge>
           </Link>
           <Search />
-          <AiOutlineMenu className="text-2xl" onClick={toggleDrawer} />
+          <AiOutlineMenu
+            className="text-xl text-white"
+            onClick={toggleDrawer}
+          />
         </div>
       </div>
-      <Drawer
-        open={open}
-        setOpen={setOpen}
-        toggleDrawer={toggleDrawer}
-        setOpenLoginModal={setModalOpen}
-      />
+      <Drawer open={open} setOpen={setOpen} toggleDrawer={toggleDrawer} />
     </Toolbar>
   );
 }

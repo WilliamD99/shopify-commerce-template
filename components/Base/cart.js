@@ -37,15 +37,15 @@ export default function CartComponent() {
     <>
       <div className="max-w-max relative">
         <button
-          className="flex items-center"
+          className="flex items-center hover:opacity-70"
           onClick={() => setDrawer(!drawerOpen)}
         >
           <Badge
             id="cart-badge"
-            className="text-black font-semibold"
+            className="text-white font-semibold"
             badgeContent={total}
           >
-            <BsCart2 className="text-2xl z-5 text-black" />
+            <BsCart2 className="text-2xl z-5 text-white" />
           </Badge>
         </button>
       </div>

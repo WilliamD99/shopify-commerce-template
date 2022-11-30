@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import loginContext from "../utils/loginContext";
+
 import Footer from "./Base/footer";
 import Header from "./Base/header";
-
 import { ToastContainer } from "react-toastify";
 import { gsap } from "../utils/utils";
 import { Zoom } from "react-toastify";
+import LoginModal from "./User/account";
 
 export default function Layout({ children }) {
   const [stickyClass, setStickyClass] = useState("");
   const [marginTop, setMarginTop] = useState(0);
+  const { userModalShow, setUserModalShow } = useContext(loginContext);
 
   const handleStickyHeader = () => {
     let header = document.querySelector("#header");
@@ -38,20 +41,23 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between min-h-screen">
-      <Header sticky={stickyClass} />
-      <div className="min-h-screen" style={{ marginTop: marginTop }}>
-        {children}
+    <>
+      <div className="flex flex-col justify-between min-h-screen">
+        <Header sticky={stickyClass} />
+        <div className="min-h-screen" style={{ marginTop: marginTop }}>
+          {children}
+        </div>
+        <Footer />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={true}
+          closeOnClick
+          theme="light"
+          transition={Zoom}
+        />
       </div>
-      <Footer />
-      <ToastContainer
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={true}
-        closeOnClick
-        theme="light"
-        transition={Zoom}
-      />
-    </div>
+      <LoginModal open={userModalShow} setOpen={setUserModalShow} />
+    </>
   );
 }

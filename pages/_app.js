@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // Style
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -17,6 +17,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import cartContext from "../utils/cartContext";
 import userContext from "../utils/userContext";
 import deviceContext from "../utils/deviceContext";
+import loginContext from "../utils/loginContext";
 import { customerGet } from "../utils/api/requests";
 
 import Layout from "../components/layout";
@@ -28,10 +29,10 @@ const ProgressBar = dynamic(() => import("../components/Loading/ProgressBar"), {
   ssr: false,
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, ...appProps }) {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({ state: "loading" });
-  const [cookie, setCookie] = useState(
+  const [cookie] = useState(
     typeof document !== "undefined" ? getCookie("tn").slice(1, -1) : ""
   );
   const [isMobile, setMobile] = useState("none");
@@ -45,6 +46,7 @@ function MyApp({ Component, pageProps }) {
         },
       })
   );
+  const [userModalShow, setUserModalShow] = useState(false);
 
   useEffect(() => {
     setMobile(
@@ -77,6 +79,13 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   const getLayout = Component.getLayout || ((page) => page);
+
+  const isLayoutNeeded = [
+    `/checkout/payment/[index]`,
+    `/checkout/complete/[complete]`,
+  ].includes(appProps.router.pathname);
+
+  const LayoutComponent = !isLayoutNeeded ? Layout : React.Fragment;
 
   if (isMobile === "none") return <></>;
 
@@ -112,13 +121,15 @@ function MyApp({ Component, pageProps }) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <deviceContext.Provider value={{ isMobile }}>
-            <userContext.Provider value={{ user, setUser }}>
-              <cartContext.Provider value={{ cart, setCart }}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </cartContext.Provider>
-            </userContext.Provider>
+            <loginContext.Provider value={{ userModalShow, setUserModalShow }}>
+              <userContext.Provider value={{ user, setUser }}>
+                <cartContext.Provider value={{ cart, setCart }}>
+                  <LayoutComponent>
+                    <Component {...pageProps} />
+                  </LayoutComponent>
+                </cartContext.Provider>
+              </userContext.Provider>
+            </loginContext.Provider>
           </deviceContext.Provider>
         </Hydrate>
         <ReactQueryDevtools />

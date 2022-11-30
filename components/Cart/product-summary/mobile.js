@@ -5,9 +5,11 @@ import { formatter } from "../../../utils/utils";
 import Link from "../../common/Link";
 import Item from "./mobile/item";
 import Button from "@mui/material/Button";
+import loginContext from "../../../utils/loginContext";
 
 export default function ProductSummaryMobile({ data, setCart }) {
   const { user } = useContext(userContext);
+  const { setUserModalShow } = useContext(loginContext);
   let displayCartTotal = () => {
     let total = 0;
     data.map((e) => (total += parseFloat(e.price) * e.quantity));
@@ -89,13 +91,12 @@ export default function ProductSummaryMobile({ data, setCart }) {
             You need to sign in in order to checkout
           </p>
           <div className="text-center mt-3">
-            <Link className="underline font-medium" href="#">
-              Join us
-            </Link>{" "}
-            or{" "}
-            <Link className="underline font-medium" href="#">
-              Sign in
-            </Link>
+            <p
+              className="underline font-medium cursor-pointer"
+              onClick={() => setUserModalShow(true)}
+            >
+              Login now
+            </p>
           </div>
         </div>
       ) : (

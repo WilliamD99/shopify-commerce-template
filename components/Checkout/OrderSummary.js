@@ -71,11 +71,12 @@ export default function OrderSummary({ data, refetch, isFetching }) {
     }
   };
   const handleComplete = async () => {
-    console.log(selectedRate);
     if (selectedRate === "" || !selectedRate) {
       toast.warning("Please select a delivery method first");
     } else {
-      router.push(data.webUrl);
+      router.push(
+        `/checkout/payment/${encodeURIComponent(encryptText(data.id))}`
+      );
     }
   };
 

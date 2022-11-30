@@ -17,33 +17,43 @@ const ShippingForm = dynamic(
   () => import("../../../components/User/address/shipping-update"),
   { loading: () => <p>Loading...</p> }
 );
-const UpdateForm = dynamic(() => import("../../../components/User/user-update"), {
-  loading: () => <p>Loading...</p>,
-});
+const UpdateForm = dynamic(
+  () => import("../../../components/User/user-update"),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
 const Loyalty = dynamic(() => import("../../../components/User/loyalty"), {
   loading: () => <p>Loading ...</p>,
 });
 import { NextSeo } from "next-seo";
+import { setCookie } from "../../../utils/utils";
+import Logout from "../../../components/User/account/logout";
 
 export default function Account() {
-  const { user } = useContext(userContext);
-  const { isMobile } = useContext(deviceContext)
+  const [open, setOpen] = useState(false);
+  const { user, setUser } = useContext(userContext);
+  const { isMobile } = useContext(deviceContext);
   const [tab, setTab] = useState(0);
-  const router = useRouter()
-  let routerQuery = router.query
+  const router = useRouter();
+  let routerQuery = router.query;
 
   const handleChangeTab = (e, newValue) => {
-    routerQuery.index = newValue
-    router.push({
-      query: routerQuery,
-    }, null, { shallow: false })
+    routerQuery.index = newValue;
+    router.push(
+      {
+        query: routerQuery,
+      },
+      null,
+      { shallow: false }
+    );
   };
 
   useEffect(() => {
     if (routerQuery.index) {
-      setTab(parseInt(routerQuery.index))
+      setTab(parseInt(routerQuery.index));
     }
-  }, [router])
+  }, [router]);
 
   // Maybe deleted due to redirect by middleware
   if (user?.state === "loading") return <Loading />;
@@ -62,7 +72,12 @@ export default function Account() {
       <div className="flex flex-col lg:ml-20 mt-10">
         <Tabs
           id="dashboard-tabs"
-          variant="scrollable" allowScrollButtonsMobile={isMobile ? true : false} scrollButtons={isMobile ? true : false} className="mb-12" value={tab} onChange={handleChangeTab}
+          variant="scrollable"
+          allowScrollButtonsMobile={isMobile ? true : false}
+          scrollButtons={isMobile ? true : false}
+          className="mb-12"
+          value={tab}
+          onChange={handleChangeTab}
         >
           <Tab label="Dashboard" />
           <Tab label="Personal Info" />
@@ -71,6 +86,7 @@ export default function Account() {
           <Tab label="History" />
           <Tab label="Wishlist" />
           <Tab label="Loyalty Program" />
+          <Tab label="Logout" />
         </Tabs>
 
         <TabPanel value={tab} index={0}>
@@ -99,6 +115,10 @@ export default function Account() {
 
         <TabPanel value={tab} index={6}>
           <Loyalty />
+        </TabPanel>
+
+        <TabPanel value={tab} index={7}>
+          <Logout redirect={true} open={open} setOpen={setOpen} />
         </TabPanel>
       </div>
     </>

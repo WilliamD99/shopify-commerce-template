@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import deviceContext from "../utils/deviceContext";
 import { useQueries } from "@tanstack/react-query";
 import { productInCollection } from "../utils/api/requests";
@@ -9,9 +9,17 @@ import Slider from "../components/Home/Slider";
 import Button from "@mui/material/Button";
 import { productsGet } from "../lib/serverRequest";
 import AnimatedGallery from "../components/Animation/Gallery";
+import FluidBackground from "../components/Animation/FluidBackground";
+import { Transition } from "react-transition-group";
+import { gsap } from "../utils/utils";
+import Link from "../components/common/Link";
+import TextReveal from "../components/Animation/TextReveal";
+import AnimateOnScroll from "../components/Animation/AnimateOnScroll";
 
 export default function Index() {
   const { isMobile } = useContext(deviceContext);
+  const [show, setShow] = useState(false);
+
   const data = useQueries({
     queries: [
       {
@@ -33,40 +41,105 @@ export default function Index() {
     ],
   });
 
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   return (
     <>
-      <div
-        id="banners"
-        className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"
-      >
-        <div className="flex flex-col space-y-5">
-          <Banner
-            image="/images/banner/banner1.webp"
-            link="/shop?vendors=MR%2520FOG"
-            title={"New Mr.Fog"}
-          />
-          <Banner image="/images/banner/banner2.webp" link="#" />
+      <div className="relative h-screen w-screen flex flex-col justify-center items-center bg-black">
+        <div className="absolute top-0 left-0 h-full w-full">
+          <FluidBackground />
         </div>
-        <Banner
-          className="col-span-2"
-          height={isMobile ? "64" : "full"}
-          image="/images/banner/banner3.webp"
-          link="#"
-          title="Disposable"
-        />
-        <div className="flex flex-col space-y-5">
-          <Banner
-            image="/images/banner/banner4.webp"
-            link="#"
-            title="New Arrival"
-          />
-          <Banner
-            image="/images/banner/banner5.webp"
-            link="#"
-            title="Starter Kit"
-          />
-        </div>
+        <Transition
+          timeout={1000}
+          mountOnEnter
+          unmountOnExit
+          in={show}
+          addEndListener={(node, done) => {
+            gsap.fromTo(
+              ".banner-content",
+              {
+                y: show ? 100 : 0,
+                autoAlpha: show ? 0 : 1,
+              },
+              {
+                y: show ? 0 : 100,
+                autoAlpha: show ? 1 : 0,
+                onComplete: done,
+                delay: 0.5,
+                stagger: 0.1,
+              }
+            );
+          }}
+        >
+          <div className="absolute px-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-5 lg:space-y-10 w-10/12 lg:w-1/2">
+            <TextReveal
+              stagger={0.5}
+              className="flex flex-col justify-center items-center space-y-5"
+            >
+              <p className="text-white text-xl lg:text-3xl text-center font-semibold banner-content">
+                Welcome to Ecommerce Template
+              </p>
+              <p className="text-white text-sm lg:text-base text-center banner-content">
+                We offer quality e-cigarettes, e-juice, disposables, nicotine
+                salts and much more for both pickup and shipping. Your order is
+                FREE if over <strong>$100</strong> (+tax).
+              </p>
+              <p className="text-white text-sm lg:text-base text-center banner-content">
+                If your order is below $100 your shipping fee is $15 flat if
+                within British Columbia.
+              </p>
+              <Link href="#banners" className="banner-content text-center">
+                <Button
+                  variant="outlined"
+                  className="text-white normal-case bg-black border-white hover:text-black hover:bg-white w-36 lg:w-44 rounded-full banner-content"
+                >
+                  See More
+                </Button>
+              </Link>
+            </TextReveal>
+          </div>
+        </Transition>
       </div>
+      <AnimateOnScroll
+        selector=".banner-container"
+        direction="up"
+        stagger={0.1}
+      >
+        <div
+          id="banners"
+          className="mt-10 overflow-hidden grid grid-cols-1 lg:grid-cols-4 gap-y-3  lg:px-20"
+        >
+          <div className="flex flex-col space-y-5">
+            <Banner
+              image="/images/banner/banner1.webp"
+              link="/shop?vendors=MR%2520FOG"
+              title={"New Mr.Fog"}
+            />
+            <Banner image="/images/banner/banner2.webp" link="#" />
+          </div>
+          <Banner
+            className="col-span-2"
+            height={isMobile ? "64" : "full"}
+            image="/images/banner/banner3.webp"
+            link="#"
+            title="Disposable"
+          />
+          <div className="flex flex-col space-y-5">
+            <Banner
+              image="/images/banner/banner4.webp"
+              link="#"
+              title="New Arrival"
+            />
+            <Banner
+              image="/images/banner/banner5.webp"
+              link="#"
+              title="Starter Kit"
+            />
+          </div>
+        </div>
+      </AnimateOnScroll>
 
       {/* <CollectionSlider /> */}
       <Slider data={data[0]} />

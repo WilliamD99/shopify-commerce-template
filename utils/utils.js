@@ -238,6 +238,27 @@ let checkoutPathGenerator = async () => {
   }
 };
 
+// For data type: [{test: "test", test1: "test1" }]
+let parseArraygGraphql = (arr, isArr) => {
+  let data = arr.map((item) => {
+    let tempArr = [];
+    let keys = Object.keys(item); // [variantId, quantity]
+    keys.map((key) => {
+      if (typeof item[key] !== "number") {
+        tempArr.push(`${key}: "${item[key]}"`); // arr = [variantId: '', quantity: ""]
+      } else {
+        tempArr.push(`${key}: ${item[key]}`); // arr = [variantId: '', quantity: ""]
+      }
+    });
+    return `{${tempArr.join(",")}}`;
+  });
+  if (isArr) {
+    return `[${data}]`;
+  } else {
+    return data.join("");
+  }
+};
+
 export {
   updateSessionStorage,
   encryptObject,
@@ -258,4 +279,5 @@ export {
   eraseCookie,
   idGenerator,
   checkoutPathGenerator,
+  parseArraygGraphql,
 };

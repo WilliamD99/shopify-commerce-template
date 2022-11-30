@@ -138,7 +138,7 @@ export default function Search() {
 
   return (
     <>
-      <FiSearch className="text-2xl" onClick={() => setOpen(true)} />
+      <FiSearch className="text-xl text-white" onClick={() => setOpen(true)} />
       <Drawer anchor="top" open={open} onClose={() => toggleDrawer(false)}>
         <Box
           ref={animationRef}

@@ -77,7 +77,7 @@ export default function Signup({ setIndex }) {
     <>
       <form
         id="loginForm"
-        className="w-80 md:w-96 h-112 px-10 py-5 md:py-8 flex flex-col justify-between space-y-3 rounded-xl z-50"
+        className="md:w-96 h-112 px-3 py-5 md:py-8 flex flex-col justify-between space-y-3 rounded-xl z-50"
         onSubmit={handleSubmit}
       >
         {customerCreate.isLoading ? <Loading /> : ""}

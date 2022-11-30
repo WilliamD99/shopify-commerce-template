@@ -93,33 +93,39 @@ input[type=number] {
   color: rgba(0, 0, 0, 0.5);
 }
 
-#search-bar .search-icon svg {
+#search-bar .search-icon svg, #footer .search-icon svg {
   color: white;
 }
 
-#search-bar .MuiFormControl-root {
+#search-bar .MuiFormControl-root, #footer .MuiFormControl-root {
   width: 100%;
 }
 
-#search-bar .MuiFormControl-root .MuiFormLabel-root {
+#search-bar .MuiFormControl-root .MuiFormLabel-root, #footer .MuiFormControl-root .MuiFormLabel-root {
   color: black;
 }
 
-#search-bar .MuiFormControl-root .MuiInputBase-root {
-  border-radius: 10rem;
+#search-bar .MuiFormControl-root .MuiInputBase-root, #footer .MuiFormControl-root .MuiInputBase-root {
+  border-radius: 5rem;
 }
 
-#search-bar .MuiFormControl-root .MuiInputBase-root #search {
+#search-bar .MuiFormControl-root .MuiInputBase-root #search, #footer .MuiFormControl-root .MuiInputBase-root #search {
   color: black;
   padding-left: 2rem;
 }
 
-#search-bar .MuiFormControl-root .MuiInputBase-root::before {
+#search-bar .MuiFormControl-root .MuiInputBase-root::before, #footer .MuiFormControl-root .MuiInputBase-root::before {
   border-color: black;
 }
 
-#search-bar .MuiFormControl-root .MuiInputBase-root::after {
+#search-bar .MuiFormControl-root .MuiInputBase-root::after, #footer .MuiFormControl-root .MuiInputBase-root::after {
   border-color: black;
+}
+
+#search-bar .Mui-focused, #footer .Mui-focused {
+  border-color: black !important;
+  outline: black !important;
+  color: black !important;
 }
 
 .nav-menu {
@@ -137,6 +143,20 @@ input[type=number] {
 
 #header-drawer__mobile .MuiFormControl-root .MuiInputBase-root {
   border-radius: 10rem;
+}
+
+.text-reveal span {
+  display: block;
+}
+
+.text-reveal > span {
+  overflow: hidden;
+}
+
+.text-reveal > span > span {
+  position: relative;
+  -webkit-transition: inherit;
+  transition: inherit;
 }
 
 .hvr-grow {
@@ -368,6 +388,11 @@ p {
 
 .home-slider .slick-list {
   padding: 0 20% 0 0 !important;
+}
+
+#banners .banner-container__image img {
+  -webkit-transition: .2s ease !important;
+  transition: .2s ease !important;
 }
 
 #dashboard-tabs .MuiTabs-scroller .MuiButtonBase-root.Mui-selected {

@@ -30,6 +30,7 @@ export default function Index({ data }) {
   let detailsRef = useRef();
   let detailsImgRef = useRef();
   let detailsContentRef = useRef();
+  let detailsBack = useRef();
 
   let showGallery = (item, index) => {
     let details = detailsRef.current;
@@ -60,7 +61,7 @@ export default function Index({ data }) {
         gsap.set(details, { overflow: "auto" });
       }, // to permit scrolling if necessary
     })
-      .fromTo("#gallery_bg", { autoAlpha: 0.8 }, { autoAlpha: 0 })
+      // .fromTo("#gallery_bg", { autoAlpha: 0.8 }, { autoAlpha: 0 })
       .fromTo(
         detailsImgRef.current,
         { yPercent: -20, autoAlpha: 0 },
@@ -74,7 +75,7 @@ export default function Index({ data }) {
         0.5
       )
       .fromTo(
-        "#gallery_back",
+        detailsBack.current,
         { scale: 0 },
         { scale: 1, ease: "Back.easeOut" }
       );
@@ -108,12 +109,17 @@ export default function Index({ data }) {
           duration: 0.5,
         }
       )
-      .fromTo("#gallery_bg", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 });
+      .to(detailsBack.current, {
+        scale: 0,
+        ease: "Bac,.easeOut",
+        duration: 0.2,
+      });
+    // .fromTo("#gallery_bg", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 });
 
     Flip.from(state, {
       scale: true,
       duration: 0.5,
-      delay: 1.2, // 0.2 seconds because we want the details to slide up first, then flip.
+      delay: 1.4, // 0.2 seconds because we want the details to slide up first, then flip.
       onComplete: () => {
         gsap.set("html", { overflow: "auto" });
         detailsRef.current.classList.add("invisible");
@@ -133,7 +139,7 @@ export default function Index({ data }) {
 
   return (
     <>
-      <div className="px-5 my-10 z-50 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-10 relative">
+      <div className="px-5 my-10 z-40 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-10 relative">
         {data ? (
           data.map((e, i) => (
             <Single
@@ -151,17 +157,13 @@ export default function Index({ data }) {
         <div
           ref={detailsRef}
           id="gallery_details"
-          className=" fixed px-5 py-28  grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 bg-slate-200 w-screen h-screen  border-none"
+          className="invisible fixed px-5 py-28  grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 bg-white w-screen h-screen  border-none"
         >
-          <Image
-            src={data[activeIndex].node.images.edges[0].node.url}
-            layout="fill"
-            id="gallery_bg"
-          />
           <div
             id="gallery_back"
             className="absolute z-50 top-20 left-5 lg:top-56 lg:left-20"
             onClick={hideGallery}
+            ref={detailsBack}
           >
             <p className="text-black flex flex-row items-center cursor-pointer opacity-70 hover:opacity-100 ease-linear">
               <BsArrowLeft className="mr-2" /> Go back

@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import loginContext from "../../../utils/loginContext";
 import userContext from "../../../utils/userContext";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Link from "../../common/Link";
@@ -6,22 +7,17 @@ import Divider from "@mui/material/Divider";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 
-import { accessTokenExist } from "../../../utils/utils";
 import useCustomerDeleteAccessToken from "../../../utils/hooks/useCustomerDeleteAccessToken";
+import Logout from "../../User/account/logout";
 
-export default function Drawer({
-  open,
-  setOpen,
-  toggleDrawer,
-  setOpenLoginModal,
-}) {
-  const { user, setUser } = useContext(userContext);
+export default function Drawer({ open, setOpen, toggleDrawer }) {
+  const { user } = useContext(userContext);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const { setUserModalShow } = useContext(loginContext);
   const deleteAccessToken = useCustomerDeleteAccessToken();
 
   const handleLogout = () => {
-    setUser({ state: "none" });
-    localStorage.removeItem("items");
-    deleteAccessToken.mutate({ accessToken: accessTokenExist() });
+    setLogoutDialogOpen(true);
   };
 
   useEffect(() => {
@@ -30,6 +26,10 @@ export default function Drawer({
       setOpen(false);
     }
   }, [deleteAccessToken.data]);
+
+  useEffect(() => {
+    setLogoutDialogOpen(false);
+  }, []);
 
   return (
     <>
@@ -90,11 +90,7 @@ export default function Drawer({
             <>
               <div className="pl-8 pr-5">
                 <div className="flex flex-row space-x-4 justify-between items-center">
-                  <div
-                    onClick={handleLogout}
-                    className="text-xl font-medium"
-                    href="/shop"
-                  >
+                  <div onClick={handleLogout} className="text-xl font-medium">
                     Logout
                   </div>
                 </div>
@@ -108,10 +104,9 @@ export default function Drawer({
                   <div
                     onClick={() => {
                       setOpen(false);
-                      setOpenLoginModal(true);
+                      setUserModalShow(true);
                     }}
                     className="text-xl font-medium"
-                    href="/shop"
                   >
                     Sign in
                   </div>
@@ -122,6 +117,15 @@ export default function Drawer({
           )}
         </div>
       </SwipeableDrawer>
+      {logoutDialogOpen ? (
+        <Logout
+          redirect={false}
+          open={logoutDialogOpen}
+          setOpen={setLogoutDialogOpen}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 }
