@@ -137,7 +137,9 @@ export default function CheckoutForm({ setIsProcess, checkout }) {
         ) : (
           <></>
         )}
-        <PaymentElement />
+        <PaymentElement
+          options={{ wallets: { applePay: "never", googlePay: "never" } }}
+        />
       </form>
       <Button
         type="submit"
