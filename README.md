@@ -31,3 +31,5 @@ Live demo is avalable at [Demo Site](https://shopify-commerce-template.vercel.ap
 - Make sure you have a Stripe account
 - Get stripe API key and put it in the .env file
 - To integrate Stripe with Shopify, you need to setup a webhook for Payment Intent event
+  + Setup the webhook in the Stripe Dashboard (make sure the path to the api is correct)
+  + Retrieve the Signing key from the dashboard and add it to the .env file
