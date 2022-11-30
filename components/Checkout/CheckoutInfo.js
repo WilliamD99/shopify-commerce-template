@@ -11,12 +11,13 @@ import { provinces, accessTokenExist, decryptText } from "../../utils/utils";
 
 export default function ShippingUpdate({ refetch, data }) {
   let { user } = useContext(userContext);
+  let [isLoading, setIsLoading] = useState(false);
   let [field, setField] = useState({
     lastName: "",
     firstName: "",
     address1: data?.shippingAddress ? data.shippingAddress.address1 : "",
     address2: data?.shippingAddress ? data.shippingAddress.address2 : "",
-    province: data?.shippingAddress ? data.shippingAddress.province : "",
+    province: data?.shippingAddress ? data.shippingAddress.province : null,
     country: "Canada",
     zip: data?.shippingAddress ? data.shippingAddress.zip : "",
     city: data?.shippingAddress ? data.shippingAddress.city : "",
@@ -56,9 +57,9 @@ export default function ShippingUpdate({ refetch, data }) {
   let checkoutEmailUpdate = useCheckoutUpdateEmail();
   let checkoutToCustomer = useCheckoutToCustomer();
 
-  const handleFormInfo = (e) => {
+  const handleFormInfo = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     let firstName = document.getElementById("firstName").value,
       lastName = document.getElementById("lastName").value,
       email = document.getElementById("email").value,
@@ -70,7 +71,7 @@ export default function ShippingUpdate({ refetch, data }) {
       zip = document.getElementById("zip").value,
       phone = document.getElementById("phone").value;
 
-    checkoutShippingUpdate.mutate({
+    await checkoutShippingUpdate.mutate({
       address: {
         lastName: lastName,
         firstName: firstName,
@@ -84,10 +85,11 @@ export default function ShippingUpdate({ refetch, data }) {
       },
     });
     if (email !== data.email) {
-      checkoutEmailUpdate.mutate({
+      await checkoutEmailUpdate.mutate({
         email: email,
       });
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {

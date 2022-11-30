@@ -229,6 +229,8 @@ let checkoutCreateId = async () => {
 };
 
 let checkoutPathGenerator = async () => {
+  setCookie("pi", null);
+  sessionStorage.removeItem("checkoutId");
   let checkoutId = await checkoutCreateId();
   if (typeof window !== "undefined") {
     checkoutId = encodeURIComponent(sessionStorage.getItem("checkoutId"));

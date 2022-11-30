@@ -37,6 +37,10 @@ const requests = async (req, res) => {
     const data = await axios.post(storefrontURL, query, {
       headers: storefrontHeaders,
     });
+    console.log(query);
+    console.log(
+      data.data.data.checkoutShippingAddressUpdateV2.checkoutUserErrors
+    );
     res.json(data.data);
   } catch (e) {
     console.log(e);

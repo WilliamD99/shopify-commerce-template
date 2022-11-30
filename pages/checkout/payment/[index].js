@@ -74,21 +74,26 @@ export default function Index({ id }) {
   };
 
   useEffect(() => {
-    if (data.data.node.completedAt) {
-      router.push(`/checkout/complete/${encodeURIComponent(encryptText(id))}`);
-    }
-
-    let pi = getCookie("pi");
-    if (!pi) {
-      let dataNode = data.data.node;
-      let total = parseFloat(dataNode.totalPriceV2.amount);
-      let currency = "cad"; // Default
-
-      if (!user.state) {
-        createPaymentIntent(total, currency, data.data.node);
-      }
+    setCookie("pi", null);
+    console.log(data);
+    if (!sessionStorage.getItem("checkoutId")) {
+      router.push(`/cart`);
+      toast.warning("Oops, something happend unexpectedly");
     } else {
-      setCreateIntent(true);
+      let pi = getCookie("pi");
+      if (!pi) {
+        let dataNode = data.data.node;
+        if (dataNode) {
+          let total = parseFloat(dataNode.totalPriceV2.amount);
+          let currency = "cad"; // Default
+
+          if (!user.state) {
+            createPaymentIntent(total, currency, data.data.node);
+          }
+        }
+      } else {
+        setCreateIntent(true);
+      }
     }
   }, [user]);
   useEffect(() => {
@@ -140,7 +145,7 @@ export default function Index({ id }) {
               <p className="text-lg">Payment</p>
               <p className="font-thin">
                 All transactions are secure and encrypted with{" "}
-                <span className="font-bold">PCI compliance</span>
+                <span className="font-bold">PCI compliance.</span>
               </p>
             </div>
             <Elements
@@ -149,7 +154,10 @@ export default function Index({ id }) {
                 clientSecret: getCookie("pi"),
               }}
             >
-              <CheckoutForm setIsProcess={setIsProcess} />
+              <CheckoutForm
+                setIsProcess={setIsProcess}
+                checkout={data.data.node}
+              />
             </Elements>
           </div>
         </div>

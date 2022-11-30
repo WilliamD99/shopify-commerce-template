@@ -13,10 +13,12 @@ export default function Index({ id }) {
     () => checkoutGet({ id: decryptText(id) }),
     { onSuccess: (data) => setCheckoutData(data.data.node) }
   );
+  console.log(data);
   const [checkoutData, setCheckoutData] = useState(data.data.node);
-  if (!data)
-    return <p>Something went wrong, please go back to the previous page</p>;
-  else if (data.data.node?.completedAt) {
+  if (!data.data?.node) {
+    sessionStorage.removeItem("checkoutId");
+    router.push("/cart");
+  } else if (data.data.node?.completedAt) {
     sessionStorage.removeItem("checkoutId");
     router.push(`/checkout/complete/${id}`);
   }

@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import cartContext from "../../utils/cartContext";
+import React, { useEffect, useState } from "react";
 // Components
 import Loading from "../Loading/dataLoading";
 import Button from "@mui/material/Button";
@@ -21,7 +20,6 @@ import { decryptText, encryptText, formatter } from "../../utils/utils";
 import { toast } from "react-toastify";
 
 export default function OrderSummary({ data, refetch, isFetching }) {
-  const { cart } = useContext(cartContext);
   const [total, setTotal] = useState(0);
   const [totalLine, setTotalLine] = useState(0);
   const [tax, setTax] = useState(0);
@@ -88,8 +86,9 @@ export default function OrderSummary({ data, refetch, isFetching }) {
       refetch();
     }
   }, [checkoutShippingLineUpdate.data]);
-
-  if (!data) return <div className="w-1/3 bg-slate-100"></div>;
+  if (!data) {
+    return <div className="w-1/3 bg-slate-100"></div>;
+  }
 
   return (
     <div className="md:mr-10 px-4 md:px-8 py-5 flex flex-col md:w-1/3 relative bg-slate-100">

@@ -23,11 +23,12 @@ export default function Cart() {
         <Button
           variant="outlined"
           disabled={!user?.id ? true : false}
-          className={`text-center w-11/12 h-12 rounded-full ${!user?.id ? "bg-gray-200" : "text-white bg-black border-black"
-            }  normal-case text-lg`}
+          className={`text-center w-11/12 h-12 rounded-full ${
+            !user?.id ? "bg-gray-200" : "text-white bg-black border-black"
+          }  normal-case text-lg`}
           onClick={async () => {
-            let path = await checkoutPathGenerator()
-            if (path) router.push(path)
+            let path = await checkoutPathGenerator();
+            if (path) router.push(path);
           }}
         >
           Checkout
