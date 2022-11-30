@@ -80,11 +80,10 @@ const request = async (req, res) => {
           });
           console.log("test2");
           console.log(draftOrderComplete.data);
+          res.json({ message: "succeeded create an order" });
         }
         break;
     }
-
-    res.json({ test: "avc" });
   } catch (e) {
     res.json(e);
   }
