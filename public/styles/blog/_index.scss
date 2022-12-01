@@ -1,0 +1,22 @@
+#blog {
+    #blog-selector {
+        background-color: #2d2d2d;
+        .blog-navigator {
+            p {
+                color: #999999;
+                &:hover {
+                    color: white !important;
+                }
+            }
+            &.selected {
+                background-color: white;
+                p {
+                    color: black;
+                    &:hover {
+                        color: black !important;
+                    }
+                }
+            }
+        }
+    }
+}

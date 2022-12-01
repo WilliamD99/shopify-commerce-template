@@ -415,4 +415,28 @@ p {
 #loginForm:focus-visible {
   outline: none !important;
 }
+
+#blog #blog-selector {
+  background-color: #2d2d2d;
+}
+
+#blog #blog-selector .blog-navigator p {
+  color: #999999;
+}
+
+#blog #blog-selector .blog-navigator p:hover {
+  color: white !important;
+}
+
+#blog #blog-selector .blog-navigator.selected {
+  background-color: white;
+}
+
+#blog #blog-selector .blog-navigator.selected p {
+  color: black;
+}
+
+#blog #blog-selector .blog-navigator.selected p:hover {
+  color: black !important;
+}
 /*# sourceMappingURL=index.css.map */
