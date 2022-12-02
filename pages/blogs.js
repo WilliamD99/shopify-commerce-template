@@ -6,7 +6,7 @@ import Navigator from "../components/Blog/blog/navigator";
 import { useRouter } from "next/router";
 import ArticleList from "../components/Blog/article/list";
 
-export default function Blogs({ name }) {
+export default function Blogs() {
   const router = useRouter();
   const routerQuery = router.query;
   const [nameQuery, setNameQuery] = useState("");
@@ -32,11 +32,11 @@ export default function Blogs({ name }) {
 
   return (
     <div id="blog">
-      <div className="relative h-128 w-screen bg-black flex flex-col justify-center items-center space-y-5">
-        <p className="text-center uppercase text-white text-6xl font-bold">
+      <div className="relative h-96 lg:h-128 w-screen bg-black flex flex-col justify-center items-center space-y-5">
+        <p className="text-center uppercase text-white text-3xl lg:text-6xl font-bold">
           Ecommerce Template
         </p>
-        <p className="text-center uppercase text-white text-6xl font-bold">
+        <p className="text-center uppercase text-white text-3xl lg:text-6xl font-bold">
           Newsroom
         </p>
         <Navigator data={data[0].data.data} />
@@ -62,7 +62,6 @@ export async function getServerSideProps({ query, res }) {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      name: name,
     },
   };
 }
