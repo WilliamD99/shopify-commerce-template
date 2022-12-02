@@ -42,7 +42,7 @@ export default function Navigator({ data }) {
     <>
       <div
         id="blog-selector"
-        className="absolute w-11/12 bottom-5 px-2 lg:px-5 rounded-full z-40 flex flex-row h-16 items-center"
+        className="absolute w-11/12 bottom-5 px-2 lg:px-5 rounded-full z-40 flex flex-row h-16 items-center overflow-x-scroll lg:overflow-x-hidden"
       >
         <div
           className={`${navIndex === -1 ? "selected" : ""
@@ -51,18 +51,16 @@ export default function Navigator({ data }) {
         >
           <p>All</p>
         </div>
-        <div className="flex flex-row items-center overflow-x-scroll lg:overflow-x-hidden overflow-hidden w-auto">
-          {data.blogs.edges.map((e, i) => (
-            <div
-              key={`nav-${i}`}
-              className={`${navIndex === i ? "selected pointer-events-none" : ""
-                } px-4 py-3 rounded-3xl cursor-pointer blog-navigator`}
-              onClick={() => handleNavClick(i, e.node.title)}
-            >
-              <p className="text-sm lg:text-base whitespace-nowrap">{e.node.title}</p>
-            </div>
-          ))}
-        </div>
+        {data.blogs.edges.map((e, i) => (
+          <div
+            key={`nav-${i}`}
+            className={`${navIndex === i ? "selected pointer-events-none" : ""
+              } px-4 py-3 rounded-3xl cursor-pointer blog-navigator`}
+            onClick={() => handleNavClick(i, e.node.title)}
+          >
+            <p className="text-sm lg:text-base whitespace-nowrap">{e.node.title}</p>
+          </div>
+        ))}
         <div className="absolute hidden lg:block right-8 top-1/2 -translate-y-1/2 cursor-pointer" onClick={() => setSearchEnable(true)}>
           <FiSearch className="text-white text-2xl" />
         </div>
