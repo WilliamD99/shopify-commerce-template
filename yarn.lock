@@ -370,6 +370,13 @@
     "minimatch" "^3.1.2"
     "strip-json-comments" "^3.1.1"
 
+"@fingerprintjs/botd@^1.1.0":
+  "integrity" "sha512-rgOsoJnWlhq0Y2CL2HTFiLtEAQFAH8OWW6SST1EkgKWZ7tcpNt20EnfRhNC05kxe6MG2ER79dHDI/np414RYHQ=="
+  "resolved" "https://registry.npmjs.org/@fingerprintjs/botd/-/botd-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "tslib" "^2.4.0"
+
 "@humanwhocodes/config-array@^0.9.2":
   "integrity" "sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw=="
   "resolved" "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.9.5.tgz"

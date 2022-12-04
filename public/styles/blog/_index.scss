@@ -1,3 +1,8 @@
+#blog_progress {
+    z-index: 9999;
+    height: 4px;
+}
+
 #blog {
     #blog-selector {
 
@@ -39,6 +44,33 @@
 
                 .MuiInputBase-input {}
             }
+        }
+    }
+}
+
+#article {
+    .article_content {
+        p {
+            // text-align: center;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: bold;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
         }
     }
 }

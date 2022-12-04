@@ -151,6 +151,21 @@ input[type=number] {
   transition: inherit;
 }
 
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+}
+
 .hvr-grow {
   display: inline-block;
   vertical-align: middle;
@@ -347,6 +362,11 @@ input[type=number] {
   outline: none !important;
 }
 
+#blog_progress {
+  z-index: 9999;
+  height: 4px;
+}
+
 #blog #blog-selector .blog-navigator p {
   color: #999999;
 }
@@ -371,6 +391,25 @@ input[type=number] {
 #blog #blog-search__desktop .MuiFormControl-root .MuiInputBase-root::after {
   border-bottom: none !important;
 }
+#article .article_content p {
+  font-family: "Rubik", sans-serif;
+}
+#article .article_content h1,
+#article .article_content h2,
+#article .article_content h3,
+#article .article_content h4,
+#article .article_content h5,
+#article .article_content h6 {
+  font-weight: bold;
+  font-family: "Rubik", sans-serif;
+}
+#article .article_content h2 {
+  font-size: 1.5rem;
+}
+#article .article_content h3 {
+  font-size: 1.25rem;
+}
+
 @media only screen and (min-width: 768px) {
   #blog #blog-selector {
     background-color: #2d2d2d;

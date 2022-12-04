@@ -42,7 +42,7 @@ export default function Navigator({ data }) {
     <>
       <div
         id="blog-selector"
-        className="absolute w-11/12 bottom-5 px-2 lg:px-5 rounded-full z-40 flex flex-row h-16 items-center overflow-x-scroll lg:overflow-x-hidden"
+        className="absolute w-11/12 bottom-5 px-2 lg:px-5 rounded-full z-40 flex flex-row h-16 items-center overflow-x-scroll lg:overflow-x-hidden scrollbar-hide"
       >
         <div
           className={`${navIndex === -1 ? "selected" : ""
