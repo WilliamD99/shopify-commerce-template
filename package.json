@@ -19,7 +19,7 @@
     "@stripe/stripe-js": "^1.44.1",
     "@tanstack/react-query": "^4.0.5",
     "@tanstack/react-query-devtools": "^4.11.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.5",
     "gsap": "^3.11.3",
